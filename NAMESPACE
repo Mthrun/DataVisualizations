@@ -23,7 +23,8 @@ export(ShepardDensityPlot)
 export(SilhouettePlot)
 export(zplot)
 export(plot3D)
-
+export(plotChoroplethMap)
+export(plotWorldmap)
 
 import(Rcpp)
 import(ggplot2)
@@ -44,5 +45,7 @@ import(AdaptGauss)
      importFrom("stats", "lm", "qnorm")
   importFrom("graphics", "pairs", "plot.new", "polygon")
   importFrom("stats", "complete.cases", "na.omit")
-
+importFrom("utils", "head", "tail")
    importFrom("graphics", "pie")
+   importFrom('sp','SpatialPolygons')
+ 
