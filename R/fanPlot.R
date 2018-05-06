@@ -42,7 +42,7 @@
    Labels=V$Labels
    pct=V$Percents
    colors=V$Cols
-   print(Labels)
+
    main=paste(length(Datavector),main)
    
   requireNamespace('plotrix')

@@ -88,7 +88,7 @@ PDEplot <- function(data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
   if(!missing(xlim)){ plt <- plt + coord_cartesian(xlim=xlim)}
   if(!missing(ylim)){ plt <- plt + coord_cartesian(ylim=ylim)}
   ## Alterantiv zum oben genannten: + xlim(xlim) bzw ylim(ylim)
-  ##  Das macht allerdings alle Werte außerhalb des Bereichs zu NA
+  ##  Das macht allerdings alle Werte ausserhalb des Bereichs zu NA
   if(isTRUE(PlotIt)){
     print(plt)
   }#plot

@@ -1,5 +1,5 @@
 slopeChart=function(FirstDatavector,SecondDatavector,Names,Labels,MaxNumberOfSlices,TopLabels=c('FirstDatavector','SecondDatavector'),main='Comparision of Descending Frequency'){
-  
+
   requireNamespace('plotrix')
 
   x1=internpiechart(FirstDatavector,Names,Labels,MaxNumberOfSlices=MaxNumberOfSlices)

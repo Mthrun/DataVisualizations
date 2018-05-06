@@ -23,7 +23,7 @@
      Cls = rep(1, AnzData)
    
    Cls=checkCls(Cls,AnzData)
-   print(Cls)
+   #print(Cls)
    #MT: Reihenfolge muss unbedingt fest sein ab hier, sie unten
    ind = order(Cls,decreasing = F,na.last = T)
    

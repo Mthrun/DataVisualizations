@@ -29,6 +29,21 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
 
   
    #Datavector= checkFeature(Datavector,'Datavector')
+  
+  nas=which(is.na(Datavector))
+  if(length(nas)>0){
+    Datavector[nas]='Missing (NA)'
+    print('Note: NA values found.')
+  }
+  if(is.numeric(Datavector)){
+    nas=which(!is.finite(Datavector))
+    if(length(nas)>0){
+      Datavector=as.character(Datavector)
+      Datavector[nas]='NaN'
+      print('Note: Infinitive and/or NaN values found.')
+    }
+  }
+  
   if(missing(Names))
     Names=sort(unique(Datavector),na.last = T)
   
@@ -83,18 +98,21 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
   
   count=c()
   
-  for(i in 1:m)
-    count[i]=length(which(Datavector==Names[i]))
+  for(i in 1:m){
+    tempind=Datavector==Names[i]
+    count[i]=sum(tempind,na.rm = T)
+  }
 
-
+ 
   indmissing=which(count==0)
+
   if(length(indmissing)>0){
     warning(paste0(length(indmissing),' Names could not be found and will not be shown in the fan plot.'))
     ind=which(count>0)
     if(length(ind)>0){
       count=count[ind]
       Labels=Labels[ind]
-  
+      Names=Names[ind]
     }
   }
   names(count)=Names

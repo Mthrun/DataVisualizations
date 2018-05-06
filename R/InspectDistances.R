@@ -1,4 +1,4 @@
-InspectDistances=function(DataOrDistances,method= "euclidean",main){
+InspectDistances=function(DataOrDistances,method= "euclidean",sampleSize = 10000,...){
   # InspectDistance(DataOrDistances,method)
   # visualizes the distances between objects in the data matrix 
   # using the method specified by distance, which can be any of the following character strings
@@ -32,7 +32,7 @@ InspectDistances=function(DataOrDistances,method= "euclidean",main){
   
   vecdist=InputDistances[upper.tri(InputDistances,F)]
   # if(method!='euclidean')
-  InspectVariable(vecdist,sampleSize = 10000,N = paste('distance'),main=main)
+  InspectVariable(vecdist,N = paste(method,'distance'),sampleSize=sampleSize,...)
   # else
   #   InspectVariable(vecdist,sampleSize = 10000,N = paste('Euclidean','distance'),main=main)
   # 
