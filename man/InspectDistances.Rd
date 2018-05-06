@@ -8,7 +8,7 @@ Inspection of Distance-Distribution
 Visualizes the distances between objects in the data matrix 
 }
 \usage{
-InspectDistances(DataOrDistances,method= "euclidean", main)
+InspectDistances(DataOrDistances,method= "euclidean",sampleSize = 10000,...)
 }
 \arguments{
   \item{DataOrDistances}{
@@ -22,7 +22,9 @@ InspectDistances(DataOrDistances,method= "euclidean", main)
 if Data[1:n,1:d]
   see \code{dist} for distance method
 }
-  \item{main}{Optional, string, title of plot
+  \item{sampleSize}{double value defining the size of the sample for large distance matrizes, see \code{InspectVariable}
+}
+  \item{\dots}{further arguments passed on to \code{InspectVariable}
 }
 }
 \details{

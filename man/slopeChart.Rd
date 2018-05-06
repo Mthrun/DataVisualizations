@@ -1,4 +1,5 @@
 \name{slopeChart}
+
 \alias{slopeChart}
 
 \title{
@@ -8,9 +9,15 @@ Slope Chart
 ABC analysis improved slope chart
 }
 \usage{
-slopChart(FirstDatavector,SecondDatavector,
+slopeChart(FirstDatavector,
 
-Names,Labels,MaxNumberOfSlices,
+SecondDatavector,
+
+Names,
+
+Labels,
+
+MaxNumberOfSlices,
 
 TopLabels=c('FirstDatavector','SecondDatavector'),
 
@@ -19,20 +26,30 @@ main='Comparision of Descending Frequency')
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{FirstDatavector}{
+    [1:n] a vector of n non unique values - a features
 }
   \item{SecondDatavector}{
+    [1:m] a vector of n non unique values - a second feature
+}
+  \item{Labels}{Optional,
+  [1:k] Labels if they are specially named, if not Names are used.
 }
   \item{Names}{
+    [1:k] names to search for in Datavector, if not set \code{unique} of Datavector is calculated.
+}
+    \item{MaxNumberOfSlices}{Default is k, integer value defining how many labels will be shown. Everything else will be summed up to \code{Other}.
+
 }
   \item{TopLabels}{
+  Labels of of feature names
 }
   \item{main}{
+  title of the plot
 }
-  \item{FirstDatavector}{
-}
+
 }
 \details{
-to be filled..
+still experimental.
 }
 \value{
 silent output by calling \code{invisible} of a list with
