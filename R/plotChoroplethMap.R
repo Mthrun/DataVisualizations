@@ -1,5 +1,74 @@
 plotChoroplethMap=function(Counts,PostalCodes,NumberOfBins=0,Breaks4Intervals,percentiles=c(0.5,0.95),digits=0,PostalCodesShapes,PlotIt=TRUE,DiscreteColors,HighColorContinuous='red',LowColorContinuous='deepskyblue1',NAcolor='grey',ReferenceMap=FALSE, main='Political Map of Germany',legend='Range of values',Silent=TRUE){
-  
+#plotChoroplethMap(Counts, PostalCodes, NumberOfBins = 0,                     Breaks4Intervals, percentiles = c(0.5, 0.95),                      digits = 0, PostalCodesShapes, PlotIt = TRUE,                     DiscreteColors, HighColorContinuous = "red",                     LowColorContinuous = "deepskyblue1", NAcolor = "grey",                     ReferenceMap = FALSE, main = "Political Map of Germany",                     legend = "Range of values", Silent = TRUE)
+
+#   Plot the Choropleth Map
+#   A thematic map with areas colored in proportion to the measurement of the statistical variable being displayed on the map. A political map geneated by this function was used in the conference talk of the publication [Thrun/Ultsch, 2018]}
+
+#INPUT
+#   Counts
+#     vector [1:m], statistical variable being displayed
+#   
+#   PostalCodes
+#     vector[1:n], currently german postal codes (zip codes), if \code{PostalCodesShapes} is not changed manually, does not need to be unique
+#   
+#   NumberOfBins
+#     Default: 1; 1 or below continously changes the color as defined by the   package \code{choroplethr}.
+#     A Number between 2 and 9 sets equally sized bins. Higher numbers are not allowed
+#   
+#   Breaks4Intervals
+#     If NumberOfBins>1 you can set here the intervals of the bins manually
+#   
+#   percentiles
+#     If NumberOfBins>1 and Breaks4Intervals not set, then the percentiles of min and max bin can be set here. See also \code{quantile}.
+#   
+#   digits
+#     number of digits for \code{round}
+#   
+#   PostalCodesShapes
+#     Specially prepared shape file with postal codes and geographic boundaries.
+#     If you set this object, then you can use non german zip codes.
+#     You can see the required structure in map.df,  github trulia choroplethr blob master r chloropleth. 
+#     
+#   
+#   PlotIt
+#     Either Plot the map directly or change the object manually before plotting it
+#   
+#   DiscreteColors
+#     Set the discrete colors manually if NumberOfBins>1, else it is ignored
+#   
+#   HighColorContinuous
+#     if NumberOfBins<=1: color of highest continuous value, else it is ignored
+#   
+#   LowColorContinuous
+#     if NumberOfBins<=1: color of lowest continuous value, else it is ignored
+#   
+#   NAcolor
+#     Color of NA values in the map (postal codes without any counts)
+#   
+#   ReferenceMap
+#     TRUE: With Google map, FALSE: without Google map
+#   
+#   main:
+#     title of plot
+#   
+#   legend
+#     title of legend
+#   
+#   Silent
+#     TRUE: disable warnings of \code{choroplethr} package
+#     FALSE: enable  warnings of \code{choroplethr} package
+
+
+# OUTPUT
+#   List of
+#   chorR6obj         An R6 object of the package \code{choroplethr}}
+#   DataFrame   Transformed PostalCodes and Counts in a way that they can be used in the package \code{choroplethr}.}
+# 
+# details
+#   The \code{choroplethr} package is not documented well. This wrapper enables  to visualize an map much more easy in the case of german zip codes. Other postal codes are in principle usable.
+# 
+# author:   Michael Thrun
+# 
   if(length(Counts)!=length(PostalCodes)) warning('Length of PostalCodes and Counts should match')
   if(max(percentiles)>1) stop('percentiles have to between zero and 1.')
   if(percentiles[1]>percentiles[2]) stop('first percentile has to be smaller then second.')

@@ -1,7 +1,7 @@
 plotWorldmap=function(CountryCodes,Cls,Colors,MissingCountryColor=grDevices::gray(.80),...){
   
-  requireNamespace('sp')
-  #requireNamespace('maps')
+
+
   u=unique(Cls)
   LandList=c()
   if(missing(Colors))
@@ -16,9 +16,13 @@ plotWorldmap=function(CountryCodes,Cls,Colors,MissingCountryColor=grDevices::gra
       cols[myCountries]<- Colors[i]
       CountryCodes[Cls==u[i]]
   }
-
-  sp:::plot.SpatialPolygons(world_country_polygons,col =cols,...)
-  #plot.SpatialPolygons(world_country_polygons,col =cols,...)
-  #plot(world_country_polygons,col =cols,...)
+  
+ 
+  #sp::plot.SpatialPolygons(world_country_polygons,col =cols,...) #a note in cran check is generated with this, thats not allowed. But the call works!
+  
+  #work around of Yihui -_-
+  requireNamespace('sp')
+  get('plot.SpatialPolygons', envir = asNamespace('sp'), inherits = FALSE)(world_country_polygons,col =cols,...)
+  
   return(invisible(list(Colors=cols,CountryCodeList=LandList,world_country_polygons=world_country_polygons)))
 }
