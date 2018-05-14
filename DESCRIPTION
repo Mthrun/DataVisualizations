@@ -5,13 +5,13 @@ Version: 1.0.0
 Date: 2018-05-06
 Authors@R: c(person("Michael", "Thrun", email= "m.thrun@gmx.net",role=c("aut","cre","cph")),person("Peter", "Kampstra",role="aut"),person("Felix", "Pape",role=c("aut","rev")),person("Onno", "Hansen-Goos",role=c("ctr","ctb")),person("Fredericke", "Matz",role=c("ctr","ctb")),person("Alfred", "Ultsch",role=c("dtc","ctb")))
 Maintainer: Michael Thrun <m.thrun@gmx.net>
-Description: A collection of various visualizations methods is provided. With regards to high-dimensional data the heat map and silhouette plot for grouped data,visualizations of the distribution of distances, the scatter-density plot for two variables,the Shepard density plot as well as the Bland-Altman plot are presented here. For a classification of countries, a map of the world or Germany can be visualized. 'DataVisualizations' makes it possible to inspect the distribution of each feature of a dataset visually through the combination of four methods.More detailed explanations can be found in the book of Thrun, M.C.:"Projection-Based Clustering through Self-Organization and Swarm Intelligence" (2018) <DOI:10.1007/978-3-658-20540-9>. Furthermore, for categorical features the ABCanalysis improved Pie charts, slope charts and fan plots are usable. Additionally, for measurements across a geographic area an easy to use function for a Choropleth map is presented here.
+Description: A collection of various visualizations methods is provided. With regards to high-dimensional data the heat map and silhouette plot for grouped data,visualizations of the distribution of distances, the scatter-density plot for two variables,the Shepard density plot as well as the Bland-Altman plot are presented here. For a classification of countries, a map of the world or Germany can be visualized. 'DataVisualizations' makes it possible to inspect the distribution of each feature of a dataset visually through the combination of four methods.More detailed explanations can be found in the book of Thrun, M.C.:"Projection-Based Clustering through Self-Organization and Swarm Intelligence" (2018) <DOI:10.1007/978-3-658-20540-9>. Furthermore, for categorical features the ABC analysis improved Pie charts, slope charts and fan plots are usable. Additionally, for measurements across a geographic area an easy to use function for a Choropleth map is presented here.
 License: GPL-3
-Imports: Rcpp (>= 0.12.12), AdaptGauss, ggplot2, magrittr, sp
-Suggests: plotly, plyr, akima, ggmap, reshape2, plotrix, rworldmap, rgl, ABCanalysis, choroplethr, gplots, dplyr, R6
+Imports: Rcpp (>= 0.12.12), AdaptGauss, ggplot2, magrittr
+Suggests: plotly, plyr, akima, ggmap, reshape2, plotrix, rworldmap, rgl, ABCanalysis, choroplethr, gplots, dplyr, R6, sp
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 2.10)
 SystemRequirements: C++11
 LazyLoad: yes
 LazyData: TRUE
-URL: http://www.deepbionics.de
+URL: http://www.deepbionics.org
