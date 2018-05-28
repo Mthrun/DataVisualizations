@@ -86,7 +86,7 @@ List of
 \item{DataFrame}{Transformed PostalCodes and Counts in a way that they can be used in the package \code{choroplethr}.}
 }
 \references{
-[Thrun/Ultsch, 2018]  Thrun, M. C. & Ultsch A. : Effects of the payout system of income taxes to municipalities in Germany, 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, Foundation of the Cracow University of Economics, Zakopane, Poland, accepted, 2018.
+[Thrun/Ultsch, 2018] Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
 }
 \author{
 Michael Thrun

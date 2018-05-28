@@ -1,44 +1,36 @@
 \name{DataVisualizations-package}
 \alias{DataVisualizations-package}
-
+\alias{DataVisualizations}
 \docType{package}
 \title{
-The Data Visualizations Package
+\packageTitle{DataVisualizations}
 }
 \description{
-'DataVisualizations' contains a collection of various visualizations methods. 
-With regards to high-dimensional data the heat map and silhouette plot for grouped data,
- visualizations of the distribution of distances, the scatter-density plot for two variables,
- the Shepard density plot as well as the Bland-Altman plot are presented here. 
- For a classification of countries, a map of the world or Germany can be visualized. 
- 'DataVisualizations' makes it possible to inspect the distribution of 
- each feature of a dataset visually through the combination of four methods.
- More detailed explanations can be found in the book of 
- Thrun, M.C.:"Projection-Based Clustering through Self-Organization and Swarm Intelligence" (2018) <DOI:10.1007/978-3-658-20540-9>. 
- Furthermore, for categorical features the ABCanalysis improved Pie charts, 
- slope charts and fan plots are usable. Additionally, for measurements across 
- a geographic area an easy to use function for a Choropleth map is presented here.
-
-
+\packageDescription{DataVisualizations}
 }
 \details{
 
+The DESCRIPTION file:
+#\packageDESCRIPTION{DataVisualizations}
+
 Please see \url{http://www.deepbionics.org/}. 
 Depending on the context please cite either [Thrun, 2018] regarding visualizations in the context of clustering or [Thrun/Ultsch, 2018] for other visualizations.
-}
-\note{
-In the next version I will try to add choroplethr based country maps using german zip codes. As well as a world map of countries colored by classification labels.
+
+For the PDE optimized violin plot please cite [Thrun et al.,2018].
+
+\packageIndices{DataVisualizations}
 }
 \author{
-Michal Thrun
+\packageAuthor{DataVisualizations}
 
-Maintainer: Michael Thrun <m.thrun@gmx.net>
+Maintainer: \packageMaintainer{DataVisualizations}
 }
 \references{
 [Thrun, 2018]  Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, \url{https://doi.org/10.1007/978-3-658-20540-9}, 2018. 
 
-[Thrun/Ultsch, 2018] Thrun, M. C. & Ultsch A. : Effects of the payout system of income taxes to municipalities in Germany, 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, Foundation of the Cracow University of Economics, Zakopane, Poland, 2018. 
+[Thrun/Ultsch, 2018] Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
 
+[Thrun et al.,2018]	Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), accepted, Paderborn, Germany, 2018. 
 }
 \examples{
 data(categoricalVariable)
