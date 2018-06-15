@@ -1,4 +1,4 @@
-PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=50000,
+PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(500000000),-3),
                               
                               NrOfContourLines=20,Plotter='native', DrawTopView = T,
                               
@@ -14,6 +14,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=50000,
 #  OPTIONAL
 #  na.rm                   Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE
 #  ParetoRadius            The Pareto Radius; if ==0 or not given it will be calculated by ParetoRadius
+#  sampleSize               bottleneck is memmory allocation von matrizen, 500000000 entspricht ca 4gb memory momentan
 #  NrOfContourLines        Number of contour lines to be drawn
 #  kernelfactor            Factor to modify the resolution of the grid used to create the plot. Default: 1. Warning: This can increase runtime extremely!
 #  xlab                    Label for the x axis
@@ -56,26 +57,26 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=50000,
   if(!isnumber(NrOfContourLines))
     stop('"NrOfContourLines" is not a numeric number of length 1. Please change Input.')
   
-  prctile =function (x, p) 
-  {
-    if (length(p) == 1) {
-      if (p > 1) {
-        p = p/100
-      }
-    }
-    if (is.matrix(x) && ncol(x) > 1) {
-      cols <- ncol(x)
-      quants <- matrix(0, nrow = length(p), ncol = cols)
-      for (i in 1:cols) {
-        quants[, i] <- quantile(x[, i], probs = p, type = 5, 
-                                na.rm = TRUE)
-      }
-    }
-    else {
-      quants <- quantile(x, p, type = 5, na.rm = TRUE)
-    }
-    return(quants)
-  }
+  # prctile =function (x, p) 
+  # {
+  #   if (length(p) == 1) {
+  #     if (p > 1) {
+  #       p = p/100
+  #     }
+  #   }
+  #   if (is.matrix(x) && ncol(x) > 1) {
+  #     cols <- ncol(x)
+  #     quants <- matrix(0, nrow = length(p), ncol = cols)
+  #     for (i in 1:cols) {
+  #       quants[, i] <- quantile(x[, i], probs = p, type = 5, 
+  #                               na.rm = TRUE)
+  #     }
+  #   }
+  #   else {
+  #     quants <- quantile(x, p, type = 5, na.rm = TRUE)
+  #   }
+  #   return(quants)
+  # }
   toRange=function (data, lower, upper) 
   {
     data <- as.matrix(data)
@@ -129,6 +130,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=50000,
 	##########
 	# Wenn mehr Daten als gewollt da sind: Sample ziehen.
 	##########
+	#distanzmatrix is quadratisch minus diagonale
 	if (sampleSize<nData) { # sample with uniform distribution MaximumNrSamples
 	  #warning('More Data than sampleSize. Consider raising sampleSize or using PDEscatterApprox')
 	  sampleInd <- floor(nData*c(runif(sampleSize))+1)
@@ -143,18 +145,35 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=50000,
 
 
 	#Dists = dist(sampleData)
-	Dists=as.matrix(parallelDist::parDist(sampleData,method = 'euclidean'))
-	
+	Dists=parallelDist::parDist(sampleData,method = 'euclidean',diag = F,upper = F)
+	Dists=as.vector(Dists)
+
 	if(paretoRadius <= 0){
 		 # paretoRadius <- paretoRadiusForGMM(Data = data)
-	  paretoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen
+	  #paretoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen
+	  # if(sampleSize<nData)
+
+	    paretoRadius <- quantile(Dists, 6/100, type = 5, na.rm = TRUE)
+
+      if(paretoRadius==0){
+        paretoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE) #pareto 20/80 rule
+        if(paretoRadius==0){
+          stop(paste0('Estimation of Radius(',paretoRadius,') for two-dimensional density not possible. Please provide paretoRadius manually.'))
+        }else{
+        warning(paste0('Estimation of Radius(',paretoRadius,') for two-dimensional density may not work properly. You can provide paretoRadius manually.'))
+        }
+      }
+
+
+	  # else
+	  #   cquantile(Dists[is.finite(Dists)], 6/100)
 	}
 
 	# Ersetzt InPShere2D
 	# inPSpheres = as.numeric(colSums(1 * (as.matrix(dist(percentdata)) <= paretoRadius)))
-print(paretoRadius)
+
 	inPSpheres = inPSphere2D(percentdata, paretoRadius)
-	print('test')
+
 	# Plotting now in zplot (again)
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
 

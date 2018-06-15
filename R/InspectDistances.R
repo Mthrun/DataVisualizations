@@ -25,15 +25,16 @@ InspectDistances=function(DataOrDistances,method= "euclidean",sampleSize = 50000
   if (isSymmetric(DataOrDistances)) {
     # nach Cls sortieren
     InputDistances = DataOrDistances
+    vecdist=InputDistances[upper.tri(InputDistances,F)]
   }
   else{
     print('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
     #InputDistances = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
-    InputDistances=as.matrix(parallelDist::parDist(DataOrDistances,method = method))
+    vecdist=as.vector(parallelDist::parDist(DataOrDistances,method = 'euclidean',diag = F,upper = F))
     #DataDists = DistanceMatrix(DataOrDistances, method = method)
   }
   
-  vecdist=InputDistances[upper.tri(InputDistances,F)]
+  
   # if(method!='euclidean')
   InspectVariable(vecdist,N = paste(method,'distance'),sampleSize=sampleSize,...)
   # else
