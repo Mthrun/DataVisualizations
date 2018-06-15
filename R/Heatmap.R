@@ -45,7 +45,7 @@
      # nach Cls sortieren
      DataOrDistances = DataOrDistances[ind, ]
      #DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
-     DataOrDistances=as.matrix(parallelDist::parDist(DataOrDistances[ind, ],method = method))
+     DataDists=as.matrix(parallelDist::parDist(DataOrDistances[ind, ],method = method))
      #DataDists = DistanceMatrix(DataOrDistances, method = method)
    }
 
