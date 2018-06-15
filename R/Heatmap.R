@@ -10,6 +10,9 @@
 # LowLim,HiLim  limits for the color axis as in PlotPixMatrix
 
 # author: MT 08/2016, edited 28.01.2018
+   #2.Editor: MT 06/18
+   requireNamespace('parallelDist')
+   
    if(!is.matrix(DataOrDistances)){
      warning('DataOrDistances is not a matrix. Calling as.matrix()')
      DataOrDistances=as.matrix(DataOrDistances)
@@ -41,7 +44,8 @@
      
      # nach Cls sortieren
      DataOrDistances = DataOrDistances[ind, ]
-     DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
+     #DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
+     DataOrDistances=as.matrix(parallelDist::parDist(DataOrDistances[ind, ],method = method))
      #DataDists = DistanceMatrix(DataOrDistances, method = method)
    }
 

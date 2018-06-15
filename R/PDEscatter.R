@@ -1,4 +1,4 @@
-PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=5000,
+PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=50000,
                               
                               NrOfContourLines=20,Plotter='native', DrawTopView = T,
                               
@@ -35,6 +35,8 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=5000,
   #requireRpackage('akima')
  # requireRpackage('plotly')
   ##############
+  
+  requireNamespace('parallelDist')
   if(isTRUE(na.rm)){
     tmp=cbind(x,y)
     tmp=tmp[complete.cases(tmp),]
@@ -140,8 +142,9 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=5000,
 	# berechnen vermindert Darstellungsfehler
 
 
-	Dists = dist(sampleData)
-
+	#Dists = dist(sampleData)
+	Dists=as.matrix(parallelDist::parDist(sampleData,method = 'euclidean'))
+	
 	if(paretoRadius <= 0){
 		 # paretoRadius <- paretoRadiusForGMM(Data = data)
 	  paretoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen
@@ -149,9 +152,9 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=5000,
 
 	# Ersetzt InPShere2D
 	# inPSpheres = as.numeric(colSums(1 * (as.matrix(dist(percentdata)) <= paretoRadius)))
-
+print(paretoRadius)
 	inPSpheres = inPSphere2D(percentdata, paretoRadius)
-
+	print('test')
 	# Plotting now in zplot (again)
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
 

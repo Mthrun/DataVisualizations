@@ -13,7 +13,7 @@ ShepardScatterPlot =ShepardDiagram=function(InputDists,OutputDists,xlab='Input D
 # gPlot                 objekt of ggplot 2, see doku there
 # Author: MT 03/2014
 # 1.Editor: MT 01/2016 umstieg auf ggplot2
-  
+
   if(!is.matrix(InputDists)){
     warning('InputDists is not a matrix. Calling as.matrix()')
     InputDists=as.matrix(InputDists)

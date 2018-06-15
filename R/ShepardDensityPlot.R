@@ -3,6 +3,7 @@ ShepardDensityPlot=function(InputDists,OutputDists,Plotter='native',xlab='Input 
   #                          Possible values are: native, ggplot, plotly
   #
   #author: MT, 2017
+
   if(!is.matrix(InputDists)){
     warning('InputDists is not a matrix. Calling as.matrix()')
     InputDists=as.matrix(InputDists)
