@@ -48,21 +48,21 @@ compute_pdedensity <- function(x) {
   }
   
   ##MT: chatch error of one unique value
-  Flag=FALSE
-  if(length(unique(x))==1){
+  Flag <- FALSE
+  if (length(unique(x)) == 1) {
     warning('Only one unique value in Data.')
-    x=c(x,head(x,1)*runif(1,0.999,1.001))
-    Flag=TRUE
+    x <- c(x, head(x, 1) * runif(1, 0.999, 1.001))
+    Flag <- TRUE
   }
   
   dens <- AdaptGauss::ParetoDensityEstimation(Data = x)
   
-  #Density cannot be estiamted, set density to value equal 1
-  if(Flag){ 
-    #scatter kernels a little to visualize several features if given
-    dens$kernels=dens$kernels*runif(length(dens$kernels),0.99,1.01)
-    x=max(dens$kernels)-min(dens$kernels)*0.9 #factor such that several features look good
-    dens$paretoDensity[1:length(dens$paretoDensity)]=1/x #integral over pdf should be 1
+  # Density cannot be estiamted, set density to value equal 1
+  if (Flag) {
+    # scatter kernels a little to visualize several features if given
+    dens$kernels <- dens$kernels * runif(length(dens$kernels), 0.99, 1.01)
+    x <- max(dens$kernels) - min(dens$kernels) * 0.9 # factor such that several features look good
+    dens$paretoDensity[1:length(dens$paretoDensity)] <- 1 / x # integral over pdf should be 1
   }
   data.frame(
     x = dens$kernels,
