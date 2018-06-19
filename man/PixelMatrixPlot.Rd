@@ -3,9 +3,9 @@
 \alias{PlotPixMatrix}
 
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Plot Pixel Matrix }
+\title{Pixel Matrix Plot}
 \description{
-  Plots Data matrix as a pixel coulour image
+  Plots Data matrix as a pixel coulour image.
 }
 \usage{
 PixelMatrixPlot(Data, XNames = NULL, LowLim, HiLim,
