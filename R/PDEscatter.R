@@ -30,7 +30,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 #
 #  Author in matlab: ALU 2004
 #  Rewrite in R with improved logic Felix Pape 01/2016
-#
+#  1.Editor: MT 06/18: bugfixes, parallelDist, input checks
 
 #  requireRpackage('reshape2')
   #requireRpackage('akima')
@@ -38,14 +38,15 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
   ##############
   
   requireNamespace('parallelDist')
-  if(isTRUE(na.rm)){
-    tmp=cbind(x,y)
-    tmp=tmp[complete.cases(tmp),]
-    x=tmp[,1]
-    y=tmp[,2]
-  }
+  
+  ## Input check
+
   x=checkFeature(x,'x')
   y=checkFeature(y,'y')
+  if(identical(x,y)){
+    stop('Variable x is identical to variable y. Please check input.')
+  }
+
   isnumber=function(x) return(is.numeric(x)&length(x)==1)
 
   if(!isnumber(paretoRadius))
@@ -57,26 +58,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
   if(!isnumber(NrOfContourLines))
     stop('"NrOfContourLines" is not a numeric number of length 1. Please change Input.')
   
-  # prctile =function (x, p) 
-  # {
-  #   if (length(p) == 1) {
-  #     if (p > 1) {
-  #       p = p/100
-  #     }
-  #   }
-  #   if (is.matrix(x) && ncol(x) > 1) {
-  #     cols <- ncol(x)
-  #     quants <- matrix(0, nrow = length(p), ncol = cols)
-  #     for (i in 1:cols) {
-  #       quants[, i] <- quantile(x[, i], probs = p, type = 5, 
-  #                               na.rm = TRUE)
-  #     }
-  #   }
-  #   else {
-  #     quants <- quantile(x, p, type = 5, na.rm = TRUE)
-  #   }
-  #   return(quants)
-  # }
+  ## Help function(s)
   toRange=function (data, lower, upper) 
   {
     data <- as.matrix(data)
@@ -120,9 +102,18 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
   if(missing(ylim))
     ylim = c(min(y), max(y))
 
-	noNaNInd <- which(!is.nan(x)&!is.nan(y))
-	x <- x[noNaNInd]
-	y <- y[noNaNInd]
+  # if(isTRUE(na.rm)){
+  #   tmp=cbind(x,y)
+  #   tmp=tmp[complete.cases(tmp),]
+  #   x=tmp[,1]
+  #   y=tmp[,2]
+  # }
+  #NAN removal
+  if(isTRUE(na.rm)){
+  	noNaNInd <- which(!is.finite(x)&!is.finite(y))
+  	x <- x[noNaNInd]
+  	y <- y[noNaNInd]
+  }
 	data <- cbind(x,y)
 	percentdata <- toRange(data,0,100)
 	nData <- length(x)
@@ -152,7 +143,6 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 		 # paretoRadius <- paretoRadiusForGMM(Data = data)
 	  #paretoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen
 	  # if(sampleSize<nData)
-
 	    paretoRadius <- quantile(Dists, 6/100, type = 5, na.rm = TRUE)
 
       if(paretoRadius==0){
@@ -163,8 +153,6 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
         warning(paste0('Estimation of Radius(',paretoRadius,') for two-dimensional density may not work properly. You can provide paretoRadius manually.'))
         }
       }
-
-
 	  # else
 	  #   cquantile(Dists[is.finite(Dists)], 6/100)
 	}
@@ -174,9 +162,11 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 
 	inPSpheres = inPSphere2D(percentdata, paretoRadius)
 
-	# Plotting now in zplot (again)
+	## Plotting now in zplot (again)
+	print('test')
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
-
+print('test')
+	
 	if(DrawTopView){
 	  # Assign labels to axis/legend/...
 	  switch(Plotter,'ggplot'={
