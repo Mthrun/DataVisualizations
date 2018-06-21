@@ -1,5 +1,5 @@
 ---
-title: "Short Intro to the Databionic Swarm (DBS)"
+title: "A Quick Tour in Data Visualizations"
 author: "Michael C. Thrun"
 date: "`r format(Sys.time(), '%d %b %Y')`"
 output: 
@@ -13,7 +13,7 @@ output:
             fig.width: 8
             fig.height: 8
 vignette: >
-  %\VignetteIndexEntry{Short Intro to the Databionic Swarm (DBS)}
+  %\VignetteIndexEntry{A Quick Tour in Data Visualizations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -64,12 +64,12 @@ library(vioplot)
 boxplot(ITS)
 vioplot(x=ITS)
 
-DF=data.frame(ID=1:length(ITS),MTY=ITS)
-ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'MTY',x='ID')) + ggplot2::geom_violin(stat = "PDEdensity",fill = "black")+ggplot2::theme_bw()+ggplot2::ylab('Range of Values')+ggplot2::xlab('PDE')
+DF=data.frame(ID=1:length(ITS),ITS=ITS)
+ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'ITS',x='ID')) + ggplot2::geom_violin(stat = "PDEdensity",fill = "black")+ggplot2::theme_bw()+ggplot2::ylab('Range of Values')+ggplot2::xlab('PDE')
 
 #Shortcut for several features
-
-PDEviolinplotData(cbind(ITS,MTY[MTY<10000]))
+MTY[MTY>8000]=8000 #Disregard outliers after deeper analysis, see publication
+PDEviolinplotData(cbind(ITS,MTY))
 ```
 
 ## Correlation Analysis
@@ -191,7 +191,7 @@ SilhouettePlot(Lsun3D$Data,Lsun3D$Cls,PlotIt = T)
 
 Stochastic algorithms like k-means have and clustering output depending on the trial. In [Thrun et al.,2018] we proposed and approach to compare different clustering algorithms with each other.We would normally choose adjusted Rand index or something similar which can be calculated using other CRAN packages like DatabionicSwarm (e.g. ClusteringAccuracy).
 In this special case, the mean silh does not change much and the distribution of changes is uniform. However, large variances and various distributions are very common (http://www.deepbionics.de/Projects/ClusteringAlgorithms.html) if not a hierarchical clustering algorithm is used.
-```{r,fig.width=4, fig.height=4}
+```{r,fig.width=4, fig.height=4,warning=FALSE}
 library(DataVisualizations)
 data("Lsun3D")
 Accuracy=c()
@@ -208,10 +208,10 @@ ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'Accuracy',x='ID')) + ggpl
 
 # References
 
-[Thrun, 2018A]  Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, https://doi.org/10.1007/978-3-658-20540-9, 2018. 
+[Thrun, 2018A]    Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, https://doi.org/10.1007/978-3-658-20540-9, 2018. 
 
-[Thrun, 2018B]  Thrun, M. C. : Cluster Analysis of the World Gross-Domestic Product Based on Emergent Self-Organization of a Swarm, in Papiez, M. & Smiech, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 523-532, Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
+[Thrun, 2018B]    Thrun, M. C. : Cluster Analysis of the World Gross-Domestic Product Based on Emergent Self-Organization of a Swarm, in Papiez, M. & Smiech, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 523-532, Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
 
-[Thrun/Ultsch, 2018] Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
+[Thrun/Ultsch, 2018]    Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
 
-[Thrun et al.,2018]	Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), Paderborn, Germany, 2018. 
+[Thrun et al.,2018]   Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), Paderborn, Germany, 2018. 
