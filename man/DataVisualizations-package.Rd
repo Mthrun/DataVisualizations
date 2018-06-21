@@ -9,7 +9,7 @@
 \packageDescription{DataVisualizations}
 }
 \details{
-For a brief introduction to \pkg{DataVisualizations} please see the vignette \href{../doc/DatabionicSwarm.html}{The Quick Tour in DataVisualizations}.
+For a brief introduction to \pkg{DataVisualizations} please see the vignette \href{../doc/DataVisualizations.html}{A Quick Tour in Data Visualizations}.
 
 Please see \url{http://www.deepbionics.org/}. 
 Depending on the context please cite either [Thrun, 2018] regarding visualizations in the context of clustering or [Thrun/Ultsch, 2018] for other visualizations.
