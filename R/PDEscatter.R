@@ -163,9 +163,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	inPSpheres = inPSphere2D(percentdata, paretoRadius)
 
 	## Plotting now in zplot (again)
-	print('test')
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
-print('test')
 	
 	if(DrawTopView){
 	  # Assign labels to axis/legend/...
