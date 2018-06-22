@@ -109,8 +109,8 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
   #   y=tmp[,2]
   # }
   #NAN removal
-  if(isTRUE(na.rm)){
-  	noNaNInd <- which(!is.finite(x)&!is.finite(y))
+  if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
+  	noNaNInd <- which(is.finite(x)&is.finite(y))
   	x <- x[noNaNInd]
   	y <- y[noNaNInd]
   }
