@@ -43,10 +43,10 @@ QQplotForStandardiziation(Data, TransData, xug = -3, xog = 3, xlab = "Normal", y
 plot
 }
 \references{
-michael 1986
+Michael, J. R.: The stabilized probability plot, Biometrika, Vol. 70(1), pp. 11-17, 1983.
 }
 \author{
-unknown
+Michael Thrun
 }
 \keyword{qqplot}% use one of  RShowDoc("KEYWORDS")
 

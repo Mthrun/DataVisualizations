@@ -8,45 +8,43 @@ QQplot with Fit
 QQplot with linear fit
 }
 \usage{
-QQplotWithFit(Data, TransData, xug = -3, xog = 3, xlab = "Normal", yDataLab =
-
-"Data", yTransDataLab = "Trasformated Data", Symbol4Gerade = "red", main = "", ...)
+QQplotWithFit(X,Y,xlab ='X', ylab='Y',col="red",main='',...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Data}{
-...}
-  \item{TransData}{
-...}
-  \item{xug}{
-...}
-  \item{xog}{
-...}
+  \item{X}{[1:n] numerical vector,
+First Feature}
+  \item{Y}{
+1:n] numerical vector, Second Feature to compare first feature with}
   \item{xlab}{
+  x label, see \code{plot}
 ...}
-  \item{yDataLab}{
-...}
-  \item{yTransDataLab}{
-...}
-  \item{Symbol4Gerade}{
-...}
+  \item{ylab}{
+    y label, see \code{plot}
+}
+  \item{col}{
+    color of line, see \code{plot}}
   \item{main}{
-...}
+  title of plot, see \code{plot}
+  }
   \item{\dots}{
-...
+other parameters for \code{qqplot}
 }
 }
 \details{
-...
+Output is the evaluation of a linear fit of \code{lm} called 'line' and a quantile quantile plot (QQplot).
 }
 \value{
-plot
+List with
+\item{Residuals}{Output of\code{residuals.lm(line)}}
+\item{Summary}{Output of\code{summaryline)}}
+\item{Anova}{Output of\code{anova(line)}}
 }
 \references{
-michael 1986
+Michael, J. R.: The stabilized probability plot, Biometrika, Vol. 70(1), pp. 11-17, 1983.
 }
 \author{
-unknown
+Michael Thrun
 }
 \keyword{qqplot}% use one of  RShowDoc("KEYWORDS")
 
