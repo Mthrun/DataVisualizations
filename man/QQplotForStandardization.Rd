@@ -1,5 +1,5 @@
-\name{QQplotForStandardiziation}
-\alias{QQplotForStandardiziation}
+\name{QQplotForStandardization}
+\alias{QQplotForStandardization}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 QQplot with Fit
@@ -8,7 +8,7 @@ QQplot with Fit
 QQplot with linear fit
 }
 \usage{
-QQplotForStandardiziation(Data, TransData, xug = -3, xog = 3, xlab = "Normal", yDataLab =
+QQplotForStandardization(Data, TransData, xug = -3, xog = 3, xlab = "Normal", yDataLab =
 
 "Data", yTransDataLab = "Trasformated Data", Symbol4Gerade = "red", main = "", ...)
 }

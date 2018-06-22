@@ -1,4 +1,4 @@
-QQplotForStandardiziation=function(Data,TransData, xug=-3, xog=3,xlab ='Normal', yDataLab='Data',yTransDataLab='Trasformated Data',Symbol4Gerade="red",main='',...){
+QQplotForStandardization=function(Data,TransData, xug=-3, xog=3,xlab ='Normal', yDataLab='Data',yTransDataLab='Trasformated Data',Symbol4Gerade="red",main='',...){
 
 # qqnormfit(x,xug,xog)
 # % QQ-Plot von Daten und Transforierten Daten im Vergleich und jeweils mit Ausgleichsgerade
