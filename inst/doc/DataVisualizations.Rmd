@@ -83,13 +83,16 @@ Ind2=which(ITS<900&MTY<8000)
 PDEscatter(ITS[Ind2],MTY[Ind2],xlab = 'ITS in EUR',ylab ='MTY in EUR' ,main='Scatter density plot using PDE' )
 ```
 
-A Shortcut to visualize correlation coefficients:
+A Shortcut to visualize correlation coefficients,if many features have to be compared against each other:
 
 ```{r,fig.width=4, fig.height=4}
 data("Lsun3D")
-cc=cor(Lsun3D$Data)
+n=nrow(Lsun3D$Data)
+Data=cbind(Lsun3D$Data,runif(n),rnorm(n),rt(n,2),rlnorm(n),rchisq(100,2))
+Header=c('x','y','z','uniform','gauss','t','log-normal','chi')
+cc=cor(Data,method='spearman')
 diag(cc)=0
-PixelMatrixPlot(cc)
+PixelMatrixPlot(cc,YNames = Header,XNames = Header,main = 'Spearman Coeffs')
 ```
 
 ## Distribution of Distances
