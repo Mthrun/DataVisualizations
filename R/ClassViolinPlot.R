@@ -61,7 +61,7 @@ ClassViolinPlot <- function(Data, Cls, ColorSequence = DataVisualizations::Defau
   ClassData$ClassNames=factor(ClassData$ClassNames) 
   ggobject = ggplot2::ggplot(ClassData,  aes_string(x = 'class', y = 'data')) +
     
-  ggplot2::geom_violin(stat = "PDEdensity",aes_string(x='class',y='data',fill = 'class'))+
+  ggplot2::geom_violin(stat = "PDEdensity",aes_string(x='class',y='data',fill = 'class'),scale='width')+
   
   # ggobject <- ggplot(ClassData, aes(x = factor(class), y = data)) +
   #   

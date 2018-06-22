@@ -65,7 +65,7 @@ boxplot(ITS)
 vioplot(x=ITS)
 
 DF=data.frame(ID=1:length(ITS),ITS=ITS)
-ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'ITS',x='ID')) + ggplot2::geom_violin(stat = "PDEdensity",fill = "black")+ggplot2::theme_bw()+ggplot2::ylab('Range of Values')+ggplot2::xlab('PDE')
+ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'ITS',x='ID')) + ggplot2::geom_violin(stat = "PDEdensity",fill = "black",scale='width')+ggplot2::theme_bw()+ggplot2::ylab('Range of Values')+ggplot2::xlab('PDE')
 
 #Shortcut for several features
 MTY[MTY>8000]=8000 #Disregard outliers after deeper analysis, see publication

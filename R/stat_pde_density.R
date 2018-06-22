@@ -60,8 +60,8 @@ compute_pdedensity <- function(x) {
   # Density cannot be estiamted, set density to value equal 1
   if (Flag) {
     # scatter kernels a little to visualize several features if given
-    dens$kernels <- dens$kernels * runif(length(dens$kernels), 0.99, 1.01)
-    x <- max(dens$kernels) - min(dens$kernels) * 0.9 # factor such that several features look good
+    dens$kernels <- dens$kernels * runif(length(dens$kernels), 0.998, 1.002)
+    x <- max(dens$kernels) - min(dens$kernels)
     dens$paretoDensity[1:length(dens$paretoDensity)] <- 1 / x # integral over pdf should be 1
   }
   data.frame(
