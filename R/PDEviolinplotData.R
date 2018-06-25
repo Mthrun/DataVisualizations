@@ -38,7 +38,7 @@ PDEviolinplotData <- function(Data, Names){
     plot <-
       ggplot(data = dataframe,
              aes_string(x = "Variables", group = "Variables", y = "Values")) +
-      geom_violin(stat = "PDEdensity",fill='black',scale='width')
+      geom_violin(stat = "PDEdensity",fill='black',scale='width')+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-  return(ggplotObj = plot+ theme(axis.text.x = element_text(angle = 90, hjust = 1)))
+  return(ggplotObj = plot+ theme(axis.text.x = element_text(angle = 90, hjust = 1,size=rel(1.2))))
 } 
