@@ -78,5 +78,5 @@ MAplot=function(x,y,islog=TRUE,densityplot=FALSE,main='MA-plot',xlab,ylab,Cls){
   }
    MA=cbind(M,A)
    colnames(MA)=c('M_y','A_x')
-  return(list(MA=MA,ggplot=ggplot))
+  return(invisible(list(MA=MA,ggplot=ggplot)))
 }
