@@ -19,7 +19,7 @@ For the PDE optimized violin plot please cite [Thrun et al.,2018].
 \packageIndices{DataVisualizations}
 }
 \author{
-Michael Thrun, Felix Pape, Peter Kampstra, Onno Hansen-Goos, Fredericke Matz, Alfred Ultsch
+Michael Thrun, Felix Pape, Onno Hansen-Goos, Alfred Ultsch
 
 Maintainer: \packageMaintainer{DataVisualizations}
 }

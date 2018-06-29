@@ -1,5 +1,5 @@
-PDEviolinplotData <- function(Data, Names){
-  #BoxplotData(data, Names)
+PDEviolinPlot <- function(Data, Names){
+  #PDEviolinPlot(data, Names)
   # Plots a Boxplot for each column of the given data
   #
   # Input
@@ -38,7 +38,7 @@ PDEviolinplotData <- function(Data, Names){
     plot <-
       ggplot(data = dataframe,
              aes_string(x = "Variables", group = "Variables", y = "Values")) +
-      geom_violin(stat = "PDEdensity",fill='black',scale='width')+ theme(axis.text.x = element_text(angle = 90, hjust = 1))
+      geom_violin(stat = "PDEdensity",fill='black',scale='width')
 
-  return(ggplotObj = plot+ theme(axis.text.x = element_text(angle = 90, hjust = 1,size=rel(1.2))))
+  return(ggplotObj = plot+ theme(axis.text.x = element_text(angle = 45, hjust = 1,size=rel(1.2))))
 } 

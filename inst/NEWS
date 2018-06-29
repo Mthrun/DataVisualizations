@@ -3,6 +3,7 @@ Version 1.1.1 (CRAN 2018-07-30)
 	
 Version 1.1.0 (GitHub)
     o Vignette generated
+	o Bugfix: authors stated in Description regarding functions which were used in other dbt packages instead of this package.
 	
 Version 1.0.9 (GitHub)
     o ClassViolinPlot build on top of stat_pde_density for Data with Clustering

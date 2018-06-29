@@ -1,5 +1,5 @@
-\name{PDEviolinplotData}
-\alias{PDEviolinplotData}
+\name{PDEviolinPlot}
+\alias{PDEviolinPlot}
 \title{
 PDE optimized violoin plot for multiple variables
 }
@@ -7,7 +7,7 @@ PDE optimized violoin plot for multiple variables
 This function creates a PDE optimized violin plot for each variable of the data matrix. Each boxplot also has a point for the mean of the variable.
 }
 \usage{
-PDEviolinplotData(Data, Names)
+PDEviolinPlot(Data, Names)
 }
 
 \arguments{
@@ -27,7 +27,7 @@ Michael Thrun, Felix Pape
 }
 \examples{
 x <- cbind(A = rnorm(200, 1, 3), B = rnorm(100, -2, 5))
-PDEviolinplotData(x)
+PDEviolinPlot(x)
 }
 \details{
 Published in [Thrun et al.,2018] for the evaluation of stochastic clustering methods and used in [Thrun et al.,2018a] in order to simultaneously estimate variances of a high-dimensional data set.
@@ -41,3 +41,4 @@ Published in [Thrun et al.,2018] for the evaluation of stochastic clustering met
 % R documentation directory.
 \keyword{violin plot}
 \keyword{PDE}
+\keyword{violin}

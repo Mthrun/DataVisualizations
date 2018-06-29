@@ -8,7 +8,7 @@ Inspection of Distance-Distribution
 Visualizes the distances between objects in the data matrix 
 }
 \usage{
-InspectDistances(DataOrDistances,method= "euclidean",sampleSize = 10000,...)
+InspectDistances(DataOrDistances,method= "euclidean",sampleSize = 50000,...)
 }
 \arguments{
   \item{DataOrDistances}{

@@ -78,8 +78,7 @@ ClassViolinPlot <- function(Data, Cls, ColorSequence = DataVisualizations::Defau
     scale_fill_manual(values = ColorSequence,
                      labels = ClassNames,
                      name = "Classes") +
-    
-    ggtitle(main)+ theme(axis.text.x = element_text(angle = 90, hjust = 1,size = rel(1.2)))
+    ggtitle(main)+ theme(axis.text.x = element_text(angle = 45, hjust = 1,size = rel(1.2)))
   
   if (!PlotLegend)
     ggobject <- ggobject + theme(legend.position = "none")
