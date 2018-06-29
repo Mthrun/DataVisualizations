@@ -55,7 +55,9 @@ import(AdaptGauss)
 importFrom("utils", "head", "tail")
    importFrom("graphics", "pie")
    importFrom('sp','SpatialPolygons')
-   
+   importClassesFrom(sp, SpatialPolygons)
+   importMethodsFrom(sp, plot)
+
      importFrom("graphics", "legend")
   importFrom("stats", "dnorm", "sd")
    importFrom("graphics", "abline")
