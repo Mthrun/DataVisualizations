@@ -30,7 +30,7 @@ InspectDistances=function(DataOrDistances,method= "euclidean",sampleSize = 50000
   else{
     print('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
     #InputDistances = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
-    vecdist=as.vector(parallelDist::parDist(DataOrDistances,method = 'euclidean',diag = F,upper = F))
+    vecdist=as.vector(parallelDist::parDist(DataOrDistances,method = method,diag = F,upper = F))
     #DataDists = DistanceMatrix(DataOrDistances, method = method)
   }
   
