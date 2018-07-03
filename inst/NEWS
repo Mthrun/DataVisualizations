@@ -1,4 +1,7 @@
-Version 1.1.1 (CRAN 2018-07-30)
+Version 1.1.2 (GitHub, 2018-02-07)
+	o bugfix: InspectDistances methods argument now passed on to parallelDist::parDist
+
+Version 1.1.1 (CRAN 2018-06-30)
 	o Improved visualization of PDE optimized violin plot
 	
 Version 1.1.0 (GitHub)

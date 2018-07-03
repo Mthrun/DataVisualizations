@@ -20,7 +20,7 @@ InspectDistances(DataOrDistances,method= "euclidean",sampleSize = 50000,...)
 }
   \item{method}{Optional, 
 if Data[1:n,1:d]
-  see \code{dist} for distance method
+  see \code{parallelDist::parDist} for distance method
 }
   \item{sampleSize}{double value defining the size of the sample for large distance matrizes, see \code{InspectVariable}
 }
