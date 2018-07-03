@@ -8746,7 +8746,9 @@ maptools package
 maptools package
 }
 \examples{
+\donttest{
 data(world_country_polygons)
 str(world_country_polygons)
+}
 }
 \keyword{datasets}
