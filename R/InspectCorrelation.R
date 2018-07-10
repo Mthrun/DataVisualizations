@@ -7,6 +7,7 @@ InspectCorrelation=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt
                             xlim, ylim, Legendlab_ggplot="value"){
   x=checkFeature(x,'x')
   y=checkFeature(y,'y')
+  #requireNamespace('ggExtra')
   if(identical(x,y)){
     stop('Variable x is identical to variable y. Please check input.')
   }
@@ -18,12 +19,14 @@ InspectCorrelation=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt
   ccc=round(cor(x,y,method = 'spearman'),2)
   
   main=paste(main,ccc)
-  return(PDEscatter(x,y,na.rm=FALSE,paretoRadius=paretoRadius,sampleSize=sampleSize,
+ggobject=PDEscatter(x,y,na.rm=FALSE,paretoRadius=paretoRadius,sampleSize=sampleSize,
              
-             NrOfContourLines=NrOfContourLines,Plotter=Plotter, DrawTopView = DrawTopView,
+             NrOfContourLines=NrOfContourLines,Plotter='ggplot', DrawTopView = TRUE,
              
              xlab=xlab, ylab=ylab, main=main,
              
-             xlim=xlim, ylim=ylim, Legendlab_ggplot=Legendlab_ggplot))
-  
+             xlim=xlim, ylim=ylim, Legendlab_ggplot=Legendlab_ggplot)$Handle
+#print(ggobject)
+#ggExtra::ggMarginal(ggobject, type="histogram", bins = 25,x='x',y='y')
+return(ggobject)  
 }
