@@ -1,3 +1,7 @@
+Version 1.1.3 (GitHub, 2018-02-07)
+	o Improvement: PDEviolinPlot layout changes and plotting paramater added
+	o InspectCorrelation now visualizes the density and calcluates the spearman correlation index as a shortcut to PDEscatter
+	
 Version 1.1.2 (GitHub, 2018-02-07)
 	o bugfix: InspectDistances methods argument now passed on to parallelDist::parDist
 
