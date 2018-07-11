@@ -39,7 +39,7 @@ Michael Thrun, Felix Pape
 x <- cbind(A = runif(200, 1, 3), B = c(rnorm(100,0,1),rnorm(100,2.4,1)))
 PDEviolinPlot(x)
 }
-\donttest
+\donttest{
 x <- cbind(A = runif(20000, 1, 3), B = c(rnorm(10000,0,1),rnorm(10000,2.6,1)))
 PDEviolinPlot(x)
 }
