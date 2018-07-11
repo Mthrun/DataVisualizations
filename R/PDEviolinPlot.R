@@ -1,4 +1,4 @@
-PDEviolinPlot <- function(Data, Names,fill='darkblue',scale='width',size=1.1){
+PDEviolinPlot <- function(Data, Names,fill='darkblue',scale='width',size=0.5){
   #PDEviolinPlot(data, Names)
   # Plots a Boxplot for each column of the given data
   #
@@ -31,14 +31,15 @@ PDEviolinPlot <- function(Data, Names,fill='darkblue',scale='width',size=1.1){
   }
 
   requireNamespace("reshape2")
+  requireNamespace("ggExtra")
   dataframe = reshape2::melt(Data)
   colnames(dataframe) <- c('ID', 'Variables', 'Values')
   dataframe$Variables=as.character(dataframe$Variables)
 
     plot <-
       ggplot(data = dataframe,
-             aes_string(x = "Variables", group = "Variables", y = "Values")) +
-      geom_violin(stat = "PDEdensity",fill=fill,scale=scale,size=size)#+ggExtra::rotateTextX() #testen ob besser wie unten
+             aes_string(x = "Variables", group = "Variables", y = "Values"))+ggExtra::rotateTextX() +
+      geom_violin(stat = "PDEdensity",fill=fill,scale=scale,size=size)+ theme(axis.text.x = element_text(size=rel(1.2)))
 
-  return(ggplotObj = plot+ theme(axis.text.x = element_text(angle = 45, hjust = 1,size=rel(1.2))))
+  return(ggplotObj = plot)
 } 
