@@ -38,7 +38,7 @@ PDEviolinPlot <- function(Data, Names,fill='darkblue',scale='width',size=1.1){
     plot <-
       ggplot(data = dataframe,
              aes_string(x = "Variables", group = "Variables", y = "Values")) +
-      geom_violin(stat = "PDEdensity",fill=fill,scale=scale,size=size)
+      geom_violin(stat = "PDEdensity",fill=fill,scale=scale,size=size)#+ggExtra::rotateTextX() #testen ob besser wie unten
 
   return(ggplotObj = plot+ theme(axis.text.x = element_text(angle = 45, hjust = 1,size=rel(1.2))))
 } 
