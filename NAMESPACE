@@ -1,11 +1,12 @@
 useDynLib(DataVisualizations, .registration=TRUE)
 
+
 export(BoxplotData)
 export(ClassBoxPlot)
 export(ClassPDEplot)
 export(ClassViolinPlot)
-export(BoxplotData)
 export(ClassPDEplotMaxLikeli)
+export(DualAxisLineChart)
 export(fanPlot)
 export(GoogleMapsCoordinates)
 export(Heatmap)
