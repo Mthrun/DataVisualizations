@@ -3,7 +3,7 @@ DualAxisLineChart=function(X,Y1,Y2,xlab='X',y1lab='Y1',y2lab='Y2',main='Dual Axi
   
   p <- plotly::plot_ly() %>%
     plotly::add_lines(x = ~X, y = ~Y1, name = y1lab, line = list(color=cols[1])) %>%
-    plotly::add_lines(x = ~NoHolNoEndweek$Time, y = ~Y2, name = y2lab, yaxis = "y2", line = list(color=cols[2])) %>%
+    plotly::add_lines(x = ~X, y = ~Y2, name = y2lab, yaxis = "y2", line = list(color=cols[2])) %>%
     plotly::layout(
       title = main, 
       yaxis2 = list(
