@@ -1,4 +1,4 @@
-PDEviolinPlot <- function(Data, Names,fill='darkblue',scale='width',size=0.5){
+PDEviolinPlot <- function(Data, Names,fill='darkblue',scale='width',size=0.01){
   #PDEviolinPlot(data, Names)
   # Plots a Boxplot for each column of the given data
   #
