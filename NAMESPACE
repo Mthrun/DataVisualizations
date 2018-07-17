@@ -36,7 +36,7 @@ export(StatPDEdensity)
 
 import(Rcpp)
 import(ggplot2)
-import(magrittr)
+	
 import(AdaptGauss)
   importFrom("graphics", "hist", "title")
   importFrom("stats", "dist", "runif")
