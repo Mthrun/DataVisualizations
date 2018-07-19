@@ -1,7 +1,8 @@
-Version 1.1.4 (GitHub, 2018-02-07)
+Version 1.1.4 (GitHub, 2018-07-19)
 	o DualAxisLineChart enables to visualize to lines in one plot overlaying them using ploty (e.g. two time series with two ranges of values)
-
-Version 1.1.3 (GitHub, 2018-07-04)
+	o bugfix: PDEscatter now removes non-numeric values with na.rm=TRUE before xlim and ylim are defined
+	
+Version 1.1.3 (GitHub, 2018-07-07)
 	o Improvement: PDEviolinPlot layout changes and plotting paramater added
 	o InspectCorrelation now visualizes the density and calcluates the spearman correlation index as a shortcut to PDEscatter
 	o minor bugifx: PDEviolinPlot now uses ggExtra::rotateTextX() for better xaxis alignment of text

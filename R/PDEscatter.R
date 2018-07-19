@@ -97,10 +97,16 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
   }
   
   ######
+  if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
+    noNaNInd <- which(is.finite(x)&is.finite(y))
+    x <- x[noNaNInd]
+    y <- y[noNaNInd]
+  }
+  
   if(missing(xlim))
-    xlim = c(min(x), max(x))
+    xlim = c(min(x,na.rm = T), max(x,na.rm = T))
   if(missing(ylim))
-    ylim = c(min(y), max(y))
+    ylim = c(min(y,na.rm = T), max(y,na.rm = T))
 
   # if(isTRUE(na.rm)){
   #   tmp=cbind(x,y)
@@ -109,11 +115,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
   #   y=tmp[,2]
   # }
   #NAN removal
-  if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
-  	noNaNInd <- which(is.finite(x)&is.finite(y))
-  	x <- x[noNaNInd]
-  	y <- y[noNaNInd]
-  }
+
 	data <- cbind(x,y)
 	percentdata <- toRange(data,0,100)
 	nData <- length(x)
