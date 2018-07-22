@@ -32,6 +32,7 @@ vignette: >
 #                       )
 ```
 # Exploratory Data Analysis
+"Exploratory data analysis is detective work" [Tukey, 1977, p.2]. This package enables the user to use graphical tools to find 'quantitative indications' enabling a better understanding of the data at hand. "As all all detective stories remind us, many of the circumstances surrounding acrime are accidental or misleading. Equally, many of the indications to be discerned in bodies of data are accidental or misleading [Tukey, 1977, p.3]." The solution is to compare many different graphical tools with the goal to find an agreement or to generate an hypothesis and then to confirm it with statistical methods. This package serves as a starting point. 
 
 ## Synoptic Overview
 
@@ -219,3 +220,5 @@ ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'Accuracy',x='ID')) + ggpl
 [Thrun/Ultsch, 2018]    Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
 
 [Thrun et al.,2018]   Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), Paderborn, Germany, 2018. 
+
+[Tukey, 1977]  Tukey, J. W.: Exploratory data analysis, United States Addison-Wesley Publishing Company, ISBN: 0-201-07616-0, 1977.
