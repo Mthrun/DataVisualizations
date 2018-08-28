@@ -5,25 +5,28 @@
 3D plot of points
 }
 \description{
-A wrapper for Data with systematic clustering colors for a x,y,z plot combined with a classification
+A wrapper for Data with systematic clustering colors for either a 2D (x,y) or 3D (x,y,z) plot combined with a classification
 }
 \usage{
-plot3D(Data,Cls,\dots)
+plot3D(Data,Cls,UniqueColors,\dots)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{Data}{
-[1:n,1:d] matrix with either d=2 or d=3, if d>3 only the first 3 dimensions are taken
+[1:n,1:d] matrix with either \code{d=2} or \code{d=3}, if \code{d>3} only the first 3 dimensions are taken
 }
   \item{Cls}{
-[1:n] numeric vector of the classification of data
+[1:n] numeric vector of the classification of data with \code{k} classes
+}
+  \item{UniqueColors}{
+[1:k] character vector of colors, if not given DataVisualizations::DefaultColorSequence is used
 }
   \item{\dots}{
-further arguments to be processed by \code{\link[rgl]{plot3d}} or \code{\link{plot}}
+further arguments to be processed by \code{\link[rgl]{plot3d}} or \code{\link[ggplot2]{geom_point}}
 }
 }
 \details{
-if d<3 \code{points} function is called with \code{pch=19}
+For \code{\link[ggplot2]{geom_point}} only \code{size} and \code{na.rm} is available as further arguments.
 }
 
 \references{
@@ -36,7 +39,7 @@ Michael Thrun
 }
 
 \note{
-Uses either  \code{\link{plot}} for 2D or \code{\link[rgl]{plot3d}} for 3D
+Uses either \code{\link[ggplot2]{geom_point}} for 2D or \code{\link[rgl]{plot3d}} for 3D
 }
 
 \examples{
@@ -46,6 +49,10 @@ plot3D(Lsun3D$Data,Lsun3D$Cls,type='s',radius=0.1,box=F,aspect=T)
 \donttest{
 rgl::grid3d(c("x", "y", "z"))
 }
+
+Data=cbind(runif(1000),rnorm(1000))
+Cls=kmeans(Data,3)$cluster #random classification
+plot3D(Data,Cls,UniqueColors = DataVisualizations::DefaultColorSequence[c(1,3,6)],size=2)
 }
 
 
