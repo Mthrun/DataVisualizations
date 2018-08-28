@@ -1,4 +1,4 @@
-ProductRatioPlot=function(x,y,na.rm=FALSE,main='Product Ratio Analysis',ylab='Root of Product',xlab='Log of Ratio',...){
+ProductRatioPlot=function(x,y,na.rm=FALSE,main='Product Ratio Analysis',xlab='Log of Ratio',ylab='Root of Product',...){
   
   if(length(x)!=length(y)) stop('Vectors x and y have to be of equal length')
   

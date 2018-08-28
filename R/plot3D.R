@@ -55,7 +55,7 @@ if (ncol >= 3) {
   if (NoColors)
     rgl::plot3d(x, y, z, ...)
   else
-    rgl::plot3d(x, y, z, col = Lcol, ...)
+    rgl::plot3d(x, y, z, col = Lcol,  ...)
 
   if (ncol > 3) {
     warning('Only the first three columns are used.')

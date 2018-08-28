@@ -11,7 +11,7 @@ Product-Ratio Plot as defined in [Tukey, 1977, p. 594].
 \usage{
 ProductRatioPlot(x, y, na.rm = FALSE, 
 
-main='Product Ratio Analysis',ylab = "Product", xlab = "Ratio", ...)
+main='Product Ratio Analysis',xlab = "Log of Ratio",ylab = "Root of Product", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

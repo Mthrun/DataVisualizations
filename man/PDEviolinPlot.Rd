@@ -7,7 +7,7 @@ PDE optimized violoin plot for multiple variables
 This function creates a PDE optimized violin plot for each variable of the data matrix. Each boxplot also has a point for the mean of the variable.
 }
 \usage{
-PDEviolinPlot(Data, Names,fill='darkblue',scale='width',size=1.1)
+PDEviolinPlot(Data, Names,fill='darkblue',scale='width',size=0.01)
 }
 
 \arguments{
@@ -45,7 +45,7 @@ PDEviolinPlot(x)
 }
 #Check for significance
 \donttest{
-require(diptest)
+requireNamespace('diptest')
 diptest::dip.test(x[,1])$p.value
 diptest::dip.test(x[,2])$p.value
 }
