@@ -181,7 +181,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	    plt <- 'Native does not have a Handle'
 	  }, 'plotly'={
 	  requireNamespace('plotly')
-	    plt <- plt %>% plotly::layout(xaxis= list(title=xlab),
+	    plt <- plotly::layout(plt,xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),
 	                                  title= main)
 
@@ -190,18 +190,18 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	  switch(Plotter,'ggplot'={
       print('Plotly plot is used because ggplot is not implemented for option DrawTopView=FALSE.')
 	    requireNamespace('plotly')
-	    plt <- plt %>% plotly::layout(scene=list(xaxis= list(title=xlab),
+	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                             yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                             title= main))
 	  },'native'={
 	    print('Plotly plot is used because native is not implemented for option DrawTopView=FALSE.')
 	    requireNamespace('plotly')
-	    plt <- plt %>% plotly::layout(scene=list(xaxis= list(title=xlab),
+	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                             yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                             title= main))
 	  }, 'plotly'={
 	    requireNamespace('plotly')
-	    plt <- plt %>% plotly::layout(scene=list(xaxis= list(title=xlab),
+	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                  title= main))
 	    

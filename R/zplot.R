@@ -90,10 +90,13 @@ zplot <- function(x,y,z,DrawTopView = TRUE,NrOfContourLines = 20, TwoDplotter = 
     zaxis = list(title = "Z")
 
 #    requireRpackage("plotly")
-requireNamespace('plotly')
+  requireNamespace('plotly')
     # Aus Gruenden erwartet plotly die Matrix transponiert zur R implementation
-    return(plotly::plot_ly(x = fld$x, y = fld$y, z = t(fld$z), type="surface", colors = DataVisualizations::PmatrixColormap) %>%
-      plotly::layout(scene =list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis)))
+  p<-plotly::plot_ly(x = fld$x, y = fld$y, z = t(fld$z), type="surface", colors = DataVisualizations::PmatrixColormap)
+
+  p <-plotly::layout(p,scene =list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis))
+
+    return(p)
     ####
 
     #### Option 2: rgl. Kann GAR keine colormaps?
