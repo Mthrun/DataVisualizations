@@ -46,13 +46,23 @@ Uses either \code{\link[ggplot2]{geom_point}} for 2D or \code{\link[rgl]{plot3d}
 #Spin3D similar output
 data(Lsun3D)
 plot3D(Lsun3D$Data,Lsun3D$Cls,type='s',radius=0.1,box=FALSE,aspect=TRUE)
-\donttest{
-rgl::grid3d(c("x", "y", "z"))
-}
+\donttest{rgl::grid3d(c("x", "y", "z"))}
 
-Data=cbind(runif(1000,min=-3,max=3),rnorm(1000))
-Cls=kmeans(Data,3)$cluster #random classification
-plot3D(Data,Cls,UniqueColors = DataVisualizations::DefaultColorSequence[c(1,3,6)],size=2)
+#Projected Points with Classification
+Data=cbind(runif(500,min=-3,max=3),rnorm(500))
+
+# Classification
+Cls=ifelse(Data[,1]>0,1,2)
+plot3D(Data,Cls,UniqueColors = DataVisualizations::DefaultColorSequence[c(1,3)],size=2)
+
+\donttest{
+#Points with Non-Overlapping Labels
+#require(ggrepel)
+Data=cbind(runif(30,min=-1,max=1),rnorm(30,0,0.5))
+Names=paste0('VeryLongName',1:30)
+ggobj=plot3D(Data)
+ggobj +  geom_text_repel(aes(label=Names), size=3)
+}
 }
 
 
