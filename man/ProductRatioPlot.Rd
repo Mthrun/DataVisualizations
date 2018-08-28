@@ -55,7 +55,7 @@ Michael Thrun
 #Beware: The data does no fit ne requirements for this approach
 data('ITS')
 data(MTY)
-PlotProjectedPoints(ITS,MTY)
+ProductRatioPlot(ITS,MTY)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

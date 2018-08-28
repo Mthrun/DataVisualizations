@@ -8,7 +8,11 @@ DualAxisLineChart
 A line chart with dual axisSS
 }
 \usage{
-DualAxisLineChart(X, Y1, Y2, xlab = "X", y1lab = "Y1", y2lab = "Y2", main = "Dual Axis Line Chart", cols = c("black", "blue"), SaveIt = FALSE)
+DualAxisLineChart(X, Y1, Y2, xlab = "X", 
+
+y1lab = "Y1", y2lab = "Y2", main = "Dual Axis Line Chart",
+
+cols = c("black", "blue"), SaveIt = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -50,10 +54,8 @@ Michael Thrun
 }
 
 \examples{
-
+#
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{DualAxisLineChart}% use one of  RShowDoc("KEYWORDS")
 \keyword{Line Chart}% __ONLY ONE__ keyword per line
 \keyword{Dual Axis Line Chart}

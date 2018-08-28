@@ -59,7 +59,7 @@ importFrom("utils", "head", "tail")
    importFrom('sp','SpatialPolygons')
    importClassesFrom(sp, SpatialPolygons)
    importMethodsFrom(sp, plot)
-
+importFrom("stats", "cor")
      importFrom("graphics", "legend")
   importFrom("stats", "dnorm", "sd")
    importFrom("graphics", "abline")

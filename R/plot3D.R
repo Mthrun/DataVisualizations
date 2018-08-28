@@ -1,4 +1,4 @@
-plot3D = function (Data,Cls,UniqueColors,size=2,na.rm=F,....){
+plot3D = function (Data,Cls,UniqueColors,size=2,na.rm=F,...){
 #plot3D(Data,Cls)
 #A wrapper for Data with systematic clustering colors for a x,y,z plot combined with a classification
 #INPUT
@@ -46,8 +46,9 @@ if (missing(Cls)) {
     Lcol[Cls == UniqueC[i]] = LcolUnique[i]
 }
 
-requireNamespace('rgl')
+
 if (ncol >= 3) {
+  requireNamespace('rgl')
   x = Data[, 1]
   y = Data[, 2]
   z = Data[, 3]
@@ -61,22 +62,22 @@ if (ncol >= 3) {
   }
 }
 if (ncol == 2) {
+  # ggplot2
   #plot.new()
   x = Data[, 1]
   y = Data[, 2]
-# ggplot2
   DF=data.frame(x=x,y=y)
   p <- ggplot(DF, aes(x, y))
   if (NoColors){
-    p <-  p + geom_point(color='blue',size=size,na.rm=na.rm)
+    p <-  p + geom_point(color='blue',size=size,na.rm=na.rm,...)
     # p <-  p +  geom_text_repel(aes(label=colnames(Forecasts)), size=3)
     # plot(x, y, pch = 19, ...)
   }else{
-    p <-  p + geom_point(color=Lcol,size=size,na.rm=na.rm)
+    p <-  p + geom_point(color=Lcol,size=size,na.rm=na.rm,...)
     # p <-  p +  geom_text_repel(aes(label=colnames(Forecasts)), size=3)
     # plot(x, y, col = Lcol, pch = 19, ...)
   }
-  p <-p+theme_bw()
+  p <-p+coord_fixed(ratio = 1)+theme_bw()
   return(p)
 }
 

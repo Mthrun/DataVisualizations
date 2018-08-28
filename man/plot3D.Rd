@@ -45,12 +45,12 @@ Uses either \code{\link[ggplot2]{geom_point}} for 2D or \code{\link[rgl]{plot3d}
 \examples{
 #Spin3D similar output
 data(Lsun3D)
-plot3D(Lsun3D$Data,Lsun3D$Cls,type='s',radius=0.1,box=F,aspect=T)
+plot3D(Lsun3D$Data,Lsun3D$Cls,type='s',radius=0.1,box=FALSE,aspect=TRUE)
 \donttest{
 rgl::grid3d(c("x", "y", "z"))
 }
 
-Data=cbind(runif(1000),rnorm(1000))
+Data=cbind(runif(1000,min=-3,max=3),rnorm(1000))
 Cls=kmeans(Data,3)$cluster #random classification
 plot3D(Data,Cls,UniqueColors = DataVisualizations::DefaultColorSequence[c(1,3,6)],size=2)
 }
