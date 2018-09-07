@@ -16,8 +16,8 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= seq(0, 100, 5),PlotIt
   leerb = setdiff(1:length(xbins), u)
   #Fill up also mising bins
   CrossTable = table(c(aint, leera, rep(1, length(leerb))), c(bint, rep(1, length(leera)), leerb))
-  #Transform
-  frequency <-  as.data.frame(CrossTable)
+  #Transform to matrix
+  frequency <-  as.matrix(CrossTable)
   frequency[, 1] = as.numeric(frequency[, 1])
   frequency[, 2] = as.numeric(frequency[, 2])
   #Correction: set missing bins to zero
