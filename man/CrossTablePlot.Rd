@@ -5,7 +5,7 @@
 CrossTablePlot
 }
 \description{
-Presents a heatmap with values and a cross table of given Data matrix of two features and a bin width or percentualized values.
+Presents a heatmap with values and a cross table of given Data matrix of two features and a bin width or percentualized values. In this approach the bin width is fixes. A more general way to approach this is the kernel density estimation plot of \code{\link{PDEscatter}}.
 }
 \usage{
 CrossTablePlot(Data, xbins = seq(0, 100, 5), 
@@ -37,6 +37,7 @@ Default TRUE: plots text in heatmap with the values of the crosstable
   \item{TextDigits}{
 integer indicating the number of decimal places to use in \code{\link{round}} for \code{TextDigits=TRUE}.
 }
+}
 \details{
 The interval in each bin is closed to the left and opened to the right. The cross table can be seen as a two-dimensional histogram. The idea to add histograms to the table is taken from [Charpentier. 2014].
 }
@@ -55,7 +56,7 @@ For non percentiled values the \code{PlotText} part does not seem always to work
 
 
 \seealso{
-\code{\link{table}},\code{\link{image}}
+\code{\link{table}}, \code{\link{image}}, \code{\link{PDEscatter}}
 }
 \examples{
 #ToDo
