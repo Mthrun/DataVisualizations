@@ -1,4 +1,4 @@
-CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,PlotIt=TRUE,NormalizationFactor=1,PlotText=TRUE,TextDigits=0){
+CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,NormalizationFactor=1,PlotIt=TRUE,main='Cross Table',PlotText=TRUE,TextDigits=0){
   #Cathing simple errors of DAU
   if(!is.matrix(Data)){
     warning('Data is expected to be a matrix, trying to transform..')
@@ -50,6 +50,7 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,PlotIt=TRUE,Nor
     
     oldpar <- par()
     par(mar=c(4,4,1,1))
+ 
     layout(matrix(c(2,0,1,3),2,2,byrow=T),c(3,1), c(1,3))
     image(
       xbins,
@@ -59,6 +60,7 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,PlotIt=TRUE,Nor
       ylab = colnames(Data)[2],
       col = cols
     )
+    
     if(PlotText)
       text(
         frequency[, 1] * widthx - widthx ,
@@ -69,6 +71,7 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,PlotIt=TRUE,Nor
     barplot(hx$counts, axes=F, ylim=c(0, top), space=0, col='blue')
     par(mar=c(3,0,0.5,1))
     barplot(hy$counts, axes=F, xlim=c(0, top), space=0, col='blue', horiz=T)
+    title(main,outer = T,line = -2)
   }
   return(invisible(CrossTable / NormalizationFactor))
 }
