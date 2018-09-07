@@ -49,7 +49,7 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,PlotIt=TRUE,Nor
     widthy = abs(ybins[2] - ybins[1])
     
     oldpar <- par()
-    par(mar=c(3,3,1,1))
+    par(mar=c(4,4,1,1))
     layout(matrix(c(2,0,1,3),2,2,byrow=T),c(3,1), c(1,3))
     image(
       xbins,
@@ -65,9 +65,9 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,PlotIt=TRUE,Nor
         frequency[, 2] * widthy - widthy ,
         labels = round(frequency[, 3] / NormalizationFactor, digits = TextDigits)
       )
-    par(mar=c(0,2,1,0))
+    par(mar=c(0,3,1,0))
     barplot(hx$counts, axes=F, ylim=c(0, top), space=0, col='blue')
-    par(mar=c(2,0,0.5,1))
+    par(mar=c(3,0,0.5,1))
     barplot(hy$counts, axes=F, xlim=c(0, top), space=0, col='blue', horiz=T)
   }
   return(invisible(CrossTable / NormalizationFactor))
