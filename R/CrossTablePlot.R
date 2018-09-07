@@ -1,4 +1,4 @@
-CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,NormalizationFactor=1,PlotIt=TRUE,main='Cross Table',PlotText=TRUE,TextDigits=0){
+CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,NormalizationFactor=1,PlotIt=TRUE,main='Cross Table',PlotText=TRUE,TextDigits=0,TextProbs=c(0.05,0.95)){
   #Cathing simple errors of DAU
   if(!is.matrix(Data)){
     warning('Data is expected to be a matrix, trying to transform..')
@@ -61,12 +61,32 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,NormalizationFa
       col = cols
     )
     
-    if(PlotText)
+    if(PlotText){
+      freqxy=round(frequency[, 3] / NormalizationFactor, digits = TextDigits)
+      qq=quantile(freqxy,probs = TextProbs)
+      ind1=which(freqxy<=qq[1])
+      ind2=which(freqxy>qq[1]&freqxy<=qq[2])
+      ind3=which(freqxy>qq[2])
       text(
-        frequency[, 1] * widthx - widthx ,
-        frequency[, 2] * widthy - widthy ,
-        labels = round(frequency[, 3] / NormalizationFactor, digits = TextDigits)
+        frequency[ind1, 1] * widthx - widthx ,
+        frequency[ind1, 2] * widthy - widthy ,
+        labels = freqxy[ind1],
+        col ='white' 
       )
+      if(length(ind2)>0)
+        text(
+          frequency[ind2, 1] * widthx - widthx ,
+          frequency[ind2, 2] * widthy - widthy ,
+          labels = freqxy[ind2],
+          col ='grey' 
+        )
+      text(
+        frequency[ind3, 1] * widthx - widthx ,
+        frequency[ind3, 2] * widthy - widthy ,
+        labels = freqxy[ind3],
+        col ='black' 
+      )
+    }
     par(mar=c(0,3,1,0))
     barplot(hx$counts, axes=F, ylim=c(0, top), space=0, col='blue')
     par(mar=c(3,0,0.5,1))
