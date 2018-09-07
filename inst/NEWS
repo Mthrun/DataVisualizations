@@ -2,8 +2,9 @@ Version 1.1.4 (GitHub, 2018-08-26)
 	o DualAxisLineChart enables to visualize to lines in one plot overlaying them using ploty (e.g. two time series with two ranges of values)
 	o Bugfix: PDEscatter now removes non-numeric values with na.rm=TRUE before xlim and ylim are defined
 	o ProductRatioPlot: The plot is useful in the case where there are many instances of very small values, but a small number of very large ones
+	o CrossTablePlot: Presents a heatmap with values and a cross table of given Data matrix of two features and a bin width or percentualized values
 	o Update: plot3D function and documentation improved.
-
+	
 Version 1.1.3 (GitHub, 2018-07-07)
 	o Improvement: PDEviolinPlot layout changes and plotting paramater added
 	o InspectCorrelation now visualizes the density and calcluates the spearman correlation index as a shortcut to PDEscatter
