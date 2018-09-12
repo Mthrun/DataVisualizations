@@ -93,5 +93,8 @@ CrossTablePlot=function(Data,xbins = seq(0, 100, 5),ybins= xbins,NormalizationFa
     barplot(hy$counts, axes=F, xlim=c(0, top), space=0, col='blue', horiz=T)
     title(main,outer = T,line = -2)
   }
+  rownames(CrossTable)=xbins
+  colnames(CrossTable)=ybins
+  CrossTable=t(CrossTable)#defined as in plot
   return(invisible(CrossTable / NormalizationFactor))
 }

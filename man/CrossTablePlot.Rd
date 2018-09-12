@@ -29,7 +29,8 @@ PlotText=TRUE,TextDigits=0,TextProbs=c(0.05,0.95))
 Optional, Data feautures can be seen as regular time series, e.g. 1 measurement for a minute, in this case it is useful to normalize the output, e.g. to hours, then \code{NormalizationFactor=60}
 }
   \item{PlotIt}{
-Optional, Plots the heatmap if \code{TRUE}
+Optional, Plots the heatmap if \code{TRUE}.
+The first feature is on the x-axis (left to right) and the second on y-axis (bottom to top).
 }
   \item{main}{
 In case of for \code{PlotIt=TRUE}: title of plot, see \code{\link{title}}
@@ -49,7 +50,9 @@ In case of for \code{TextDigits=TRUE}: [1:2] numeric vector of two probabilities
 The interval in each bin is closed to the left and opened to the right. The cross table can be seen as a two-dimensional histogram. The idea to add histograms to the table is taken from [Charpentier. 2014].
 }
 \value{
-\code{invisible} Output of the cross table which the depicts the number of values (frequency) in an specific range with regard to two variables. 
+The cross table in \code{invisible} mode which depicts the number of values (frequency) in an specific range with regard to two features. 
+
+The first feature is on the x-axis (left to right), and the second on y-axis (top to bottom) contrary to the plot where it is bottom to top.
 }
 \references{
 [Charpentier. 2014]  Charpentier, Arthur, ed. Computational actuarial science with R. CRC Press, 2014.
