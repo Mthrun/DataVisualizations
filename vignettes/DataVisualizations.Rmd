@@ -54,7 +54,7 @@ InspectVariable(MTY,'MTY')
 
 ```
 
-## PDE-Optimized Violin Plots
+## Mirrored Density Plots (MD-plots): PDE-Optimized Violin Plots
 
 A clear model behind density estimation can outperform conventional visualization approaches. The approach is published in [Thrun et al.,2018].
 ```{r,fig.width=4, fig.height=4}
@@ -71,7 +71,7 @@ ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'ITS',x='ID')) + ggplot2::
 
 #Shortcut for several features
 MTY[MTY>8000]=8000 #Disregard outliers after deeper analysis, see publication
-PDEviolinPlot(cbind(ITS,MTY))
+MDplot(cbind(ITS,MTY))
 ```
 
 ## Correlation Analysis

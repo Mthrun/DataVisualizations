@@ -10,7 +10,7 @@ Presents a heatmap with values and a cross table of given Data matrix of two fea
 \usage{
 CrossTablePlot(Data, xbins = seq(0, 100, 5), ybins = xbins, 
 
-NormalizationFactor = 1, PlotIt = TRUE, main='Cross Table'
+NormalizationFactor = 1, PlotIt = TRUE, main='Cross Table',
 
 PlotText=TRUE,TextDigits=0,TextProbs=c(0.05,0.95))
 }

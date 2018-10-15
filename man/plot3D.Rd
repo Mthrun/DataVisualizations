@@ -8,7 +8,7 @@
 A wrapper for Data with systematic clustering colors for either a 2D (x,y) or 3D (x,y,z) plot combined with a classification
 }
 \usage{
-plot3D(Data,Cls,UniqueColors,\dots)
+plot3D(Data,Cls,UniqueColors,size=2,na.rm=FALSE,\dots)
 }
 
 \arguments{
@@ -20,6 +20,13 @@ plot3D(Data,Cls,UniqueColors,\dots)
 }
   \item{UniqueColors}{
 [1:k] character vector of colors, if not given DataVisualizations::DefaultColorSequence is used
+}
+
+  \item{size}{
+size of points
+}
+  \item{na.rm}{
+if \code{na.rm=TRUE}, then missing values are removed
 }
   \item{\dots}{
 further arguments to be processed by \code{\link[rgl]{plot3d}} or \code{\link[ggplot2]{geom_point}}

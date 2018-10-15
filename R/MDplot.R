@@ -1,6 +1,6 @@
-PDEviolinPlot <- function(Data, Names,fill='darkblue',scale='width',size=0.01){
-  #PDEviolinPlot(data, Names)
-  # Plots a Boxplot for each column of the given data
+MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',scale='width',size=0.01){
+  #MDplot(data, Names)
+  # Plots a Boxplot like pdfshape for each column of the given data
   #
   # Input
   # data          Matrix containing data. Each column is one variable.

@@ -1,4 +1,4 @@
-plot3D = function (Data,Cls,UniqueColors,size=2,na.rm=F,...){
+plot3D = function(Data,Cls,UniqueColors,size=2,na.rm=FALSE,...){
 #plot3D(Data,Cls)
 #A wrapper for Data with systematic clustering colors for a x,y,z plot combined with a classification
 #INPUT

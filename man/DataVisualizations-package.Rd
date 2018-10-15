@@ -14,7 +14,7 @@ For a brief introduction to \pkg{DataVisualizations} please see the vignette \hr
 Please see \url{http://www.deepbionics.org/}. 
 Depending on the context please cite either [Thrun, 2018] regarding visualizations in the context of clustering or [Thrun/Ultsch, 2018] for other visualizations.
 
-For the PDE optimized violin plot please cite [Thrun et al.,2018].
+For the Mirrored Density Plot (PDE optimized violin plot) please cite [Thrun et al.,2018].
 
 \packageIndices{DataVisualizations}
 }
