@@ -12,8 +12,16 @@ MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',scale='width',size
   #
   # Author MT 2018: rewritten function of FP
   if (is.vector(Data)) {
-    warning("This boxplot is for several features at once.Calling as.matrix()")
+    warning("This MD-plot is for several features at once. Calling as.matrix()")
     Data = as.matrix(Data)
+  }
+  if(!is.matrix(Data)){
+    warning('The MD-plot prefers a numerical matrix. If a data.frame is used it is transformed to a matrix. Calling as.matrix.')
+  Data=as.matrix(Data)
+  }
+  if(mode(Data)!='numeric'){
+    warning('"mode" of matrix is not numeric. Casting to numeric.')
+    mode(Data)='numeric'
   }
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
