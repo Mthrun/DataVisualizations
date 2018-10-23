@@ -37,7 +37,7 @@ For \code{\link[ggplot2]{geom_point}} only \code{size} and \code{na.rm} is avail
 }
 
 \references{
-RGL in \url{https://cran.r-project.org/web/packages/rgl/vignettes/rgl.html}
+RGL vignette in \url{https://cran.r-project.org/package=rgl}
 
 Spin3D in \url{https://www.uni-marburg.de/fb12/arbeitsgruppen/datenbionik/software-en}
 }

@@ -1,4 +1,4 @@
-Version 1.1.4 (CRAN, 2018-10-14)
+Version 1.1.4 (CRAN, 2018-10-21)
 	o DualAxisLineChart enables to visualize to lines in one plot overlaying them using ploty (e.g. two time series with two ranges of values)
 	o Bugfix: PDEscatter now removes non-numeric values with na.rm=TRUE before xlim and ylim are defined
 	o ProductRatioPlot: The plot is useful in the case where there are many instances of very small values, but a small number of very large ones
