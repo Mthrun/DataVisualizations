@@ -1,4 +1,4 @@
-MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',StatsEval=FALSE,scale='width',size=0.01){
+MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,BoxPlot=FALSE,BoxColor='darkred',scale='width',size=0.01){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
   #
@@ -12,12 +12,12 @@ MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',StatsEval=FALSE,sc
   #
   # Author MT 2018: rewritten function of FP
   if (is.vector(Data)) {
-    warning("This MD-plot is for several features at once. Calling as.matrix()")
+    print("This MD-plot is typically for several features at once. By calling as.matrix(), it will be now used with one feature.")
     Data = as.matrix(Data)
   }
   if(!is.matrix(Data)){
-    warning('The MD-plot prefers a numerical matrix. If a data.frame is used it is transformed to a matrix. Calling as.matrix.')
-  Data=as.matrix(Data)
+    warning('The MD-plot prefers a numerical matrix. If a data.frame or a tibble is used it is transformed to a matrix. Calling as.matrix.')
+    Data=as.matrix(Data)
   }
   if(mode(Data)!='numeric'){
     warning('"mode" of matrix is not numeric. Casting to numeric.')
@@ -37,28 +37,43 @@ MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',StatsEval=FALSE,sc
       colnames(Data) <- Names
     }
   }
-
+  
   requireNamespace("reshape2")
   requireNamespace("ggExtra")
   dataframe = reshape2::melt(Data)
   colnames(dataframe) <- c('ID', 'Variables', 'Values')
   dataframe$Variables=as.character(dataframe$Variables)
-
-    plot =
-      ggplot(data = dataframe,
-             aes_string(x = "Variables", group = "Variables", y = "Values")) +
-      geom_violin(stat = "PDEdensity",fill=fill,scale=scale,size=size)+ theme(axis.text.x = element_text(size=rel(1.2)))
-    
-    if(isTRUE(StatsEval)){
-      requireNamespace('moments')
-      requireNamespace('diptest')
+  
+  plot =
+    ggplot(data = dataframe,
+           aes_string(x = "Variables", group = "Variables", y = "Values"))
+  
+  plot=plot + 
+   geom_violin(stat = "PDEdensity",fill=fill,scale=scale,size=size)+ theme(axis.text.x = element_text(size=rel(1.2)))
+  
+  if(isTRUE(RobustGaussian)){
+    requireNamespace('moments')
+    requireNamespace('diptest')
     x=as.matrix(Data)
+    N=nrow(x)
+    if(N<50)  warning('Sample of data maybe to small to calculate dip test and argostina test')
     lowInnerPercentile=25
     hiInnerPercentile = 100 - lowInnerPercentile
     faktor <- sum(abs(qnorm(t(c(lowInnerPercentile, hiInnerPercentile)/100), 0, 1)))
     std <- sd(x, na.rm = TRUE)
     p <- c(lowInnerPercentile, hiInnerPercentile)/100
-    quartile <- prctile(x, p)
+    if (is.matrix(x) && ncol(x) > 1) {
+      cols <- ncol(x)
+      quartile <- matrix(0, nrow = length(p), ncol = cols)
+      for (i in 1:cols) {
+        quartile[, i] <- quantile(x[, i], probs = p, type = 5, 
+                                na.rm = TRUE)
+      }
+    }
+    else {
+      quartile <- quantile(x, p, type = 5, na.rm = TRUE)
+    }
+    
     if (ncol(x) > 1) 
       iqr <- quartile[2, ] - quartile[1, ]
     else iqr <- quartile[2] - quartile[1]
@@ -72,18 +87,34 @@ MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',StatsEval=FALSE,sc
     for (i in 1:ncol(x)) {
       shat[i] <- min(std[i], iqr[i]/faktor, na.rm = TRUE)
       mhat[i] <- mean(x[, i], trim = 0.1, na.rm = TRUE)
-      nonunimodal[i]=diptest::dip.test(x[, i])$p.value
-      skewed[i]=moments::agostino.test(x[, i])$p.value
-      if(nonunimodal[i]<0.05|skewed[i]<0.05)
+     
+      if(N>45000){
+        vec=sample(x = x[, i],45000)
+        nonunimodal[i]=diptest::dip.test(vec)$p.value
+        skewed[i]=moments::agostino.test(vec)$p.value
+      }
+      else if(sum(is.finite(x[, i]))<8){
+        warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
+        nonunimodal[i]=1
+        skewed[i]=1
+      }else{
+        nonunimodal[i]=diptest::dip.test(x[, i])$p.value
+        skewed[i]=moments::agostino.test(x[, i])$p.value
+      }
+      if(nonunimodal[i]>0.05&skewed[i]>0.05)
         normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
     }
     colnames(normaldist)=colnames(Data)
     DFtemp = reshape2::melt(normaldist)
     colnames(DFtemp) <- c('ID', 'Variables', 'Values')
     DFtemp$Variables=as.character(DFtemp$Variables)
-    print(shat)
-    plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),colour='black',alpha=0,scale=scale,size=size)+guides(fill=FALSE)
-    #plot=plot+geom_boxplot(width=1,outlier.colour = NA,alpha=0)
-    }
+    plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),colour=GaussianColor,alpha=0,scale=scale,size=Gaussian_lwd,na.rm = T)+guides(fill=FALSE)
+    #
+  }
+  if(isTRUE(BoxPlot)){
+    plot=plot+stat_boxplot(geom = "errorbar", width = 0.5, color=BoxColor)+geom_boxplot(width=1,outlier.colour = NA,alpha=0,fill='#ffffff', color=BoxColor)
+  }
+  # plot=plot + 
+  #   geom_violin(stat = "PDEdensity",fill=fill,scale=scale,size=size)+ theme(axis.text.x = element_text(size=rel(1.2)))
   return(ggplotObj = plot+ggExtra::rotateTextX())
 } 

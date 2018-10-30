@@ -8,28 +8,50 @@ This function creates a MD-plot for each variable of the data matrix.
 The MD-plot is an improvement of violin or so-called bean plots which posses advantages in comparison to the conventional well-known box plot.
 }
 \usage{
-MDplot(Data, Names,fill='darkblue',scale='width',size=0.01)
+MDplot(Data, Names,fill='darkblue',
+
+RobustGaussian=TRUE,GaussianColor='Magenta',Gaussian_lwd=1.5,
+
+BoxPlot=FALSE,BoxColor='darkred',
+
+scale='width',size=0.01)
 }
 
 \arguments{
   \item{Data}{
-    Matrix containing the data. Each column is one variable.}
+    [1:n,1:d] Numerical Matrix containing the n cases of d variables. Each column is one variable. A data.frame is automatically transformed to a numerical matrix.}
   \item{Names}{
-    Optional: Names of the variables. If missing the columnnames of data are used.
+    Optional: [1:d] Names of the variables. If missing, the columnnames of data are used.
   }
     \item{fill}{
-    Optional: color with which violin is to be filled with, see \code{ggplot2} documentation for details
+    Optional: string, color with which MDs are to be filled with
   }
+    \item{RobustGaussian}{
+    Optional: If TRUE: each MDplot is overlayed with a roubustly estimated unimodal Gaussian distribution, if statistical testing does not yield a significant p.value.
+  }
+      \item{GaussianColor}{
+    Optional: string, color of robustly estimated gaussian, only for \code{RobustGaussian=TRUE}.
+  }
+  \item{Gaussian_lwd}{
+    Optional: numerical, line width of robustly estimated gaussian, only for \code{RobustGaussian=TRUE}.
+  }
+     \item{BoxPlot}{
+    Optional: If TRUE: each MDplot is overlayed with a Box-Whisker Diagram.
+  }
+      \item{BoxColor}{
+    Optional: string, color of Boxplot, only for \code{BoxPlot=TRUE}.
+  }
+  
     \item{scale}{
-    Optional: if "area" (default), all violins have the same area (before trimming the tails). If "count", areas are scaled proportionally to  the number of observations. If "width", all violins have the same maximum width.
+    Optional: if "area" (default), all violins have the same area (before trimming the tails). If "count", areas are scaled proportionally to  the number of observations. If "width", all MDs have the same maximum width.
   }
     \item{size}{
-    Optional: numerical, linewith of black line around the violin plot
+    Optional: numerical, linewidth of black line around the MDs.
   }
 }
 
 \value{
-The ggplot object of the boxplots
+The ggplot object of the MD-plot.
 }
 
 \author{
@@ -44,17 +66,14 @@ MDplot(x)
 x <- cbind(A = runif(20000, 1, 3), B = c(rnorm(10000,0,1),rnorm(10000,2.6,1)))
 MDplot(x)
 }
-#Check for significance
-\donttest{
-#requireNamespace('diptest')
-#diptest::dip.test(x[,1])$p.value
-#diptest::dip.test(x[,2])$p.value
-}
+
 }
 \details{
 In short, the MD-plot can be described as a PDE optimized violin plot. The Pareto Density Estimation (PDE) is an approach to estimate the probability density function (pdf) [Ultsch, 2005].
 
 MD plot was used in [Thrun et al.,2018] for the evaluation of stochastic clustering methods and used in [Thrun et al.,2018a] in order to simultaneously estimate variances of a high-dimensional data set. The MD-plot is in the process of beeing published. 
+
+Statistical testing is performed with \code{\link[diptest]{dip.test}} and \code{\link[moments]{agostino.test}}.
 }
 \references{
 [Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
@@ -67,9 +86,11 @@ MD plot was used in [Thrun et al.,2018] for the evaluation of stochastic cluster
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{violin plot}
+\keyword{geom_violin}
 \keyword{PDE}
 \keyword{violin}
 \keyword{MDplot}
+\keyword{MD-plot}
 \keyword{MD}
 \keyword{Mirrored Density plot}
 \keyword{Mirrored Density}
