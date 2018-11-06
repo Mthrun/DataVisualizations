@@ -68,6 +68,13 @@ MDplot(x)
 }
 
 }
+
+\note{
+One would assume that in the first of the two following case only the plotting region is adjusted but: \code{MDplot(MTY)+ylim(c(0,7000))} is equal to \code{MDplot(MTY[MTY<7000])}. 
+
+This means in both cases the data is clipped and AFTERWARDS the density estimated. 
+}
+
 \details{
 In short, the MD-plot can be described as a PDE optimized violin plot. The Pareto Density Estimation (PDE) is an approach to estimate the probability density function (pdf) [Ultsch, 2005].
 
