@@ -3,7 +3,7 @@ stat_pde_density <- function(mapping = NULL,
                              geom = "violin",
                              position = "dodge",
                              ...,
-                             trim = TRUE,
+                             trim = TRUE, #enden des violins werden korrekt angezeigt und nicht ueber den wertebereich fortgesetzt
                              scale = "area",
                              na.rm = FALSE,
                              show.legend = NA,
