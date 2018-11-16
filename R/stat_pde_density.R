@@ -51,8 +51,9 @@ compute_pdedensity <- function(x) {
   Flag <- FALSE
   if (length(unique(x)) == 1) {
     warning('stat_pde_density: Only one unique value in Data.')
-    x <- c(x, head(x, 1) * runif(1, 0.999, 1.001))
+    x <- c(unique(x), head(x, 1) * runif(1, 0.999, 1.001))
     Flag <- TRUE
+    print(x)
   }
   
   dens <- AdaptGauss::ParetoDensityEstimation(Data = x)

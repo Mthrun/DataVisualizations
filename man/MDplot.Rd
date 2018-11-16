@@ -8,13 +8,15 @@ This function creates a MD-plot for each variable of the data matrix.
 The MD-plot is an improvement of violin or so-called bean plots which posses advantages in comparison to the conventional well-known box plot.
 }
 \usage{
-MDplot(Data, Names,fill='darkblue',
+MDplot(Data, Names,Ordering='Default',
+
+Percentalize=FALSE,Fill='darkblue',
 
 RobustGaussian=TRUE,GaussianColor='Magenta',Gaussian_lwd=1.5,
 
 BoxPlot=FALSE,BoxColor='darkred',
 
-scale='width',size=0.01)
+MDscaling='width',Size=0.01,MinimalAmoutOfData=40)
 }
 
 \arguments{
@@ -23,7 +25,14 @@ scale='width',size=0.01)
   \item{Names}{
     Optional: [1:d] Names of the variables. If missing, the columnnames of data are used.
   }
-    \item{fill}{
+      \item{Ordering}{
+    Optional: string, either \code{Default}, \code{Columnwise}, \code{Alphabetical} or \code{Statistics}. Please see details for explanation.
+  }
+      \item{Percentalize}{
+    Optional, boolean, If TRUE: Values of Datacolumns are transformed to values in percent from zero to 100.
+  }
+
+    \item{Fill}{
     Optional: string, color with which MDs are to be filled with
   }
     \item{RobustGaussian}{
@@ -42,11 +51,14 @@ scale='width',size=0.01)
     Optional: string, color of Boxplot, only for \code{BoxPlot=TRUE}.
   }
   
-    \item{scale}{
+    \item{MDscaling}{
     Optional: if "area" (default), all violins have the same area (before trimming the tails). If "count", areas are scaled proportionally to  the number of observations. If "width", all MDs have the same maximum width.
   }
-    \item{size}{
+    \item{Size}{
     Optional: numerical, linewidth of black line around the MDs.
+  }
+    \item{MinimalAmoutOfData}{
+    Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
   }
 }
 
@@ -81,6 +93,18 @@ In short, the MD-plot can be described as a PDE optimized violin plot. The Paret
 MD plot was used in [Thrun et al.,2018] for the evaluation of stochastic clustering methods and used in [Thrun et al.,2018a] in order to simultaneously estimate variances of a high-dimensional data set. The MD-plot is in the process of beeing published. 
 
 Statistical testing is performed with \code{\link[diptest]{dip.test}} and \code{\link[moments]{agostino.test}}.
+
+For the paramter \code{Ordering} the following options are possible:
+\describe{
+\item{\code{Default}}{Ordering of plots by convex/concav/unimodal/nonunimodal shapes}
+
+\item{\code{Columnwise}}{Ordering of plots by the order of columns of \code{Data}}
+
+\item{\code{Alphabetical}}{Ordering of plots by the order of columns of \code{Data} sorted in alphabetical order by column names}
+
+\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing}
+}
+
 }
 \references{
 [Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
