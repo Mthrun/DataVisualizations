@@ -27,6 +27,7 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
   }
   dvariables=ncol(Data)
   Ncases=nrow(Data)
+  Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
       Names = colnames(Data)
@@ -53,7 +54,7 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
     warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points. Changing from MD-plot to Jitter-Plot for these columns.'))
     DataDensity=Data
     mm=apply(Data,2,median,na.rm=T)
-    DataDensity[,(Npervar<MinimalAmoutOfData)]=mm[(Npervar<MinimalAmoutOfData)]*runif(Ncases, 0.999, 1.001)
+    DataDensity[,(Npervar<MinimalAmoutOfData)]=mm[(Npervar<MinimalAmoutOfData)]*runif(Ncases, 0.999, 10001)
     DataJitter=Data
     DataJitter[,(Npervar>=MinimalAmoutOfData)]=NaN
     dataframe = reshape2::melt(DataDensity)
@@ -66,8 +67,8 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
   Rangfolge=unique(dataframe$Variables,fromLast = FALSE,nmax = dvariables)#colnames(Data)#
   
   ## Statistics ----
-  Npervar=apply(Data,2,function(x) sum(is.finite(x)))
-  print(Npervar)
+  #Npervar=apply(Data,2,function(x) sum(is.finite(x)))
+  #print(Npervar)
   
  if(RobustGaussian==TRUE |Ordering=="Statistics"){
     requireNamespace('moments')
@@ -113,7 +114,7 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
         skewed[i]=moments::agostino.test(vec)$p.value
         bimodalprob[i]=bimodal(vec)$Bimodal
       }
-      else if(sum(is.finite(x[, i]))<8){
+      else if(Npervar[i]<8){
         warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
         nonunimodal[i]=1
         skewed[i]=1
@@ -150,7 +151,7 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
                  bimodalprob[i]=bimodal(x[, i])$Bimodal
                }
              }
-             print(bimodalprob)
+             #print(bimodalprob)
              Rangfolge=Rangfolge[order(bimodalprob,decreasing = T,na.last = T)]
            },
            Columnwise={Rangfolge=Rangfolge},
