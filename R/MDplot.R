@@ -83,6 +83,7 @@ MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',RobustGaussian=TRU
     mhat <- c()
     nonunimodal=c()
     skewed=c()
+    bimodalprob=c()
     Nsample=10000
     kernels=matrix(NaN,nrow=Nsample,ncol = dvariables)
     normaldist=matrix(NaN,nrow=Nsample,ncol = dvariables)
@@ -94,26 +95,31 @@ MDplot = PDEviolinPlot = function(Data, Names,fill='darkblue',RobustGaussian=TRU
         vec=sample(x = x[, i],45000)
         nonunimodal[i]=diptest::dip.test(vec)$p.value
         skewed[i]=moments::agostino.test(vec)$p.value
+        bimodalprob[i]=bimodal(vec)$Bimodal
       }
       else if(sum(is.finite(x[, i]))<8){
         warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
         nonunimodal[i]=1
         skewed[i]=1
+        bimodalprob[i]=0
       }else{
         nonunimodal[i]=diptest::dip.test(x[, i])$p.value
         skewed[i]=moments::agostino.test(x[, i])$p.value
+        bimodalprob[i]=bimodal(x[, i])$Bimodal
       }
-      if(nonunimodal[i]>0.05&skewed[i]>0.05)
+      if(nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05)
         normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
     }
     colnames(normaldist)=colnames(Data)
     DFtemp = reshape2::melt(normaldist)
     colnames(DFtemp) <- c('ID', 'Variables', 'Values')
     DFtemp$Variables=as.character(DFtemp$Variables)
-    #
+    #raw estimation, page 115, projection based clustering book
     nonunimodal[nonunimodal==0]=0.0000000001
     skewed[skewed==0]=0.0000000001
-    Effectstrength=(-log(nonunimodal)-log(skewed))/2
+    #Effectstrength=(-10*log(skewed)-10*log(nonunimodal))/2
+    Effectstrength=bimodalprob
+    #Effectstrength=RelativeDifference(-10*log(skewed),-10*log(nonunimodal))
     Rangfolge=Rangfolge[order(Effectstrength,decreasing = T,na.last = T)]
   }
   
