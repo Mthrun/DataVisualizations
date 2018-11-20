@@ -1,4 +1,5 @@
-MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FALSE,Fill='darkblue',RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',Size=0.01,MinimalAmoutOfData=40){
+MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
+                                  BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',Size=0.01,MinimalAmoutOfData=40,OnlyPlotOutput=TRUE){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
   #
@@ -10,7 +11,7 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
   # Output
   # ggplotObj     The ggplot object of the boxplots
   #
-  # Author MT 2018: rewritten function of FP
+  # Author MT 2018: used general idea of FP to apply ggplot2 frameworks 
   
   ## Error Catching ----
   if (is.vector(Data)) {
@@ -26,6 +27,7 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
     mode(Data)='numeric'
   }
   dvariables=ncol(Data)
+
   Ncases=nrow(Data)
   Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
   if (missing(Names)) {
@@ -42,34 +44,31 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
       colnames(Data) <- Names
     }
   }
+  if(is.null(colnames(Data))){ 
+
+    colnames(Data)=paste0('C',1:dvariables)
+
+  }
   requireNamespace("reshape2")
   requireNamespace("ggExtra")
 
-  ## Data Reshaping ----
-  if(Percentalize){
-    Data = apply(Data, MARGIN = 2,function(x) return((x-min(x,na.rm = T))/(max(x,na.rm = T) - min(x,na.rm = T)) * 100))
-  }
-  #First Column is now first variable
-  if(any(Npervar<MinimalAmoutOfData)){
-    warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points. Changing from MD-plot to Jitter-Plot for these columns.'))
-    DataDensity=Data
-    mm=apply(Data,2,median,na.rm=T)
-    DataDensity[,(Npervar<MinimalAmoutOfData)]=mm[(Npervar<MinimalAmoutOfData)]*runif(Ncases, 0.999, 10001)
-    DataJitter=Data
-    DataJitter[,(Npervar>=MinimalAmoutOfData)]=NaN
-    dataframe = reshape2::melt(DataDensity)
-  }else{
-    dataframe = reshape2::melt(Data)
-  }
-  colnames(dataframe) <- c('ID', 'Variables', 'Values')
-  dataframe$Variables=as.character(dataframe$Variables)
-  #Using First Column is first variable principle
-  Rangfolge=unique(dataframe$Variables,fromLast = FALSE,nmax = dvariables)#colnames(Data)#
+  ## Data Scaling ----
+  switch(Scaling,
+    None={Data=Data},
+    Percentalize={ Data = apply(Data, MARGIN = 2,function(x) return((x-min(x,na.rm = T))/(max(x,na.rm = T) - min(x,na.rm = T)) * 100))},
+    CompleteRobust={Data=DatabionicSwarm::RobustNormalization(Data,Centered = T,Capped = T)},
+    Robust={Data=DatabionicSwarm::RobustNormalization(Data,Centered = F,Capped = F)},
+    Log={Data=SignedLog(Data,Base="Ten")
+         RobustGaussian=FALSE #log with robust gaussian does not work, because mean and variance is not valid description for log normal data
+    },
+    {stop('You can select for Scaling: "None", "Percentalize", "CompleteRobust", "Robust" or "Log"')}
+  )
+
   
   ## Statistics ----
   #Npervar=apply(Data,2,function(x) sum(is.finite(x)))
   #print(Npervar)
-  
+
  if(RobustGaussian==TRUE |Ordering=="Statistics"){
     requireNamespace('moments')
     requireNamespace('diptest')
@@ -124,7 +123,7 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
         skewed[i]=moments::agostino.test(x[, i])$p.value
         bimodalprob[i]=bimodal(x[, i])$Bimodal
       }
-      if(nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05)
+      if(nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData)
         normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
     }
     
@@ -132,35 +131,69 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
     nonunimodal[nonunimodal==0]=0.0000000001
     skewed[skewed==0]=0.0000000001
     Effectstrength=(-10*log(skewed)-10*log(nonunimodal))/2
+   
  }#end if (RobustGaussian==TRUE |Ordering=="Statistics"
-    
-    switch(Ordering,
-           Default={
-             x=as.matrix(Data)
-             if(dvariables!=ncol(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
-             if(Ncases!=nrow(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
-             
-             bimodalprob=c()
-             for (i in 1:dvariables) {
-               if(Ncases>45000){
-                 vec=sample(x = x[, i],45000)
+  
+  ## Ordering
+  dfrang = reshape2::melt(Data)
+  colnames(dfrang) <- c('ID', 'Variables', 'Values')
+  dfrang$Variables=as.character(dfrang$Variables)
+  #Using First Column is first variable principle
+  Rangfolge=unique(dfrang$Variables,fromLast = FALSE,nmax = dvariables)#colnames(Data)#
+  rm(dfrang)
+
+  switch(Ordering,
+         Default={
+           x=as.matrix(Data)
+           if(dvariables!=ncol(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
+           if(Ncases!=nrow(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
+           
+           bimodalprob=c()
+           for (i in 1:dvariables) {
+             if(Ncases>45000){
+               vec=sample(x = x[, i],45000)
                bimodalprob[i]=bimodal(vec)$Bimodal
-               }else if(sum(is.finite(x[, i]))<8){
-                 bimodalprob[i]=0
-               }else{
-                 bimodalprob[i]=bimodal(x[, i])$Bimodal
-               }
+             }else if(sum(is.finite(x[, i]))<8){
+               bimodalprob[i]=0
+             }else{
+               bimodalprob[i]=bimodal(x[, i])$Bimodal
              }
-             #print(bimodalprob)
-             Rangfolge=Rangfolge[order(bimodalprob,decreasing = T,na.last = T)]
-           },
-           Columnwise={Rangfolge=Rangfolge},
-           Alphabetical={Rangfolge=sort(Rangfolge,decreasing = F,na.last = T)},
-           Statistics={
-             Rangfolge=Rangfolge[order(Effectstrength,decreasing = T,na.last = T)]
-           },
-           {stop('You can select for Ordering: "Default", "Columnwise", "Alphabetical" or "Statistics"')}
-           )
+           }
+           #print(bimodalprob)
+           Rangfolge=Rangfolge[order(bimodalprob,decreasing = T,na.last = T)]
+           
+         },
+         Columnwise={Rangfolge=Rangfolge},
+         Alphabetical={Rangfolge=sort(Rangfolge,decreasing = F,na.last = T)},
+         Statistics={
+           Rangfolge=Rangfolge[order(Effectstrength,decreasing = T,na.last = T)]
+         },
+         {stop('You can select for Ordering: "Default", "Columnwise", "Alphabetical" or "Statistics"')}
+  )
+
+  ## Data Reshaping----
+  if(any(Npervar<MinimalAmoutOfData)){
+    warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points. Changing from MD-plot to Jitter-Plot for these columns.'))
+    DataDensity=Data
+    mm=apply(Data,2,median,na.rm=T)
+    DataDensity[,(Npervar<MinimalAmoutOfData)]=mm[(Npervar<MinimalAmoutOfData)]*runif(Ncases, 0.999, 1.001)
+    DataJitter=Data
+    DataJitter[,(Npervar>=MinimalAmoutOfData)]=NaN
+    #apply ordering
+    dataframe = reshape2::melt(DataDensity[,Rangfolge])
+  }else{
+    #apply ordering
+    dataframe = reshape2::melt(Data[,Rangfolge])
+  }
+  if(dvariables==1){
+    dataframe$ID=rep(1,Ncases)
+    dataframe$Variables=rep(colnames(Data),Ncases)
+    dataframe$Values=dataframe$value
+  }else{
+    colnames(dataframe) <- c('ID', 'Variables', 'Values')
+  }
+  dataframe$Variables=as.character(dataframe$Variables)
+
   
   ## Plotting ----
   plot =
@@ -172,24 +205,45 @@ MDplot = PDEviolinPlot = function(Data, Names,Ordering='Default',Percentalize=FA
   plot=plot + 
     geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=Size,trim = TRUE)+ theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
   if(any(Npervar<MinimalAmoutOfData)){
+    DataJitter[,Rangfolge]
     dataframejitter=reshape2::melt(DataJitter)
+    if(dvariables==1){#bugfix one feature
+      dataframejitter$ID=rep(1,Ncases)
+      dataframejitter$Variables=rep(colnames(DataJitter),Ncases)
+      dataframejitter$Values=dataframejitter$value
+    }else{
     colnames(dataframejitter) <- c('ID', 'Variables', 'Values')
-    plot=plot+geom_jitter(size=1.75,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),position=position_jitter(0.15))
+    }
+    plot=plot+geom_jitter(size=2,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),position=position_jitter(0.15))
     
   }
+
   if(isTRUE(RobustGaussian)){
     colnames(normaldist)=colnames(Data)
+    normaldist=normaldist[,Rangfolge]
+    if(dvariables==1){#bugfix
+      normaldist=as.matrix(normaldist)
+      normaldist=cbind(normaldist,rep(NaN,Ncases))
+    }
     DFtemp = reshape2::melt(normaldist)
     colnames(DFtemp) <- c('ID', 'Variables', 'Values')
+    if(dvariables==1){#bugfix
+      DFtemp=DFtemp[DFtemp[,'Variables']==colnames(DFtemp)[1],]
+    }
     DFtemp$Variables=as.character(DFtemp$Variables)
     #trimming in this case not required
     plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,na.rm = T,trim = FALSE)+guides(fill=FALSE)
   }
-  
+
   if(isTRUE(BoxPlot)){
     plot=plot+stat_boxplot(geom = "errorbar", width = 0.5, color=BoxColor)+geom_boxplot(width=1,outlier.colour = NA,alpha=0,fill='#ffffff', color=BoxColor)
   }
+
   # plot=plot + 
   #   geom_violin(stat = "PDEdensity",fill=fill,scale=MDscaling,size=Size)+ theme(axis.text.x = element_text(size=rel(1.2)))
-  return(ggplotObj = plot+ggExtra::rotateTextX())
+  if(OnlyPlotOutput){
+    return(ggplotObj = plot+ggExtra::rotateTextX())
+  }else{
+    return(list(gplotObj = plot+ggExtra::rotateTextX(),Ordering=Rangfolge,DataOrdered=Data[,Rangfolge]))
+  }
 } 

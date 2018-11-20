@@ -122,10 +122,10 @@ SecondDerivative = V$SecondDerivative
 ErsteAbleitung = V$ErsteAbleitung
 
 Bimodal = pnorm(min(ProConvex,ProConcave),7,3) 
-Bimodal = round(Bimodal,3) 
+#Bimodal = round(Bimodal,3) 
 
 if(isTRUE(PlotIt)){
-  title(paste('Bimodal =',Bimodal*100,'- ProConvex =',round(ProConvex,2),'- ProConcave = ',round(ProConcave,2)))
+  title(paste('Bimodal =',round(Bimodal,3)*100,'- ProConvex =',round(ProConvex,2),'- ProConcave = ',round(ProConcave,2)))
 }
 return(list(Bimodal=Bimodal,ProConvex=ProConvex,ProConcave=ProConcave))
 }

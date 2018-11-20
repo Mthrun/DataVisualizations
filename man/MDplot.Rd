@@ -10,13 +10,13 @@ The MD-plot is an improvement of violin or so-called bean plots which posses adv
 \usage{
 MDplot(Data, Names,Ordering='Default',
 
-Percentalize=FALSE,Fill='darkblue',
+Scaling=FALSE,Fill='darkblue',
 
 RobustGaussian=TRUE,GaussianColor='Magenta',Gaussian_lwd=1.5,
 
 BoxPlot=FALSE,BoxColor='darkred',
 
-MDscaling='width',Size=0.01,MinimalAmoutOfData=40)
+MDscaling='width',Size=0.01,MinimalAmoutOfData=40,OnlyPlotOutput=TRUE)
 }
 
 \arguments{
@@ -28,12 +28,12 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40)
       \item{Ordering}{
     Optional: string, either \code{Default}, \code{Columnwise}, \code{Alphabetical} or \code{Statistics}. Please see details for explanation.
   }
-      \item{Percentalize}{
-    Optional, boolean, If TRUE: Values of Datacolumns are transformed to values in percent from zero to 100.
+      \item{Scaling}{
+    Optional, Default is \code{None}, \code{Percentalize}, \code{CompleteRobust}, \code{Robust} or \code{Log}, Please see details for explanation.
   }
 
     \item{Fill}{
-    Optional: string, color with which MDs are to be filled with
+    Optional: string, color with which MDs are to be filled with.
   }
     \item{RobustGaussian}{
     Optional: If TRUE: each MDplot is overlayed with a roubustly estimated unimodal Gaussian distribution, if statistical testing does not yield a significant p.value.
@@ -60,14 +60,33 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40)
     \item{MinimalAmoutOfData}{
     Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
   }
+  \item{OnlyPlotOutput}{
+  Default TRUE only a ggplot object is given back, if FALSE: Additinally Scaled Data and ordering are the output of this function in a \code{list}.
+  }
 }
 
 \value{
-The ggplot object of the MD-plot.
+
+In the default case of
+
+\code{OnlyPlotOutput==TRUE}: The ggplot object of the MD-plot.
+
+Otherwise
+
+\code{OnlyPlotOutput==FALSE}: list of
+      \item{gplotObj}{
+   The ggplot object of the MD-plot.
+  }
+        \item{Ordering}{
+   The ordering of columns of data defined by  \code{Ordering}.
+  }
+        \item{DataOrdered}{
+   [1:n,1:d] matrix of ordered and scaled data defined by \code{Ordering} and \code{Scaling}.
+  }
 }
 
 \author{
-Michael Thrun, Felix Pape
+Michael Thrun, Felix Pape contributed with the idea to use ggplot2 as the basic framework.
 }
 \examples{
 \dontshow{
@@ -96,15 +115,27 @@ Statistical testing is performed with \code{\link[diptest]{dip.test}} and \code{
 
 For the paramter \code{Ordering} the following options are possible:
 \describe{
-\item{\code{Default}}{Ordering of plots by convex/concav/unimodal/nonunimodal shapes}
+\item{\code{Default}}{Ordering of plots by convex/concav/unimodal/nonunimodal shapes.}
 
-\item{\code{Columnwise}}{Ordering of plots by the order of columns of \code{Data}}
+\item{\code{Columnwise}}{Ordering of plots by the order of columns of \code{Data}.}
 
-\item{\code{Alphabetical}}{Ordering of plots by the order of columns of \code{Data} sorted in alphabetical order by column names}
+\item{\code{Alphabetical}}{Ordering of plots by the order of columns of \code{Data} sorted in alphabetical order by column names.}
 
-\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing}
+\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing.}
 }
 
+For the paramter \code{Scaling} the following options are possible:
+\describe{
+\item{\code{None}}{No Scaling of data is done.}
+
+\item{\code{Percentalize}}{Data is scaled between zero and 100.}
+
+\item{\code{CompleteRobust}}{Data is first robustly scaled between zero and 1, then centered to zero and outliers are capped by a robustly formula described in the \pkg{DatabionicSwarm} package. }
+
+\item{\code{Robust}}{Data is robustly scaled between zero and 1 by a formula described in the \pkg{DatabionicSwarm} package. }
+
+\item{\code{Log}}{Data is transformed with a sgined log allowing for negative values to be transformed with a logarithm of base 10, please see \code{SignedLog} for details.}
+}
 }
 \references{
 [Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.

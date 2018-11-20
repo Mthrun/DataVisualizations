@@ -35,6 +35,7 @@ export(SilhouettePlot)
 export(zplot)
 export(stat_pde_density)
 export(StatPDEdensity)
+export(SignedLog)
 
 import(Rcpp)
 import(ggplot2)
