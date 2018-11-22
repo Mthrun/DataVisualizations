@@ -104,6 +104,8 @@ MDplot(x)
 One would assume that in the first of the two following case only the plotting region is adjusted but: \code{MDplot(MTY)+ylim(c(0,7000))} is equal to \code{MDplot(MTY[MTY<7000])}. 
 
 This means in both cases the data is clipped and AFTERWARDS the density estimated. 
+
+Because of a (sometimes) strange behavior of either ggplot2 or reshape2, numerical column names are changed to character by adding 'C_'.
 }
 
 \details{

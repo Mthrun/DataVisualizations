@@ -1,5 +1,7 @@
-MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
-                                  BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',Size=0.01,MinimalAmoutOfData=40,OnlyPlotOutput=TRUE){
+MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',
+                                  RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
+                                  BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',Size=0.01,
+                                  MinimalAmoutOfData=40,OnlyPlotOutput=TRUE){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
   #
@@ -46,9 +48,18 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   }
   if(is.null(colnames(Data))){ 
 
-    colnames(Data)=paste0('C',1:dvariables)
+    colnames(Data)=paste0('C_',1:dvariables)
 
   }
+  #bugfix numeric columns names result in some strange behaviour in either reshape2 or ggplot2
+  Names=colnames(Data)
+  NamesNumeric=suppressWarnings(as.numeric(Names))
+  colnames(Data)=ifelse(!is.na(NamesNumeric),paste0('C_',Names),Names)
+  # for(i in 1:dvariables){
+  #   if(!is.na(NamesNumeric[i])){
+  #     colnames(Data)[i]=paste0('C_',NamesNumeric[i])
+  #   }
+  # }
   requireNamespace("reshape2")
   requireNamespace("ggExtra")
 
@@ -175,13 +186,19 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   )
 
   ## Data Reshaping----
+
   if(any(Npervar<MinimalAmoutOfData)){
     warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points. Changing from MD-plot to Jitter-Plot for these columns.'))
     DataDensity=Data
     mm=apply(Data,2,median,na.rm=T)
-    DataDensity[,(Npervar<MinimalAmoutOfData)]=mm[(Npervar<MinimalAmoutOfData)]*runif(Ncases, 0.999, 1.001)
+    for(nc in 1:dvariables){
+      if(Npervar[nc]<MinimalAmoutOfData){
+        DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+      }
+    }
     DataJitter=Data
     DataJitter[,(Npervar>=MinimalAmoutOfData)]=NaN
+
     #apply ordering
     dataframe = reshape2::melt(DataDensity[,Rangfolge])
   }else{
