@@ -1,22 +1,12 @@
-bimodal=function(Data,PlotIt=FALSE){
+bimodal=function(Data,PlotIt=FALSE,na.rm=T){
   
-  prctile= function (x, p) 
-  {
-
-    if (is.matrix(x) && ncol(x) > 1) {
-      cols <- ncol(x)
-      quants <- matrix(0, nrow = length(p), ncol = cols)
-      for (i in 1:cols) {
-        quants[, i] <- quantile(x[, i], probs = p, type = 5, 
-                                na.rm = TRUE)
-      }
-    }
-    else {
-      quants <- quantile(x, p, type = 5, na.rm = TRUE)
-    }
-    return(quants)
+  if(!is.vector(Data)){
+    Data=as.vector(Data)
+    warning('Data has to be a vector but is not, calling as.vector()')
   }
-  
+  if(isTRUE(na.rm)){
+    Data=Data[is.finite(Data)]
+  }
     convexconcave=function(x,fx,PlotIt=FALSE){
     # [Kruemmung,ProConvex,ProConcave,SecondDerivative,ErsteAbleitung] = convexconcave(x,fx,PlotIt) 
     # Abschätzung, in wieweit eine Funktion konvex oder konkav ist.
@@ -110,8 +100,8 @@ bimodal=function(Data,PlotIt=FALSE){
 
 # author: Michael Thrun, reimplemented from matlab of ALU 2006
 
-
-fx = prctile(Data,c(1:99)/100) 
+ 
+fx = quantile(Data, c(1:99)/100, type = 5, na.rm = TRUE)
 Percent =seq(from=0.01,by=0.01,to=0.99) 
 x= qnorm(Percent,0,1) 
 V = convexconcave(x,fx,PlotIt) 

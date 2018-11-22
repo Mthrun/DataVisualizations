@@ -73,6 +73,9 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     requireNamespace('moments')
     requireNamespace('diptest')
     x=as.matrix(Data)
+    #bugfix: statistical testing does not accept infinitive values
+    x[x==Inf]=NaN
+    x[x==-Inf]=NaN
     if(dvariables!=ncol(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
     if(Ncases!=nrow(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
 
