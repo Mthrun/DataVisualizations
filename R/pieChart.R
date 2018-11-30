@@ -1,4 +1,4 @@
- pieChart=function(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,Rline=1){
+ pieChart=function(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,Rline=1,...){
 #    pieChart(Datavector,Names,Labels,main='',col)
 # 
 #      the pie chart represents amount of values given in data.
@@ -43,7 +43,7 @@
    colors=V$Cols
    
    main=paste(length(Datavector),main)
-   pie(pct,col=colors,radius=Rline,init.angle=90,clockwise=TRUE,labels=Labels,main = '')
+   pie(pct,col=colors,radius=Rline,init.angle=90,clockwise=TRUE,labels=Labels,main = '',...)
    # xy <- par("usr")
 
    #text(0, xy[3], main, cex = 1.5, adj = c(0.5, 1))

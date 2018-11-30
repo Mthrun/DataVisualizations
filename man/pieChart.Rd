@@ -8,7 +8,8 @@ The fan plot
 the pie chart represents amount of values given in data.
 }
 \usage{
-pieChart(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,Rline=1)
+pieChart(Datavector,Names,Labels,MaxNumberOfSlices,
+main='',col,Rline=1,...)
 }
 \arguments{
   \item{Datavector}{
@@ -30,8 +31,11 @@ pieChart(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,Rline=1)
 }
 
   \item{Rline}{Optional, the radius of the pie in numerical numbers
-
 }
+  \item{\dots}{Optional, further arguments passed on to \code{\link{plot}}
+}
+
+
 }
 \details{
 If Number of Slices is higher than MaxNumberOfSlices then \code{ABCanalysis} is applied (see [Ultsch/Lotsch, 2015]) and group A chosen.
