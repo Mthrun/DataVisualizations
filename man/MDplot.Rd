@@ -1,11 +1,11 @@
 \name{MDplot}
 \alias{MDplot}
 \title{
-Mirrored Density plot (MD-plot): Visualization for a Boxplot-like Shape of the PDF
+Mirrored Density plot (MD-plot): Visualization for a Boxplot-like Shape of the PDF published in [Thrun/Ultsch, 2019].
 }
 \description{
 This function creates a MD-plot for each variable of the data matrix. 
-The MD-plot is an improvement of violin or so-called bean plots which posses advantages in comparison to the conventional well-known box plot.
+The MD-plot is an improvement of violin or so-called bean plots which posses advantages in comparison to the conventional well-known box plot [Thrun/Ultsch, 2019].
 }
 \usage{
 MDplot(Data, Names,Ordering='Default',
@@ -52,7 +52,7 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40,OnlyPlotOutput=TRUE)
   }
   
     \item{MDscaling}{
-    Optional: if "area" (default), all violins have the same area (before trimming the tails). If "count", areas are scaled proportionally to  the number of observations. If "width", all MDs have the same maximum width.
+    Optional: if "area", all violins have the same area (before trimming the tails). If "count", areas are scaled proportionally to  the number of observations. If "width" (default), all MDs have the same maximum width.
   }
     \item{Size}{
     Optional: numerical, linewidth of black line around the MDs.
@@ -111,7 +111,7 @@ Because of a (sometimes) strange behavior of either ggplot2 or reshape2, numeric
 \details{
 In short, the MD-plot can be described as a PDE optimized violin plot. The Pareto Density Estimation (PDE) is an approach to estimate the probability density function (pdf) [Ultsch, 2005].
 
-MD plot was used in [Thrun et al.,2018] for the evaluation of stochastic clustering methods and used in [Thrun et al.,2018a] in order to simultaneously estimate variances of a high-dimensional data set. The MD-plot is in the process of beeing published. 
+MD plot was used in [Thrun et al.,2018] for the evaluation of stochastic clustering methods and used in [Thrun et al.,2018a] in order to simultaneously estimate variances of a high-dimensional data set. The MD-plot is in the process of beeing peer-reviewed [Thrun/Ultsch, 2019]. 
 
 Statistical testing is performed with \code{\link[diptest]{dip.test}} and \code{\link[moments]{agostino.test}}.
 
@@ -141,6 +141,8 @@ For the paramter \code{Scaling} the following options are possible:
 }
 \references{
 [Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
+
+[Thrun/Ultsch, 2019]	Thrun, M. C., & Ultsch, A. : Ânalyzing the Fine Structure of Distributions, Technical Report prior to submission, Philipps-University Marburg, German, 2019. 
 
 
 [Thrun et al.,2018a]	Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency stream nitrate concentrations: hydrology and biology contributions, Proc. European Conference on Data Analysis (ECDA), pp. 46-47, Paderborn, Germany, 2018. 

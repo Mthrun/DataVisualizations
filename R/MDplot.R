@@ -14,7 +14,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   # ggplotObj     The ggplot object of the boxplots
   #
   # Author MT 2018: used general idea of FP to apply ggplot2 frameworks 
-  
+  MinimalAmoutOfUniqueData=12
   ## Error Catching ----
   if (is.vector(Data)) {
     print("This MD-plot is typically for several features at once. By calling as.matrix(), it will be now used with one feature.")
@@ -32,6 +32,11 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
 
   Ncases=nrow(Data)
   Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
+  NUniquepervar=apply(Data,MARGIN = 2,function(x) {
+    x=x[is.finite(x)]
+    return(length(unique(x)))
+    })
+  
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
       Names = colnames(Data)
@@ -76,13 +81,16 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   )
 
   
-  ## Statistics ----
+  ## Roboust Gaussian and Statistics ----
   #Npervar=apply(Data,2,function(x) sum(is.finite(x)))
   #print(Npervar)
 
+  #ToDo: split up RobustGAussian and Ordering Parameter for better code readibility
  if(RobustGaussian==TRUE |Ordering=="Statistics"){
+   if(Ordering=="Statistics"){
     requireNamespace('moments')
     requireNamespace('diptest')
+   }
     x=as.matrix(Data)
     #bugfix: statistical testing does not accept infinitive values
     x[x==Inf]=NaN
@@ -103,13 +111,13 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
         quartile[, i] <- quantile(x[, i], probs = p, type = 5, 
                                 na.rm = TRUE)
       }
-    }
-    else {
+    }else{
       quartile <- quantile(x, p, type = 5, na.rm = TRUE)
     }
-    if (dvariables > 1) 
+    if (dvariables > 1){
       iqr <- quartile[2, ] - quartile[1, ]
-    else iqr <- quartile[2] - quartile[1]
+    }else{ iqr <- quartile[2] - quartile[1]
+    }
     shat <- c()
     mhat <- c()
     nonunimodal=c()
@@ -121,24 +129,46 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     for (i in 1:dvariables) {
       shat[i] <- min(std[i], iqr[i]/faktor, na.rm = TRUE)
       mhat[i] <- mean(x[, i], trim = 0.1, na.rm = TRUE)
-      if(Ncases>45000){
+      if(Ncases>45000){#statistical testing does not work with to many cases
         vec=sample(x = x[, i],45000)
-        nonunimodal[i]=diptest::dip.test(vec)$p.value
-        skewed[i]=moments::agostino.test(vec)$p.value
+        if(Ordering=="Statistics"){
+          nonunimodal[i]=diptest::dip.test(vec)$p.value
+          skewed[i]=moments::agostino.test(vec)$p.value
+        }else{
+          nonunimodal[i]=1
+          skewed[i]=1
+        }
         bimodalprob[i]=bimodal(vec)$Bimodal
-      }
-      else if(Npervar[i]<8){
+      }else if(Npervar[i]<8){#statistical testing does not work with not enough cases
         warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
         nonunimodal[i]=1
         skewed[i]=1
         bimodalprob[i]=0
       }else{
-        nonunimodal[i]=diptest::dip.test(x[, i])$p.value
-        skewed[i]=moments::agostino.test(x[, i])$p.value
+        if(Ordering=="Statistics"){
+     
+          if(NUniquepervar[i]>MinimalAmoutOfUniqueData){
+            nonunimodal[i]=diptest::dip.test(x[, i])$p.value
+            skewed[i]=moments::agostino.test(x[, i])$p.value
+          }else{#statistical testing requires enough unique values
+            warning('Not enough unique values for moments::agostino.test and diptest::dip.test output ignored.')
+            nonunimodal[i]=1
+            skewed[i]=1
+          }
+        }else{
+          nonunimodal[i]=1
+          skewed[i]=1
+        }
         bimodalprob[i]=bimodal(x[, i])$Bimodal
       }
-      if(nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData)
-        normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
+      if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
+        if(nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData)
+          normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
+      }else{#bimodal is siginficant and enough data for gaussian estimation
+        if(bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData)
+          normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
+      }
+      
     }
     
     #raw estimation, page 115, projection based clustering book
@@ -148,7 +178,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
    
  }#end if (RobustGaussian==TRUE |Ordering=="Statistics"
   
-  ## Ordering
+  ## Ordering ----
   dfrang = reshape2::melt(Data)
   colnames(dfrang) <- c('ID', 'Variables', 'Values')
   dfrang$Variables=as.character(dfrang$Variables)
@@ -187,24 +217,40 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
 
   ## Data Reshaping----
 
-  if(any(Npervar<MinimalAmoutOfData)){
-    warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points. Changing from MD-plot to Jitter-Plot for these columns.'))
+  if(any(Npervar<MinimalAmoutOfData)|any(NUniquepervar<MinimalAmoutOfUniqueData)){#builds scatter plots in case of not enough information for pdf
+    warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points or less than ',MinimalAmoutOfUniqueData,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
     DataDensity=Data
     mm=apply(Data,2,median,na.rm=T)
+    #Transforms pdf estimation to median line drawing of pdf cannot be estimated
     for(nc in 1:dvariables){
       if(Npervar[nc]<MinimalAmoutOfData){
-        DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+        #generated values around the median if not enoug non finite values given
+        # this is done to draw a median line
+        if(mm[nc]!=0)
+          DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+        else
+          DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
+      }
+      if(NUniquepervar[nc]<MinimalAmoutOfUniqueData){
+        #generated values around the median if not enoug unique values given
+        # this is done to draw a median line
+        if(mm[nc]!=0)
+          DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+        else
+          DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
       }
     }
+    #Generates in the cases where pdf cannot be estimated a scatter plot
     DataJitter=Data
-    DataJitter[,(Npervar>=MinimalAmoutOfData)]=NaN
-
+    #Delete all scatters for features where distributions can be estimated
+    DataJitter[,(Npervar>=MinimalAmoutOfData&NUniquepervar>=MinimalAmoutOfUniqueData)]=NaN
     #apply ordering
     dataframe = reshape2::melt(DataDensity[,Rangfolge])
   }else{
     #apply ordering
     dataframe = reshape2::melt(Data[,Rangfolge])
   }
+  
   if(dvariables==1){
     dataframe$ID=rep(1,Ncases)
     dataframe$Variables=rep(colnames(Data),Ncases)
@@ -224,7 +270,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
   plot=plot + 
     geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=Size,trim = TRUE)+ theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
-  if(any(Npervar<MinimalAmoutOfData)){
+  if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfUniqueData)){
     DataJitter[,Rangfolge]
     dataframejitter=reshape2::melt(DataJitter)
     if(dvariables==1){#bugfix one feature

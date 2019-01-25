@@ -1,3 +1,6 @@
+Version 1.1.5 (GitHub, 2018-01-26)
+	o Bugfix: The statistical testing in the MD-plot now is omitted if not enough unique values are given in some features. In such a case, only a scatter plot is plotted.
+
 Version 1.1.4 (GitHub, 2018-11-17)
 	o SignedLog: Allows to transform negativ values with logarithm.
 	o Improvement: MD-plot allows for Scaling and Ordering of data and plots scattered points if a column has not enough values to perform density estimation.
