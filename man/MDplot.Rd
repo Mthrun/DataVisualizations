@@ -115,7 +115,7 @@ Statistical testing is performed with \code{\link[diptest]{dip.test}} and \code{
 
 For the paramter \code{Ordering} the following options are possible:
 \describe{
-\item{\code{Default}}{Ordering of plots by convex/concav/unimodal/nonunimodal shapes.}
+\item{\code{Default}}{Ordering of plots by convex/concav/unimodal/nonunimodal shapes. In this case the \pkg{signal} is required.}
 
 \item{\code{Columnwise}}{Ordering of plots by the order of columns of \code{Data}.}
 
