@@ -34,7 +34,7 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40, OnlyPlotOutput=TRUE)
     Optional: string, color with which MDs are to be filled with.
   }
     \item{RobustGaussian}{
-    Optional: If TRUE: each MDplot is overlayed with a roubustly estimated unimodal Gaussian distribution, if statistical testing does not yield a significant p.value.
+    Optional: If TRUE: each MDplot is overlayed with a roubustly estimated unimodal Gaussian distribution, if statistical testing does not yield a significant p.value. In this case the \pkg{signal} is required.
   }
       \item{GaussianColor}{
     Optional: string, color of robustly estimated gaussian, only for \code{RobustGaussian=TRUE}.
@@ -121,7 +121,7 @@ For the paramter \code{Ordering} the following options are possible:
 
 \item{\code{Alphabetical}}{Ordering of plots by the order of columns of \code{Data} sorted in alphabetical order by column names.}
 
-\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing. In this case the packages \pkg{moments} and \pkg{diptest} are required.}
+\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.}
 }
 
 For the paramter \code{Scaling} the following options are possible:
