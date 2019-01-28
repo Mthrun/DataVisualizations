@@ -10,9 +10,9 @@ The MD-plot is an improvement of violin or so-called bean plots which posses adv
 \usage{
 MDplot(Data, Names,Ordering='Default',
 
-Scaling=FALSE,Fill='darkblue',
+Scaling="None",Fill='darkblue',
 
-RobustGaussian=TRUE,GaussianColor='Magenta',Gaussian_lwd=1.5,
+RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
 
 BoxPlot=FALSE,BoxColor='darkred',
 

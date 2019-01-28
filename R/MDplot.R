@@ -310,6 +310,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   if(OnlyPlotOutput){
     return(ggplotObj = plot+ggExtra::rotateTextX())
   }else{
-    return(list(gplotObj = plot+ggExtra::rotateTextX(),Ordering=Rangfolge,DataOrdered=Data[,Rangfolge]))
+    print(plot+ggExtra::rotateTextX())
+    return(list(Ordering=Rangfolge,DataOrdered=Data[,Rangfolge],gplotObj = plot+ggExtra::rotateTextX()))
   }
 } 
