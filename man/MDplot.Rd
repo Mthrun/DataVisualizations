@@ -8,15 +8,13 @@ This function creates a MD-plot for each variable of the data matrix.
 The MD-plot is an improvement of violin or so-called bean plots which posses advantages in comparison to the conventional well-known box plot [Thrun/Ultsch, 2019].
 }
 \usage{
-MDplot(Data, Names,Ordering='Default',
+MDplot(Data, Names, Ordering='Default', Scaling="None",
 
-Scaling="None",Fill='darkblue',
+Fill='darkblue', RobustGaussian=TRUE, GaussianColor='magenta',
 
-RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
+Gaussian_lwd=1.5, BoxPlot=FALSE, BoxColor='darkred',
 
-BoxPlot=FALSE,BoxColor='darkred',
-
-MDscaling='width',Size=0.01,MinimalAmoutOfData=40,OnlyPlotOutput=TRUE)
+MDscaling='width',Size=0.01,MinimalAmoutOfData=40, OnlyPlotOutput=TRUE)
 }
 
 \arguments{
@@ -67,14 +65,10 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40,OnlyPlotOutput=TRUE)
 
 \value{
 
-In the default case of
+In the default case of \code{OnlyPlotOutput==TRUE}: The ggplot object of the MD-plot. 
 
-\code{OnlyPlotOutput==TRUE}: The ggplot object of the MD-plot.
-
-Otherwise
-
-\code{OnlyPlotOutput==FALSE}: list of
-      \item{gplotObj}{
+Otherwise for \code{OnlyPlotOutput==FALSE}: A list of
+      \item{ggplotObj}{
    The ggplot object of the MD-plot.
   }
         \item{Ordering}{
@@ -83,6 +77,8 @@ Otherwise
         \item{DataOrdered}{
    [1:n,1:d] matrix of ordered and scaled data defined by \code{Ordering} and \code{Scaling}.
   }
+  
+  Note that the package \pkg{ggExtra} is not necessarily required but if given the feauture names are automatically rotated. 
 }
 
 \author{
@@ -101,11 +97,13 @@ MDplot(x)
 }
 
 \note{
-One would assume that in the first of the two following case only the plotting region is adjusted but: \code{MDplot(MTY)+ylim(c(0,7000))} is equal to \code{MDplot(MTY[MTY<7000])}. 
+1.) One would assume that in the first of the two following case only the plotting region is adjusted but: 
+
+\code{MDplot(MTY)+ylim(c(0,7000))} is equal to \code{MDplot(MTY[MTY<7000])}. 
 
 This means in both cases the data is clipped and AFTERWARDS the density estimated. 
 
-Because of a (sometimes) strange behavior of either ggplot2 or reshape2, numerical column names are changed to character by adding 'C_'.
+2.) Because of a (sometimes) strange behavior of either ggplot2 or reshape2, numerical column names are changed to character by adding 'C_'.
 }
 
 \details{
@@ -123,7 +121,7 @@ For the paramter \code{Ordering} the following options are possible:
 
 \item{\code{Alphabetical}}{Ordering of plots by the order of columns of \code{Data} sorted in alphabetical order by column names.}
 
-\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing.}
+\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing. In this case the packages \pkg{moments} and \pkg{diptest} are required.}
 }
 
 For the paramter \code{Scaling} the following options are possible:

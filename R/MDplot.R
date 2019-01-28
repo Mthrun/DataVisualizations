@@ -14,6 +14,10 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   # ggplotObj     The ggplot object of the boxplots
   #
   # Author MT 2018: used general idea of FP to apply ggplot2 frameworks 
+  
+  #always required:
+  requireNamespace("reshape2")
+
   MinimalAmoutOfUniqueData=12
   ## Error Catching ----
   if (is.vector(Data)) {
@@ -65,15 +69,17 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   #     colnames(Data)[i]=paste0('C_',NamesNumeric[i])
   #   }
   # }
-  requireNamespace("reshape2")
-  requireNamespace("ggExtra")
 
   ## Data Scaling ----
   switch(Scaling,
     None={Data=Data},
     Percentalize={ Data = apply(Data, MARGIN = 2,function(x) return((x-min(x,na.rm = T))/(max(x,na.rm = T) - min(x,na.rm = T)) * 100))},
-    CompleteRobust={Data=DatabionicSwarm::RobustNormalization(Data,Centered = T,Capped = T)},
-    Robust={Data=DatabionicSwarm::RobustNormalization(Data,Centered = F,Capped = F)},
+    CompleteRobust={
+      requireNamespace('DatabionicSwarm')
+      Data=DatabionicSwarm::RobustNormalization(Data,Centered = T,Capped = T)},
+    Robust={
+      requireNamespace('DatabionicSwarm')
+      Data=DatabionicSwarm::RobustNormalization(Data,Centered = F,Capped = F)},
     Log={Data=SignedLog(Data,Base="Ten")
          RobustGaussian=FALSE #log with robust gaussian does not work, because mean and variance is not valid description for log normal data
     },
@@ -307,10 +313,14 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
 
   # plot=plot + 
   #   geom_violin(stat = "PDEdensity",fill=fill,scale=MDscaling,size=Size)+ theme(axis.text.x = element_text(size=rel(1.2)))
+  
+  if(isTRUE(requireNamespace("ggExtra"))){
+    plot=plot+ggExtra::rotateTextX()
+  }
   if(OnlyPlotOutput){
-    return(ggplotObj = plot+ggExtra::rotateTextX())
+      return(ggplotObj = plot)
   }else{
-    print(plot+ggExtra::rotateTextX())
-    return(list(Ordering=Rangfolge,DataOrdered=Data[,Rangfolge],gplotObj = plot+ggExtra::rotateTextX()))
+    print(plot)
+    return(list(Ordering=Rangfolge,DataOrdered=Data[,Rangfolge],ggplotObj = plot))
   }
 } 
