@@ -1,11 +1,12 @@
 \name{MDplot}
 \alias{MDplot}
 \title{
-Mirrored Density plot (MD-plot): Visualization for a Boxplot-like Shape of the PDF published in [Thrun/Ultsch, 2019].
+Mirrored Density plot (MD-plot)
 }
 \description{
 This function creates a MD-plot for each variable of the data matrix. 
-The MD-plot is an improvement of violin or so-called bean plots which posses advantages in comparison to the conventional well-known box plot [Thrun/Ultsch, 2019].
+The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun/Ultsch, 2019].
+It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun/Ultsch, 2019].
 }
 \usage{
 MDplot(Data, Names, Ordering='Default', Scaling="None",
