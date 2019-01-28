@@ -142,7 +142,7 @@ For the paramter \code{Scaling} the following options are possible:
 \references{
 [Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
 
-[Thrun/Ultsch, 2019]	Thrun, M. C., & Ultsch, A. : Ânalyzing the Fine Structure of Distributions, Technical Report prior to submission, Philipps-University Marburg, German, 2019. 
+[Thrun/Ultsch, 2019]	Thrun, M. C., & Ultsch, A. : Analyzing the Fine Structure of Distributions, Technical Report prior to submission, Philipps-University Marburg, Germany, 2019. 
 
 
 [Thrun et al.,2018a]	Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency stream nitrate concentrations: hydrology and biology contributions, Proc. European Conference on Data Analysis (ECDA), pp. 46-47, Paderborn, Germany, 2018. 
