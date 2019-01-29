@@ -26,7 +26,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   }
   if(!is.matrix(Data)){
     warning('The MD-plot prefers a numerical matrix. If a data.frame or a tibble is used it is transformed to a matrix. Calling as.matrix.')
-    Data=as.matrix(Data)
+    Data=as.matrix(Data) #note to me, in v 1.1.1 DatabionicsSwarm, RobustNormalization only works with matrix, have to fix that..
   }
   if(mode(Data)!='numeric'){
     warning('"mode" of matrix is not numeric. Casting to numeric.')
