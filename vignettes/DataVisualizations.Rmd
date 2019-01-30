@@ -39,7 +39,7 @@ vignette: >
 ```{r,fig.width=5, fig.height=5}
 library(DataVisualizations)
 data("Lsun3D")
-PixelMatrixPlot(Lsun3D$Data)
+Pixelmatrix(Lsun3D$Data)
 ```
 
 ## Distribution Analysis
@@ -94,7 +94,7 @@ Data=cbind(Lsun3D$Data,runif(n),rnorm(n),rt(n,2),rlnorm(n),rchisq(100,2))
 Header=c('x','y','z','uniform','gauss','t','log-normal','chi')
 cc=cor(Data,method='spearman')
 diag(cc)=0
-PixelMatrixPlot(cc,YNames = Header,XNames = Header,main = 'Spearman Coeffs')
+Pixelmatrix(cc,YNames = Header,XNames = Header,main = 'Spearman Coeffs')
 ```
 
 ## Distribution of Distances
@@ -127,7 +127,7 @@ load(file='GermanPostalCodesShapes.rda')
 If you download the package from GitHub, you can omit the two steps above. Then, do not use the 'PostalCodesShapes' input parameter. Many postal codes are required to see a structure. The code below shows exemplary two postal codes in the upper left corner of the map.
 
 ```{}
-out=plotChoroplethMap(c(4,8,5,4),c('49838', '26817', '49838', '26817'),NumberOfBins=2,PlotIt=FALSE)
+out=Choroplethmap(c(4,8,5,4),c('49838', '26817', '49838', '26817'),NumberOfBins=2,PlotIt=FALSE)
 out$chorR6obj$render()
 ```
 
@@ -167,7 +167,7 @@ Codes=c("AFG", "AGO", "ALB", "ARG", "ATG", "AUS", "AUT", "BDI", "BEL",
 "SWZ", "SYC", "SYR", "TCD", "TGO", "THA", "TON", "TTO", "TUN", 
 "TUR", "TWN", "TZA", "UGA", "URY", "USA", "VCT", "VEN", "VNM", 
 "VUT", "WSM", "ZAF", "ZAR", "ZMB", "ZWE")
-plotWorldmap(Codes,Cls)
+Worldmap(Codes,Cls)
 ```
 
 ## Visualization of categorical features
@@ -176,9 +176,9 @@ A fanplot is better alternative to the pie chart. It represents amount of values
 ```{r,fig.width=5, fig.height=5}
 library(DataVisualizations)
 data(categoricalVariable)
-fanPlot(categoricalVariable)
+Fanplot(categoricalVariable)
 
-pieChart(categoricalVariable)
+Piechart(categoricalVariable)
 ```
 
 # Evaluation of Clustering
@@ -200,7 +200,7 @@ data("Lsun3D")
 
 Heatmap(Lsun3D$Data,Lsun3D$Cls,method = 'euclidean')
 
-SilhouettePlot(Lsun3D$Data,Lsun3D$Cls,PlotIt = T)
+Silhouetteplot(Lsun3D$Data,Lsun3D$Cls,PlotIt = T)
 ```
 
 ## Visualizations of Supervised Indices

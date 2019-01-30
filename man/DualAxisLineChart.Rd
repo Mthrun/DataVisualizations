@@ -1,14 +1,14 @@
-\name{DualAxisLineChart}
-\alias{DualAxisLineChart}
+\name{DualaxisLinechart}
+\alias{DualaxisLinechart}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-DualAxisLineChart
+DualaxisLinechart
 }
 \description{
 A line chart with dual axisSS
 }
 \usage{
-DualAxisLineChart(X, Y1, Y2, xlab = "X", 
+DualaxisLinechart(X, Y1, Y2, xlab = "X", 
 
 y1lab = "Y1", y2lab = "Y2", main = "Dual Axis Line Chart",
 

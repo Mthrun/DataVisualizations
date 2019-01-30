@@ -1,4 +1,4 @@
- pieChart=function(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,Rline=1,...){
+ Piechart=pieChart=function(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,Rline=1,...){
 #    pieChart(Datavector,Names,Labels,main='',col)
 # 
 #      the pie chart represents amount of values given in data.

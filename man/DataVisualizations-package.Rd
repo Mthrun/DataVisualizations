@@ -36,7 +36,7 @@ Maintainer: \packageMaintainer{DataVisualizations}
 data("Lsun3D")
 Data=Lsun3D$Data
 \donttest{
-PixelMatrixPlot(Data)
+Pixelmatrix(Data)
 }
 
 \donttest{
@@ -62,7 +62,7 @@ Data=Lsun3D$Data
 plot(Data[,1:2],col=Cls)
 #However, the silhouette plot does not indicate a very good clustering in cluster 1 and 2
 \donttest{
-SilhouettePlot(Data,Cls = Cls)
+Silhouetteplot(Data,Cls = Cls)
 }
 \donttest{
 Heatmap(as.matrix(dist(Data)),Cls = Cls)

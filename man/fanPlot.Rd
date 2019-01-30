@@ -1,5 +1,5 @@
-\name{fanPlot}
-\alias{fanPlot}
+\name{Fanplot}
+\alias{Fanplot}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 The fan plot
@@ -8,7 +8,7 @@ The fan plot
 The better alternative to the pie chart represents amount of values given in data.
 }
 \usage{
-fanPlot(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,
+Fanplot(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,
 
 MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1)
 }
@@ -67,7 +67,7 @@ Michael Thrun
 
 \examples{
 data(categoricalVariable)
-fanPlot(categoricalVariable)
+Fanplot(categoricalVariable)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

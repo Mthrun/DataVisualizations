@@ -1,13 +1,13 @@
-\name{ClassBoxPlot}
-\alias{ClassBoxPlot}
+\name{ClassBoxplot}
+\alias{ClassBoxplot}
 \title{
- Creates BoxPlot plot for all classes
+ Creates Boxplot plot for all classes
 }
 \description{
- BoxPlot the data for all classes
+ Boxplot the data for all classes
 }
 \usage{
-ClassBoxPlot(Data, Cls,  ColorSequence = DataVisualizations::DefaultColorSequence,
+ClassBoxplot(Data, Cls,  ColorSequence = DataVisualizations::DefaultColorSequence,
 
  ClassNames = NULL, PlotLegend = TRUE,
 
