@@ -1,4 +1,4 @@
-slopeChart=function(FirstDatavector,SecondDatavector,Names,Labels,MaxNumberOfSlices,TopLabels=c('FirstDatavector','SecondDatavector'),main='Comparision of Descending Frequency'){
+Slopechart=slopeChart=function(FirstDatavector,SecondDatavector,Names,Labels,MaxNumberOfSlices,TopLabels=c('FirstDatavector','SecondDatavector'),main='Comparision of Descending Frequency'){
 
   requireNamespace('plotrix')
 

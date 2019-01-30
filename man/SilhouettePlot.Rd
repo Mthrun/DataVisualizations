@@ -1,16 +1,16 @@
-\name{SilhouettePlot}
-\alias{SilhouettePlot}
+\name{Silhouetteplot}
+\alias{Silhouetteplot}
 
 \title{
-Silhouette plot for classified data.
+Silhouette plot of classified data.
 }
 \description{
 
-   SilhouettePlot plots cluster silhouettes for the n-by-d data
+   Silhouette plot of cluster silhouettes for the n-by-d data
    matrix Data or distance matrix where the clusters are defined in the vector Cls.
 }
 \usage{
-SilhouettePlot(DataOrDistances, Cls, method='euclidean', PlotIt=TRUE)
+Silhouetteplot(DataOrDistances, Cls, method='euclidean', PlotIt=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -45,7 +45,7 @@ Data=Lsun3D$Data
 #clear cluster structure
 plot(Data[,1:2],col=Cls)
 #However, the silhouette plot does not indicate a very good clustering in cluster 1 and 2
-SilhouettePlot(Data,Cls = Cls)
+Silhouetteplot(Data,Cls = Cls)
 
 }
 

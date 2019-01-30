@@ -1,4 +1,4 @@
-DualAxisLineChart=function(X,Y1,Y2,xlab='X',y1lab='Y1',y2lab='Y2',main='Dual Axis Line Chart',cols=c('black','blue'),SaveIt=FALSE){
+DualaxisLinechart=DualAxisLineChart=function(X,Y1,Y2,xlab='X',y1lab='Y1',y2lab='Y2',main='Dual Axis Line Chart',cols=c('black','blue'),SaveIt=FALSE){
   requireNamespace('plotly')
 
   

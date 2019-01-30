@@ -1,14 +1,14 @@
-\name{pieChart}
-\alias{pieChart}
+\name{Piechart}
+\alias{Piechart}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-The fan plot
+The pie chart
 }
 \description{
 the pie chart represents amount of values given in data.
 }
 \usage{
-pieChart(Datavector,Names,Labels,MaxNumberOfSlices,
+Piechart(Datavector,Names,Labels,MaxNumberOfSlices,
 main='',col,Rline=1,...)
 }
 \arguments{
@@ -64,11 +64,11 @@ silent output by calling \code{invisible} of a list with
 Michael Thrun
 }
 \note{
-You see in the example below that a pieChart does not visualize such data well contrary to the \code{fanPlot}.
+You see in the example below that a pie chart does not visualize such data well contrary to the \code{fanPlot}.
 }
 \examples{
 data(categoricalVariable)
-pieChart(categoricalVariable)
+Piechart(categoricalVariable)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

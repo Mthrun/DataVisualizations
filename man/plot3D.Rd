@@ -1,5 +1,5 @@
-\name{plot3D}
-\alias{plot3D}
+\name{Plot3D}
+\alias{Plot3D}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 3D plot of points
@@ -8,7 +8,7 @@
 A wrapper for Data with systematic clustering colors for either a 2D (x,y) or 3D (x,y,z) plot combined with a classification
 }
 \usage{
-plot3D(Data,Cls,UniqueColors,size=2,na.rm=FALSE,\dots)
+Plot3D(Data,Cls,UniqueColors,size=2,na.rm=FALSE,\dots)
 }
 
 \arguments{
@@ -52,7 +52,7 @@ Uses either \code{\link[ggplot2]{geom_point}} for 2D or \code{\link[rgl]{plot3d}
 \examples{
 #Spin3D similar output
 data(Lsun3D)
-plot3D(Lsun3D$Data,Lsun3D$Cls,type='s',radius=0.1,box=FALSE,aspect=TRUE)
+Plot3D(Lsun3D$Data,Lsun3D$Cls,type='s',radius=0.1,box=FALSE,aspect=TRUE)
 \donttest{rgl::grid3d(c("x", "y", "z"))}
 
 #Projected Points with Classification
@@ -60,14 +60,14 @@ Data=cbind(runif(500,min=-3,max=3),rnorm(500))
 
 # Classification
 Cls=ifelse(Data[,1]>0,1,2)
-plot3D(Data,Cls,UniqueColors = DataVisualizations::DefaultColorSequence[c(1,3)],size=2)
+Plot3D(Data,Cls,UniqueColors = DataVisualizations::DefaultColorSequence[c(1,3)],size=2)
 
 \donttest{
 #Points with Non-Overlapping Labels
 #require(ggrepel)
 Data=cbind(runif(30,min=-1,max=1),rnorm(30,0,0.5))
 Names=paste0('VeryLongName',1:30)
-ggobj=plot3D(Data)
+ggobj=Plot3D(Data)
 ggobj +  geom_text_repel(aes(label=Names), size=3)
 }
 }

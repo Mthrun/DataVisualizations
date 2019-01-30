@@ -1,4 +1,4 @@
-ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend = TRUE, main = 'Boxplot per Class', xlab = 'Classes', ylab = 'Range of Data') {
+ClassBoxplot <- ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend = TRUE, main = 'Boxplot per Class', xlab = 'Classes', ylab = 'Range of Data') {
     # PlotHandle = ClassBoxPlotMaxLikeli(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend);
     # BoxPlot the data for all classes, weight the Plot with 1 (= maximum likelihood)
     # INPUT

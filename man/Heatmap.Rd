@@ -48,7 +48,7 @@ Michael Thrun
 }
 
 \seealso{
-\code{\link{PixelMatrixPlot}}
+\code{\link{Pixelmatrix}}
 }
 \examples{
 data("Lsun3D")

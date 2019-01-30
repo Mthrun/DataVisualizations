@@ -1,5 +1,24 @@
-Version 1.1.5 (GitHub, 2018-01-26)
+Version 1.1.5 (CRAN, 2018-02-02)
 	o Bugfix: The statistical testing in the MD-plot now is omitted if not enough unique values are given in some features. In such a case, only a scatter plot is plotted.
+	o Naming Convention: Standardized plotting functions by removing "plot" in names except cases where it is conventional in other sources, e.g. MAplot. Older function names will be removed in the next CRAN version.
+						o  plotWorldmap renamed to Worldmap
+						o  plotChoroplethMap renamed to Choroplethmap
+						o  ClassBoxPlot renamed to ClassBoxplot
+						o  ClassViolinPlot renamed to ClassViolin
+						o  fanPlot renamed to Fanplot
+						o  pieChart renamed to Piechart
+						o  CrossTablePlot renamed to Crosstable
+						o  slopeChart renamed to Slopechart
+						o  plot3D renamed to Plot3D
+						o  InspectScatterOfData renamed to InspectScatterplots
+						o  PixelMatrixPlot renamed to Pixelmatrix
+						o  ShepardScatterPlot renamed to Sheparddiagram
+						o  ShepardDensityPlot renamed to ShepardPDEscatter
+						o  DualAxisLineChart renamed to DualaxisLinechart
+						o  SilhouettePlot renamed to Silhouetteplot
+						o  BoxplotData renamed to InspectBoxplots
+						o  QQplotWithFit renamed to QQplot
+	o nanPlot is deprecated. The new function is PlotMissingvalues
 
 Version 1.1.4 (GitHub, 2018-11-17)
 	o SignedLog: Allows to transform negativ values with logarithm.

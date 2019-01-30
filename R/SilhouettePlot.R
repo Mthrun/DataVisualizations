@@ -1,4 +1,4 @@
-SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "euclidean",PlotIt=TRUE){
+Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "euclidean",PlotIt=TRUE){
 #sil=SilhouettePlot(DataOrDistances, Cls=NULL,method= "euclidean",PlotIt=TRUE) 
 #   Silhouette plot for classified data
 #   

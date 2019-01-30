@@ -1,6 +1,6 @@
-\name{slopeChart}
+\name{Slopechart}
 
-\alias{slopeChart}
+\alias{Slopechart}
 
 \title{
 Slope Chart
@@ -9,7 +9,7 @@ Slope Chart
 ABC analysis improved slope chart
 }
 \usage{
-slopeChart(FirstDatavector,
+Slopechart(FirstDatavector,
 
 SecondDatavector,
 
@@ -69,7 +69,7 @@ Michael Thrun
 
 
 \seealso{
-\code{\link{pieChart}}, \code{\link{fanPlot}}
+\code{\link{Piechart}}, \code{\link{Fanplot}}
 }
 \examples{
 ## will follow

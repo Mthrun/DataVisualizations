@@ -62,7 +62,7 @@
    #MT: sollte in der selbenreihenfolge sein wie anordnung der cls welche daten anordnet
    Vunique = sort(unique(Cls),decreasing = F,na.last = T)
    
-   plt = PixelMatrixPlot(DataDists, c(), LowLim, HiLim) +
+   plt = Pixelmatrix(DataDists, c(), LowLim, HiLim) +
      ylab(paste('|Cls No', Vunique[order(Vunique, decreasing = T)], '| ', collapse = '')) +
      xlab(paste('|Cls No', Vunique, '| ', collapse = '')) +
      ggtitle('Distances of DataOrDistances sorted by Cls')
