@@ -4,7 +4,6 @@ Version 1.1.5 (CRAN, 2018-02-02)
 						o  plotWorldmap renamed to Worldmap
 						o  plotChoroplethMap renamed to Choroplethmap
 						o  ClassBoxPlot renamed to ClassBoxplot
-						o  ClassViolinPlot renamed to ClassViolin
 						o  fanPlot renamed to Fanplot
 						o  pieChart renamed to Piechart
 						o  CrossTablePlot renamed to Crosstable
@@ -18,7 +17,8 @@ Version 1.1.5 (CRAN, 2018-02-02)
 						o  SilhouettePlot renamed to Silhouetteplot
 						o  BoxplotData renamed to InspectBoxplots
 						o  QQplotWithFit renamed to QQplot
-	o nanPlot is deprecated. The new function is PlotMissingvalues
+	o nanPlot is deprecated. The new function is PlotMissingvalues.
+	o ClassViolinPlot is deprecated. The new function is ClassMDplot.
 
 Version 1.1.4 (GitHub, 2018-11-17)
 	o SignedLog: Allows to transform negativ values with logarithm.
