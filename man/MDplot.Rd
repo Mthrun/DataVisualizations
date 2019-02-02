@@ -35,7 +35,7 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40, OnlyPlotOutput=TRUE)
     Optional: string, color with which MDs are to be filled with.
   }
     \item{RobustGaussian}{
-    Optional: If TRUE: each MDplot is overlayed with a roubustly estimated unimodal Gaussian distribution, if statistical testing does not yield a significant p.value. In this case the \pkg{signal} is required.
+    Optional: If TRUE: each MDplot is overlayed with a roubustly estimated unimodal Gaussian distribution, if statistical testing does not yield a significant p.value. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.
   }
       \item{GaussianColor}{
     Optional: string, color of robustly estimated gaussian, only for \code{RobustGaussian=TRUE}.
@@ -91,7 +91,7 @@ x <- cbind(A = runif(200, 1, 3), B = c(rnorm(100,0,1),rnorm(100,2.4,1)))
 MDplot(x)
 }
 \donttest{
-x <- cbind(A = runif(20000, 1, 3), B = c(rnorm(10000,0,1),rnorm(10000,2.6,1)))
+x <- cbind(A = runif(20000, 1, 3), B = c(rnorm(10000,0,1),rnorm(10000,2.6,1)),C = c(rnorm(20000,0,1)))
 MDplot(x)
 }
 

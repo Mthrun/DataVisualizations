@@ -92,6 +92,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   #print(Npervar)
 
   #ToDo: split up RobustGAussian and Ordering Parameter for better code readibility
+  #MT: robust gaussians only work with statistical testing, disabled some ifs
  if(RobustGaussian==TRUE |Ordering=="Statistics"){
    if(Ordering=="Statistics"){
     requireNamespace('moments')
@@ -110,15 +111,20 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     faktor <- sum(abs(qnorm(t(c(lowInnerPercentile, hiInnerPercentile)/100), 0, 1)))
     std <- sd(x, na.rm = TRUE)
     p <- c(lowInnerPercentile, hiInnerPercentile)/100
+    extrema=c(0.001,0.999)
     if (is.matrix(x) && dvariables > 1) {
       cols <- dvariables
       quartile <- matrix(0, nrow = length(p), ncol = cols)
+      MinMax <- matrix(0, nrow = length(extrema), ncol = cols)
       for (i in 1:cols) {
         quartile[, i] <- quantile(x[, i], probs = p, type = 5, 
                                 na.rm = TRUE)
+        MinMax[, i] <- quantile(x[, i], probs = extrema, type = 5, 
+                                  na.rm = TRUE)
       }
     }else{
       quartile <- quantile(x, p, type = 5, na.rm = TRUE)
+      MinMax <- quantile(x, extrema, type = 5, na.rm = TRUE)
     }
     if (dvariables > 1){
       iqr <- quartile[2, ] - quartile[1, ]
@@ -129,6 +135,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     nonunimodal=c()
     skewed=c()
     bimodalprob=c()
+    isuniformdist=c()
     Nsample=10000
     kernels=matrix(NaN,nrow=Nsample,ncol = dvariables)
     normaldist=matrix(NaN,nrow=Nsample,ncol = dvariables)
@@ -137,43 +144,51 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
       mhat[i] <- mean(x[, i], trim = 0.1, na.rm = TRUE)
       if(Ncases>45000){#statistical testing does not work with to many cases
         vec=sample(x = x[, i],45000)
-        if(Ordering=="Statistics"){
+       # if(Ordering=="Statistics"){
           nonunimodal[i]=diptest::dip.test(vec)$p.value
           skewed[i]=moments::agostino.test(vec)$p.value
-        }else{
-          nonunimodal[i]=1
-          skewed[i]=1
-        }
+          #Ties should not be present, however here we only approximate
+          isuniformdist[i]=suppressWarnings(ks.test(vec,"punif", MinMax[1, i], MinMax[2, i])$p.value)
+       # }else{
+        #  nonunimodal[i]=1
+        #  skewed[i]=1
+       # }
         bimodalprob[i]=bimodal(vec)$Bimodal
       }else if(Npervar[i]<8){#statistical testing does not work with not enough cases
         warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
         nonunimodal[i]=1
         skewed[i]=1
         bimodalprob[i]=0
+        isuniformdist[i]=0
       }else{
-        if(Ordering=="Statistics"){
+#        if(Ordering=="Statistics"){
      
           if(NUniquepervar[i]>MinimalAmoutOfUniqueData){
             nonunimodal[i]=diptest::dip.test(x[, i])$p.value
             skewed[i]=moments::agostino.test(x[, i])$p.value
+            isuniformdist[i]=suppressWarnings(ks.test(x[, i],"punif", MinMax[1, i], MinMax[2, i])$p.value)
+            bimodalprob[i]=bimodal(x[, i])$Bimodal
           }else{#statistical testing requires enough unique values
-            warning('Not enough unique values for moments::agostino.test and diptest::dip.test output ignored.')
+            warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
             nonunimodal[i]=1
             skewed[i]=1
+            isuniformdist[i]=0
+            bimodalprob[i]=0
           }
-        }else{
-          nonunimodal[i]=1
-          skewed[i]=1
-        }
-        bimodalprob[i]=bimodal(x[, i])$Bimodal
+        # }else{
+        #   nonunimodal[i]=1
+        #   skewed[i]=1
+        # }
+      
       }
-      if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
-        if(nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData)
-          normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
-      }else{#bimodal is siginficant and enough data for gaussian estimation
-        if(bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData)
+     # if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
+        if(isuniformdist[i]<0.05 & nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData){
           normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
       }
+          #else{#bimodal is siginficant and enough data for gaussian estimation
+      #  if(bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData)
+     #     normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
+     # }
       
     }
     

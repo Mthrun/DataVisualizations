@@ -44,7 +44,9 @@ ggobject()
 This plot was used in [Thrun, 2018, p. 135].
 }
 \note{
-requires an Internet connection
+requires an Internet connection,
+requires an API key of Google.
+See \code{?ggmap::register_google} for details.
 }
 \author{
 Michael Thrun
