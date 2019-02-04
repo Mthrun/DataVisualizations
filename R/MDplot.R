@@ -124,7 +124,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
       }
     }else{
       quartile <- quantile(x, p, type = 5, na.rm = TRUE)
-      MinMax <- quantile(x, extrema, type = 5, na.rm = TRUE)
+      MinMax <- as.matrix(quantile(x, extrema, type = 5, na.rm = TRUE))
     }
     if (dvariables > 1){
       iqr <- quartile[2, ] - quartile[1, ]
