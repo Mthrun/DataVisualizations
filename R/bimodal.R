@@ -9,7 +9,7 @@ bimodal=function(Data,PlotIt=FALSE,na.rm=T){
   }
     convexconcave=function(x,fx,PlotIt=FALSE){
     # [Kruemmung,ProConvex,ProConcave,SecondDerivative,ErsteAbleitung] = convexconcave(x,fx,PlotIt) 
-    # Abschätzung, in wieweit eine Funktion konvex oder konkav ist.
+    # Abschaetzung, in wieweit eine Funktion konvex oder konkav ist.
     # 
     # INPUT
     # x(1:n)             x           values of function

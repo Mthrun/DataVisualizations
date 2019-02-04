@@ -13,15 +13,15 @@ if (!is.matrix(Data)) {
   warning('Data is not a matrix. Using as.matrix()')
   Data = as.matrix(Data)
 }
-nrow = dim(Data)[1]
-ncol = dim(Data)[2]
-if (ncol < 2) {
+nrows = dim(Data)[1]
+ncols = dim(Data)[2]
+if (ncols < 2) {
   stop('Data has to have at least two columns')
 }
 NoColors = FALSE
 
 if (missing(Cls)) {
-  Cls = rep(1, nrow)
+  Cls = rep(1, nrows)
   NoColors = TRUE
 } else{
   if (!is.vector(Cls)) {
@@ -32,9 +32,12 @@ if (missing(Cls)) {
     Cls = as.numeric(Cls)
     warning('Cls should be a numeric.Calling as.numeric')
   }
+  if(length(Cls)!=nrows){
+    warning(paste0('Length of Cls (',length(Cls),') does not match number of rows (',nrows,'). Cls is replicated until it matches the number of rows.'))
+    Cls=rep(Cls,1000)[1:nrows]
+  }
   UniqueC = unique(Cls)
   m = length(UniqueC)
-  
   if(missing(UniqueColors))
     LcolUnique = DataVisualizations::DefaultColorSequence[1:m]
   else
@@ -47,7 +50,7 @@ if (missing(Cls)) {
 }
 
 
-if (ncol >= 3) {
+if (ncols >= 3) {
   requireNamespace('rgl')
   x = Data[, 1]
   y = Data[, 2]
@@ -57,11 +60,11 @@ if (ncol >= 3) {
   else
     rgl::plot3d(x, y, z, col = Lcol,  ...)
 
-  if (ncol > 3) {
+  if (ncols > 3) {
     warning('Only the first three columns are used.')
   }
 }
-if (ncol == 2) {
+if (ncols == 2) {
   # ggplot2
   #plot.new()
   x = Data[, 1]
