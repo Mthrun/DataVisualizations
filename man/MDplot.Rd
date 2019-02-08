@@ -93,7 +93,9 @@ MDplot(x)
 MDplot(rpois(100,1000))
 }
 \donttest{
-x <- cbind(A = runif(20000, 1, 5), B = c(rnorm(10000,0,1),rnorm(10000,2.6,1)),C = c(rnorm(20000,2.5,1)),D=rpois(20000,5))
+x <- cbind(A = runif(20000, 1, 5), B = c(rnorm(10000,0,1),rnorm(10000,2.6,1)),
+
+		   C = c(rnorm(20000,2.5,1)),D=rpois(20000,5))
 MDplot(x)
 }
 
