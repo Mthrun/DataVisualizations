@@ -7,7 +7,7 @@ Class MD-plot for Data w.r.t. all classes
   Creates PDE optimized Violin plot for all classes 
 }
 \usage{
-ClassMDplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
+ClassMDplot(Data, Cls, ColorSequence,
 
  ClassNames = NULL,
 
@@ -27,7 +27,7 @@ ClassMDplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
   Vector of class identifiers.
   }
   \item{ColorSequence}{
-  Optional: The sequence of colors used, Default: DefaultColorSequence()
+  Optional: The sequence of colors used, Default: DataVisualizations::DefaultColorSequence
   }
   \item{ClassNames}{
   Optional: The names of the classes. Default: C1 - C(Number of Classes)
@@ -49,10 +49,30 @@ ClassMDplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
   A List of
   \item{ClassData}{The DataFrame used to plot}
   \item{ggobject}{The ggplot2 plot object}
+  in mode \code{invisible}
 }
 \author{
   Michael Thrun, Felix Pape
 }
+\examples{
+\dontshow{
+data(ITS)
+#clustering only for testing
+Classification=c(rep(1,8805),rep(2,2389))
+DataVisualizations::ClassMDplot(ITS,Classification)
+}
+
+\donttest{
+data(ITS)
+model=AdaptGauss::AdaptGauss(ITS)
+Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
+
+DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
+
+DataVisualizations::ClassMDplot(ITS,Classification)
+}
+}
+
 \references{
 Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), accepted, Paderborn, Germany, 2018. 
 

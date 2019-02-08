@@ -66,6 +66,24 @@ ClassPDEplotMaxLikeli(Data, Cls, ColorSequence = DataVisualizations::DefaultColo
 \author{
 Felix Pape
 }
+\examples{
+\dontshow{
+data(ITS)
+#clustering only for testing
+Classification=c(rep(1,8805),rep(2,2389))
+DataVisualizations::ClassPDEplotMaxLikeli(ITS,Classification)
+}
+
+\donttest{
+data(ITS)
+model=AdaptGauss::AdaptGauss(ITS)
+Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
+
+DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
+
+DataVisualizations::ClassPDEplotMaxLikeli(ITS,Classification)$ggobject
+}
+}
 \references{
 Aubert, A. H., Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from high-frequency stream nitrate concentrations: hydrology and biology contributions, Scientific reports, Nature, Vol. 6(31536), pp. doi 10.1038/srep31536, 2016. 
 }

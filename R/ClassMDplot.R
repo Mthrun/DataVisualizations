@@ -83,6 +83,6 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   if (!PlotLegend)
     ggobject <- ggobject + theme(legend.position = "none")
   ggobject
-  return(list(ClassData = ClassData, ggobject = ggobject))
+  return(invisible(list(ClassData = ClassData, ggobject = ggobject)))
   
 }

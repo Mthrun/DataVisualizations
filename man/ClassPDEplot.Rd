@@ -4,7 +4,7 @@
 PDE Plot for all classes
 }
 \description{
-PDEplot the data for allclasses, weight the Plot with priors
+PDEplot the data for all classes, weights the pdf with priors
 }
 \usage{
 ClassPDEplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
@@ -43,8 +43,27 @@ ClassPDEplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence
 }
 }
 \value{
-  Kernels of the Pareto density estimation
+  Kernels of the Pareto density estimation in mode \code{invisible}
 }
 \author{
   Michael Thrun
+}
+
+\examples{
+\dontshow{
+data(ITS)
+#clustering only for testing
+Classification=c(rep(1,8805),rep(2,2389))
+DataVisualizations::ClassPDEplotMaxLikeli(ITS,Classification)
+}
+
+\donttest{
+data(ITS)
+model=AdaptGauss::AdaptGauss(ITS)
+Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
+
+DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
+
+DataVisualizations::ClassPDEplotMaxLikeli(ITS,Classification)$ggobject
+}
 }

@@ -69,7 +69,12 @@ For non percentiled values the \code{PlotText} part does not seem always to work
 \code{\link{table}}, \code{\link{image}}, \code{\link{PDEscatter}}
 }
 \examples{
-#ToDo
+data(ITS)
+data(MTY)
+#simple but not a good transformation
+Data=(cbind(ITS/max(ITS),MTY/max(MTY)))*100
+#choice for bins could be better
+Crosstable(Data)
 }
 
 \keyword{cross table}% use one of  RShowDoc("KEYWORDS")
