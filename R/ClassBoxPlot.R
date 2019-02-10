@@ -63,7 +63,7 @@ ClassBoxplot <- ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualiz
     
     if (!PlotLegend)
       ggobject <- ggobject + theme(legend.position = "none")
-    ggobject
+    print(ggobject)
     return(invisible(list(ClassData = ClassData, ggobject = ggobject)))
     
   }

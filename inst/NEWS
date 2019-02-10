@@ -2,6 +2,7 @@ Version 1.1.6 (GitHub, 2018-02-09)
 	o Bugfix: In MD-plot the testing against uniform distribution now works also for one feauture.
 	o Bugfix: Plot3D checks now that the length of Cls is equal to the number of rows of data.
 	o Bugfix: ClassPDEplot did not plot all pdfs for SameKernelsAndRadius=0.
+	o Improvement: ClassMDplot now jitters points instead of visualizing pdf if not enough data in class is given.
 	
 Version 1.1.5 (CRAN, 2018-02-02)
 	o Bugfix: The statistical testing in the MD-plot now is omitted if not enough unique values are given in some features. In such a case, only a scatter plot is plotted.

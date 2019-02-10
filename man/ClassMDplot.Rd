@@ -17,7 +17,7 @@ ClassMDplot(Data, Cls, ColorSequence,
 
  xlab = 'Classes',
 
- ylab = 'PDE of Data per Class')
+ ylab = 'PDE of Data per Class',MinimalAmoutOfData=40)
 }
 \arguments{
   \item{Data}{
@@ -43,6 +43,9 @@ ClassMDplot(Data, Cls, ColorSequence,
   }
   \item{ylab}{
   Optional: Title of the y axis. Default: "Data"
+  }
+      \item{MinimalAmoutOfData}{
+    Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a Jitter plot with a median line is drawn. Please see \code{\link{MDplot}} for details.
   }
 }
 \value{

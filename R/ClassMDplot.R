@@ -1,4 +1,8 @@
-ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend = TRUE, main = 'PDE Violin Plot for each Class', xlab = 'Classes', ylab = 'PDE of Data per Class') {
+ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
+                         ClassNames = NULL, PlotLegend = TRUE,
+                         main = 'PDE Violin Plot for each Class',
+                         xlab = 'Classes', ylab = 'PDE of Data per Class',
+                         MinimalAmoutOfData=40) {
   # PlotHandle = ClassViolinplot(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend);
   # BoxPlot the data for all classes, weight the Plot with 1 (= maximum likelihood)
   # INPUT
@@ -23,7 +27,6 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   #    library(ggplot2)
   
   AnzData = length(Data)
-  
   NoNanInd <- which(!is.nan(Data))
   Data <- Data[NoNanInd]
   Cls <- Cls[NoNanInd]
@@ -59,7 +62,26 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   ClassData$class=factor(ClassData$class)
   ClassData$ClassColors=factor(ClassData$ClassColors)
   ClassData$ClassNames=factor(ClassData$ClassNames) 
-  ggobject = ggplot2::ggplot(ClassData,  aes_string(x = 'class', y = 'data')) +
+
+  Npervar=c()
+  NUniquepervar=c()
+  for(i in 1:length(UniqueClasses)){
+    Npervar[i]=sum(Cls==UniqueClasses[i])
+    NUniquepervar[i]=length(unique(Data[Cls==UniqueClasses[i]]))
+  }
+  
+  if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfData)){
+    ClassData2=ClassData
+    for(i in 1:length(UniqueClasses)){
+      if(Npervar[i]<MinimalAmoutOfData | NUniquepervar[i]<MinimalAmoutOfData){
+        ClassData2[Cls==UniqueClasses[i],]=NaN
+      }
+    }
+  }else{
+    ClassData2=ClassData
+  }
+  
+  ggobject = ggplot2::ggplot(ClassData2,  aes_string(x = 'class', y = 'data')) +
     
   ggplot2::geom_violin(stat = "PDEdensity",aes_string(x='class',y='data',fill = 'class'),scale='width')+
   
@@ -80,9 +102,20 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
                      name = "Classes") +
     ggtitle(main)+ theme(axis.text.x = element_text(angle = 45, hjust = 1,size = rel(1.2)))
   
+  if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfData)){
+    DataJitter=ClassData
+    for(i in 1:length(UniqueClasses)){
+      if(Npervar[i]>MinimalAmoutOfData | NUniquepervar[i]>MinimalAmoutOfData){
+        DataJitter[Cls==UniqueClasses[i],]=NaN
+      }
+    }
+    ggobject=ggobject+geom_jitter(size=2,data =DataJitter,aes_string(x = 'class', y = 'data',fill = 'class'),position=position_jitter(0.15))
+    
+  }
+  
   if (!PlotLegend)
     ggobject <- ggobject + theme(legend.position = "none")
-  ggobject
+  print(ggobject)
   return(invisible(list(ClassData = ClassData, ggobject = ggobject)))
   
 }
