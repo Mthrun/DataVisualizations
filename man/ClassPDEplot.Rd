@@ -7,7 +7,7 @@ PDE Plot for all classes
 PDEplot the data for all classes, weights the pdf with priors
 }
 \usage{
-ClassPDEplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
+ClassPDEplot(Data, Cls, ColorSequence,
 
  ColorSymbSequence, PlotLegend = 1,
 

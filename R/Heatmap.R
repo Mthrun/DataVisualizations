@@ -62,12 +62,7 @@
    #MT: sollte in der selbenreihenfolge sein wie anordnung der cls welche daten anordnet
    Vunique = sort(unique(Cls),decreasing = F,na.last = T)
    
-   plt = Pixelmatrix(DataDists, c(), LowLim, HiLim) +
-     ylab(paste('|Cls No', Vunique[order(Vunique, decreasing = T)], '| ', collapse = '')) +
-     xlab(paste('|Cls No', Vunique, '| ', collapse = '')) +
-     ggtitle('Distances of DataOrDistances sorted by Cls')
-   
-   
+
    # Klassen Unterteilungslinien anbringen
    if (length(Vunique) > 1) {
        countPerClass <- rep(0, length(Vunique))
@@ -76,10 +71,27 @@
         countPerClass[i] = inClassI
     }
      ClassSepLines = cumsum(countPerClass) + 0.5
-     plt = plt + geom_hline(yintercept = ClassSepLines) + geom_vline(xintercept = ClassSepLines)
-     # abline(h=ClassSepLines, col='magenta', lwd =2)
-     # abline(v=ClassSepLines, col='magenta', lwd =2)
-   }
+
+     #does not look good to change the color of the seperating lines of the clusters
+     # and it is not applicable to color labels with multiple colors
+    #  cols=c('black','coral','gray41','lightpink1','darksalmon','magenta','rosybrown2','thistle','wheat4','mistyrose1')
+      cnn=length(ClassSepLines)
+    #  if(cnn<=length(cols)){
+    #   cols=cols[1:cnn]
+    # }else{
+    #    cols=rep('black',cnn)
+    # }
+      cols=rep('black',cnn)
+   } 
+     plt = Pixelmatrix(DataDists, c(), LowLim, HiLim) +
+       ylab(paste('|Cls No', Vunique[order(Vunique, decreasing = T)], '| ', collapse = '')) +
+       xlab(paste('|Cls No', Vunique, '| ', collapse = '')) +
+       ggtitle('Distances of DataOrDistances sorted by Cls')+
+       theme(plot.title = element_text(hjust = 0.5),axis.text.x = element_blank())
+     
+     if (length(Vunique) > 1) {
+      plt = plt + geom_hline(yintercept = ClassSepLines,color=cols) + geom_vline(xintercept = ClassSepLines,color=cols)
+     }
    print(plt)
    return(invisible(plt))
 }                    

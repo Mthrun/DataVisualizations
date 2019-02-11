@@ -20,9 +20,14 @@ ClassPDEplot <- function(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend =1,
   # 1.editor: 04/2015 MT, in max/min na.rm=T added, Fehlerabfang, bei CLS, xlim added
   
   #MT
-  n=length(Cls)
-  if(n!=length(Data))
-    stop('Number of rows differs with length of cls')
+  if(!is.vector(Data)){
+    warning('Data is expected to me a vector. Calling as.vector().')
+    Data=as.vector(Data)
+  }
+  Cls=checkCls(Cls,length(Data))
+  # n=length(Cls)
+  # if(n!=length(Data))
+  #   stop('Number of rows differs with length of cls')
   if(missing(xlim))
     xlim <- c(min(Data,na.rm=T),max(Data,na.rm=T))
   if(missing(ColorSequence)){

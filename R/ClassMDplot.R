@@ -30,7 +30,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   NoNanInd <- which(!is.nan(Data))
   Data <- Data[NoNanInd]
   Cls <- Cls[NoNanInd]
-  
+  Cls=checkCls(Cls,AnzData)
   #ClCou <- ClassCount(Cls)
   UniqueClasses = unique(Cls)#ClCou$UniqueClasses
   #CountPerClass = ClCou$countPerClass

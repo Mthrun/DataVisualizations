@@ -50,9 +50,11 @@ Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "eucl
   }
   
   nIn = length(Cls)
-  if (nIn != dim(InputDistances)[1]) {
-    warning('stats:silhouette:InputSizeMismatch')
-  }
+  # if (nIn != dim(InputDistances)[1]) {
+  #   warning('stats:silhouette:InputSizeMismatch')
+  # }
+  
+  Cls=checkCls(Cls,dim(InputDistances)[1])
   
   #  sorts a numeric grouping variable in ascending order (ersetzt [idx,cnames] = grp2idx(Cls); in MAtlab)
   idx = Cls

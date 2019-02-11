@@ -22,6 +22,11 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
 #  library(ggplot2)
 # author: Felix Pape
   #1.Editor: MT 2018
+  if(!is.vector(Data)){
+    warning('Data is expected to me a vector. Calling as.vector().')
+    Data=as.vector(Data)
+  }
+  
   requireNamespace('reshape2')
   if(MinAnzKernels <= 0) MinAnzKernels=100
 
@@ -32,7 +37,8 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   NoNanInd <- which(!is.nan(Data))
   Data <- Data[NoNanInd]
   Cls <- Cls[NoNanInd]
-
+  
+  Cls=checkCls(Cls,AnzData)
   #ClCou <- ClassCount(Cls)
   UniqueClasses = unique(Cls)#ClCou$UniqueClasses
   #CountPerClass = #ClCou$CountPerClass
