@@ -44,6 +44,14 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
       Names = colnames(Data)
+      if(length(Names)!=length(unique(Names))){
+        warning('Colnames are not unique. Numerating duplicated colnames.')
+        # Names = 1:dvariables
+        Names=colnames(Data)
+        charbooleandupli=duplicated(Names)
+        Names[charbooleandupli]=paste0(Names[charbooleandupli],2:(1+sum(charbooleandupli)))
+        colnames(Data) <- Names
+      }
     } else{
       Names = 1:dvariables
     }
