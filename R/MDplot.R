@@ -42,16 +42,17 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     warning('Data has more cases than "SampleSize". Drawing a sample for faster computation.
             You can omit this by setting "SampleSize=nrow(Data".')
     ind=sample(1:Ncases,size = SampleSize)
-    Data=Data[ind,]
+    #Data=as.matrix(Data[ind,])
+    Data=Data[ind,,drop=FALSE]
+    Ncases=nrow(Data)
   }
-  Ncases=nrow(Data)
   
   Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
   NUniquepervar=apply(Data,MARGIN = 2,function(x) {
     x=x[is.finite(x)]
     return(length(unique(x)))
     })
-  
+
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
       Names = colnames(Data)
@@ -130,6 +131,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     faktor <- sum(abs(qnorm(t(c(lowInnerPercentile, hiInnerPercentile)/100), 0, 1)))
     std <- sd(x, na.rm = TRUE)
     p <- c(lowInnerPercentile, hiInnerPercentile)/100
+    
     extrema=c(0.001,0.999)
     if (is.matrix(x) && dvariables > 1) {
       cols <- dvariables
@@ -203,14 +205,19 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
      # if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
         if(isuniformdist[i]<0.05 & nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData){
           normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
-      }
+          #trim to range, not exact but close enough
+          normaldist[normaldist[,i]<min(x[, i],na.rm=T),i]=NaN#MinMax[1,i]
+          normaldist[normaldist[,i]>max(x[, i],na.rm=T),i]=NaN#MinMax[2,i]
+        }
           #else{#bimodal is siginficant and enough data for gaussian estimation
       #  if(bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData)
      #     normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
      # }
       
     }
-    
+    # statsps=data.frame(isuniformdist=isuniformdist,nonunimodal=nonunimodal,bimodalprob=bimodalprob,skewed=skewed)
+    # rownames(statsps)=Names
+    # return(data.frame(t(statsps)))
     #raw estimation, page 115, projection based clustering book
     nonunimodal[nonunimodal==0]=0.0000000001
     skewed[skewed==0]=0.0000000001
@@ -308,8 +315,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
-  plot=plot + 
-    geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=Size,trim = TRUE)+ theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
+  plot=plot + geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=Size,trim = TRUE) + theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
   if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfUniqueData)){
     DataJitter[,Rangfolge]
     dataframejitter=reshape2::melt(DataJitter)
@@ -320,7 +326,8 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     }else{
     colnames(dataframejitter) <- c('ID', 'Variables', 'Values')
     }
-    plot=plot+geom_jitter(size=2,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),position=position_jitter(0.15))
+    plot=plot+geom_jitter(size=2,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
+                          position=position_jitter(0.15))
     
   }
 
@@ -338,11 +345,14 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     }
     DFtemp$Variables=as.character(DFtemp$Variables)
     #trimming in this case not required
-    plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,na.rm = T,trim = FALSE)+guides(fill=FALSE)
+ 
+    plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),
+                          colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,
+                          na.rm = TRUE,trim = TRUE, fill = NA,position="identity",width=1)#+guides(fill=FALSE,scale=MDscaling)
   }
 
   if(isTRUE(BoxPlot)){
-    plot=plot+stat_boxplot(geom = "errorbar", width = 0.5, color=BoxColor)+geom_boxplot(width=1,outlier.colour = NA,alpha=0,fill='#ffffff', color=BoxColor)
+    plot=plot+stat_boxplot(geom = "errorbar", width = 0.5, color=BoxColor)+geom_boxplot(width=1,outlier.colour = NA,alpha=0,fill='#ffffff', color=BoxColor,position="identity")
   }
 
   # plot=plot + 
