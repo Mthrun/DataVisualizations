@@ -1,7 +1,7 @@
 MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',
                                   RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
                                   BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',Size=0.01,
-                                  MinimalAmoutOfData=40,OnlyPlotOutput=TRUE){
+                                  MinimalAmoutOfData=40, MinimalAmoutOfUniqueData=12,SampleSize=200000,OnlyPlotOutput=TRUE){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
   #
@@ -18,7 +18,9 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   #always required:
   requireNamespace("reshape2")
 
-  MinimalAmoutOfUniqueData=12
+
+  
+ 
   ## Error Catching ----
   if (is.vector(Data)) {
     print("This MD-plot is typically for several features at once. By calling as.matrix(), it will be now used with one feature.")
@@ -35,6 +37,15 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   dvariables=ncol(Data)
 
   Ncases=nrow(Data)
+  
+  if(Ncases>SampleSize){
+    warning('Data has more cases than "SampleSize". Drawing a sample for faster computation.
+            You can omit this by setting "SampleSize=nrow(Data".')
+    ind=sample(1:Ncases,size = SampleSize)
+    Data=Data[ind,]
+  }
+  Ncases=nrow(Data)
+  
   Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
   NUniquepervar=apply(Data,MARGIN = 2,function(x) {
     x=x[is.finite(x)]
