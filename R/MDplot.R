@@ -61,7 +61,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     nn=colnames(Data)
     Data=do.call(addcols,DataL)
     colnames(Data)=nn
-    
+    Data=as.matrix(Data)
     }else{#here alle vectors are sampled
       warning('Package rowr is not installed. Sampling Data without taking finite values only into account.')
       ind=sample(1:Ncases,size = SampleSize)
