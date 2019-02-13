@@ -52,14 +52,14 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
         indmat[1:length(ind),i]=ind
       }
     }
-    DataL=mapply(FUN = function(x,y) return(x[y]), as.list(as.data.frame(Data))
-                ,as.list(as.data.frame(indmat)))
+    DataListtemp=mapply(FUN = function(x,y) return(x[y]), as.list(as.data.frame(Data))
+                ,as.list(as.data.frame(indmat)),SIMPLIFY = FALSE)
     
     addcols=function(...){
       return(rowr::cbind.fill(...,fill = NaN))
     }
     nn=colnames(Data)
-    Data=do.call(addcols,DataL)
+    Data=do.call(addcols,DataListtemp)
     colnames(Data)=nn
     Data=as.matrix(Data)
     }else{#here alle vectors are sampled
@@ -186,7 +186,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     for (i in 1:dvariables) {
       shat[i] <- min(std[i], iqr[i]/faktor, na.rm = TRUE)
       mhat[i] <- mean(x[, i], trim = 0.1, na.rm = TRUE)
-      if(Ncases>45000){#statistical testing does not work with to many cases
+      if(Ncases>45000&Npervar[i]>8){#statistical testing does not work with to many cases
         vec=sample(x = x[, i],45000)
        # if(Ordering=="Statistics"){
           nonunimodal[i]=diptest::dip.test(vec)$p.value
@@ -206,7 +206,6 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
         isuniformdist[i]=0
       }else{
 #        if(Ordering=="Statistics"){
-     
           if(NUniquepervar[i]>MinimalAmoutOfUniqueData){
             nonunimodal[i]=diptest::dip.test(x[, i])$p.value
             skewed[i]=moments::agostino.test(x[, i])$p.value
@@ -238,6 +237,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
      # }
       
     }
+
     # statsps=data.frame(isuniformdist=isuniformdist,nonunimodal=nonunimodal,bimodalprob=bimodalprob,skewed=skewed)
     # rownames(statsps)=Names
     # return(data.frame(t(statsps)))
@@ -255,7 +255,6 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   #Using First Column is first variable principle
   Rangfolge=unique(dfrang$Variables,fromLast = FALSE,nmax = dvariables)#colnames(Data)#
   rm(dfrang)
-
   switch(Ordering,
          Default={
            x=as.matrix(Data)
@@ -264,10 +263,10 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
            
            bimodalprob=c()
            for (i in 1:dvariables) {
-             if(Ncases>45000){
+             if(Ncases>45000 & Npervar[i]>8){
                vec=sample(x = x[, i],45000)
                bimodalprob[i]=bimodal(vec)$Bimodal
-             }else if(sum(is.finite(x[, i]))<8){
+             }else if(Npervar[i]<8){
                bimodalprob[i]=0
              }else{
                bimodalprob[i]=bimodal(x[, i])$Bimodal
@@ -286,7 +285,6 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   )
 
   ## Data Reshaping----
-
   if(any(Npervar<MinimalAmoutOfData)|any(NUniquepervar<MinimalAmoutOfUniqueData)){#builds scatter plots in case of not enough information for pdf
     warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points or less than ',MinimalAmoutOfUniqueData,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
     DataDensity=Data
