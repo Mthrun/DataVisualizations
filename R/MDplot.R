@@ -180,8 +180,8 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     skewed=c()
     bimodalprob=c()
     isuniformdist=c()
-    Nsample=10000
-    kernels=matrix(NaN,nrow=Nsample,ncol = dvariables)
+    Nsample=max(c(10000,Ncases))
+    #kernels=matrix(NaN,nrow=Nsample,ncol = dvariables)
     normaldist=matrix(NaN,nrow=Nsample,ncol = dvariables)
     for (i in 1:dvariables) {
       shat[i] <- min(std[i], iqr[i]/faktor, na.rm = TRUE)
