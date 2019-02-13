@@ -1,4 +1,5 @@
-Version 1.1.6 (GitHub, 2018-02-09)
+Version 1.1.6 (GitHub, 2018-02-13)
+	o Major Improvement: The MD-plot samples now data automatically above an threshold in order to be usuable for Big Data.
 	o Bugfix: In MD-plot the testing against uniform distribution now works also for one feauture.
 	o Bugfix: If colnames of Data are given in MD-plot but not unique, they are renamed to unique colnames.
 	o Bugfix: Plot3D checks now that the length of Cls is equal to the number of rows of data.

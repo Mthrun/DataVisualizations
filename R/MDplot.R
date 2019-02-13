@@ -41,9 +41,32 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   if(Ncases>SampleSize){
     warning('Data has more cases than "SampleSize". Drawing a sample for faster computation.
             You can omit this by setting "SampleSize=nrow(Data".')
-    ind=sample(1:Ncases,size = SampleSize)
-    #Data=as.matrix(Data[ind,])
-    Data=Data[ind,,drop=FALSE]
+    if(isTRUE(requireNamespace('rowr'))){
+    #here only finite values are sampled
+    indmat=matrix(0,nrow = SampleSize,ncol = dvariables)
+    for(i in 1:dvariables){
+      ind=which(is.finite(Data[,i]))
+      if(length(ind)>=SampleSize){
+        indmat[,i]=sample(ind,size = SampleSize)
+      }else{
+        indmat[1:length(ind),i]=ind
+      }
+    }
+    DataL=mapply(FUN = function(x,y) return(x[y]), as.list(as.data.frame(Data))
+                ,as.list(as.data.frame(indmat)))
+    
+    addcols=function(...){
+      return(rowr::cbind.fill(...,fill = NaN))
+    }
+    nn=colnames(Data)
+    Data=do.call(addcols,DataL)
+    colnames(Data)=nn
+    
+    }else{#here alle vectors are sampled
+      warning('Package rowr is not installed. Sampling Data without taking finite values only into account.')
+      ind=sample(1:Ncases,size = SampleSize)
+      Data=Data[ind,,drop=FALSE]
+    }
     Ncases=nrow(Data)
   }
   
@@ -360,6 +383,8 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   
   if(isTRUE(requireNamespace("ggExtra"))){
     plot=plot+ggExtra::rotateTextX()
+  }else{
+    warning('Package ggExtra is not installed. Labels of Variablenames are not rotated.')
   }
   if(OnlyPlotOutput){
       return(ggplotObj = plot)
