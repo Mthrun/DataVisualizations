@@ -15,7 +15,9 @@ Fill='darkblue', RobustGaussian=TRUE, GaussianColor='magenta',
 
 Gaussian_lwd=1.5, BoxPlot=FALSE, BoxColor='darkred',
 
-MDscaling='width',Size=0.01,MinimalAmoutOfData=40, OnlyPlotOutput=TRUE)
+MDscaling='width',Size=0.01, MinimalAmoutOfData=40,
+
+MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
 }
 
 \arguments{
@@ -60,6 +62,13 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40, OnlyPlotOutput=TRUE)
     \item{MinimalAmoutOfData}{
     Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
   }
+      \item{MinimalAmoutOfUniqueData}{
+    Optional: numeric value defining a threshold. Below this threshold no density estimation and statistical testing is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand how the density is estimated (see [Ultsch, 2005]).
+  }
+      \item{SampleSize}{
+    Optional: numeric value defining a threshold. Above this threshold uniform sampling of finite cases is performed in order to shorten computation time.If \pkg{rowr} is not installed, uniform sampling of all cases
+    is performed. If required, \code{SampleSize=n} can be set to omit this procedure. 
+  }
   \item{OnlyPlotOutput}{
   Default TRUE only a ggplot object is given back, if FALSE: Additinally Scaled Data and ordering are the output of this function in a \code{list}.
   }
@@ -103,13 +112,15 @@ MDplot(x)
 }
 
 \note{
-1.) One would assume that in the first of the two following case only the plotting region is adjusted but: 
+1.) One would assume that in the first of the two following cases ggplot only adjusts the plotting region but: 
 
 \code{MDplot(MTY)+ylim(c(0,7000))} is equal to \code{MDplot(MTY[MTY<7000])}. 
 
-This means in both cases the data is clipped and AFTERWARDS the density estimated. 
+This means in both cases the data is clipped and AFTERWARDS the density estimation is performed. 
 
 2.) Because of a (sometimes) strange behavior of either ggplot2 or reshape2, numerical column names are changed to character by adding 'C_'.
+
+3.) Overlaying MD-plots with robustly estimated gaussians seldomly will yield magenta  (or other \code{GaussianColor}) lines overlaying more than the violin plot they should overlay, because the width of the two plots is not the same (but I am unable to set it strictly in ggplot). In such a case just call the function again.
 }
 
 \details{
@@ -148,7 +159,6 @@ For the paramter \code{Scaling} the following options are possible:
 
 [Thrun/Ultsch, 2019]	Thrun, M. C., & Ultsch, A. : Analyzing the Fine Structure of Distributions, Technical Report prior to submission, Philipps-University Marburg, Germany, 2019. 
 
-
 [Thrun et al.,2018a]	Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency stream nitrate concentrations: hydrology and biology contributions, Proc. European Conference on Data Analysis (ECDA), pp. 46-47, Paderborn, Germany, 2018. 
 
 [Thrun et al.,2018b]	Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), p. 26, Paderborn, Germany, 2018. 
@@ -162,11 +172,16 @@ For the paramter \code{Scaling} the following options are possible:
 \keyword{MDplot}
 \keyword{MD-plot}
 \keyword{MD}
+\keyword{pdf}
 \keyword{Mirrored Density plot}
 \keyword{Mirrored Density}
 \keyword{Density}
+\keyword{density}
 \keyword{pdf}
 \keyword{probability density function}
 \keyword{bean plot}
 \keyword{vase plot}
+\keyword{multivariate}
 \keyword{box plot}
+\keyword{box whisker diagramm}
+\keyword{schematic plot}
