@@ -15,11 +15,13 @@ Fill='darkblue', RobustGaussian=TRUE, GaussianColor='magenta',
 
 Gaussian_lwd=1.5, BoxPlot=FALSE, BoxColor='darkred',
 
-MDscaling='width',Size=0.01,MinimalAmoutOfData=40, OnlyPlotOutput=TRUE)
+MDscaling='width',Size=0.01, MinimalAmoutOfData=40,
+
+MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
 }
 
 \arguments{
-  \item{\dots}{d numerical vectors of different lengths}
+  \item{\dots}{Either d numerical vectors of different lengths or a list of length d where each element of the list is an vector of arbitrary length}
    
    \item{Names}{
     Optional: [1:d] Names of the the numerical vectors. If missing, the columnnames are mumbered.
@@ -58,7 +60,16 @@ MDscaling='width',Size=0.01,MinimalAmoutOfData=40, OnlyPlotOutput=TRUE)
   }
     \item{MinimalAmoutOfData}{
     Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
+         }
+		 
+\item{MinimalAmoutOfUniqueData}{
+    Optional: numeric value defining a threshold. Below this threshold no density estimation and statistical testing is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand how the density is estimated (see [Ultsch, 2005]).
   }
+      \item{SampleSize}{
+    Optional: numeric value defining a threshold. Above this threshold uniform sampling of finite cases is performed in order to shorten computation time.If \pkg{rowr} is not installed, uniform sampling of all cases
+    is performed. If required, \code{SampleSize=n} can be set to omit this procedure. 
+  }
+
   \item{OnlyPlotOutput}{
   Default TRUE only a ggplot object is given back, if FALSE: Additinally Scaled Data and ordering are the output of this function in a \code{list}.
   }
@@ -87,6 +98,8 @@ Michael Thrun.
 }
 \examples{
 \dontshow{
+MDplot4multiplevectors(list(runif(200, 1, 3),c(rnorm(200,0,1),rnorm(100,2.4,1))))
+
 MDplot4multiplevectors(runif(200, 1, 3),c(rnorm(200,0,1),rnorm(100,2.4,1)))
 
 MDplot4multiplevectors(rpois(100,1000))
@@ -98,6 +111,13 @@ MDplot4multiplevectors(runif(20000, 1, 5),c(rnorm(20000,0,1),
 rnorm(20000,2.6,1)),c(rnorm(2000,2.5,1)),rpois(25000,5),
 
 Names=c('A','B','C','D'))
+
+V=list(runif(20000, 1, 5),c(rnorm(20000,0,1),
+
+rnorm(20000,2.6,1)),c(rnorm(2000,2.5,1)),rpois(25000,5))
+
+
+MDplot4multiplevectors(V,Names=c('A','B','C','D'))
 }
 
 }
