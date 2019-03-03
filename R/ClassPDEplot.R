@@ -42,7 +42,7 @@ ClassPDEplot <- function(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend =1,
   UniqueClasses = unique(Cls)#ClCou$UniqueClasses
   CountPerClass = #ClCou$CountPerClass
   NrOfClasses = length(UniqueClasses)#ClCou$NumberOfClasses
-  
+  ClassPercentages <- rep(0, NrOfClasses)
   CountPerClass <- rep(0, NrOfClasses)
   for (i in 1:NrOfClasses) {
     inClassI <- sum(Cls == UniqueClasses[i])

@@ -38,7 +38,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   # ClassPercentages = ClCou$classPercentages # KlassenZaehlen
   
   if (is.null(ClassNames)) {
-    ClassNames = c(1:NrOfClasses)
+    ClassNames = unique(Cls)
     ClassNames <- paste("C", ClassNames, sep = "")
   }
   
@@ -81,9 +81,9 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
     ClassData2=ClassData
   }
   
-  ggobject = ggplot2::ggplot(ClassData2,  aes_string(x = 'class', y = 'data')) +
+  ggobject = ggplot2::ggplot(ClassData2,  aes_string(x = 'class', y = 'data'),show.legend = PlotLegend) +
     
-  ggplot2::geom_violin(stat = "PDEdensity",aes_string(x='class',y='data',fill = 'class'),scale='width')+
+  ggplot2::geom_violin(stat = "PDEdensity",aes_string(x='class',y='data',fill = 'class'),scale='width',show.legend = PlotLegend)+
   
   # ggobject <- ggplot(ClassData, aes(x = factor(class), y = data)) +
   #   
@@ -109,12 +109,15 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
         DataJitter[Cls==UniqueClasses[i],]=NaN
       }
     }
-    ggobject=ggobject+geom_jitter(size=2,data =DataJitter,aes_string(x = 'class', y = 'data',fill = 'class'),position=position_jitter(0.15))
+    ggobject=ggobject+geom_jitter(size=2,data =DataJitter,aes_string(x = 'class', y = 'data',fill = 'class'),position=position_jitter(0.15),show.legend = PlotLegend)
     
   }
   
-  if (!PlotLegend)
-    ggobject <- ggobject + theme(legend.position = "none")
+  if (isFALSE(PlotLegend)){
+    ggobject <- ggobject + theme(legend.position = "none",legend.title = NULL,legend.text = element_text(inherit.blank = T))
+  }
+  
+  
   print(ggobject)
   return(invisible(list(ClassData = ClassData, ggobject = ggobject)))
   

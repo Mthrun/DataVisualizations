@@ -1,4 +1,4 @@
-Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "euclidean",PlotIt=TRUE){
+Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "euclidean",PlotIt=TRUE,...){
 #sil=SilhouettePlot(DataOrDistances, Cls=NULL,method= "euclidean",PlotIt=TRUE) 
 #   Silhouette plot for classified data
 #   
@@ -125,18 +125,66 @@ Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "eucl
   }
   
   if (isTRUE(PlotIt)){
-    barplot(
-      rev(bars),
-      width = 1,
-      space = 0,
-      ylim = c(1, length(bars)),
-      xlim = c(min(c(bars, 0)), 1.1),
-      xlab = "Silhouette Value",
-      ylab = "Cluster",
-      col = "blue4",
-      border = NA,
-      horiz = TRUE
-    )
+    arguments <- list(...)
+
+   i_ylim=which(names(arguments)=='ylim')
+   
+   i_xlim=which(names(arguments)=='xlim')
+   
+   i_xlab=which(names(arguments)=='xlab')
+   
+   i_ylab=which(names(arguments)=='ylab')
+    
+   i_col=which(names(arguments)=='col')
+   rmarg=c()
+   if(length(i_ylim)==1){
+     ylim=arguments[[i_ylim]]
+     rmarg=c(rmarg,names(arguments)[i_ylim])
+   }else{
+     ylim=c(1, length(bars))
+   }
+   if(length(i_xlim)==1){
+     xlim=arguments[[i_xlim]]
+     rmarg=c(rmarg,names(arguments)[i_xlim])
+   }else{
+     xlim=c(min(c(bars, 0)), 1.1)
+   }
+   if(length(i_xlab)==1){
+     xlab=arguments[[i_xlab]]
+     rmarg=c(rmarg,names(arguments)[i_xlab])
+   }else{
+     xlab="Silhouette Value"
+   }
+   if(length(i_ylab)==1){
+     ylab=arguments[[i_ylab]]
+     rmarg=c(rmarg,names(arguments)[i_ylab])
+   }else{
+     ylab = "Cluster"
+   }
+   if(length(i_col)==1){
+     col=arguments[[i_col]]
+     rmarg=c(rmarg,names(arguments)[i_col])
+   }else{
+     col = "blue4"
+   }
+   
+
+   if(length(rmarg)>0)
+    arguments=arguments[!names(arguments)%in% rmarg]
+
+   barplotF=function(...){
+     barplot(rev(bars),
+             width = 1,
+             space = 0,
+             ylim = ylim,
+             xlim = xlim,
+             xlab = xlab,
+             ylab = ylab,
+             col = col,
+             border = NA,
+             horiz = TRUE,...)
+   }
+    do.call(what = barplotF,arguments)
     axis(2 , at = length(bars) - tcks, labels = cnames)
     box()
   }

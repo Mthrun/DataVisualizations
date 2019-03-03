@@ -10,7 +10,9 @@ Silhouette plot of classified data.
    matrix Data or distance matrix where the clusters are defined in the vector Cls.
 }
 \usage{
-Silhouetteplot(DataOrDistances, Cls, method='euclidean', PlotIt=TRUE)
+Silhouetteplot(DataOrDistances, Cls, method='euclidean',
+
+PlotIt=TRUE,\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,6 +27,8 @@ Silhouetteplot(DataOrDistances, Cls, method='euclidean', PlotIt=TRUE)
        one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski". Any unambiguous substring can be given, see \code{dist}
   }
   \item{PlotIt}{Optional, Default:TRUE, FALSE to supress the plot}
+    \item{\dots}{If \code{PlotIt=TRUE}: Further arguements to \code{\link{barplot}}
+    }
 }
 \value{
 
@@ -45,7 +49,7 @@ Data=Lsun3D$Data
 #clear cluster structure
 plot(Data[,1:2],col=Cls)
 #However, the silhouette plot does not indicate a very good clustering in cluster 1 and 2
-Silhouetteplot(Data,Cls = Cls)
+Silhouetteplot(Data,Cls = Cls,main='Silhouetteplot')
 
 }
 
