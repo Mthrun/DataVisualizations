@@ -32,7 +32,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   Cls <- Cls[NoNanInd]
   Cls=checkCls(Cls,AnzData)
   #ClCou <- ClassCount(Cls)
-  UniqueClasses = unique(Cls)#ClCou$UniqueClasses
+  UniqueClasses = sort(unique(Cls))#ClCou$UniqueClasses
   #CountPerClass = ClCou$countPerClass
   NrOfClasses = length(UniqueClasses)#ClCou$NumberOfClasses
   # ClassPercentages = ClCou$classPercentages # KlassenZaehlen
@@ -40,6 +40,12 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   if (is.null(ClassNames)) {
     ClassNames = unique(Cls)
     ClassNames <- paste("C", ClassNames, sep = "")
+  }else{
+    if(!is.character(ClassNames)){
+      warning('ClassNames should be a character vector. Ignoring input and setting to default.')
+      ClassNames = unique(Cls)
+      ClassNames <- paste("C", ClassNames, sep = "")
+    }
   }
   
   if (NrOfClasses != length(ClassNames))
@@ -47,21 +53,35 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
               This might result in a wrong plot")
   
   ColorsUnique=ColorSequence[1:NrOfClasses]
-  #print(ColorsUnique)
+  names(ClassNames)=UniqueClasses
+
+  # hex_hlp = function(cname) {
+  #   colMat <- grDevices::col2rgb(cname)
+  #   grDevices::rgb(red = colMat[1,] / 255,
+  #                  green = colMat[2,] / 255,
+  #                  blue = colMat[3,] / 255)
+  # }
+  # ColorsUniqueHex=hex_hlp(ColorsUnique)
+
   Colors=rep(NaN,length(Cls))
   ClassNamesVec=rep(NaN,length(Cls))
+  # ClassColorsHex=rep(NaN,length(Cls))
   for(i in 1:NrOfClasses){
     Colors[Cls==UniqueClasses[i]]=ColorsUnique[i]
     ClassNamesVec[Cls==UniqueClasses[i]]=ClassNames[i]
+    # ClassColorsHex[Cls==UniqueClasses[i]]=ColorsUniqueHex[i]
   }
-  
+
   ClassData = data.frame(cbind(data = Data, class = Cls))
-  ClassData=cbind(ClassData,ClassColors=Colors,ClassNames=ClassNamesVec)
+  ClassData=cbind(ClassData,ClassColors=Colors,ClassNames=ClassNamesVec)#,ClassColorsHex=ClassColorsHex)
   sorted=order(ClassData$class,decreasing = FALSE,na.last = T)
   ClassData=ClassData[sorted,]
+
+
   ClassData$class=factor(ClassData$class)
   ClassData$ClassColors=factor(ClassData$ClassColors)
   ClassData$ClassNames=factor(ClassData$ClassNames) 
+  #ClassData$ClassColorsHex=factor(ClassData$ClassColorsHex) 
 
   Npervar=c()
   NUniquepervar=c()
@@ -69,22 +89,31 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
     Npervar[i]=sum(Cls==UniqueClasses[i])
     NUniquepervar[i]=length(unique(Data[Cls==UniqueClasses[i]]))
   }
-  
+
   if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfData)){
     ClassData2=ClassData
     for(i in 1:length(UniqueClasses)){
       if(Npervar[i]<MinimalAmoutOfData | NUniquepervar[i]<MinimalAmoutOfData){
-        ClassData2[Cls==UniqueClasses[i],]=NaN
+        ClassData2[ClassData2$class==UniqueClasses[i],'data']=NaN
       }
     }
   }else{
     ClassData2=ClassData
   }
-  
-  ggobject = ggplot2::ggplot(ClassData2,  aes_string(x = 'class', y = 'data'),show.legend = PlotLegend) +
+
+  Colors=as.vector(ClassData2$ClassColors)
+  names(Colors)=as.vector(ClassData2$class)
+  Colors=Colors[unique(names(Colors))]
+
+  UniqueClassesPlot=ClassData2$class
+  names(UniqueClassesPlot)=as.vector(ClassData2$ClassNames)
+  UniqueClassesPlot=UniqueClassesPlot[unique(names(UniqueClassesPlot))]
+
+  ggobject = ggplot2::ggplot(ClassData2,  aes_string(x = 'class', y = 'data',fill = 'class'),show.legend = PlotLegend) +
     
-  ggplot2::geom_violin(stat = "PDEdensity",aes_string(x='class',y='data',fill = 'class'),scale='width',show.legend = PlotLegend)+
-  
+  ggplot2::geom_violin(stat = "PDEdensity",aes_string(x='class', y='data',fill = 'class'),scale='width',show.legend = PlotLegend)
+    
+    
   # ggobject <- ggplot(ClassData, aes(x = factor(class), y = data)) +
   #   
   #   geom_boxplot(aes(fill = factor(class)), notch = FALSE) +
@@ -95,24 +124,26 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   #     size = 3,
   #     fill = "white"
   #   ) +
-    ylab(ylab) + xlab(xlab) +
-    scale_x_discrete(labels = ClassNames) +
-    scale_fill_manual(values = ColorSequence,
-                     labels = ClassNames,
-                     name = "Classes") +
-    ggtitle(main)+ theme(axis.text.x = element_text(angle = 45, hjust = 1,size = rel(1.2)))
+
   
   if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfData)){
     DataJitter=ClassData
     for(i in 1:length(UniqueClasses)){
       if(Npervar[i]>MinimalAmoutOfData | NUniquepervar[i]>MinimalAmoutOfData){
-        DataJitter[Cls==UniqueClasses[i],]=NaN
+        DataJitter[DataJitter$class==UniqueClasses[i],'data']=NaN
       }
     }
-    ggobject=ggobject+geom_jitter(size=2,data =DataJitter,aes_string(x = 'class', y = 'data',fill = 'class'),position=position_jitter(0.15),show.legend = PlotLegend)
+    ggobject=ggobject+geom_jitter(size=2,data =DataJitter,aes_string(x = 'class', y = 'data',fill='class'),position=position_jitter(0.15),show.legend = PlotLegend)
     
   }
-  
+
+  ggobject=ggobject+ylab(ylab) + xlab(xlab) +
+    scale_x_discrete(limits=UniqueClassesPlot,labels = ClassNames) +
+    scale_fill_manual(limits=UniqueClassesPlot,values = Colors,
+                      name = "Classes") +
+    ggtitle(main)+ theme(axis.text.x = element_text(angle = 45, hjust = 1,size = rel(1.2)))
+
+
   if (isFALSE(PlotLegend)){
     ggobject <- ggobject + theme(legend.position = "none",legend.title = NULL,legend.text = element_text(inherit.blank = T))
   }

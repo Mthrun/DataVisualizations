@@ -6,6 +6,10 @@ Class MD-plot for Data w.r.t. all classes
 \description{
   Creates PDE optimized Violin plot for all classes 
 }
+\details{
+ The \code{Cls} vector is sorted from lowest to highest number.
+  The \code{ClassNames} vector and \code{ColorSequence} vectors are matched by this ordering of \code{Cls}, i.e. the lowest number gets the first color or class name.
+}
 \usage{
 ClassMDplot(Data, Cls, ColorSequence,
 
@@ -21,16 +25,16 @@ ClassMDplot(Data, Cls, ColorSequence,
 }
 \arguments{
   \item{Data}{
-  Vector of the data to be plotted
+  [1:n] Vector of the data to be plotted
   }
   \item{Cls}{
-  Vector of class identifiers.
+  [1:n] Vector of class identifiers of k clusters one number is the label of one cluster
   }
   \item{ColorSequence}{
-  Optional: The sequence of colors used, Default: DataVisualizations::DefaultColorSequence
+  Optional: [1:k] vector, The sequence of colors used, Default: DataVisualizations::DefaultColorSequence
   }
   \item{ClassNames}{
-  Optional: The names of the classes. Default: C1 - C(Number of Classes)
+  Optional: [1:k] vector, The names of the classes. Default: C1 - C(Number of Classes)
   }
   \item{PlotLegend}{
   Optional: Add a legent to plot. Default: TRUE)
@@ -48,6 +52,7 @@ ClassMDplot(Data, Cls, ColorSequence,
     Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a Jitter plot with a median line is drawn. Please see \code{\link{MDplot}} for details.
   }
 }
+
 \value{
   A List of
   \item{ClassData}{The DataFrame used to plot}
