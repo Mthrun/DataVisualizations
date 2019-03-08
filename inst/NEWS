@@ -1,4 +1,4 @@
-Version 1.1.6 (GitHub, 2018-03-07)
+Version 1.1.6 (CRAN, 2018-03-08)
 	o Major Improvement: The MD-plot samples now data automatically above an threshold in order to be usuable for Big Data.
 	o Bugfixes: In MD-plot the testing against uniform distribution now works also for one feauture. A crash is fixed where a columns has not even one finite value.
 	o Bugfix: If colnames of Data are given in MD-plot but not unique, they are renamed to unique colnames.
@@ -7,6 +7,7 @@ Version 1.1.6 (GitHub, 2018-03-07)
 	o Improvement: ClassMDplot now jitters points instead of visualizing pdf if not enough data in class is given.
 	o Bugfix: In Heatmap the x labels are now plotted correctly.
 	o Bugfix: In ClassMDplot class names now work correctly.
+	o Classplot and DualClassplot: Functions allow to plot one or two time series with a classification as scatter plots or line and scatter plots. Usefull to see if temporal clustering has time dependent variations and for Hidden Markov Models (see Mthrun/RHmm on GitHub).
 	
 Version 1.1.5 (CRAN, 2018-02-02)
 	o Bugfix: The statistical testing in the MD-plot now is omitted if not enough unique values are given in some features. In such a case, only a scatter plot is plotted.
