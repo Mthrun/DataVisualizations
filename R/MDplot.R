@@ -302,22 +302,24 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
       if(Npervar[nc]<MinimalAmoutOfData){
         #generated values around the median if not enoug non finite values given
         # this is done to draw a median line
-        if(mm[nc]!=0)
+        if(mm[nc]!=0){
           DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
-        else
+        }else{
           DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
+        }
       }
       if(NUniquepervar[nc]<MinimalAmoutOfUniqueData){
         #generated values around the median if not enoug unique values given
         # this is done to draw a median line
-        if(mm[nc]!=0)
+        if(mm[nc]!=0){
           DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
-        else
+        }else{
           DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
+        }
       }
     }
     #Generates in the cases where pdf cannot be estimated a scatter plot
-    DataJitter=Data
+    DataJitter=DataDensity
     #Delete all scatters for features where distributions can be estimated
     DataJitter[,(Npervar>=MinimalAmoutOfData&NUniquepervar>=MinimalAmoutOfUniqueData)]=NaN
     #apply ordering
