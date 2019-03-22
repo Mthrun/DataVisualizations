@@ -84,6 +84,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     return(length(unique(x)))
     })
 
+  
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
       Names = colnames(Data)
@@ -197,15 +198,19 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
       if(Ncases>45000&Npervar[i]>8){#statistical testing does not work with to many cases
         vec=sample(x = x[, i],45000)
        # if(Ordering=="Statistics"){
+        if(NUniquepervar[i]>MinimalAmoutOfUniqueData){
           nonunimodal[i]=diptest::dip.test(vec)$p.value
           skewed[i]=moments::agostino.test(vec)$p.value
           #Ties should not be present, however here we only approximate
           isuniformdist[i]=suppressWarnings(ks.test(vec,"punif", MinMax[1, i], MinMax[2, i])$p.value)
-       # }else{
-        #  nonunimodal[i]=1
-        #  skewed[i]=1
-       # }
-        bimodalprob[i]=bimodal(vec)$Bimodal
+          bimodalprob[i]=bimodal(vec)$Bimodal
+         }else{
+           warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
+           nonunimodal[i]=1
+           skewed[i]=1
+           isuniformdist[i]=0
+           bimodalprob[i]=0
+        }
       }else if(Npervar[i]<8){#statistical testing does not work with not enough cases
         warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
         nonunimodal[i]=1

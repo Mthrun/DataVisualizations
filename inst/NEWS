@@ -1,5 +1,6 @@
 Version 1.1.7 (GitHub, 2018-03-09)
 o Bugfix: In MD-plot Jitter Plot for colomuns with one unique value, in the case it is zero, corrected.
+o Bugfix: In MD-plot statistical cases for colomuns with one unique value but more than 45000 cases corrected.
 
 Version 1.1.6 (CRAN, 2018-03-08)
 	o Major Improvement: The MD-plot samples now data automatically above an threshold in order to be usuable for Big Data.
