@@ -28,7 +28,8 @@
    Cls=checkCls(Cls,AnzData)
    #print(Cls)
    #MT: Reihenfolge muss unbedingt fest sein ab hier, sie unten
-   ind = order(Cls,decreasing = F,na.last = T)
+   SortOrder=FALSE
+   ind = order(Cls,decreasing = SortOrder,na.last = T)
    
    if (isSymmetric(DataOrDistances)) {
      # nach Cls sortieren
@@ -60,7 +61,7 @@
      stop('"LowLim" is not a numeric number of length 1. Please change Input.')
    # Zeichnen
    #MT: sollte in der selbenreihenfolge sein wie anordnung der cls welche daten anordnet
-   Vunique = sort(unique(Cls),decreasing = F,na.last = T)
+   Vunique = sort(unique(Cls),decreasing = SortOrder,na.last = T)
    
 
    # Klassen Unterteilungslinien anbringen
@@ -84,7 +85,7 @@
       cols=rep('black',cnn)
    } 
      plt = Pixelmatrix(DataDists, c(), LowLim, HiLim) +
-       ylab(paste('|Cls No', Vunique[order(Vunique, decreasing = T)], '| ', collapse = '')) +
+       ylab(paste('|Cls No', Vunique[order(Vunique, decreasing = !SortOrder)], '| ', collapse = '')) +
        xlab(paste('|Cls No', Vunique, '| ', collapse = '')) +
        ggtitle('Distances of DataOrDistances sorted by Cls')+
        theme(plot.title = element_text(hjust = 0.5),axis.text.x = element_blank())
