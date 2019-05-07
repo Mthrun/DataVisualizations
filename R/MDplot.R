@@ -38,6 +38,15 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
 
   Ncases=nrow(Data)
   
+  Nfinitepervar=apply(Data,MARGIN = 2,function(x) {
+    return(sum(is.finite(x)))
+  })
+  if(any(Nfinitepervar<1)){
+    warning('Some columns have not even one finite value. Please check your data. Deleting these columns.')
+    Data=Data[,Nfinitepervar>0]
+    dvariables=ncol(Data)
+  }
+  
   if(Ncases>SampleSize){
     warning('Data has more cases than "SampleSize". Drawing a sample for faster computation.
             You can omit this by setting "SampleSize=nrow(Data".')
@@ -69,14 +78,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     }
     Ncases=nrow(Data)
   }
-  Nfinitepervar=apply(Data,MARGIN = 2,function(x) {
-    return(sum(is.finite(x)))
-  })
-  if(any(Nfinitepervar<1)){
-    warning('Some columns have not even one finite value. Please check your data. Deleting these columns.')
-    Data=Data[,Nfinitepervar>0]
-    dvariables=ncol(Data)
-  }
+
   
   Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
   NUniquepervar=apply(Data,MARGIN = 2,function(x) {

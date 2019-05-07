@@ -89,7 +89,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
     D2 = D
   }
   
-  pdeVal        = ParetoDensityEstimation(D2)
+  pdeVal        = AdaptGauss::ParetoDensityEstimation(D2)
   
   if (missing(xlim) && missing(ylim)) {
     plot(
