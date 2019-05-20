@@ -18,10 +18,10 @@ QQplot=function(X,Y,xlab ='X', ylab='Y',col="red",main='',...){
  par(pty="s")# Plot immer quadratisch
 
  #QQPlot of X
- qqplot(X,Y, col="blue", pch=20, xlab = xlab, ylab = ylab,main=main, ...) 
+ quants=qqplot(X,Y, col="blue", pch=20, xlab = xlab, ylab = ylab,main=main, ...) 
  grid(lty='dashed',col='black')
 
- line=lm(Y~X)
+ line=lm(quants$y~quants$x)
  abline(line, col = col, lwd = 3)
  par(def.par)
  Summary=summary(line)

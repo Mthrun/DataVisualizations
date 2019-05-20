@@ -3,6 +3,8 @@ o Bugfix: In MD-plot Jitter Plot for colomuns with one unique value, in the case
 o Bugfix: In MD-plot statistical cases for colomuns with one unique value but more than 45000 cases corrected.
 o Bugfix: In MD-plot does not crash anymore if columns exists with not one finite values but data has more cases than the sample size.
 o Bugfix: Namespace of AdaptGauss package added for Pareto density estimation
+o Bugfix: Regression line in QQplot fixed.
+
 Version 1.1.6 (CRAN, 2018-03-08)
 	o Major Improvement: The MD-plot samples now data automatically above an threshold in order to be usuable for Big Data.
 	o Bugfixes: In MD-plot the testing against uniform distribution now works also for one feauture. A crash is fixed where a columns has not even one finite value.
