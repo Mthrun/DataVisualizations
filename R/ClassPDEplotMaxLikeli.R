@@ -1,5 +1,5 @@
 # function [Kernels,ClassParetoDensities] = ClassPDEplotMaxLikeli(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend,MinAnzKernels,PlotNorm);
-ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend=TRUE, MinAnzKernels=0,PlotNorm=0,main='Pareto Density Estimation (PDE)', xlab='Data',ylab='ParetoDensity', xlim = NULL, ylim = NULL, ...){
+ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend=TRUE, MinAnzKernels=0,PlotNorm=0,main='Pareto Density Estimation (PDE)', xlab='Data',ylab='ParetoDensity', xlim = NULL, ylim = NULL, lwd=1,...){
 # res=ClassPDEplotMaxLikeli(Data, Cls)
 # PDEplot the data for allclasses, weight the Plot with 1 (= maximum likelihood)
 # INPUT
@@ -30,17 +30,15 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   requireNamespace('reshape2')
   if(MinAnzKernels <= 0) MinAnzKernels=100
 
-  AnzData = length(Data)
-
-
   Out = Data
   NoNanInd <- which(!is.nan(Data))
   Data <- Data[NoNanInd]
   Cls <- Cls[NoNanInd]
   
+  AnzData = length(Data)
   Cls=checkCls(Cls,AnzData)
   #ClCou <- ClassCount(Cls)
-  UniqueClasses = unique(Cls)#ClCou$UniqueClasses
+  UniqueClasses = sort(unique(Cls),decreasing = F,na.last = T)#ClCou$UniqueClasses
   #CountPerClass = #ClCou$CountPerClass
     NrOfClasses = length(UniqueClasses)#ClCou$NumberOfClasses
   
@@ -53,7 +51,7 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   
   #ClassPercentages = ClCou$ClassPercentages # KlassenZaehlen 
 
-  PDEP = ParetoDensityEstimation(Data=Data,paretoRadius=0,kernels=0,MinAnzKernels)
+  PDEP = ParetoDensityEstimationV2(Data=Data,paretoRadius=0,kernels=0,MinAnzKernels)
   Kernels = PDEP$kernels
   ParetoDensity = PDEP$paretoDensity
   ParetoRadiusGesamt = PDEP$paretoRadius
@@ -88,7 +86,7 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     Class = UniqueClasses[c]
     ClassInd = which(Cls==Class)
 
-    pdeVal <- AdaptGauss::ParetoDensityEstimation(Data[ClassInd], paretoRadius=ParetoRadiusGesamt, kernels=Kernels)
+    pdeVal <- ParetoDensityEstimationV2(Data[ClassInd], paretoRadius=ParetoRadiusGesamt, kernels=Kernels)
 
     Kernels = pdeVal$kernels
     ParetoDensity = pdeVal$paretoDensity
@@ -155,11 +153,17 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   colnames(cpd) <- ClassNames
   cpd$kernels = Kernels
   cpdm = reshape2::melt(cpd, id="kernels")
+  ind=which(colnames(cpdm)=="value")
+  if(length(ind)>0)
+    colnames(cpdm)[ind]="PDE"
+  else{
+    warning('Could not find y values for ggplot')
+  }
   plt <- ggplot()
   if(PlotNorm>0){
-    plt <- plt + geom_line(data = normsm, mapping = aes_string(x='kernels', y='value', color='variable'), linetype = 1, size = 1.5)
+    plt <- plt + geom_line(data = normsm, mapping = aes_string(x='kernels', y='value', color='variable'), linetype = 1, size = lwd)
   }
-  plt <- plt + geom_line(data=cpdm, aes_string(x='kernels', y='value', color='variable'))
+  plt <- plt + geom_line(data=cpdm, aes_string(x='kernels', y='PDE', color='variable'),size = lwd)
   plt <- plt + ggtitle(main) +
     theme(plot.title = element_text(lineheight = .8, face="bold"))
   plt <- plt + ylab(ylab) + xlab(xlab)
@@ -173,5 +177,5 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     plt <- plt + scale_y_continuous(limits = ylim)
   plt
 
-  invisible(list(Kernels=Kernels, ClassParetoDensities=ClassParetoDensities, ggobject=plt))
+  invisible(list(Kernels=Kernels, ClassParetoDensities=ClassParetoDensities, ggobject=plt,Dataframe=cpdm))
 }

@@ -26,10 +26,12 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   #    library(reshape2)
   #    library(ggplot2)
   
-  AnzData = length(Data)
+ 
   NoNanInd <- which(!is.nan(Data))
   Data <- Data[NoNanInd]
   Cls <- Cls[NoNanInd]
+  
+  AnzData = length(Data)
   Cls=checkCls(Cls,AnzData)
   #ClCou <- ClassCount(Cls)
   UniqueClasses = sort(unique(Cls))#ClCou$UniqueClasses

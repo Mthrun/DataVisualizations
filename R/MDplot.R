@@ -287,9 +287,13 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
                bimodalprob[i]=bimodal(x[, i])$Bimodal
              }
            }
-           #print(bimodalprob)
-           Rangfolge=Rangfolge[order(bimodalprob,decreasing = T,na.last = T)]
            
+           if(length(unique(bimodalprob))<2 & ncol(x)>1 & isTRUE(RobustGaussian)){
+              Rangfolge=Rangfolge[order(Effectstrength,decreasing = T,na.last = T)]
+              message('Using statistics for ordering instead of default')
+           }else{
+              Rangfolge=Rangfolge[order(bimodalprob,decreasing = T,na.last = T)]
+           }
          },
          Columnwise={Rangfolge=Rangfolge},
          Alphabetical={Rangfolge=sort(Rangfolge,decreasing = F,na.last = T)},

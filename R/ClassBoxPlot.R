@@ -1,4 +1,4 @@
-ClassBoxplot <- ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend = TRUE, main = 'Boxplot per Class', xlab = 'Classes', ylab = 'Range of Data') {
+ClassBoxplot <- ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, All=FALSE,PlotLegend = TRUE, main = 'Boxplot per Class', xlab = 'Classes', ylab = 'Range of Data') {
     # PlotHandle = ClassBoxPlotMaxLikeli(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend);
     # BoxPlot the data for all classes, weight the Plot with 1 (= maximum likelihood)
     # INPUT
@@ -22,11 +22,11 @@ ClassBoxplot <- ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualiz
 #    library(reshape2)
 #    library(ggplot2)
     
-    AnzData = length(Data)
-    
-    NoNanInd <- which(!is.nan(Data))
+    NoNanInd <- which(is.finite(Data))
     Data <- Data[NoNanInd]
     Cls <- Cls[NoNanInd]
+    
+    AnzData = length(Data)
     Cls=checkCls(Cls,AnzData)
     #ClCou <- ClassCount(Cls)
     UniqueClasses = unique(Cls)#ClCou$UniqueClasses
@@ -37,14 +37,24 @@ ClassBoxplot <- ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualiz
     if (is.null(ClassNames)) {
       ClassNames = c(1:NrOfClasses)
       ClassNames <- paste("C", ClassNames, sep = "")
+      if(All)
+        ClassNames=c( ClassNames,'All')
     }
-    
-    if (NrOfClasses != length(ClassNames))
-      warning("Number of classes does not equal number of ClassNames!
-              This might result in a wrong plot")
-    
+    if(!All){
+      if (NrOfClasses != length(ClassNames))
+        warning("Number of classes does not equal number of ClassNames!
+                This might result in a wrong plot")
+    }else{
+      if ((NrOfClasses+1) != length(ClassNames))
+        warning("Number of classes does not equal number of ClassNames!
+                This might result in a wrong plot")
+    }
+    if(!All){
     ClassData = data.frame(cbind(data = Data, class = as.numeric(Cls)))
-    
+    }else{
+     
+      ClassData = data.frame(cbind(data = c(Data,Data), class = c(as.numeric(Cls),rep(999,length(Data)))))
+    }
     ggobject <- ggplot(ClassData, aes(x = factor(class), y = data)) +
       geom_boxplot(aes(fill = factor(class)), notch = FALSE) +
       stat_summary(

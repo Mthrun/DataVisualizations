@@ -57,8 +57,8 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   #    i = maxData-minData
   #    optBreaks = seq(minData, maxData, i/optNrOfBins) # bins in fixed intervals
   #    hist(D, breaks=optBreaks,xlab=N)
-  requireNamespace('AdaptGauss')
-  optNrOfBins=AdaptGauss::OptimalNoBins(D)
+ 
+  optNrOfBins=OptimalNoBinsV2(D)
   optNrOfBins = min(100,optNrOfBins) #
 
    optBreaks <- seq(MinD, MaxD, abs(MinD-MaxD)/optNrOfBins) # bins haben alle die gleiche groesse
@@ -88,8 +88,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   } else{
     D2 = D
   }
-  
-  pdeVal        = AdaptGauss::ParetoDensityEstimation(D2)
+  pdeVal        = ParetoDensityEstimationV2(D2)
   
   if (missing(xlim) && missing(ylim)) {
     plot(

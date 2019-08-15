@@ -54,7 +54,7 @@ ClassPDEplot(Data, Cls, ColorSequence,
 data(ITS)
 #clustering only for testing
 Classification=c(rep(1,8805),rep(2,2389))
-DataVisualizations::ClassPDEplotMaxLikeli(ITS,Classification)
+DataVisualizations::ClassPDEplot(ITS,Classification)
 }
 
 \donttest{
@@ -64,6 +64,6 @@ Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
 
 DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
 
-DataVisualizations::ClassPDEplotMaxLikeli(ITS,Classification)$ggobject
+DataVisualizations::ClassPDEplot(ITS,Classification)$ggobject
 }
 }

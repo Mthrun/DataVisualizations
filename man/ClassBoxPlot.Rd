@@ -9,7 +9,7 @@
 \usage{
 ClassBoxplot(Data, Cls,  ColorSequence = DataVisualizations::DefaultColorSequence,
 
- ClassNames = NULL, PlotLegend = TRUE,
+ ClassNames = NULL,All=FALSE, PlotLegend = TRUE,
 
  main = 'Boxplot per Class', xlab = 'Classes', ylab = 'Range of Data')
 }
@@ -25,6 +25,9 @@ ClassBoxplot(Data, Cls,  ColorSequence = DataVisualizations::DefaultColorSequenc
   }
   \item{ClassNames}{
   Optional: The names of the classes. Default: C1 - C(Number of Classes)
+  }
+   \item{All}{
+	Optional: adds full data vector for comparison against classes
   }
   \item{PlotLegend}{
   Optional: Add a legent to plot. Default: TRUE)

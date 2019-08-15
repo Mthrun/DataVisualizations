@@ -63,9 +63,9 @@ PDEplot <- function(data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
   }
 
   if(length(paretoRadius)<1 || is.nan(paretoRadius)  || (paretoRadius==0))
-    pdeVal        <- ParetoDensityEstimation(data,NULL,kernels)
+    pdeVal        <- ParetoDensityEstimationV2(data,NULL,kernels)
   else
-    pdeVal        <- ParetoDensityEstimation(data,paretoRadius,kernels)
+    pdeVal        <- ParetoDensityEstimationV2(data,paretoRadius,kernels)
  
   paretoDensity <- pdeVal$paretoDensity*weight
 

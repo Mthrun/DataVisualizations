@@ -15,7 +15,7 @@ inPSphere2D = function(data,paretoRadius=NULL){
 # Implementation der Hauptschleife in C++: FP 03/2016
 
 	if(is.null(paretoRadius))
-		paretoRadius = ParetoRadius(data)
+		paretoRadius = ParetoRadiusV2(data)
 
 	nData = nrow(data)
 	nVar = ncol(data)
