@@ -41,7 +41,13 @@ Number Selections for \code{Base} currently experimental.
 \code{\link{log}}
 }
 \examples{
-MDplot(SignedLog(cbind(ITS,MTY)*(-1),Base = "Ten"))
+# sampling is online done
+# because otherwise the example takes too long
+# in the CRAN check
+data('ITS')
+ind=sample(length(ITS),1000)
+
+MDplot(SignedLog(cbind(ITS[ind],MTY[ind])*(-1),Base = "Ten"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

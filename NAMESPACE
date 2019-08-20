@@ -1,5 +1,5 @@
 useDynLib(DataVisualizations, .registration=TRUE)
-
+export(ABCbarplot)
 export(ClassBoxplot)
 export(ClassPDEplot)
 export(ClassMDplot)

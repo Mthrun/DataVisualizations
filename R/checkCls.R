@@ -1,4 +1,16 @@
-checkCls=function(Cls,AnzData){
+checkCls=function(Cls,AnzData=NULL){
+  if(is.null(AnzData)){
+    warning('No number of data to compare. Something went wrong in the function calling checkCLS. Thus, checkCls is skipped!')
+    return(Cls)
+  }
+  if(!is.numeric(AnzData)){
+    warning('No number of data to compare. Something went wrong in the function calling checkCLS. Thus, checkCls is skipped!')
+    return(Cls)
+  }
+  if(AnzData<=0){
+    warning('Amount of data is zero! Something went wrong in the function calling checkCLS. Thus, checkCls is skipped!')
+    return(Cls)
+  }
   if(!is.vector(Cls)){
     warning('Cls is not a vector, calling as.vector')
     Cls=as.vector(Cls)

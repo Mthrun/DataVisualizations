@@ -5,8 +5,8 @@ Mirrored Density plot (MD-plot)
 }
 \description{
 This function creates a MD-plot for each variable of the data matrix. 
-The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun/Ultsch, 2019].
-It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun/Ultsch, 2019].
+The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun et al., 2019].
+It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2019].
 }
 \usage{
 MDplot(Data, Names, Ordering='Default', Scaling="None",
@@ -157,14 +157,17 @@ For the paramter \code{Scaling} the following options are possible:
 \references{
 [Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
 
-[Thrun/Ultsch, 2019]	Thrun, M. C., & Ultsch, A. : Analyzing the Fine Structure of Distributions, Technical Report prior to submission, Philipps-University Marburg, Germany, 2019. 
+[Thrun et al., 2018a]	Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency stream nitrate concentrations: hydrology and biology contributions, Proc. European Conference on Data Analysis (ECDA), pp. 46-47, Paderborn, Germany, 2018. 
 
-[Thrun et al.,2018a]	Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency stream nitrate concentrations: hydrology and biology contributions, Proc. European Conference on Data Analysis (ECDA), pp. 46-47, Paderborn, Germany, 2018. 
+[Thrun et al., 2018b]	Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), p. 26, Paderborn, Germany, 2018. 
 
-[Thrun et al.,2018b]	Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), p. 26, Paderborn, Germany, 2018. 
+[Thrun et al., 2019]	Thrun, M. C., Gehlert, Tino, & Ultsch, A. : Analyzing the Fine Structure of Distributions, arXiv:1908.06081, 2019. 
+
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+\seealso{
+\code{\link{ClassMDplot}}
+\url{https://pypi.org/project/md-plot/}
+}
 \keyword{violin plot}
 \keyword{geom_violin}
 \keyword{PDE}

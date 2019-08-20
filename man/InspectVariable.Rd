@@ -31,8 +31,19 @@ Michael Thrun
 }
 
 \examples{
+\dontshow{
+data("ITS")
+# sampling is online done
+# because otherwise the example takes too long
+# in the CRAN check
+ind=sample(length(ITS),1000)
+
+InspectVariable(ITS[ind],N='Income in EUR',main='ITS')
+}
+\donttest{
 data("ITS")
 InspectVariable(ITS,N='Income in EUR',main='ITS')
+}
 }
 
 

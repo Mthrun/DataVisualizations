@@ -59,26 +59,27 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
   }
   minData = min(Data, na.rm = TRUE)
   maxData = max(Data, na.rm = TRUE)
-  
-  if (length(kernels) == 0 || ( length(kernels)==1 & kernels == 0)) {
-    #MT: Korrektur: statt kernels==0 und im Input Kernels=0
-    nBins = OptimalNoBinsV2(Data)
-    #MT: MinAnzKernels fehlte
-    nBins = max(MinAnzKernels , nBins)
-    # mindestzahl von Kernels sicherstellen
-    if (nBins > 100) {
-      if (nBins > 1E4) {
-        #MT: Fehlerabdfang bei zu vielen Bins
-        nBins=1E4
-        warning('Too many bins estimated, try to transform or sample the data')
-      } else{
-        nBins=nBins * 3 + 1
+  if(length(kernels)<=1){
+    if (length(kernels) == 0 || ( length(kernels)==1 & kernels == 0)) {
+      #MT: Korrektur: statt kernels==0 und im Input Kernels=0
+      nBins = OptimalNoBinsV2(Data)
+      #MT: MinAnzKernels fehlte
+      nBins = max(MinAnzKernels , nBins)
+      # mindestzahl von Kernels sicherstellen
+      if (nBins > 100) {
+        if (nBins > 1E4) {
+          #MT: Fehlerabdfang bei zu vielen Bins
+          nBins=1E4
+          warning('Too many bins estimated, try to transform or sample the data')
+        } else{
+          nBins=nBins * 3 + 1
+        }
       }
+      breaks = pretty(c(minData,maxData), n = nBins, min.n = 1)
+      nB=length(breaks)
+      mids = 0.5 * (breaks[-1L] + breaks[-nB])
+      kernels = mids
     }
-    breaks = pretty(c(minData,maxData), n = nBins, min.n = 1)
-    nB=length(breaks)
-    mids = 0.5 * (breaks[-1L] + breaks[-nB])
-    kernels = mids
   }
   nKernels = length(kernels)
   #Randapproximierung

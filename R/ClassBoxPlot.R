@@ -50,7 +50,7 @@ ClassBoxplot <- ClassBoxPlot <- function(Data, Cls, ColorSequence = DataVisualiz
                 This might result in a wrong plot")
     }
     if(!All){
-    ClassData = data.frame(cbind(data = Data, class = as.numeric(Cls)))
+      ClassData = data.frame(cbind(data = Data, class = as.numeric(Cls)))
     }else{
      
       ClassData = data.frame(cbind(data = c(Data,Data), class = c(as.numeric(Cls),rep(999,length(Data)))))
