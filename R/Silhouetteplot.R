@@ -42,7 +42,7 @@ Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "eucl
     InputDistances = DataOrDistances
   }
   else{
-    warning('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
+    message('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
     
     #InputDistances = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
     InputDistances=as.matrix(parallelDist::parDist(DataOrDistances,method = method))

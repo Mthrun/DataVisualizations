@@ -14,7 +14,7 @@
    requireNamespace('parallelDist')
    
    if(!is.matrix(DataOrDistances)){
-     warning('DataOrDistances is not a matrix. Calling as.matrix()')
+     mess('DataOrDistances is not a matrix. Calling as.matrix()')
      DataOrDistances=as.matrix(DataOrDistances)
    }
    if(!mode(DataOrDistances)=='numeric'){
@@ -39,7 +39,7 @@
      DataDists = DataOrDistances
    }
    else{
-     warning('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
+      message('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
      
      AnzVar = ncol(DataOrDistances)
      

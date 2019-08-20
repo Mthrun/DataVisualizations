@@ -51,10 +51,15 @@ ClassPDEplot(Data, Cls, ColorSequence,
 
 \examples{
 \dontshow{
+# sampling is online done
+# because otherwise the example takes too long
+# in the CRAN check
 data(ITS)
+ind=sample(length(ITS),1000)
+
 #clustering only for testing
 Classification=c(rep(1,8805),rep(2,2389))
-DataVisualizations::ClassPDEplot(ITS,Classification)
+DataVisualizations::ClassPDEplot(ITS[ind],Classification[ind])
 }
 
 \donttest{
