@@ -14,7 +14,7 @@
    requireNamespace('parallelDist')
    
    if(!is.matrix(DataOrDistances)){
-     mess('DataOrDistances is not a matrix. Calling as.matrix()')
+     message('DataOrDistances is not a matrix. Calling as.matrix()')
      DataOrDistances=as.matrix(DataOrDistances)
    }
    if(!mode(DataOrDistances)=='numeric'){
