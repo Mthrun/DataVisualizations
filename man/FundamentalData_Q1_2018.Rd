@@ -66,7 +66,7 @@ List of 3
 \details{
 Stocks are selected by the German Prime standard accoridingly to the "Names" data frame.
 Fundamental Data with missing values is stored in "Data". The rownames of "Data" have the same Key as the first row of "Names" which is the trading symbol.
-Cls provides the clustering as a numerical vector of 1:k classes performed by Databionic Swarm in [Thrun, 2019].
+"Cls" provides the clustering as a numerical vector of 1:k classes performed by Databionic Swarm in [Thrun, 2019].
 
 }
 \source{
