@@ -1,4 +1,4 @@
-ABCbarplot=ABC_screeplot=function(Data,Colors=DataVisualizations::DefaultColorSequence[1:3],main,xlab="Fraction of Data",ylab="Value"){
+ABCbarplot=ABC_screeplot=function(Data,Colors=DataVisualizations::DefaultColorSequence[1:3],main,xlab="Fraction of Data in %",ylab="Value"){
 # V= ABCbarPlot(Data);
 # V has the elements Aind,Bind,Cind,ABlimit,BClimit
 # barplot of sortdescending(Data) with the sets in different colours
@@ -20,7 +20,7 @@ Cind =V$Cind
 X = c(1:length(SortedData))
 ColorsVec=c(rep(Colors[1],length(Aind)),rep(Colors[2],length(Bind)),rep(Colors[3],length(Cind)))
 ABC_classes=c(rep('A',length(Aind)),rep('B',length(Bind)),rep('C',length(Cind)))
-DF=data.frame(X=X/100,Y=SortedData,ABC_classes=ABC_classes,ColorsVec=ColorsVec)
+DF=data.frame(X=X/length(SortedData)*100,Y=SortedData,ABC_classes=ABC_classes,ColorsVec=ColorsVec)
 
 ggobject=ggplot(data=DF, aes_string(x='X',y = 'Y',fill='ABC_classes')) + geom_bar(stat="identity")+ 
   scale_fill_manual(values = Colors, name = "ABC Analysis")+

@@ -2,7 +2,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
                          ClassNames = NULL, PlotLegend = TRUE,
                          main = 'PDE Violin Plot for each Class',
                          xlab = 'Classes', ylab = 'PDE of Data per Class',
-                         MinimalAmoutOfData=40) {
+                         MinimalAmoutOfData=40,SampleSize=1e+05) {
   # PlotHandle = ClassViolinplot(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend);
   # BoxPlot the data for all classes, weight the Plot with 1 (= maximum likelihood)
   # INPUT
@@ -31,8 +31,28 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   Data <- Data[NoNanInd]
   Cls <- Cls[NoNanInd]
   
+  dvariables=ncol(Data)
   AnzData = length(Data)
-  Cls=checkCls(Cls,AnzData)
+  #split quoted
+  TrainInd <- c()
+  if(AnzData>SampleSize){
+    UniqueClasses=unique(Cls)
+    Percentage=round(SampleSize/AnzData,2)
+    for(i in UniqueClasses){
+      ClassInd <- which(Cls==i)
+      sampleInd <- sample(ClassInd, round(length(ClassInd)* Percentage),0)
+      TrainInd=c(TrainInd,sampleInd)
+    }
+      Data=Data[TrainInd,,drop=FALSE]
+      Cls=Cls[TrainInd]
+    AnzData=nrow(Data)
+  }
+  
+  if(AnzData<3e+03){
+    Cls=checkCls(Cls,AnzData,Normalize=TRUE)
+  }else{
+    Cls=checkCls(Cls,AnzData,Normalize=FALSE)
+  }
   #ClCou <- ClassCount(Cls)
   UniqueClasses = sort(unique(Cls))#ClCou$UniqueClasses
   #CountPerClass = ClCou$countPerClass

@@ -1,4 +1,4 @@
-checkCls=function(Cls,AnzData=NULL){
+checkCls=function(Cls,AnzData=NULL,Normalize=TRUE){
   if(is.null(AnzData)){
     warning('No number of data to compare. Something went wrong in the function calling checkCLS. Thus, checkCls is skipped!')
     return(Cls)
@@ -31,20 +31,22 @@ checkCls=function(Cls,AnzData=NULL){
     warning("Cls too long, shortened")
     Cls = Cls[1:AnzData]
   }
-  
-  uniqueClasses <- sort(na.last = T, unique(Cls))
-  numberOfClasses <- length(uniqueClasses)
-  unique2Cls <- NULL
-  for (i in 1:length(Cls)) {
-    unique2Cls <- c(unique2Cls, which(uniqueClasses == Cls[i]))
+  if(isTRUE(Normalize)){
+    uniqueClasses <- sort(na.last = T, unique(Cls))
+    numberOfClasses <- length(uniqueClasses)
+    unique2Cls <- NULL
+    for (i in 1:length(Cls)) {
+      unique2Cls <- c(unique2Cls, which(uniqueClasses == Cls[i]))
+    }
+    if (numberOfClasses > 0) {
+      normalizedClasses <- c(1:numberOfClasses)
+      normalizedCls <- normalizedClasses[unique2Cls]
+    }
+    else {
+      normalizedClasses <- Cls
+    }
+  }else{
+      normalizedCls=Cls
   }
-  if (numberOfClasses > 0) {
-    normalizedClasses <- c(1:numberOfClasses)
-    normalizedCls <- normalizedClasses[unique2Cls]
-  }
-  else {
-    normalizedClasses <- Cls
-  }
-  
   return(normalizedCls)
 }

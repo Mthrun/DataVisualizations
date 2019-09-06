@@ -13,7 +13,7 @@ ABCbarplot(Data,
 
 Colors=DataVisualizations::DefaultColorSequence[1:3],
 
-main,xlab="Fraction of Data",ylab="Value")
+main,xlab="Fraction of Data in \%",ylab="Value")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
