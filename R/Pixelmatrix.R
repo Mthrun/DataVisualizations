@@ -23,7 +23,10 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames = NULL, LowLim, HiLim, YNames
     mode(Data)='numeric'
   }
   heatC = DataVisualizations::HeatmapColors
-    
+  Schalter=TRUE
+  if (missing(LowLim)&missing(HiLim))
+    Schalter=FALSE
+  
   if (missing(LowLim))
       LowLim = min(Data, na.rm = T)
   if (missing(HiLim))
@@ -47,11 +50,12 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames = NULL, LowLim, HiLim, YNames
     if (min(dim(Data)) < 1) {
       warning('PlotPixMatrix: Datamust be matrix with min 2 columns and 2 rows!')
     }
-    
-    hiind = which(Data >= HiLim)
-    Data[hiind] = HiLim
-    lowind = which(Data <= LowLim)
-    Data[lowind] = LowLim
+    if(isTRUE(Schalter)){
+      hiind = which(Data >= HiLim)
+      Data[hiind] = HiLim
+      lowind = which(Data <= LowLim)
+      Data[lowind] = LowLim
+    }
     if(isTRUE(FillNotFiniteWithHighestValue)){
       if(any(!is.finite(Data))){ # vom Prinzip aus Matlab uebernommen
         Delta = (HiLim - LowLim) / 64
@@ -76,7 +80,7 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames = NULL, LowLim, HiLim, YNames
     #             rescale = rescale(value))
     #aes_string only works if you dont modify your features in ggplot2 (e.g. not logarithmize them)
     plt <-
-      ggplot(dfm, aes_string(y = 'id', x = 'variable', fill = 'value')) + geom_tile() +
+      ggplot(dfm, aes_string(y = 'id', x = 'variable', fill = 'value')) + geom_raster() +
       scale_fill_gradientn(colours = heatC,na.value = 'black') +
       theme(
         panel.background = element_blank(),
