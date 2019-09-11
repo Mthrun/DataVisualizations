@@ -1,4 +1,4 @@
-PlotMissingvalues=PlotMissingValues=function(Data,Names,WhichDefineMissing=c('NA','DUMMY','.',' '),PlotIt=TRUE,xlab='Amount Of Missing Values in percent',...){
+PlotMissingvalues=PlotMissingValues=function(Data,Names,WhichDefineMissing=c('NA','NaN','DUMMY','.',' '),PlotIt=TRUE,xlab='Amount Of Missing Values in Percent',xlim=c(0,100),...){
   if(is.matrix(Data)){
     Data=as.data.frame(Data)
   }
@@ -22,15 +22,17 @@ PlotMissingvalues=PlotMissingValues=function(Data,Names,WhichDefineMissing=c('NA
   if(any(WhichDefineMissing=="NA")){
     nas=c()
     for(i in 1:d){
-      nas=c(nas,sum(is.na(as.vector(as.matrix(Data[,i])))))
+      temp=as.vector(as.matrix(Data[,i]))
+      temp[is.nan(temp)]=0
+      nas=c(nas,sum(is.na(temp)))
     }
   }
-  # if(any(WhichDefineMissing=="NaN")){
+  if(any(WhichDefineMissing=="NaN")){
     nans=c()
     for(i in 1:d){
       nans=c(nans,sum(is.nan(as.vector(as.matrix(Data[,i])))))
     }
-  # }
+  }
   if(any(WhichDefineMissing=="DUMMY")){
     dummy=c()
     for(i in 1:d){
@@ -62,7 +64,7 @@ PlotMissingvalues=PlotMissingValues=function(Data,Names,WhichDefineMissing=c('NA
   par(mar = c(5, 18, 1, 1) + 0.2)
   options(repr.plot.width=4, repr.plot.height=8)
   par(las=2) 
-  barplot(nana/ncases*100,horiz = T,xlab=xlab,...)
+  barplot((nana/ncases)*100,horiz = T,xlab=xlab,xlim = xlim,...)
   par(def.par)
   return(invisible(nana))
 }

@@ -372,22 +372,23 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
                           position=position_jitter(0.15))
     
   }
-
+print(RobustGaussian)
   if(isTRUE(RobustGaussian)){
     colnames(normaldist)=colnames(Data)
     normaldist=normaldist[,Rangfolge]
     if(dvariables==1){#bugfix
       normaldist=as.matrix(normaldist)
       normaldist=cbind(normaldist,rep(NaN,Ncases))
-    }
+      colnames(normaldist)=c(colnames(Data),'Cnan')
+    } 
     DFtemp = reshape2::melt(normaldist)
     colnames(DFtemp) <- c('ID', 'Variables', 'Values')
     if(dvariables==1){#bugfix
-      DFtemp=DFtemp[DFtemp[,'Variables']==colnames(DFtemp)[1],]
+      DFtemp=DFtemp[DFtemp[,'Variables']==colnames(Data),]
     }
     DFtemp$Variables=as.character(DFtemp$Variables)
     #trimming in this case not required
- 
+    print(str(DFtemp))
     plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),
                           colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,
                           na.rm = TRUE,trim = TRUE, fill = NA,position="identity",width=1)#+guides(fill=FALSE,scale=MDscaling)

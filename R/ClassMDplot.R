@@ -31,8 +31,8 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   Data <- Data[NoNanInd]
   Cls <- Cls[NoNanInd]
   
-  dvariables=ncol(Data)
   AnzData = length(Data)
+
   #split quoted
   TrainInd <- c()
   if(AnzData>SampleSize){
@@ -40,12 +40,17 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
     Percentage=round(SampleSize/AnzData,2)
     for(i in UniqueClasses){
       ClassInd <- which(Cls==i)
-      sampleInd <- sample(ClassInd, round(length(ClassInd)* Percentage),0)
+      nclass=round(length(ClassInd)* Percentage,0)
+      if(nclass>SampleSize) #adjusted splited quoted (only for classes bigger than sample size)
+        sampleInd <- sample(ClassInd,nclass)
+      else
+        sampleInd = ClassInd
+      
       TrainInd=c(TrainInd,sampleInd)
     }
-      Data=Data[TrainInd,,drop=FALSE]
+      Data=Data[TrainInd] #Data[TrainInd,,drop=FALSE]
       Cls=Cls[TrainInd]
-    AnzData=nrow(Data)
+    AnzData=length(Data)
   }
   
   if(AnzData<3e+03){

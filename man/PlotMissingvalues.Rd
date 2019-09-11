@@ -4,14 +4,16 @@
 \usage{
 PlotMissingvalues(Data,Names,
 
-WhichDefineMissing=c('NA','DUMMY','.',' '),
+WhichDefineMissing=c('NA','NaN','DUMMY','.',' '),
 
-PlotIt=TRUE,xlab='Amount Of Missing Values in percent',...)
+PlotIt=TRUE,xlab='Amount Of Missing Values in Percent',
+
+xlim=c(0,100)...)
 }
 \arguments{
 \item{Data}{[1:n,1:d] data cases in rows, variables/features in columns}
 \item{Names}{[1:d] optional vector of string describing the names of the features}
-\item{WhichDefineMissing}{[1:d] optional vector of string describing missing values, usefull for character features.}
+\item{WhichDefineMissing}{[1:d] optional vector of string describing missing values, usefull for character features. Currently up to five different options are possible.}
 \item{PlotIt}{If FALES: Does not plot}
 \item{xlab}{x label of bar plot}
 \item{\dots}{Further arguments passed on to \code{barplot}, such as \code{main} for title}
