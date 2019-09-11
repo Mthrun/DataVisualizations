@@ -372,7 +372,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
                           position=position_jitter(0.15))
     
   }
-print(RobustGaussian)
+
   if(isTRUE(RobustGaussian)){
     colnames(normaldist)=colnames(Data)
     normaldist=normaldist[,Rangfolge]
@@ -388,7 +388,7 @@ print(RobustGaussian)
     }
     DFtemp$Variables=as.character(DFtemp$Variables)
     #trimming in this case not required
-    print(str(DFtemp))
+
     plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),
                           colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,
                           na.rm = TRUE,trim = TRUE, fill = NA,position="identity",width=1)#+guides(fill=FALSE,scale=MDscaling)
