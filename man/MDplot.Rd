@@ -170,6 +170,7 @@ For the paramter \code{Scaling} the following options are possible:
 \url{https://md-plot.readthedocs.io/en/latest/index.html}
 
 \code{\link{ClassMDplot}}
+
 \url{https://pypi.org/project/md-plot/}
 }
 \keyword{violin plot}
