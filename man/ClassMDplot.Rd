@@ -7,6 +7,8 @@ Class MD-plot for Data w.r.t. all classes
   Creates PDE optimized Violin plot for all classes 
 }
 \details{
+Further examples for the ClassMDplot can be found in \url{https://md-plot.readthedocs.io/en/latest/application/example_application.html}.
+
  The \code{Cls} vector is sorted from lowest to highest number.
   The \code{ClassNames} vector and \code{ColorSequence} vectors are matched by this ordering of \code{Cls}, i.e. the lowest number gets the first color or class name.
 }
@@ -95,6 +97,8 @@ Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency 
 }
 
 \seealso{
+\url{https://md-plot.readthedocs.io/en/latest/application/example_application.html}
+
 \code{\link{MDplot}}
 \url{https://pypi.org/project/md-plot/}
 }
