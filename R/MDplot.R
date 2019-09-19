@@ -307,26 +307,30 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   if(any(Npervar<MinimalAmoutOfData)|any(NUniquepervar<MinimalAmoutOfUniqueData)){#builds scatter plots in case of not enough information for pdf
     warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points or less than ',MinimalAmoutOfUniqueData,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
     DataDensity=Data
-    mm=apply(Data,2,median,na.rm=T)
+    #mm=apply(Data,2,median,na.rm=T)
     #Transforms pdf estimation to median line drawing of pdf cannot be estimated
     for(nc in 1:dvariables){
       if(Npervar[nc]<MinimalAmoutOfData){
+        DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
+        
         #generated values around the median if not enoug non finite values given
         # this is done to draw a median line
-        if(mm[nc]!=0){
-          DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
-        }else{
-          DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
-        }
+        # if(mm[nc]!=0){
+        #   DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+        # }else{
+        #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
+        # }
       }
       if(NUniquepervar[nc]<MinimalAmoutOfUniqueData){
+        DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
+        
         #generated values around the median if not enoug unique values given
         # this is done to draw a median line
-        if(mm[nc]!=0){
-          DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
-        }else{
-          DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
-        }
+        # if(mm[nc]!=0){
+        #   DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+        # }else{
+        #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
+        # }
       }
     }
     #Generates in the cases where pdf cannot be estimated a scatter plot

@@ -1,8 +1,8 @@
 ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
                          ClassNames = NULL, PlotLegend = TRUE,
-                         main = 'PDE Violin Plot for each Class',
+                         main = 'MDplot for each Class',
                          xlab = 'Classes', ylab = 'PDE of Data per Class',
-                         MinimalAmoutOfData=40,SampleSize=1e+05) {
+                         MinimalAmoutOfData=40,MinimalAmoutOfUniqueData=12,SampleSize=1e+05) {
   # PlotHandle = ClassViolinplot(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend);
   # BoxPlot the data for all classes, weight the Plot with 1 (= maximum likelihood)
   # INPUT
@@ -32,6 +32,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   Cls <- Cls[NoNanInd]
   
   AnzData = length(Data)
+  uniqueData=unique(Data)
 
   #split quoted
   TrainInd <- c()
@@ -103,7 +104,13 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   ClassData=cbind(ClassData,ClassColors=Colors,ClassNames=ClassNamesVec)#,ClassColorsHex=ClassColorsHex)
   sorted=order(ClassData$class,decreasing = FALSE,na.last = T)
   ClassData=ClassData[sorted,]
-
+  for(i in 1:NrOfClasses){
+    x=ClassData$data[Cls==UniqueClasses[i]]
+    if(length(unique(x))<MinimalAmoutOfUniqueData){
+      x=JitterUniqueValues(x,NULL)
+      ClassData$data[Cls==UniqueClasses[i]]=x
+    }
+  }
 
   ClassData$class=factor(ClassData$class)
   ClassData$ClassColors=factor(ClassData$ClassColors)
@@ -117,10 +124,10 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
     NUniquepervar[i]=length(unique(Data[Cls==UniqueClasses[i]]))
   }
 
-  if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfData)){
+  if(any(Npervar<MinimalAmoutOfData)){
     ClassData2=ClassData
     for(i in 1:length(UniqueClasses)){
-      if(Npervar[i]<MinimalAmoutOfData | NUniquepervar[i]<MinimalAmoutOfData){
+      if(Npervar[i]<MinimalAmoutOfData){
         ClassData2[ClassData2$class==UniqueClasses[i],'data']=NaN
       }
     }

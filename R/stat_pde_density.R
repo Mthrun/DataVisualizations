@@ -49,9 +49,13 @@ compute_pdedensity <- function(x) {
   
   ##MT: chatch error of one unique value
   Flag <- FALSE
-  if (length(unique(x)) == 1) {
+  if (length(unique(x)) ==1) {
     warning('stat_pde_density: Only one unique value in Data.')
-    x <- c(unique(x), head(x, 1) * runif(1, 0.999, 1.001))
+    if(unique(x)!=0)
+      x <- c(unique(x), head(x, 1) * runif(1, 0.999, 1.001))
+    else
+      x <- c(unique(x), head(x, 1) + runif(1, 0.999, 1.001))
+
     Flag <- TRUE
   }
   

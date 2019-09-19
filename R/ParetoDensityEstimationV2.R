@@ -1,4 +1,4 @@
-ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100){
+ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE){
 #  V = ParetoDensityEstimation(Data,ParetoRadius,Kernels)
 #  V = ParetoDensityEstimation(Data)
 #  ParetoDensity=V$paretoDensity
@@ -34,13 +34,58 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
     Data = as.numeric(Data)
     warning('Beware: ParetoDensityEstimation: Data set not numeric !')
   }
-  if(length(unique(Data))<3){
-    warning('Less than 3 unqiue values for density estimation. Function may not work')
-  }
+
   if(length(Data)!=sum(is.finite(Data))){
     message('Not all values are finite. Please check of infinite or missing values.')
   }
   Data = Data[is.finite(Data)]
+  
+  values=unique(Data)
+  
+  if(length(values)>2&length(values)<5){
+    warning('Less than 5 unqiue values for density estimation. Function may not work')
+  }
+  
+
+  if(length(values)<3){
+    warning('1 or 2 unique values for density estimation. Dirac Delta distribution(s) is(are) assumed. Input of "kernels", "paretoRadius" and "MinAnzKernels" or ignored!')
+   
+    
+   if(values[1]!=0)
+    kernels=seq(from=values[1]*0.9,to=unique(Data)*1.1,by=values[1]*0.0001)
+   else
+     kernels=seq(from=values[1]-0.1,to=values[1]+0.1,by=0.0001)
+   
+   
+   paretoDensity=rep(0,length(kernels))
+   paretoDensity[kernels==values[1]]=1
+   
+   if(length(values)==2){
+     if(values[2]!=0)
+       kernels2=seq(from=values[2]*0.9,to=values[2]*1.1,by=values[2]*0.0001)
+     else
+       kernels2=seq(from=values[2]-0.1,to=values[2]+0.1,by=0.0001)
+     
+     
+     paretoDensity2=rep(0,length(kernels2))
+     paretoDensity2[kernels2==values[2]]=1
+    
+     paretoDensity=c(paretoDensity,paretoDensity2) 
+     kernels=c(kernels,kernels2)
+   }
+   
+   
+   
+   if(isTRUE(PlotIt)){
+     plot(kernels,paretoDensity,type = 'l',main='RAW PDE rplot',xaxs='i',
+          yaxs='i',xlab='Data',ylab='PDE')
+   }
+     return (list(
+      kernels = kernels,
+      paretoDensity = paretoDensity,
+      paretoRadius = 0
+    ))
+  }
   
   if (length(Data) < 10) {
     warning('Less than 10 datapoints given, ParetoRadius potientially cannot be calcualted.')
@@ -111,7 +156,10 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
   }else{
     paretoDensity <- paretoDensity / area
   }
-  
+  if(isTRUE(PlotIt)){
+    plot(kernels,paretoDensity,type = 'l',main='RAW PDE rplot',xaxs='i',
+         yaxs='i',xlab='Data',ylab='PDE')
+  }
   return (list(
     kernels = kernels,
     paretoDensity = paretoDensity,

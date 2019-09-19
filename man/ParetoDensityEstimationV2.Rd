@@ -4,23 +4,25 @@
 \title{Pareto Density EstimationV2}
 \usage{
 ParetoDensityEstimationV2(Data, paretoRadius, kernels = NULL,
-  MinAnzKernels = 100)
+  MinAnzKernels = 100,PlotIt=FALSE)
 }
 \arguments{
 \item{Data}{numeric vector of data.}
 
-\item{paretoRadius}{Optional, numeric value, see ParetoRadius}
+\item{paretoRadius}{Optional, numeric value, see \code{\link{ParetoRadiusV2}}, Please do not set manually}
 
 \item{kernels}{Optional, numeric vector. data values where pareto density is measured at. If 0 (by default) kernels will be computed.}
 
 \item{MinAnzKernels}{Optional, minimal number of kernels, default MinAnzKernels==100}
+  \item{PlotIt}{Optional, if TRUE: raw basic r plot of density estimation of debugging purposes. Usually please use \pkg{ggplot2} interface via \code{\link{PDEplot}} or \code{\link{MDplot}}}
 }
 \value{
 List With 
 \describe{
-  \item{kernels:}{numeric vector. data values at with Pareto Density is measured.}
-  \item{paretoDensity:}{numeric vector containing the determined density by ParetoRadius.}
-  \item{paretoRadius:}{numeric value.}
+  \item{kernels}{numeric vector. data values at with Pareto Density is measured.}
+  \item{paretoDensity}{numeric vector containing the determined density by ParetoRadius.}
+  \item{paretoRadius}{numeric value of defining the radius}
+
 }
 }
 \description{
@@ -46,11 +48,15 @@ This the second version of the function prior available in \pkg{AdaptGauss}
 }
 \references{
 Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
+}
+\seealso{
 
+\code{\link{ParetoRadiusV2}}
 
-\strong{See Also}
+\code{\link{PDEplot}}
 
-ParetoRadiusV2
+\code{\link{MDplot}}
+
 }
 \author{
 Michael Thrun

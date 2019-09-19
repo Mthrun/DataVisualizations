@@ -1,7 +1,10 @@
-Version 1.1.9 (GitHub, 2018-09-05)
+Version 1.1.9 (GitHub, 2018-09-019)
 - Improvements in ClassMDplot in the case of Big Data (e.g. Flow Cytometry data of CLL)
-- bugfix ABCbarplot x-axis shows now correct prozentual values between 1 and 100.
-- Pixelmatrix is now significantly fast by using geom_raster instead of geom_tile
+- bugfix ABCbarplot: x-axis shows now correct prozentual values between 1 and 100.
+- Pixelmatrix is now significantly fast by using geom_raster instead of geom_tile.
+- Bugfix MDplot: Several whitespread unique values in large data vectors are visualized correctly. Option "RobustGaussian=TRUE" now works also if only one column of data is given as input.
+- Bugfix ParetoDensityEstimationV2: Assumes now the dirac delta distribution for one ore two unique values in a given vector of data of arbitrary length.
+
 Version 1.1.8 (CRAN, 2018-08-20)
 - new implementation of Pareto density estimation (PDE), pareto radius and optimal number of bins for histograms.
 - AdaptGauss package detached and new PDE attached to MD plot.
