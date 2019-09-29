@@ -1,7 +1,8 @@
 MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',
                                   RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
-                                  BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',Size=0.01,
-                                  MinimalAmoutOfData=40, MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE){
+                                  BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
+                                  MinimalAmoutOfData=40, MinimalAmoutOfUniqueData=12,SampleSize=5e+05,
+                                  SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
   #
@@ -361,7 +362,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
-  plot=plot + geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=Size,trim = TRUE) + theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
+  plot=plot + geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=LineSize,trim = TRUE,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
   if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfUniqueData)){
     DataJitter[,Rangfolge]
     dataframejitter=reshape2::melt(DataJitter)
@@ -372,7 +373,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     }else{
     colnames(dataframejitter) <- c('ID', 'Variables', 'Values')
     }
-    plot=plot+geom_jitter(size=2,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
+    plot=plot+geom_jitter(size=SizeOfJitteredPoints,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
                           position=position_jitter(0.15))
     
   }
@@ -403,7 +404,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   }
 
   # plot=plot + 
-  #   geom_violin(stat = "PDEdensity",fill=fill,scale=MDscaling,size=Size)+ theme(axis.text.x = element_text(size=rel(1.2)))
+  #   geom_violin(stat = "PDEdensity",fill=fill,scale=MDscaling,size=LineSize)+ theme(axis.text.x = element_text(size=rel(1.2)))
   
   if(isTRUE(requireNamespace("ggExtra"))){
     plot=plot+ggExtra::rotateTextX()

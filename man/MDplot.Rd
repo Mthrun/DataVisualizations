@@ -17,9 +17,11 @@ Fill='darkblue', RobustGaussian=TRUE, GaussianColor='magenta',
 
 Gaussian_lwd=1.5, BoxPlot=FALSE, BoxColor='darkred',
 
-MDscaling='width',Size=0.01, MinimalAmoutOfData=40,
+MDscaling='width',LineSize=0.01, LineColor="black",
 
-MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
+MinimalAmoutOfData=40,MinimalAmoutOfUniqueData=12,SampleSize=5e+05,
+
+SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE)
 }
 
 \arguments{
@@ -54,12 +56,14 @@ MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
       \item{BoxColor}{
     Optional: string, color of Boxplot, only for \code{BoxPlot=TRUE}.
   }
-  
     \item{MDscaling}{
     Optional: if "area", all violins have the same area (before trimming the tails). If "count", areas are scaled proportionally to  the number of observations. If "width" (default), all MDs have the same maximum width.
   }
-    \item{Size}{
-    Optional: numerical, linewidth of black line around the MDs.
+    \item{LineSize}{
+    Optional: numerical, linewidth of line around the mirrored densities.
+  }
+   \item{LineColor}{
+    Optional: string, color of line around the mirrored densities. \code{NA} disaböes this feautres which is usefull if ones wants to avoid vertical lines leading to outliers.
   }
     \item{MinimalAmoutOfData}{
     Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
@@ -71,8 +75,11 @@ MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
     Optional: numeric value defining a threshold. Above this threshold uniform sampling of finite cases is performed in order to shorten computation time.If \pkg{rowr} is not installed, uniform sampling of all cases
     is performed. If required, \code{SampleSize=n} can be set to omit this procedure. 
   }
+   \item{SizeOfJitteredPoints}{
+	 Optional: scalar. If Not enough unique values for density estimation are given, data points are jittered. This parameter defines the size of the points. 
+  }
   \item{OnlyPlotOutput}{
-  Default TRUE only a ggplot object is given back, if FALSE: Additinally Scaled Data and ordering are the output of this function in a \code{list}.
+   Optional: Default TRUE only a ggplot object is given back, if FALSE: Additinally Scaled Data and ordering are the output of this function in a \code{list}.
   }
 }
 
