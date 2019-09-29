@@ -373,7 +373,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     }else{
     colnames(dataframejitter) <- c('ID', 'Variables', 'Values')
     }
-    plot=plot+geom_jitter(size=SizeOfJitteredPoints,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
+    plot=plot+geom_jitter(colour=Fill,size=SizeOfJitteredPoints,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
                           position=position_jitter(0.15))
     
   }
