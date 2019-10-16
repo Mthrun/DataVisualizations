@@ -37,9 +37,13 @@ ParetoRadiusV2 <- function(Data ,maximumNrSamples = 10000, plotDistancePercentil
   distvec=as.vector(parallelDist::parallelDist(as.matrix(sampleData),method='euclidean',upper = F,diag = F))
 
   # selection of ParetoRadius
-  paretoRadius=quantile(distvec,probs = 18/100,na.rm = T,type=8)#minimal unrealized potential (->Ultsch2005)
-
-  
+  #paretoRadius=quantile(distvec,probs = 18/100,na.rm = T,type=8)#minimal unrealized potential (->Ultsch2005)
+ 
+  if(nData<4000){#use more precise implelemtation
+	 paretoRadius <- quantile(distvec, 18/100, type = 8, na.rm = TRUE)
+  }else{ #use faster implementation
+	 paretoRadius <- c_quantile(distvec, 18/100)
+  }
   if (paretoRadius == 0) {
     pzt=quantile(distvec,probs = c(1:100)/100,na.rm = T,type=8)
     paretoRadius <-  min(pzt[pzt>0],na.rm=T) # take the smallest nonzero

@@ -23,7 +23,7 @@ Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "eucl
 #
 # Author Hansen-Goos 2015, major redone by Michael Thrun 2018
   #1.Editor: MT 06/18
-  requireNamespace('parallelDist')
+
   if(!is.matrix(DataOrDistances)){
     warning('DataOrDistances is not a matrix. Calling as.matrix()')
     DataOrDistances=as.matrix(DataOrDistances)
@@ -43,7 +43,7 @@ Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "eucl
   }
   else{
     message('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
-    
+    requireNamespace('parallelDist')
     #InputDistances = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
     InputDistances=as.matrix(parallelDist::parDist(DataOrDistances,method = method))
     #DataDists = DistanceMatrix(DataOrDistances, method = method)

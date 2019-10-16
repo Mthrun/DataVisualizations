@@ -99,8 +99,8 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
   ######
   if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
     noNaNInd <- which(is.finite(x)&is.finite(y))
-    x <- x[noNaNInd]
-    y <- y[noNaNInd]
+    x = x[noNaNInd]
+    y = y[noNaNInd]
   }
   
   if(missing(xlim))
@@ -124,9 +124,14 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	# Wenn mehr Daten als gewollt da sind: Sample ziehen.
 	##########
 	#distanzmatrix is quadratisch minus diagonale
+
 	if (sampleSize<nData) { # sample with uniform distribution MaximumNrSamples
 	  #warning('More Data than sampleSize. Consider raising sampleSize or using PDEscatterApprox')
 	  sampleInd <- floor(nData*c(runif(sampleSize))+1)
+	  #mt: cannot sample data for interpolation z plot
+	  # otherwise density plot is to stochastic and often incorrect
+	  # x=x[sampleInd]
+	  # y=y[sampleInd]
 	  sampleData = percentdata[sampleInd,]
 	} else {
 	  sampleData = percentdata
@@ -140,15 +145,22 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	#Dists = dist(sampleData)
 	Dists=parallelDist::parDist(sampleData,method = 'euclidean',diag = F,upper = F)
 	Dists=as.vector(Dists)
-
 	if(paretoRadius <= 0){
 		 # paretoRadius <- paretoRadiusForGMM(Data = data)
 	  #paretoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen
 	  # if(sampleSize<nData)
+	  if(nData<500){
 	    paretoRadius <- quantile(Dists, 6/100, type = 5, na.rm = TRUE)
-
-      if(paretoRadius==0){
-        paretoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE) #pareto 20/80 rule
+	  }else{
+	    paretoRadius <- c_quantile(Dists[is.finite(Dists)], 6/100)
+	  }
+      if(paretoRadius==0){         #pareto 20/80 rule
+        if(nData<500){
+          paretoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE)
+        }else{
+          paretoRadius <- c_quantile(Dists[is.finite(Dists)], 20/100)
+        }
+        #paretoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE)
         if(paretoRadius==0){
           stop(paste0('Estimation of Radius(',paretoRadius,') for two-dimensional density not possible. Please provide paretoRadius manually.'))
         }else{
@@ -166,7 +178,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 
 	## Plotting now in zplot (again)
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
-	
+
 	if(DrawTopView){
 	  # Assign labels to axis/legend/...
 	  switch(Plotter,'ggplot'={

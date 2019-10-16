@@ -71,16 +71,27 @@ zplot <- function(x,y,z,DrawTopView = TRUE,NrOfContourLines = 20, TwoDplotter = 
 
   # Aequivaltent zu Griddata in Matlab. Arbeitet nur leider linear.
   # Ergebnis trotzdem sehr nah an Matlab.
-  requireNamespace('akima')
-  fld <- akima::interp(x=data[,1],
-                y=data[,2],
-                z=data[,3],
-                xo=xbins,
-                yo=ybins,
-                linear=T,
-                duplicate = 'mean')
-
-
+  #this is faster but acm license
+  # requireNamespace('akima')
+  # fld <- akima::interp(x=data[,1],
+  #               y=data[,2],
+  #               z=data[,3],
+  #               xo=xbins,
+  #               yo=ybins,
+  #               linear=T,
+  #               duplicate = 'mean')
+  #
+  #this slower but better license
+  # requireNamespace('interp')
+  # fld <- interp::interp(x=data[,1],
+  #               y=data[,2],
+  #               z=data[,3],
+  #               xo=xbins,
+  #               yo=ybins,
+  #               linear=T,
+  #               duplicate = 'mean')
+  requireNamespace('MBA')
+  fld<- MBA::mba.surf(xyz = data,no.X = nrofbins,no.Y=nrofbins)$xyz.est
 
   if(!isTRUE(DrawTopView)){
 
@@ -93,7 +104,8 @@ zplot <- function(x,y,z,DrawTopView = TRUE,NrOfContourLines = 20, TwoDplotter = 
   requireNamespace('plotly')
     # Aus Gruenden erwartet plotly die Matrix transponiert zur R implementation
   p<-plotly::plot_ly(x = fld$x, y = fld$y, z = t(fld$z), type="surface", colors = DataVisualizations::PmatrixColormap)
-
+  #p<-plotly::plot_ly(x = fld[,1], y = fld[,2], z = fld[,3], type="surface", colors = DataVisualizations::PmatrixColormap)
+  
   p <-plotly::layout(p,scene =list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis))
 
     return(p)

@@ -5,3 +5,7 @@ c_inPSphere2D <- function(data, xBinNr, yBinNr, nrXBins, nrYBins, nrData, pareto
     .Call(`_DataVisualizations_c_inPSphere2D`, data, xBinNr, yBinNr, nrXBins, nrYBins, nrData, paretoRadius)
 }
 
+c_quantile <- function(x, probs) {
+    .Call(`_DataVisualizations_c_quantile`, x, probs)
+}
+

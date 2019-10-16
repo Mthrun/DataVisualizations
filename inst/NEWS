@@ -4,6 +4,8 @@ Version 1.1.9 (GitHub, 2018-09-019)
 - Pixelmatrix is now significantly fast by using geom_raster instead of geom_tile.
 - Bugfix MDplot: Several whitespread unique values in large data vectors are visualized correctly. Option "RobustGaussian=TRUE" now works also if only one column of data is given as input.
 - Bugfix ParetoDensityEstimationV2: Assumes now the dirac delta distribution for one ore two unique values in a given vector of data of arbitrary length.
+- All density estimation based function are now faster because Rcpp is used for the bottleneck stats function.
+- zplot: Changed interpolation from akima to MBA due to licensing issues with akima, see https://www.user2017.brussels/uploads/bivand_gebhardt_user17_a0.pdf
 
 Version 1.1.8 (CRAN, 2018-08-20)
 - new implementation of Pareto density estimation (PDE), pareto radius and optimal number of bins for histograms.

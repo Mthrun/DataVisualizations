@@ -23,9 +23,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// c_quantile
+Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs);
+RcppExport SEXP _DataVisualizations_c_quantile(SEXP xSEXP, SEXP probsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type probs(probsSEXP);
+    rcpp_result_gen = Rcpp::wrap(c_quantile(x, probs));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DataVisualizations_c_inPSphere2D", (DL_FUNC) &_DataVisualizations_c_inPSphere2D, 7},
+    {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 2},
     {NULL, NULL, 0}
 };
 
