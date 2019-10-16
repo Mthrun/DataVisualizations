@@ -187,6 +187,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	      ylab(ylab) +
 	      labs(title=main, fill=Legendlab_ggplot) +
 	      theme(panel.background = element_blank())
+	    print(plt)
 
 	  },'native'={
 	    title(main = main, xlab = xlab, ylab = ylab)
@@ -196,6 +197,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	    plt <- plotly::layout(plt,xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),
 	                                  title= main)
+	    print(plt)
 
 	  })
 	}else{
@@ -205,6 +207,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                             yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                             title= main))
+	    print(plt)
 	  },'native'={
 	    print('Plotly plot is used because native is not implemented for option DrawTopView=FALSE.')
 	    requireNamespace('plotly')
@@ -216,6 +219,7 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                  title= main))
+	    print(plt)
 	    
 	  })
 	}

@@ -106,7 +106,7 @@ zplot <- function(x,y,z,DrawTopView = TRUE,NrOfContourLines = 20, TwoDplotter = 
   p<-plotly::plot_ly(x = fld$x, y = fld$y, z = t(fld$z), type="surface", colors = DataVisualizations::PmatrixColormap)
   #p<-plotly::plot_ly(x = fld[,1], y = fld[,2], z = fld[,3], type="surface", colors = DataVisualizations::PmatrixColormap)
   
-  p <-plotly::layout(p,scene =list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis))
+  p <-plotly::layout(p,scene =list(xaxis = xaxis, yaxis = yaxis, zaxis = zaxis),dragmode="turntable")
 
     return(p)
     ####
