@@ -99,6 +99,20 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
         Names[charbooleandupli]=paste0(Names[charbooleandupli],2:(1+sum(charbooleandupli)))
         colnames(Data) <- Names
       }
+      if(any(Names=="")){
+        warning('Some colnames are set to "" (blank). Numerating these colnames.')
+        Names=colnames(Data)
+        charmissing=which(Names=="")
+        Names[charmissing]=paste0(Names[charmissing],2:(1+sum(charmissing)))
+        colnames(Data) <- Names
+      }
+      if(any(Names==" ")){
+        warning('Some colnames are set to "" (blank). Numerating these colnames.')
+        Names=colnames(Data)
+        charmissing=which(Names==" ")
+        Names[charmissing]=paste0(Names[charmissing],2:(1+sum(charmissing)))
+        colnames(Data) <- Names
+      }
     } else{
       Names = 1:dvariables
     }

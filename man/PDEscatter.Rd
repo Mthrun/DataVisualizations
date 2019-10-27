@@ -5,7 +5,7 @@
 Pareto density estimation (PDE) [Ultsch, 2005] used for a scatter density plot. 
 }
 \usage{
-PDEscatter(x, y, na.rm = FALSE, paretoRadius = 0, sampleSize =
+PDEscatter(x, y, na.rm = FALSE, PlotIt=TRUE,paretoRadius = 0, sampleSize =
 
                  round(sqrt(5e+08), -3), NrOfContourLines = 20, Plotter
 				 
@@ -19,16 +19,21 @@ PDEscatter(x, y, na.rm = FALSE, paretoRadius = 0, sampleSize =
 The \code{PDEscatter} function generates the density of the xy data as a z coordinate. Afterwards xyz will be plotted either as a contour plot or a 3d plot. 
 This function plots the PDE on top of a scatterplot. Variances of x and y should not differ by extreme numbers, otherwise calculate the percentiles on both first.
 The method was succesfully used in [Thrun, 2018; Thrun/Ultsch 2018].
+
+\code{PlotIt=FALSE} is usefull if one likes to perform adjustements like axis scaling prior to plotting with \pkg{ggplot2} or  \pkg{plotly}. In the case of \code{native} the handle return null because the basic R functon \code{plot}()is used
 }
 \arguments{
   \item{x}{Numeric vector, first feature (for x axis values)}
   \item{y}{Numeric vector, second feature (for y axis values)}
   \item{na.rm}{Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE}
   \item{paretoRadius}{Numeric, the Pareto Radius. If omitted (or 0), calculate by paretoRad.}
+    \item{PlotIt}{TRUE: plots with function call
+    FALSE: Does not plot, plotting can be done using the list element \code{Handle}
+    }
   \item{sampleSize}{Numeric, maximum size of the sample used for calculation. High values increase runtime significantly.}
   \item{NrOfContourLines}{Numeric, number of contour lines to be drawn. 20 by default.}
   \item{Plotter}{String, name of the plotting backend to use. Possible values are: "native", "ggplot", "plotly"}
-  \item{DrawTopView}{Boolean, True means contur is drawn, otherwise a 3D plot is drawn. Default: True}
+  \item{DrawTopView}{Boolean, True means contur is drawn, otherwise a 3D plot is drawn. Default: TRUE}
     \item{xlab}{String, title of the x axis. Default: "X",   see \code{plot()} function}
   \item{ylab}{String, title of the y axis. Default: "Y",   see \code{plot()} function}
     \item{main}{

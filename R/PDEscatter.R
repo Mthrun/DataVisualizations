@@ -1,4 +1,4 @@
-PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(500000000),-3),
+PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(sqrt(500000000),-3),
                               
                               NrOfContourLines=20,Plotter='native', DrawTopView = T,
                               
@@ -187,17 +187,20 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	      ylab(ylab) +
 	      labs(title=main, fill=Legendlab_ggplot) +
 	      theme(panel.background = element_blank())
-	    print(plt)
+	    if(isTRUE(PlotIt))
+	      print(plt)
 
 	  },'native'={
 	    title(main = main, xlab = xlab, ylab = ylab)
 	    plt <- 'Native does not have a Handle'
+	    if(!isTRUE(PlotIt)) warning('for native plotting cannot be disabled')
 	  }, 'plotly'={
 	  requireNamespace('plotly')
 	    plt <- plotly::layout(plt,xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),
 	                                  title= main)
-	    print(plt)
+	    if(isTRUE(PlotIt))
+	      print(plt)
 
 	  })
 	}else{
@@ -207,19 +210,23 @@ PDEscatter=function(x,y,na.rm=FALSE,paretoRadius=0,sampleSize=round(sqrt(5000000
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                             yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                             title= main))
-	    print(plt)
+	    if(isTRUE(PlotIt))
+	      print(plt)
 	  },'native'={
 	    print('Plotly plot is used because native is not implemented for option DrawTopView=FALSE.')
 	    requireNamespace('plotly')
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                             yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                             title= main))
+	    if(isTRUE(PlotIt))
+	      print(plt)
 	  }, 'plotly'={
 	    requireNamespace('plotly')
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),zaxis= list(title='PDE'),
 	                                  title= main))
-	    print(plt)
+	    if(isTRUE(PlotIt))
+	      print(plt)
 	    
 	  })
 	}
