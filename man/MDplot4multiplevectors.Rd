@@ -9,22 +9,23 @@ The MD-plot is a visualization for a boxplot-like Shape of the PDF published in 
 It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2019].
 }
 \usage{
-MDplot4multiplevectors(\dots, Names, Ordering='Default', Scaling="None",
+MDplot4multiplevectors(\dots, Names, Ordering = 'Default',
+Scaling = "None", Fill = 'darkblue', RobustGaussian = TRUE,
 
-Fill='darkblue', RobustGaussian=TRUE, GaussianColor='magenta',
+GaussianColor = 'magenta', Gaussian_lwd = 1.5, BoxPlot = FALSE,
 
-Gaussian_lwd=1.5, BoxPlot=FALSE, BoxColor='darkred',
+BoxColor = 'darkred', MDscaling = 'width', LineSize = 0.01,
 
-MDscaling='width',Size=0.01, MinimalAmoutOfData=40,
+LineColor = 'black', MinimalAmoutOfData = 40, MinimalAmoutOfUniqueData = 12,
 
-MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
+SampleSize = 5e+05, SizeOfJitteredPoints = 1, OnlyPlotOutput = TRUE)
 }
 
 \arguments{
   \item{\dots}{Either d numerical vectors of different lengths or a list of length d where each element of the list is an vector of arbitrary length}
    
-   \item{Names}{
-    Optional: [1:d] Names of the the numerical vectors. If missing, the columnnames are mumbered.
+\item{Names}{
+    Optional: [1:d] Names of the variables. If missing, the columnnames of data are used.
   }
       \item{Ordering}{
     Optional: string, either \code{Default}, \code{Columnwise}, \code{Alphabetical} or \code{Statistics}. Please see details for explanation.
@@ -37,7 +38,8 @@ MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
     Optional: string, color with which MDs are to be filled with.
   }
     \item{RobustGaussian}{
-    Optional: If TRUE: each MDplot is overlayed with a roubustly estimated unimodal Gaussian distribution, if statistical testing does not yield a significant p.value. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.
+    Optional: If TRUE: each MDplot of a variable is overlayed with a roubustly estimated unimodal Gaussian distribution in the range of this variable,
+	if statistical testing does not yield a significant p.value. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.
   }
       \item{GaussianColor}{
     Optional: string, color of robustly estimated gaussian, only for \code{RobustGaussian=TRUE}.
@@ -51,27 +53,30 @@ MinimalAmoutOfUniqueData=12,SampleSize=5e+05,OnlyPlotOutput=TRUE)
       \item{BoxColor}{
     Optional: string, color of Boxplot, only for \code{BoxPlot=TRUE}.
   }
-  
     \item{MDscaling}{
     Optional: if "area", all violins have the same area (before trimming the tails). If "count", areas are scaled proportionally to  the number of observations. If "width" (default), all MDs have the same maximum width.
   }
-    \item{Size}{
-    Optional: numerical, linewidth of black line around the MDs.
+    \item{LineSize}{
+    Optional: numerical, linewidth of line around the mirrored densities.
+  }
+   \item{LineColor}{
+    Optional: string, color of line around the mirrored densities. \code{NA} disables this features which is usefull if ones wants to avoid vertical lines leading to outliers.
   }
     \item{MinimalAmoutOfData}{
-    Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
-         }
-		 
-\item{MinimalAmoutOfUniqueData}{
-    Optional: numeric value defining a threshold. Below this threshold no density estimation and statistical testing is performed and a          Jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand how the density is estimated (see [Ultsch, 2005]).
+    Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
+  }
+      \item{MinimalAmoutOfUniqueData}{
+    Optional: numeric value defining a threshold. Below this threshold no density estimation and statistical testing is performed and a Jitter plot is drawn. Only Data Science experts should change this value after they understand how the density is estimated (see [Ultsch, 2005]).
   }
       \item{SampleSize}{
     Optional: numeric value defining a threshold. Above this threshold uniform sampling of finite cases is performed in order to shorten computation time.If \pkg{rowr} is not installed, uniform sampling of all cases
     is performed. If required, \code{SampleSize=n} can be set to omit this procedure. 
   }
-
+   \item{SizeOfJitteredPoints}{
+	 Optional: scalar. If Not enough unique values for density estimation are given, data points are jittered. This parameter defines the size of the points. 
+  }
   \item{OnlyPlotOutput}{
-  Default TRUE only a ggplot object is given back, if FALSE: Additinally Scaled Data and ordering are the output of this function in a \code{list}.
+   Optional: Default TRUE only a ggplot object is given back, if FALSE: Additinally Scaled Data and ordering are the output of this function in a \code{list}.
   }
 }
 

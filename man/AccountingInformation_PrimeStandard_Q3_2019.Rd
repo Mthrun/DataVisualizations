@@ -1,5 +1,6 @@
 \name{AccountingInformation_PrimeStandard_Q3_2019}
 \alias{AccountingInformation_PrimeStandard_Q3_2019}
+\alias{AI_PS_Q3_2019}
 \docType{data}
 \title{
 Accounting Information in the Prime Standard in Q3 in 2019 (AI_PS_Q3_2019)

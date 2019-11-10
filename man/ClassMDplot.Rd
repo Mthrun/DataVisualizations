@@ -13,19 +13,15 @@ Further examples for the ClassMDplot can be found in \url{https://md-plot.readth
   The \code{ClassNames} vector and \code{ColorSequence} vectors are matched by this ordering of \code{Cls}, i.e. the lowest number gets the first color or class name.
 }
 \usage{
-ClassMDplot(Data, Cls, ColorSequence,
+ClassMDplot(Data, Cls, 
 
- ClassNames = NULL,
+ColorSequence = DataVisualizations::DefaultColorSequence,
 
- PlotLegend = TRUE,
+ClassNames = NULL, PlotLegend = TRUE,main = 'MDplot for each Class',
 
- main = 'MDplot for each Class',
+xlab = 'Classes', ylab = 'PDE of Data per Class',
 
- xlab = 'Classes',
-
- ylab = 'PDE of Data per Class',
- 
- MinimalAmoutOfData=40,,MinimalAmoutOfUniqueData=12,SampleSize=1e+05)
+MinimalAmoutOfData=40,MinimalAmoutOfUniqueData=12,SampleSize=1e+05)
 }
 \arguments{
   \item{Data}{
@@ -44,7 +40,7 @@ ClassMDplot(Data, Cls, ColorSequence,
   Optional: Add a legent to plot. Default: TRUE)
   }
   \item{main}{
-  Optional: Title of the plot. Default: "MDplot for each Class"
+  Optional: Title of the plot. Default: MDplot for each Class
   }
   \item{xlab}{
   Optional: Title of the x axis. Default: "Classes"
@@ -88,10 +84,11 @@ DataVisualizations::ClassMDplot(ITS[ind],Classification[ind])
 
 \donttest{
 data(ITS)
-model=AdaptGauss::AdaptGauss(ITS)
-Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
+#please download package from cran
+#model=AdaptGauss::AdaptGauss(ITS)
+#Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
 
-DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
+#DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
 
 DataVisualizations::ClassMDplot(ITS,Classification)
 }
@@ -100,9 +97,9 @@ DataVisualizations::ClassMDplot(ITS,Classification)
 \references{
 Thrun, M. C., Gehlert, Tino, & Ultsch, A. : Analyzing the Fine Structure of Distributions, arXiv:1908.06081, 2019. 
 
-Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), accepted, Paderborn, Germany, 2018. 
+Thrun, M. C., Pape, F., & Ultsch, A. : Benchmarking Cluster Analysis Methods using PDE-Optimized Violin Plots, Proc. European Conference on Data Analysis (ECDA), Paderborn, Germany, 2018. 
 
-Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency stream nitrate concentrations: hydrology and biology contributions, Proc. European Conference on Data Analysis (ECDA), accepted, Paderborn, Germany, 2018. 
+Thrun, M. C., Breuer, L., & Ultsch, A. : Knowledge discovery from low-frequency stream nitrate concentrations: hydrology and biology contributions, Proc. European Conference on Data Analysis (ECDA), Paderborn, Germany, 2018. 
 }
 
 \seealso{

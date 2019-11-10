@@ -6,9 +6,11 @@ PlotMissingvalues(Data,Names,
 
 WhichDefineMissing=c('NA','NaN','DUMMY','.',' '),
 
-PlotIt=TRUE,xlab='Amount Of Missing Values in Percent',
+PlotIt=TRUE,
 
-xlim=c(0,100)...)
+xlab='Amount Of Missing Values in Percent',
+
+xlim=c(0,100),...)
 }
 \arguments{
 \item{Data}{[1:n,1:d] data cases in rows, variables/features in columns}
@@ -16,6 +18,7 @@ xlim=c(0,100)...)
 \item{WhichDefineMissing}{[1:d] optional vector of string describing missing values, usefull for character features. Currently up to five different options are possible.}
 \item{PlotIt}{If FALES: Does not plot}
 \item{xlab}{x label of bar plot}
+\item{xlim}{x axis limits in percent}
 \item{\dots}{Further arguments passed on to \code{barplot}, such as \code{main} for title}
 }
 \description{

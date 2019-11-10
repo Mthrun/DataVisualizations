@@ -84,10 +84,11 @@ DataVisualizations::ClassPDEplotMaxLikeli(ITS[ind],Classification[ind])
 
 \donttest{
 data(ITS)
-model=AdaptGauss::AdaptGauss(ITS)
-Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
+#model=AdaptGauss::AdaptGauss(ITS)
+##please download package from cran
+#Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
 
-DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
+#DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
 
 DataVisualizations::ClassPDEplotMaxLikeli(ITS,Classification)$ggobject
 }

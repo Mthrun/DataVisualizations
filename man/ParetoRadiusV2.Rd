@@ -24,7 +24,9 @@ The Pareto-radius of the hyperspheres is derived from the optimization of inform
 ParetoRadius() is a kernel density estimation for variable intervals. It works only on Data without missing values (NA) or NaN. In other cases, please use ParetoDensityEstimation directly.
 }
 \note{
-This the second version of the function prior available in \pkg{AdaptGauss}
+This the second version of the function prior available in \pkg{AdaptGauss}.
+
+For larger datasets the quantile_c() function is used instead of quantile in R which was programmed by Dirk Eddelbuettel on Jun 6 and taken by the author from \url{https://github.com/RcppCore/Rcpp/issues/967}.
 }
 
 \references{
