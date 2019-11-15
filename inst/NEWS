@@ -1,3 +1,6 @@
+Version 1.1.10 (GitHub, 2019-11-15)
+- DualaxisLinechart works now in combination with plotly::subplot ommitting the bug of subplot, see https://github.com/ropensci/plotly/issues/954
+
 Version 1.1.9 (CRAN, 2019-11-10)
 - Improvements in ClassMDplot in the case of Big Data (e.g. Flow Cytometry data of CLL)
 - bugfix ABCbarplot: x-axis shows now correct prozentual values between 1 and 100.
