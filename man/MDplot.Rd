@@ -31,7 +31,7 @@ SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE)
     Optional: [1:d] Names of the variables. If missing, the columnnames of data are used.
   }
       \item{Ordering}{
-    Optional: string, either \code{Default}, \code{Columnwise}, \code{Alphabetical} or \code{Statistics}. Please see details for explanation.
+    Optional: string, either \code{Default}, \code{Columnwise}, \code{Alphabetical}, \code{Average}, \code{Bimodal}, \code{Variance}  or \code{Statistics}. Please see details for explanation.
   }
       \item{Scaling}{
     Optional, Default is \code{None}, \code{Percentalize}, \code{CompleteRobust}, \code{Robust} or \code{Log}, Please see details for explanation.
@@ -112,9 +112,12 @@ MDplot(x)
 MDplot(rpois(100,1000))
 }
 \donttest{
-x <- cbind(A = runif(20000, 1, 5), B = c(rnorm(10000,0,1),rnorm(10000,2.6,1)),
-
-		   C = c(rnorm(20000,2.5,1)),D=rpois(20000,5))
+x = cbind(
+    A = runif(20000, 1, 5),
+    B = c(rnorm(10000, 0, 1), rnorm(10000, 2.6, 1)),
+    C = c(rnorm(20000, 2.5, 1)),
+    D = rpois(20000, 5)
+  )
 MDplot(x)
 }
 
@@ -147,6 +150,12 @@ For the paramter \code{Ordering} the following options are possible:
 
 \item{\code{Alphabetical}}{Ordering of plots by the order of columns of \code{Data} sorted in alphabetical order by column names.}
 
+\item{\code{Average}}{Ordering of plots by the order of columns of \code{Data} sorted in order of increasing column-wise average}
+
+\item{\code{Bimodal}}{Ordering of plots by the order of columns of \code{Data} sorted in order of decreasing bimodality amplitude[Zhang et al., 2003] of \pkg{modes}}
+
+\item{\code{Variance}}{Ordering of plots by the order of columns of \code{Data} sorted in order of increasing inter-quartile range}
+
 \item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.}
 }
 
@@ -172,6 +181,7 @@ For the paramter \code{Scaling} the following options are possible:
 
 [Thrun et al., 2019]	Thrun, M. C., Gehlert, Tino, & Ultsch, A. : Analyzing the Fine Structure of Distributions, arXiv:1908.06081, 2019. 
 
+[Zhang et al., 2003] Zhang, C., Mapes, B., & Soden, B.: Bimodality in tropical water vapour, Quarterly Journalof the Royal Meteorological Society, 129(594), 2847-2866, 2003.
 }
 \seealso{
 \url{https://md-plot.readthedocs.io/en/latest/index.html}

@@ -312,10 +312,58 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
          },
          Columnwise={Rangfolge=Rangfolge},
          Alphabetical={Rangfolge=sort(Rangfolge,decreasing = F,na.last = T)},
+         Average={
+           x=as.matrix(Data)
+           med_val=apply(x,2,median,na.rm=TRUE)
+           meanval=apply(x,2,function(x) {
+             x=x[is.finite(x)]
+             if(length(x)>0){
+               y=mean(x,trim = 0.1)
+               return(y)
+             }else{
+               return(0)
+             }
+           })
+           average_vals=(med_val+meanval)/2 #weighted average
+           average_ind=order(average_vals,na.last = T,decreasing = FALSE)
+           Rangfolge=Rangfolge[average_ind]
+           },
+         Variance={
+           x=as.matrix(Data)
+           iqr_vals=apply(x,2,function(x) {
+             x=x[is.finite(x)]
+             if(length(x)>0){
+               y=c_quantile(x,c(0.25,0.75))
+               iqr=y[2]-y[1]
+               return(iqr)
+             }else{
+               return(0)
+             }
+           })
+           iqr_ind=order(iqr_vals,na.last = T,decreasing = FALSE)
+           Rangfolge=Rangfolge[iqr_ind]
+         },
+         Bimodal={
+           x=as.matrix(Data)
+           requireNamespace('modes')
+           bimodalitycoef=apply(x,2,function(x) {
+             x=x[is.finite(x)]
+             if(length(x)>0){
+               y=modes::bimodality_amplitude(x,fig=FALSE)
+               if(identical(y, numeric(0))) y=0
+               return(y)
+             }else{
+               return(0)
+             }
+             }
+             )
+           bimodal_ind=order(bimodalitycoef,na.last = T,decreasing = TRUE)
+           Rangfolge=Rangfolge[bimodal_ind]
+         },
          Statistics={
            Rangfolge=Rangfolge[order(Effectstrength,decreasing = T,na.last = T)]
          },
-         {stop('You can select for Ordering: "Default", "Columnwise", "Alphabetical" or "Statistics"')}
+         {stop('You can select for Ordering: "Default", "Columnwise", "Alphabetical", "Average", "Bimodal", "Variance" or "Statistics"')}
   )
 
   ## Data Reshaping----

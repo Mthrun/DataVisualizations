@@ -1,4 +1,4 @@
-ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE){
+ParetoDensityEstimationV2 = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE){
 #  V = ParetoDensityEstimation(Data,ParetoRadius,Kernels)
 #  V = ParetoDensityEstimation(Data)
 #  ParetoDensity=V$paretoDensity
@@ -34,53 +34,64 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
     Data = as.numeric(Data)
     warning('Beware: ParetoDensityEstimation: Data set not numeric !')
   }
-
-  if(length(Data)!=sum(is.finite(Data))){
+  
+  if (length(Data) != sum(is.finite(Data))) {
     message('Not all values are finite. Please check of infinite or missing values.')
   }
   Data = Data[is.finite(Data)]
+  values = unique(Data)
   
-  values=unique(Data)
-  
-  if(length(values)>2&length(values)<5){
+  if (length(values) > 2 & length(values) < 5) {
     warning('Less than 5 unqiue values for density estimation. Function may not work')
   }
   
-
-  if(length(values)<3){
-    warning('1 or 2 unique values for density estimation. Dirac Delta distribution(s) is(are) assumed. Input of "kernels", "paretoRadius" and "MinAnzKernels" or ignored!')
-   
+  if (length(values) < 3) {
+    warning(
+      '1 or 2 unique values for density estimation. Dirac Delta distribution(s) is(are) assumed. Input of "kernels", "paretoRadius" and "MinAnzKernels" or ignored!'
+    )
     
-   if(values[1]!=0)
-    kernels=seq(from=values[1]*0.9,to=unique(Data)*1.1,by=values[1]*0.0001)
-   else
-     kernels=seq(from=values[1]-0.1,to=values[1]+0.1,by=0.0001)
-   
-   
-   paretoDensity=rep(0,length(kernels))
-   paretoDensity[kernels==values[1]]=1
-   
-   if(length(values)==2){
-     if(values[2]!=0)
-       kernels2=seq(from=values[2]*0.9,to=values[2]*1.1,by=values[2]*0.0001)
-     else
-       kernels2=seq(from=values[2]-0.1,to=values[2]+0.1,by=0.0001)
-     
-     
-     paretoDensity2=rep(0,length(kernels2))
-     paretoDensity2[kernels2==values[2]]=1
+    if (values[1] != 0)
+      kernels = seq(from = values[1] * 0.9,
+                    to = unique(Data) * 1.1,
+                    by = values[1] * 0.0001)
+    else
+      kernels = seq(from = values[1] - 0.1,
+                    to = values[1] + 0.1,
+                    by = 0.0001)
     
-     paretoDensity=c(paretoDensity,paretoDensity2) 
-     kernels=c(kernels,kernels2)
-   }
-   
-   
-   
-   if(isTRUE(PlotIt)){
-     plot(kernels,paretoDensity,type = 'l',main='RAW PDE rplot',xaxs='i',
-          yaxs='i',xlab='Data',ylab='PDE')
-   }
-     return (list(
+    paretoDensity = rep(0, length(kernels))
+    paretoDensity[kernels == values[1]] = 1
+    
+    if (length(values) == 2) {
+      if (values[2] != 0)
+        kernels2 = seq(from = values[2] * 0.9,
+                       to = values[2] * 1.1,
+                       by = values[2] * 0.0001)
+      else
+        kernels2 = seq(from = values[2] - 0.1,
+                       to = values[2] + 0.1,
+                       by = 0.0001)
+      
+      
+      paretoDensity2 = rep(0, length(kernels2))
+      paretoDensity2[kernels2 == values[2]] = 1
+      
+      paretoDensity = c(paretoDensity, paretoDensity2)
+      kernels = c(kernels, kernels2)
+    }
+    if (isTRUE(PlotIt)) {
+      plot(
+        kernels,
+        paretoDensity,
+        type = 'l',
+        main = 'RAW PDE rplot',
+        xaxs = 'i',
+        yaxs = 'i',
+        xlab = 'Data',
+        ylab = 'PDE'
+      )
+    }
+    return (list(
       kernels = kernels,
       paretoDensity = paretoDensity,
       paretoRadius = 0
@@ -104,8 +115,8 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
   }
   minData = min(Data, na.rm = TRUE)
   maxData = max(Data, na.rm = TRUE)
-  if(length(kernels)<=1){
-    if (length(kernels) == 0 || ( length(kernels)==1 & kernels == 0)) {
+  if (length(kernels) <= 1) {
+    if (length(kernels) == 0 || (length(kernels) == 1 & kernels == 0)) {
       #MT: Korrektur: statt kernels==0 und im Input Kernels=0
       nBins = OptimalNoBinsV2(Data)
       #MT: MinAnzKernels fehlte
@@ -114,14 +125,14 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
       if (nBins > 100) {
         if (nBins > 1E4) {
           #MT: Fehlerabdfang bei zu vielen Bins
-          nBins=1E4
+          nBins = 1E4
           warning('Too many bins estimated, try to transform or sample the data')
         } else{
-          nBins=nBins * 3 + 1
+          nBins = nBins * 3 + 1
         }
       }
-      breaks = pretty(c(minData,maxData), n = nBins, min.n = 1)
-      nB=length(breaks)
+      breaks = pretty(c(minData, maxData), n = nBins, min.n = 1)
+      nB = length(breaks)
       mids = 0.5 * (breaks[-1L] + breaks[-nB])
       kernels = mids
     }
@@ -130,13 +141,13 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
   #Randapproximierung
   #  diese Daten liegen am unteren Rand
   lowBInd =  (Data < (minData + paretoRadius))
-  lowR = as.matrix(2 * minData - Data[lowBInd], ncol = 1) 
+  lowR = as.matrix(2 * minData - Data[lowBInd], ncol = 1)
   # diese Daten liegen am obere Rand
   upBInd =  (Data > (maxData - paretoRadius))
   upR <- as.matrix(2 * maxData - Data[upBInd], ncol = 1)
   #extend data by mirrowing
   DataPlus = as.matrix(c(Data, lowR, upR), 1)
-
+  
   paretoDensity <- rep(0, nKernels)
   for (i in 1:nKernels) {
     lb = kernels[i] - paretoRadius
@@ -144,21 +155,29 @@ ParetoDensityEstimationV2= function(Data,paretoRadius,kernels=NULL,MinAnzKernels
     isInParetoSphere = (DataPlus >= lb) & (DataPlus <= ub)
     paretoDensity[i] = sum(isInParetoSphere)
   }
- 
+  
   area <- pracma::trapz(kernels, paretoDensity)
   #adhoc numerical calc (not preferable)
   #idx = 2:length(kernels)
   #area <- (as.double((kernels[idx] - kernels[idx - 1]) %*% (paretoDensity[idx] + paretoDensity[idx - 1]))/2)
   
   #Fall kernel==0 => area==NAN muss abgefangen werden, passiert vermutlich nur bei unique values <2
-  if (area < 0.0000000001 || is.na(area)){
+  if (area < 0.0000000001 || is.na(area)) {
     paretoDensity <- rep(0, nKernels)
-  }else{
+  } else{
     paretoDensity <- paretoDensity / area
   }
-  if(isTRUE(PlotIt)){
-    plot(kernels,paretoDensity,type = 'l',main='RAW PDE rplot',xaxs='i',
-         yaxs='i',xlab='Data',ylab='PDE')
+  if (isTRUE(PlotIt)) {
+    plot(
+      kernels,
+      paretoDensity,
+      type = 'l',
+      main = 'RAW PDE rplot',
+      xaxs = 'i',
+      yaxs = 'i',
+      xlab = 'Data',
+      ylab = 'PDE'
+    )
   }
   return (list(
     kernels = kernels,
