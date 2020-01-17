@@ -125,7 +125,7 @@ zplot <- function(x,y,z,DrawTopView = TRUE,NrOfContourLines = 20, TwoDplotter = 
       # Aufbau des Plots
       plt <- ggplot() +
         geom_raster(data = df, aes(x = x, y = y, fill=z))+ # Fuer den hintergrund
-        geom_contour(data = df, aes(x = x, y = y, z = z), bins = NrOfContourLines, colour = "grey") +
+        geom_contour(data = df, aes(x = x, y = y, z = z), bins = NrOfContourLines,colour="grey",alpha=0.5) +
         scale_fill_gradientn(colors = DataVisualizations::PmatrixColormap) +
         coord_cartesian(xlim = xlim, ylim = ylim)
       #     if(PlotPoints){
