@@ -19,9 +19,6 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   #always required:
   requireNamespace("reshape2")
 
-
-  
- 
   ## Error Catching ----
   if (is.vector(Data)) {
     print("This MD-plot is typically for several features at once. By calling as.matrix(), it will be now used with one feature.")
@@ -44,7 +41,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   })
   if(any(Nfinitepervar<1)){
     warning('Some columns have not even one finite value. Please check your data. Deleting these columns.')
-    Data=Data[,Nfinitepervar>0]
+    Data=Data[,Nfinitepervar>0,drop=FALSE]
     dvariables=ncol(Data)
   }
   

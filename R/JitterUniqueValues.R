@@ -13,11 +13,15 @@ JitterUniqueValues=function(Data,Npoints=20,min=0.99999,max=1.00001){
   diff=max-min
   DataJitter=c()
   for(v in vals){
-    if(v!=0){
-      x <- c(v, v * runif(Npoints-1, min, max))
-     
+    if(is.finite(v)){
+      if(v!=0){
+        x <- c(v, v * runif(Npoints-1, min, max))
+       
+      }else{
+        x <- c(v, v + runif(Npoints-1, -diff, diff))
+      }
     }else{
-      x <- c(v, v + runif(Npoints-1, -diff, diff))
+      x=c(v,rep(v,Npoints-1))
     }
     DataJitter=c(DataJitter,x)
   }
