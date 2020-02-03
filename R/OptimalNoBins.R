@@ -1,4 +1,4 @@
-OptimalNoBinsV2 = function(Data){
+OptimalNoBins = function(Data){
 #OptimalNrOfBins = OptNrOfBinsV2(Data)
 # DESCRIPTION
 # Berechung der optimalen Anzahl von Bins fuer ein Histogramm

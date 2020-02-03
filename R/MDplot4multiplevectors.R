@@ -16,23 +16,28 @@ MDplot4multiplevectors = function(...,
                                   SampleSize = 5e+05,
                                   SizeOfJitteredPoints = 1,
                                   OnlyPlotOutput = TRUE) {
-  requireNamespace('rowr')
+  #author: Michael Thrun
+
+
+  
   inputs <- list(...)
-  addcol = function(...) {
-    return(rowr::cbind.fill(..., fill = NaN))
-  }
+  
+  
+  #addcol = function(...) {
+ #   return(cbind_fill(..., fill = NaN))
+ # }
   
   if (length(inputs) == 1) {
     if (is.list(inputs[[1]])) {
       #the list of input consists exactly of one list
-      df = do.call(what = addcol, inputs[[1]])#for every element of this list do
+      df = do.call(what = addcols, inputs[[1]])#for every element of this list do
     } else{
       #assumption: only one element ist given which is not a list, error catching if its not the case is done in base
       df = as.matrix(inputs[[1]])
     }
   } else{
-    #several vectors are given, error catching if its not the case is done in rowr
-    df = addcol(...)
+    #several vectors are given, error catching if its not the case is done in (former) rowr
+    df = addcols(...)
   }
   
   if (!missing(Names)) {

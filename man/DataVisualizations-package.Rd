@@ -14,9 +14,7 @@ For a brief introduction to \pkg{DataVisualizations} please see the vignette \hr
 Please see \url{http://www.deepbionics.org/}. 
 Depending on the context please cite either [Thrun, 2018] regarding visualizations in the context of clustering or [Thrun/Ultsch, 2018] for other visualizations.
 
-For the Mirrored Density Plot (MD plot) please cite [Thrun et al., 2019].
-
-The MD plot is also available in Python \url{https://pypi.org/project/md-plot/}
+For the Mirrored Density Plot (MD plot) please cite [Thrun et al., 2019] and see the extensive vignette in \url{https://md-plot.readthedocs.io/en/latest/index.html}. The MD plot is also available in Python \url{https://pypi.org/project/md-plot/}
 
 \packageIndices{DataVisualizations}
 }

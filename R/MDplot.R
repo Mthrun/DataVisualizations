@@ -48,7 +48,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   if(Ncases>SampleSize){
     warning('Data has more cases than "SampleSize". Drawing a sample for faster computation.
             You can omit this by setting "SampleSize=nrow(Data".')
-    if(isTRUE(requireNamespace('rowr'))){
+    #if(isTRUE(requireNamespace('rowr'))){
     #here only finite values are sampled
     indmat=matrix(0,nrow = SampleSize,ncol = dvariables)
     for(i in 1:dvariables){
@@ -62,18 +62,18 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     DataListtemp=mapply(FUN = function(x,y) return(x[y]), as.list(as.data.frame(Data))
                 ,as.list(as.data.frame(indmat)),SIMPLIFY = FALSE)
     
-    addcols=function(...){
-      return(rowr::cbind.fill(...,fill = NaN))
-    }
+    #addcols=function(...){
+    #  return(cbind_fill(...,fill = NaN))
+    #}
     nn=colnames(Data)
     Data=do.call(addcols,DataListtemp)
     colnames(Data)=nn
     Data=as.matrix(Data)
-    }else{#here alle vectors are sampled
-      warning('Package rowr is not installed. Sampling Data without taking finite values only into account.')
-      ind=sample(1:Ncases,size = SampleSize)
-      Data=Data[ind,,drop=FALSE]
-    }
+    #}else{#here alle vectors are sampled
+   #   warning('Package rowr is not installed. Sampling Data without taking finite values only into account.')
+    #  ind=sample(1:Ncases,size = SampleSize)
+    #  Data=Data[ind,,drop=FALSE]
+    #}
     Ncases=nrow(Data)
   }
 

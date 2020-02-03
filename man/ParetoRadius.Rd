@@ -1,9 +1,9 @@
 
-\name{ParetoRadiusV2}
-\alias{ParetoRadiusV2}
+\name{ParetoRadius}
+\alias{ParetoRadius}
 \title{ParetoRadius for distributions}
 \usage{
-ParetoRadiusV2(Data, maximumNrSamples = 10000,
+ParetoRadius(Data, maximumNrSamples = 10000,
   plotDistancePercentiles = FALSE)
 }
 \arguments{
@@ -34,7 +34,7 @@ Ultsch, A.: Pareto density estimation: A density estimation for knowledge discov
 
 \strong{See Also}
 
-ParetoDensityEstimationV2, OptimalNoBins
+ParetoDensityEstimation, OptimalNoBins
 }
 \author{
 Michael Thrun

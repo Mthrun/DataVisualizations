@@ -58,7 +58,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   #    optBreaks = seq(minData, maxData, i/optNrOfBins) # bins in fixed intervals
   #    hist(D, breaks=optBreaks,xlab=N)
  
-  optNrOfBins=OptimalNoBinsV2(D)
+  optNrOfBins=OptimalNoBins(D)
   optNrOfBins = min(100,optNrOfBins) #
 
    optBreaks <- seq(MinD, MaxD, abs(MinD-MaxD)/optNrOfBins) # bins haben alle die gleiche groesse
@@ -88,7 +88,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   } else{
     D2 = D
   }
-  pdeVal        = ParetoDensityEstimationV2(D2)
+  pdeVal        = ParetoDensityEstimation(D2)
   
   if (missing(xlim) && missing(ylim)) {
     plot(

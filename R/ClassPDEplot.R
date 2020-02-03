@@ -65,7 +65,7 @@ ClassPDEplot <- function(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend =1,
     MaxWeightInd  = which(UniqAnzPerClass==MaxWeight,arr.ind=TRUE)
     MaxWeightInd = min(MaxWeightInd); # falls es 2 gibt;
     Ind = which(Cls==UniqueClasses[MaxWeightInd],arr.ind=TRUE); # nur die Datenpunkte aus der Verteilung mit maxWeight
-    Pde <- ParetoDensityEstimationV2(Data[Ind]);
+    Pde <- ParetoDensityEstimation(Data[Ind]);
     Kernels = Pde$kernels
     ParetoDensity = Pde$paretoDensity
     ParetoRadiusGesamt = Pde$paretoRadius # Kernels und ParetoRadius fuer die Gesamtverteilung
@@ -75,7 +75,7 @@ ClassPDEplot <- function(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend =1,
       Class = UniqueClasses[c];
       ClassInd = which(Cls==Class,arr.ind=TRUE);
       Weight[c] = ClassPercentages[c]/100; # gewichtet mit a prioris
-      PDEP = ParetoDensityEstimationV2(Data=Data[ClassInd],paretoRadius=ParetoRadiusGesamt,kernels=Kernels,MinAnzKernels=100)
+      PDEP = ParetoDensityEstimation(Data=Data[ClassInd],paretoRadius=ParetoRadiusGesamt,kernels=Kernels,MinAnzKernels=100)
       ParetoDensity = PDEP$paretoDensity
       ClassParetoDensities[,c] = ParetoDensity;
       if(Ylimes < max(ClassParetoDensities[,c],na.rm=T)*rep(Weight[c]))
@@ -99,7 +99,7 @@ ClassPDEplot <- function(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend =1,
       if(sum(!is.na(Data[ClassInd]))>0){
         if(length(ClassInd)>1){
           Weight = ClassPercentages[c]/100; # gewichtet mit a prioris
-          pdeVal <- ParetoDensityEstimationV2(Data[ClassInd])
+          pdeVal <- ParetoDensityEstimation(Data[ClassInd])
           kernels[[c]] <- pdeVal$kernels
           paretoDensity[[c]] <- pdeVal$paretoDensity*Weight
           if(Ylimes < max(paretoDensity[[c]],na.rm=T))

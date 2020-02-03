@@ -7,7 +7,7 @@ InspectScatterplots=InspectScatterOfData=function(Data,Names=colnames(Data)){
     x = x[!is.infinite(x)]
     MinD = min(x, na.rm = TRUE)
     MaxD = max(x, na.rm = TRUE)
-    optNrOfBins=OptimalNoBinsV2(x)
+    optNrOfBins=OptimalNoBins(x)
     optNrOfBins = min(100,optNrOfBins) 
     optBreaks <- seq(MinD, MaxD, abs(MinD-MaxD)/optNrOfBins) # bins haben alle die gleiche groesse
     temp <- hist(x, breaks=optBreaks, plot=FALSE)

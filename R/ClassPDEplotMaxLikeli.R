@@ -51,7 +51,7 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   
   #ClassPercentages = ClCou$ClassPercentages # KlassenZaehlen 
 
-  PDEP = ParetoDensityEstimationV2(Data=Data,paretoRadius=0,kernels=0,MinAnzKernels)
+  PDEP = ParetoDensityEstimation(Data=Data,paretoRadius=0,kernels=0,MinAnzKernels)
   Kernels = PDEP$kernels
   ParetoDensity = PDEP$paretoDensity
   ParetoRadiusGesamt = PDEP$paretoRadius
@@ -86,7 +86,7 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     Class = UniqueClasses[c]
     ClassInd = which(Cls==Class)
 
-    pdeVal <- ParetoDensityEstimationV2(Data[ClassInd], paretoRadius=ParetoRadiusGesamt, kernels=Kernels)
+    pdeVal <- ParetoDensityEstimation(Data[ClassInd], paretoRadius=ParetoRadiusGesamt, kernels=Kernels)
 
     Kernels = pdeVal$kernels
     ParetoDensity = pdeVal$paretoDensity

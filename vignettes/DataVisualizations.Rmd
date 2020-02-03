@@ -56,9 +56,9 @@ InspectVariable(MTY,'MTY')
 
 ## Mirrored Density Plots (MD-plots)
 
-A clear model behind density estimation can outperform conventional visualization approaches. MD Plot combines the syntax of ggplot2 with Pareto density estimation and additional functionality usefull from the Data Scientist's point of view. The approach is published in [Thrun et al. ,2019].A detailed description of the usage and functionality can be found in \url{https://md-plot.readthedocs.io/en/latest/index.html}. 
+A clear model behind density estimation can outperform conventional visualization approaches. MD Plot combines the syntax of ggplot2 with Pareto density estimation and additional functionality usefull from the Data Scientist's point of view. The approach is published in [Thrun et al. ,2019].A detailed description of the usage and functionality can be found in https://md-plot.readthedocs.io/en/latest/index.html \url{https://md-plot.readthedocs.io/en/latest/index.html}. 
 
-The MD plot is also available in Python \url{https://pypi.org/project/md-plot/}
+The MD plot is also available in Python https://pypi.org/project/md-plot/ \url{https://pypi.org/project/md-plot/}
 
 In the example, one feature is multimodal the other one has a large range of values.
 

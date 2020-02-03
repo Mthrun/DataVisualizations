@@ -1,4 +1,4 @@
-ParetoRadiusV2 <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles = FALSE){
+ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles = FALSE){
   # MT: in Matlab als ParetoRadiusfuerGMM.m benannt
   # ParetoRadius <- ParetoRadius(Data)
   # function calculates the paretoRadius for passed gauss mixture modell

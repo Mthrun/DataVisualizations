@@ -1,15 +1,15 @@
 
-\name{ParetoDensityEstimationV2}
-\alias{ParetoDensityEstimationV2}
+\name{ParetoDensityEstimation}
+\alias{ParetoDensityEstimation}
 \title{Pareto Density EstimationV2}
 \usage{
-ParetoDensityEstimationV2(Data, paretoRadius, kernels = NULL,
+ParetoDensityEstimation(Data, paretoRadius, kernels = NULL,
   MinAnzKernels = 100,PlotIt=FALSE)
 }
 \arguments{
 \item{Data}{numeric vector of data.}
 
-\item{paretoRadius}{Optional, numeric value, see \code{\link{ParetoRadiusV2}}, Please do not set manually}
+\item{paretoRadius}{Optional, numeric value, see \code{\link{ParetoRadius}}, Please do not set manually}
 
 \item{kernels}{Optional, numeric vector. data values where pareto density is measured at. If 0 (by default) kernels will be computed.}
 
@@ -39,7 +39,7 @@ This the second version of the function prior available in \pkg{AdaptGauss}
 \examples{
 
    data = c(rnorm(1000),rnorm(2000)+2,rnorm(1000)*2-1)
-   pdeVal        <- ParetoDensityEstimationV2(data)
+   pdeVal        <- ParetoDensityEstimation(data)
    plot(pdeVal$kernels,pdeVal$paretoDensity,type='l',xaxs='i',
    yaxs='i',xlab='Data',ylab='PDE')
    
@@ -51,7 +51,7 @@ Ultsch, A.: Pareto density estimation: A density estimation for knowledge discov
 }
 \seealso{
 
-\code{\link{ParetoRadiusV2}}
+\code{\link{ParetoRadius}}
 
 \code{\link{PDEplot}}
 

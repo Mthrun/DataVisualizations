@@ -127,6 +127,9 @@ MDplot4multiplevectors(V,Names=c('A','B','C','D'))
 
 }
 
+\note{
+cbind.fill is internally used from the depricated R package rowr of Craig Varrichio.
+}
 
 \details{
 Please see \code{\link{MDplot}} for details.

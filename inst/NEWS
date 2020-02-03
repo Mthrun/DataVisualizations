@@ -1,6 +1,10 @@
-Version 1.1.10 (GitHub, 2019-11-30)
+Version 1.1.10 (CRAN, 2020-02-02)
 - DualaxisLinechart works now in combination with plotly::subplot ommitting the bug of subplot, see https://github.com/ropensci/plotly/issues/954
 - MDplot has now two new sorting options for columns: increasing average or variance, or decreasing bimodality (using packages modes).
+- Bugfix: MDplot bug fixed in case of two columns of which one is only NaN and in case of jittered not-finite values.
+- Bugfix: ParetoDensityEstimationV2 bug for data with only two unique values fixed.
+- Bugfix: MDplot4multiplevectors: rowr is depricated, hence the relevant function is internally integrated now in MDplot4multiplevectors
+- Naming Convention: delted V2 in ParetoDensityEstimation, ParetoRadius and OptimalNoBins because these functions are now completly removed from the AdaptGauss package.
 
 Version 1.1.9 (CRAN, 2019-11-10)
 - Improvements in ClassMDplot in the case of Big Data (e.g. Flow Cytometry data of CLL)

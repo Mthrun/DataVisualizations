@@ -1,4 +1,4 @@
-ParetoDensityEstimationV2 = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE){
+ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE){
 #  V = ParetoDensityEstimation(Data,ParetoRadius,Kernels)
 #  V = ParetoDensityEstimation(Data)
 #  ParetoDensity=V$paretoDensity
@@ -52,7 +52,7 @@ ParetoDensityEstimationV2 = function(Data,paretoRadius,kernels=NULL,MinAnzKernel
     
     if (values[1] != 0)
       kernels = seq(from = values[1] * 0.9,
-                    to = unique(Data) * 1.1,
+                    to = values[1] * 1.1,
                     by = values[1] * 0.0001)
     else
       kernels = seq(from = values[1] - 0.1,
@@ -103,13 +103,13 @@ ParetoDensityEstimationV2 = function(Data,paretoRadius,kernels=NULL,MinAnzKernel
   }
   
   if (missing(paretoRadius)) {
-    paretoRadius = ParetoRadiusV2(Data)
+    paretoRadius = ParetoRadius(Data)
   } else if (is.null(paretoRadius)) {
-    paretoRadius = ParetoRadiusV2(Data)
+    paretoRadius = ParetoRadius(Data)
   } else if (is.na(paretoRadius)) {
-    paretoRadius = ParetoRadiusV2(Data)
+    paretoRadius = ParetoRadius(Data)
   } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
-    paretoRadius = ParetoRadiusV2(Data)
+    paretoRadius = ParetoRadius(Data)
   } else{
     
   }
@@ -118,7 +118,7 @@ ParetoDensityEstimationV2 = function(Data,paretoRadius,kernels=NULL,MinAnzKernel
   if (length(kernels) <= 1) {
     if (length(kernels) == 0 || (length(kernels) == 1 & kernels == 0)) {
       #MT: Korrektur: statt kernels==0 und im Input Kernels=0
-      nBins = OptimalNoBinsV2(Data)
+      nBins = OptimalNoBins(Data)
       #MT: MinAnzKernels fehlte
       nBins = max(MinAnzKernels , nBins)
       # mindestzahl von Kernels sicherstellen
