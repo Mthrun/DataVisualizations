@@ -66,7 +66,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     #  return(cbind_fill(...,fill = NaN))
     #}
     nn=colnames(Data)
-    Data=do.call(addcols,DataListtemp)
+    Data=do.call(CombineCols,DataListtemp)
     colnames(Data)=nn
     Data=as.matrix(Data)
     #}else{#here alle vectors are sampled

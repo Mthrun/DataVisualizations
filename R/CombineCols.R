@@ -1,4 +1,4 @@
-addcols=function(..., fill = NULL){
+CombineCols=function(...){
   
   buffer <- function(x,
                      length.out = len(x),

@@ -1,3 +1,10 @@
+Version 1.1.11 (GitHub, 2020-02-13´4)
+- Improvement of efficiency of ParetoDensityFunction using Rcpp by reducing computing time around 80 percent. Improvement is passed on to MDplot.
+
+Version 1.1.11 (CRAN, 2020-02-13)
+- Bugfix: Missing rgl packages in solaris combined with a CRAN check of Plot3D does not allow the package to install itself
+- CombineCols: Robust alternative to \code{\link{cbind}} that fills missing values with nan instead of extending length of vector by duplicating elements
+
 Version 1.1.10 (CRAN, 2020-02-02)
 - DualaxisLinechart works now in combination with plotly::subplot ommitting the bug of subplot, see https://github.com/ropensci/plotly/issues/954
 - MDplot has now two new sorting options for columns: increasing average or variance, or decreasing bimodality (using packages modes).

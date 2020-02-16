@@ -1,4 +1,4 @@
-Plot3D = plot3D = function(Data,Cls,UniqueColors,size=2,na.rm=FALSE,...){
+Plot3D = plot3D = function(Data,Cls,UniqueColors,size=2,na.rm=FALSE,Plotter3D="rgl",...){
 #plot3D(Data,Cls)
 #A wrapper for Data with systematic clustering colors for a x,y,z plot combined with a classification
 #INPUT
@@ -7,7 +7,7 @@ Plot3D = plot3D = function(Data,Cls,UniqueColors,size=2,na.rm=FALSE,...){
 
 #\dots further arguments to be processed by \code{rgl::plot3d}
 #OUTPUT
-#author: MT 2018
+#author: MT 2018, edited 2020
 
 if (!is.matrix(Data)) {
   warning('Data is not a matrix. Using as.matrix()')
@@ -51,15 +51,45 @@ if (missing(Cls)) {
 
 
 if (ncols >= 3) {
-  requireNamespace('rgl')
   x = Data[, 1]
   y = Data[, 2]
   z = Data[, 3]
-  if (NoColors)
-    rgl::plot3d(x, y, z, ...)
-  else
-    rgl::plot3d(x, y, z, col = Lcol,  ...)
-
+  switch(Plotter3D,
+         "rgl"={
+           rglgiven=requireNamespace('rgl')
+              if (NoColors){
+                if(isTRUE(rglgiven)){
+                  rgl::plot3d(x, y, z,size = size, ...)
+                }else{
+                  p=plotly::plot_ly(x=x, y=y, z=z, type="scatter3d", mode="markers",size = size,...)
+                 return(p)
+                }
+              }else{
+                if(isTRUE(rglgiven)){
+                  rgl::plot3d(x, y, z, col = Lcol,size = size,  ...)
+                }else{
+                  p=plotly::plot_ly(x=x, y=y, z=z, type="scatter3d", mode="markers", color=as.factor(Cls),colors=unique(Lcol,fromLast = F),size = size,...)
+                  return(p)
+                }
+              }
+  },"plotly"={
+    plotlygiven=requireNamespace('plotly')
+    if (NoColors){
+      if(isFALSE(plotlygiven)){
+        rgl::plot3d(x, y, z,size = size, ...)
+      }else{
+        p=plotly::plot_ly(x=x, y=y, z=z, type="scatter3d", mode="markers",size = size,...)
+        return(p)
+      }
+    }else{
+      if(isFALSE(plotlygiven)){
+        rgl::plot3d(x, y, z, col = Lcol,size = size,  ...)
+      }else{
+        p=plotly::plot_ly(x=x, y=y, z=z, type="scatter3d", mode="markers", color=as.factor(Cls),colors=unique(Lcol,fromLast = F),size = size,...)
+        return(p)
+      }
+    }
+  })
   if (ncols > 3) {
     warning('Only the first three columns are used.')
   }

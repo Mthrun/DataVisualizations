@@ -147,15 +147,18 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   upR <- as.matrix(2 * maxData - Data[upBInd], ncol = 1)
   #extend data by mirrowing
   DataPlus = as.matrix(c(Data, lowR, upR), 1)
+  paretoDensity=rep(0, nKernels)
+  paretoDensity=c_pde(kernels, nKernels, paretoRadius,  DataPlus)
+  #paretoDensity=c_pde_parallel(kernels, nKernels, paretoRadius,  DataPlus)
   
-  paretoDensity <- rep(0, nKernels)
-  for (i in 1:nKernels) {
-    lb = kernels[i] - paretoRadius
-    ub = kernels[i] + paretoRadius
-    isInParetoSphere = (DataPlus >= lb) & (DataPlus <= ub)
-    paretoDensity[i] = sum(isInParetoSphere)
-  }
-  
+  # for (i in 1:nKernels) {
+  #   lb = kernels[i] - paretoRadius
+  #   ub = kernels[i] + paretoRadius
+  #   isInParetoSphere = (DataPlus >= lb) & (DataPlus <= ub)
+  #   paretoDensity[i] = sum(isInParetoSphere)
+  # }
+  # print(paretoDensity-paretoDensity2)
+  # 
   area <- pracma::trapz(kernels, paretoDensity)
   #adhoc numerical calc (not preferable)
   #idx = 2:length(kernels)

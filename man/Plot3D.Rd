@@ -8,7 +8,9 @@
 A wrapper for Data with systematic clustering colors for either a 2D (x,y) or 3D (x,y,z) plot combined with a classification
 }
 \usage{
-Plot3D(Data,Cls,UniqueColors,size=2,na.rm=FALSE,\dots)
+Plot3D(Data,Cls,UniqueColors,
+
+size=2,na.rm=FALSE,Plotter3D="rgl",\dots)
 }
 
 \arguments{
@@ -23,13 +25,18 @@ Plot3D(Data,Cls,UniqueColors,size=2,na.rm=FALSE,\dots)
 }
 
   \item{size}{
-size of points
+size of points, for plotly additional a vector [1:n] of a mapping of sizes to Cls has to be given in the (...) argument with \code{sizes=}
 }
   \item{na.rm}{
 if \code{na.rm=TRUE}, then missing values are removed
 }
+  \item{Plotter3D}{
+ in case of 3 dimensions, choose either "plotly" or "rgl", 
+ 
+ if one of this packages is not given, the other one is selected as a fallback method
+}
   \item{\dots}{
-further arguments to be processed by \code{\link[rgl]{plot3d}} or \code{\link[ggplot2]{geom_point}}
+further arguments to be processed by \code{\link[rgl]{plot3d}} or \code{\link[ggplot2]{geom_point}} or \code{\link[plotly]{plot_ly}} of type "scatter3d"
 }
 }
 \details{
@@ -46,14 +53,16 @@ Michael Thrun
 }
 
 \note{
-Uses either \code{\link[ggplot2]{geom_point}} for 2D or \code{\link[rgl]{plot3d}} for 3D
+Uses either \code{\link[ggplot2]{geom_point}} for 2D or \code{\link[rgl]{plot3d}} for 3D or \code{\link[plotly]{plot_ly}}
 }
 
 \examples{
 #Spin3D similar output
+\donttest{
 data(Lsun3D)
 Plot3D(Lsun3D$Data,Lsun3D$Cls,type='s',radius=0.1,box=FALSE,aspect=TRUE)
-\donttest{rgl::grid3d(c("x", "y", "z"))}
+rgl::grid3d(c("x", "y", "z"))
+}
 
 #Projected Points with Classification
 Data=cbind(runif(500,min=-3,max=3),rnorm(500))
