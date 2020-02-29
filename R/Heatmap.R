@@ -31,7 +31,7 @@
    SortOrder=FALSE
    ind = order(Cls,decreasing = SortOrder,na.last = T)
    
-   if (isSymmetric(DataOrDistances)) {
+   if (isSymmetric(unname(DataOrDistances))) {
      # nach Cls sortieren
      DataOrDistances = DataOrDistances[ind, ]
      DataOrDistances = DataOrDistances[, ind]

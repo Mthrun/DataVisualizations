@@ -1,5 +1,8 @@
 Version 1.1.11 (GitHub, 2020-02-13´4)
 - Improvement of efficiency of ParetoDensityFunction using Rcpp by reducing computing time around 80 percent. Improvement is passed on to MDplot.
+- Classplot: Missing values can be now removed with na-rm=TRUE, fixed feature checks, LineColor is now per default invisible in this dot plot, Names for points and size of points can be set optionally (in case of using this plot to visualise a Receiver operating characteristic (ROC) with/without its curve)
+- bugfix Heatmap and InspectDistances: using unname in isSymmetric to check correctly of symmetric distance matrix
+
 
 Version 1.1.11 (CRAN, 2020-02-13)
 - Bugfix: Missing rgl packages in solaris combined with a CRAN check of Plot3D does not allow the package to install itself

@@ -10,15 +10,15 @@ The colors are the labels defined by the classification.
 Usefull to see if temporal clustering has time dependent variations and for Hidden Markov Models (see Mthrun/RHmm on GitHub).
 }
 \usage{
-Classplot(X, Y, Cls,
+Classplot(X, Y, Cls,Names=NULL,na.rm=FALSE,
 
 xlab = "X", ylab = "Y",
 
-main = "Class Plot", Colors,
+main = "Class Plot", Colors,Size=8
 
-LineColor = "grey", LineWidth = 1, LineType = NULL,
+LineColor = NULL, LineWidth = 1, LineType = NULL,
 
-Showgrid = TRUE, SaveIt = FALSE)
+Showgrid = TRUE, PlotIt=TRUE,SaveIt = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,9 +28,14 @@ Showgrid = TRUE, SaveIt = FALSE)
   \item{Y}{
 [1:n] numeric vector of feature
 }
-  \item{Cls}{
-[1:n] numeric vector of k classes
+  \item{Names}{
+[1:n] character vector of k classes, if not set perdefault Cls is used, if set, names the legend and the points
 }
+  \item{Cls}{
+[1:n] numeric vector of k classes, if not set per default every point is in first class
+}
+  \item{na.rm}{Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE}
+  
   \item{xlab}{
 Optional, string
 }
@@ -44,19 +49,22 @@ Optional, string
 Optional, string
 }
   \item{LineColor}{
-Optional, name of color
+Optional, name of color, then all points are connected by a curve
 }
   \item{LineWidth}{
-Optional, number
+Optional, number defining the width of the curve
 }
   \item{LineType}{
-Optional, string
+Optional, string defining the type of the curve
 }
   \item{Showgrid}{
 Optional, boolean
 }
+  \item{PlotIt}{
+Optional, boolean, if false does not plot in order to change ploty layut by user
+}
   \item{SaveIt}{
-Optional, boolean
+Optional, boolean, if true saves plot as html
 }
 }
 
@@ -74,8 +82,10 @@ Michael Thrun
 \code{\link{DualaxisClassplot}}
 }
 \examples{
-##ToDo
+data(Lsun3D)
+Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Classplot}% use one of  RShowDoc("KEYWORDS")
+\keyword{dotplot}% use one of  RShowDoc("KEYWORDS")

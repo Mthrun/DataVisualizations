@@ -22,7 +22,7 @@ InspectDistances=function(DataOrDistances,method= "euclidean",sampleSize = 50000
     warning('Data is not a numeric matrix. Calling mode(DataOrDistances)="numeric"')
     mode(DataOrDistances)='numeric'
   }
-  if (isSymmetric(DataOrDistances)) {
+  if (isSymmetric(unname(DataOrDistances))) {
     # nach Cls sortieren
     InputDistances = DataOrDistances
     vecdist=InputDistances[upper.tri(InputDistances,F)]

@@ -38,7 +38,7 @@ Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "eucl
     
   }
   
-  if (isSymmetric(DataOrDistances)) {
+  if (isSymmetric(unname(DataOrDistances))) {
     InputDistances = DataOrDistances
   }
   else{
