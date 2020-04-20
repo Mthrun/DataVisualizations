@@ -1,8 +1,12 @@
-Version 1.1.11 (GitHub, 2020-02-13´4)
+Version 1.1.11 (GitHub, 2020-03-02)
 - Improvement of efficiency of ParetoDensityFunction using Rcpp by reducing computing time around 80 percent. Improvement is passed on to MDplot.
 - Classplot: Missing values can be now removed with na-rm=TRUE, fixed feature checks, LineColor is now per default invisible in this dot plot, Names for points and size of points can be set optionally (in case of using this plot to visualise a Receiver operating characteristic (ROC) with/without its curve)
-- bugfix Heatmap and InspectDistances: using unname in isSymmetric to check correctly of symmetric distance matrix
-
+- bugfix: Heatmap and InspectDistances: using unname in isSymmetric to check correctly of symmetric distance matrix
+- bugfix: PDEplot y-axis should always start with zero because this functions plots the density
+- bugfix: SignedLog besides strings, now also accepts numerical values correctly for the Base argument
+- bugfix: Fanplot and Piechart now labels <0.01% correctly.
+- bugfix: ParetoDensityEstimation ensures now that all data is contained in a Pareto ball even if pretty does not set the breaks from min to max. This resulted priorly in an incorrect density estimation in the special case of more than one mode of data with one mode consisting of unique data points lying exactly on on of the two borders of data (either min or max) in the case of an existing empty space between the unique values and the other mode of data.
+- BimodalityAmplitude enables to order the MDplot using the bimodality coefficient of [Zhang, 2003] using the PDE.
 
 Version 1.1.11 (CRAN, 2020-02-13)
 - Bugfix: Missing rgl packages in solaris combined with a CRAN check of Plot3D does not allow the package to install itself

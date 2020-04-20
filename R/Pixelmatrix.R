@@ -1,4 +1,4 @@
-Pixelmatrix=PlotPixMatrix =  function(Data, XNames = NULL, LowLim, HiLim, YNames = NULL, main = '',FillNotFiniteWithHighestValue=FALSE) {
+Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main = '',FillNotFiniteWithHighestValue=FALSE) {
     #PixelMatrixPlot = function(Data, XNames=NULL, LowLim=NULL, HiLim=NULL, YNames=NULL,main='')
     # PixelMatrixPlot(Data,XNames,LowLim,HiLim,YNames);
     #  plot Data matrix as a pixel colour picture
@@ -21,6 +21,14 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames = NULL, LowLim, HiLim, YNames
   if(!mode(Data)=='numeric'){
     warning('Data is not a numeric matrix. Calling mode(Data)="numeric"')
     mode(Data)='numeric'
+  }
+  if(missing(XNames)){
+    XNames=colnames(Data)
+  }
+  if(missing(YNames)){
+    YNames=rownames(Data)
+    if(is.null(YNames))
+      YNames=1:nrow(Data)
   }
   heatC = DataVisualizations::HeatmapColors
   Schalter=TRUE
@@ -85,11 +93,12 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames = NULL, LowLim, HiLim, YNames
       theme(
         panel.background = element_blank(),
         legend.key = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1)
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5,vjust = 0.5)
       ) +
       labs(x = "", y = "", title = main)
     
-    if (!is.null(YNames)) {
+    if (!is.null(YNames)&!all(YNames==1:nrow(Data))) {
       if (length(YNames) != nrow(Data))
         warning(
           "Lengths of YNames does not equal number of rows.\n
@@ -98,9 +107,18 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames = NULL, LowLim, HiLim, YNames
         )
       plt <-
         plt + scale_y_reverse(breaks = 1:length(YNames), labels = YNames)
-    } else{
+    }else{
       plt <- plt + scale_y_reverse()
     }
-    
+    if(is.null(XNames)){
+      plt=plt+theme(axis.title.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.ticks.x=element_blank())
+    }
+    if(is.null(YNames)){
+      plt=plt+theme(axis.title.y=element_blank(),
+                    axis.text.y=element_blank(),
+                    axis.ticks.y=element_blank())
+    }
     plt
   }   # end function  PixelMatrixPlot

@@ -61,9 +61,13 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   optNrOfBins=OptimalNoBins(D)
   optNrOfBins = min(100,optNrOfBins) #
 
-   optBreaks <- seq(MinD, MaxD, abs(MinD-MaxD)/optNrOfBins) # bins haben alle die gleiche groesse
-   temp <- hist(D, breaks=optBreaks, plot=FALSE)
- 
+   optBreaks <- seq(MinD, MaxD, abs(MinD-MaxD)/optNrOfBins)
+  
+   # bins haben alle die gleiche groesse
+   if(length(optBreaks)>1)
+      temp <- hist(D, breaks=optBreaks, plot=FALSE)
+    else
+      temp <- hist(D, plot=FALSE)
    #box();
    Breaks <- temp$breaks;  nB <- length(Breaks)
    y <- temp$counts;

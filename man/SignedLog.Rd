@@ -32,7 +32,7 @@ Prof. Dr. habil. A. Ultsch, Lectures in Knowledge Discovery, 2014.
 Michael Thrun
 }
 \note{
-Number Selections for \code{Base} currently experimental.
+Number Selections for \code{Base} for 2,10, "Two" or "Ten" add 1 to every datapoint as defined in the lectures.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -41,7 +41,7 @@ Number Selections for \code{Base} currently experimental.
 \code{\link{log}}
 }
 \examples{
-# sampling is online done
+# sampling is done
 # because otherwise the example takes too long
 # in the CRAN check
 data('ITS')

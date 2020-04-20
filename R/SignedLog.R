@@ -18,6 +18,15 @@ SignedLog=function (Data, Base="Ten")
          "Ten"={
            LogedData = Signed * log10(Absolut + 1)
          },
+         "2"={
+           LogedData = Signed * log2(Absolut + 1)
+         },
+         "0"={
+           LogedData = Signed * log1p(Absolut)
+         },
+         "10"={
+           LogedData = Signed * log10(Absolut + 1)
+         },
          {
            if(!is.finite(as.numeric(Base))) Base=10
            

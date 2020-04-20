@@ -342,11 +342,10 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
          },
          Bimodal={
            x=as.matrix(Data)
-           requireNamespace('modes')
            bimodalitycoef=apply(x,2,function(x) {
              x=x[is.finite(x)]
              if(length(x)>0){
-               y=modes::bimodality_amplitude(x,fig=FALSE)
+               y=BimodalityAmplitude(x,PlotIt=FALSE)
                if(identical(y, numeric(0))) y=0
                return(y)
              }else{

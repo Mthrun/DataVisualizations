@@ -137,6 +137,14 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       kernels = mids
     }
   }
+  #bugfix: MT 2020
+  #sicherstellen das alle daten auch in einer ParetoKugel enthalten sind
+  if((kernels[1]-paretoRadius)!=minData){
+    kernels=c(minData,kernels)
+  } 
+  if((tail(kernels,1)+paretoRadius)!=maxData){
+    kernels=c(kernels,maxData)
+  }
   nKernels = length(kernels)
   #Randapproximierung
   #  diese Daten liegen am unteren Rand
@@ -148,7 +156,18 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   #extend data by mirrowing
   DataPlus = as.matrix(c(Data, lowR, upR), 1)
   paretoDensity=rep(0, nKernels)
-  paretoDensity=c_pde(kernels, nKernels, paretoRadius,  DataPlus)
+  Fast=TRUE# only for debugging =FALSE
+  if(isTRUE(Fast)){
+    paretoDensity=c_pde(kernels, nKernels, paretoRadius,  DataPlus)
+  }else{
+    for (i in 1:nKernels) {
+       lb = kernels[i] - paretoRadius
+       ub = kernels[i] + paretoRadius
+       isInParetoSphere = (DataPlus >= lb) & (DataPlus <= ub)
+       paretoDensity[i] = sum(isInParetoSphere)
+    }
+  }
+
   #paretoDensity=c_pde_parallel(kernels, nKernels, paretoRadius,  DataPlus)
   
   # for (i in 1:nKernels) {
@@ -175,7 +194,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       kernels,
       paretoDensity,
       type = 'l',
-      main = 'RAW PDE rplot',
+      main = 'Raw PDE R plot',
       xaxs = 'i',
       yaxs = 'i',
       xlab = 'Data',

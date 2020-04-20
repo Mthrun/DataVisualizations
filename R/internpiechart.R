@@ -166,7 +166,8 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
     names(pct)[indother]='Other'
   }
   Labels=paste0(Labels,': ',pct,"%")
-  Labels=gsub('0%','<0.01%',Labels)
+  inds=which(pct==0)
+  Labels[inds]=gsub('0%','<0.01%',Labels[inds])
   if(missing(col)){
     colors=DataVisualizations::DefaultColorSequence[1:knew]
   }else{
@@ -178,5 +179,5 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
     }
   }
 
-   return(list(Percents=pct,Labels=Labels,Names=LabelsOut,Cols=colors))
+   return(list(Percents=pct,Labels=Labels,Names=LabelsOut,Cols=colors,Count=count))
 }

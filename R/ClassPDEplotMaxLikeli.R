@@ -56,8 +56,6 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   ParetoDensity = PDEP$paretoDensity
   ParetoRadiusGesamt = PDEP$paretoRadius
 
-  ClassParetoDensities = Kernels * matrix(1, length(Kernels), NrOfClasses)#ones(length(Kernels),NrOfClasses)
-
   #Normaldist=list()
   Normaldist = matrix(data = 0, nrow = length(Kernels), ncol = NrOfClasses)
   
@@ -81,7 +79,9 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     }
     return(quants)
   }
-  
+
+  #ClassParetoDensities = Kernels * matrix(1, length(Kernels), NrOfClasses)#ones(length(Kernels),NrOfClasses)
+  ClassParetoDensitiesL=list()
   for(c in 1:NrOfClasses){
     Class = UniqueClasses[c]
     ClassInd = which(Cls==Class)
@@ -91,8 +91,18 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     Kernels = pdeVal$kernels
     ParetoDensity = pdeVal$paretoDensity
 
-    if(is.null(dim(ClassParetoDensities))) ClassParetoDensities = ParetoDensity
-    else ClassParetoDensities[,c] = ParetoDensity
+    #if(is.null(dim(ClassParetoDensities))){
+     # ClassParetoDensities = ParetoDensity
+    #}else{
+      #ClassParetoDensities[,c] = ParetoDensity
+      ClassParetoDensitiesL[[c]]=ParetoDensity
+    #}
+  }
+  ClassParetoDensities=do.call(CombineCols,ClassParetoDensitiesL)
+  
+  ClassParetoDensities=ClassParetoDensities[1:length(Kernels),]
+  ClassParetoDensities[is.na(ClassParetoDensities)]=0
+    for(c in 1:NrOfClasses){
     if(PlotNorm==1){
     M = mean(Data[ClassInd],na.rm=T) #% empirical Mean
     S = sd(Data[ClassInd],na.rm=T)  # empirical Sdev

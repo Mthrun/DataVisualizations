@@ -3,7 +3,13 @@
 //author Dirk eddelbuettel
 // [[Rcpp::export]]
 Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs) {
-  // implementation of type 7
+//out=c_quantile(data, 0.5)
+// fast implementation of type 7 quantile of R
+//INPUT
+// datavector [1:n] numerical vector
+// probs scalar or vector of relevant quantiles
+//Output: 
+// fast quantiles of numerical vector
   const size_t n=x.size(), np=probs.size();
   if (n==0) return x;
   if (np==0) return probs;

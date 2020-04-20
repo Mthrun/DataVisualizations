@@ -152,7 +152,7 @@ For the paramter \code{Ordering} the following options are possible:
 
 \item{\code{Average}}{Ordering of plots by the order of columns of \code{Data} sorted in order of increasing column-wise average}
 
-\item{\code{Bimodal}}{Ordering of plots by the order of columns of \code{Data} sorted in order of decreasing bimodality amplitude[Zhang et al., 2003] of \pkg{modes}}
+\item{\code{Bimodal}}{Ordering of plots by the order of columns of \code{Data} sorted in order of decreasing bimodality amplitude[Zhang et al., 2003]}
 
 \item{\code{Variance}}{Ordering of plots by the order of columns of \code{Data} sorted in order of increasing inter-quartile range}
 

@@ -73,20 +73,20 @@ PDEplot <- function(data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
   plt <- ggPlot
   if(length(grep(pattern = 'gg',attributes(ggPlot)$class))<1){
     warning('ggobject of Inputparameter ggPlot, could not be found. Creating new object.')
-    plt=ggplot()
+    plt=ggplot2::ggplot()
   }
   if(isTRUE(xpoints)){
-    plt <- plt + geom_point(data = df, aes_string(x = "kernels", y = "density"), colour = color)
+    plt <- plt + ggplot2::geom_point(data = df, aes_string(x = "kernels", y = "density"), colour = color)
   }else{
-    plt <- plt + geom_line(data = df, aes_string(x = "kernels", y = "density"), colour = color,size=lwd)  
+    plt <- plt + ggplot2::geom_line(data = df, aes_string(x = "kernels", y = "density"), colour = color,size=lwd)  
   }
-  plt <- plt  + xlab(xlab) + ylab(ylab) + ggtitle(title)
+  plt <- plt  + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)+ggplot2::ylim(c(0,1.05*max(df$density)))
 
   if(isTRUE(LogPlot)){
     plt <- plt + scale_x_log10() + scale_y_log10()
   }#LogPlot
-  if(!missing(xlim)){ plt <- plt + coord_cartesian(xlim=xlim)}
-  if(!missing(ylim)){ plt <- plt + coord_cartesian(ylim=ylim)}
+  if(!missing(xlim)){ plt <- plt +ggplot2::coord_cartesian(xlim=xlim)}
+  if(!missing(ylim)){ plt <- plt + ggplot2::coord_cartesian(ylim=ylim)}
   ## Alterantiv zum oben genannten: + xlim(xlim) bzw ylim(ylim)
   ##  Das macht allerdings alle Werte ausserhalb des Bereichs zu NA
   if(isTRUE(PlotIt)){
