@@ -19,7 +19,7 @@ Gaussian_lwd=1.5, BoxPlot=FALSE,BoxColor='darkred',
 
 MDscaling='width', LineColor='black', LineSize=0.01,
 
-MinimalAmoutOfData=40, MinimalAmoutOfUniqueData=12,
+QuantityThreshold=40, UniqueValuesThreshold=12,
 
 SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE)
 }
@@ -65,11 +65,11 @@ SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE)
     \item{LineSize}{
     Optional: numerical, linewidth of line around the mirrored densities.
   }
-    \item{MinimalAmoutOfData}{
-    Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
+    \item{QuantityThreshold}{
+    Optional: numeric value defining the threshold of the minimal amount of values in data. Below this threshold no density estimation is performed and a jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
   }
-      \item{MinimalAmoutOfUniqueData}{
-    Optional: numeric value defining a threshold. Below this threshold no density estimation and statistical testing is performed and a Jitter plot is drawn. Only Data Science experts should change this value after they understand how the density is estimated (see [Ultsch, 2005]).
+      \item{UniqueValuesThreshold}{
+    Optional: numeric value defining the threshold of the minimal amount of unique values in data. Below this threshold no density estimation and statistical testing is performed and a Jitter plot is drawn. Only Data Science experts should change this value after they understand how the density is estimated (see [Ultsch, 2005]).
   }
       \item{SampleSize}{
     Optional: numeric value defining a threshold. Above this threshold uniform sampling of finite cases is performed in order to shorten computation time.If \pkg{rowr} is not installed, uniform sampling of all cases

@@ -1,7 +1,7 @@
 MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',
                                   RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
                                   BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
-                                  MinimalAmoutOfData=40, MinimalAmoutOfUniqueData=12,SampleSize=5e+05,
+                                  QuantityThreshold=40, UniqueValuesThreshold=12,SampleSize=5e+05,
                                   SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
@@ -212,7 +212,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
       if(Ncases>45000&Npervar[i]>8){#statistical testing does not work with to many cases
         vec=sample(x = x[, i],45000)
        # if(Ordering=="Statistics"){
-        if(NUniquepervar[i]>MinimalAmoutOfUniqueData){
+        if(NUniquepervar[i]>UniqueValuesThreshold){
           nonunimodal[i]=diptest::dip.test(vec)$p.value
           skewed[i]=moments::agostino.test(vec)$p.value
           #Ties should not be present, however here we only approximate
@@ -233,7 +233,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
         isuniformdist[i]=0
       }else{
 #        if(Ordering=="Statistics"){
-          if(NUniquepervar[i]>MinimalAmoutOfUniqueData){
+          if(NUniquepervar[i]>UniqueValuesThreshold){
             nonunimodal[i]=diptest::dip.test(x[, i])$p.value
             skewed[i]=moments::agostino.test(x[, i])$p.value
             isuniformdist[i]=suppressWarnings(ks.test(x[, i],"punif", MinMax[1, i], MinMax[2, i])$p.value)
@@ -252,14 +252,14 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
       
       }
      # if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
-        if(isuniformdist[i]<0.05 & nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData){
+        if(isuniformdist[i]<0.05 & nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>QuantityThreshold & NUniquepervar[i]>UniqueValuesThreshold){
           normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
           #trim to range, not exact but close enough
           normaldist[normaldist[,i]<min(x[, i],na.rm=T),i]=NaN#MinMax[1,i]
           normaldist[normaldist[,i]>max(x[, i],na.rm=T),i]=NaN#MinMax[2,i]
         }
           #else{#bimodal is siginficant and enough data for gaussian estimation
-      #  if(bimodalprob[i]<0.05& Npervar[i]>MinimalAmoutOfData & NUniquepervar[i]>MinimalAmoutOfUniqueData)
+      #  if(bimodalprob[i]<0.05& Npervar[i]>QuantityThreshold & NUniquepervar[i]>UniqueValuesThreshold)
      #     normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
      # }
       
@@ -363,13 +363,13 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   )
 
   ## Data Reshaping----
-  if(any(Npervar<MinimalAmoutOfData)|any(NUniquepervar<MinimalAmoutOfUniqueData)){#builds scatter plots in case of not enough information for pdf
-    warning(paste('Some columns have less than,',MinimalAmoutOfData,',finite data points or less than ',MinimalAmoutOfUniqueData,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
+  if(any(Npervar<QuantityThreshold)|any(NUniquepervar<UniqueValuesThreshold)){#builds scatter plots in case of not enough information for pdf
+    warning(paste('Some columns have less than,',QuantityThreshold,',finite data points or less than ',UniqueValuesThreshold,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
     DataDensity=Data
     #mm=apply(Data,2,median,na.rm=T)
     #Transforms pdf estimation to median line drawing of pdf cannot be estimated
     for(nc in 1:dvariables){
-      if(Npervar[nc]<MinimalAmoutOfData){
+      if(Npervar[nc]<QuantityThreshold){
         DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
         
         #generated values around the median if not enoug non finite values given
@@ -380,7 +380,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
         #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
         # }
       }
-      if(NUniquepervar[nc]<MinimalAmoutOfUniqueData){
+      if(NUniquepervar[nc]<UniqueValuesThreshold){
         DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
         
         #generated values around the median if not enoug unique values given
@@ -395,7 +395,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
     #Generates in the cases where pdf cannot be estimated a scatter plot
     DataJitter=DataDensity
     #Delete all scatters for features where distributions can be estimated
-    DataJitter[,(Npervar>=MinimalAmoutOfData&NUniquepervar>=MinimalAmoutOfUniqueData)]=NaN
+    DataJitter[,(Npervar>=QuantityThreshold&NUniquepervar>=UniqueValuesThreshold)]=NaN
     #apply ordering
     dataframe = reshape2::melt(DataDensity[,Rangfolge])
   }else{
@@ -421,7 +421,7 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
   plot=plot + geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=LineSize,trim = TRUE,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
-  if(any(Npervar<MinimalAmoutOfData) | any(NUniquepervar<MinimalAmoutOfUniqueData)){
+  if(any(Npervar<QuantityThreshold) | any(NUniquepervar<UniqueValuesThreshold)){
     DataJitter[,Rangfolge]
     dataframejitter=reshape2::melt(DataJitter)
     if(dvariables==1){#bugfix one feature
