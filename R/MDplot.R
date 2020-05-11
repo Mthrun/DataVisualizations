@@ -341,8 +341,8 @@ MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None"
            Rangfolge=Rangfolge[iqr_ind]
          },
          Bimodal={
-           x=as.matrix(Data)
-           bimodalitycoef=apply(x,2,function(x) {
+           TMP_X=as.matrix(Data)
+           bimodalitycoef=apply(TMP_X,2,function(x) {
              x=x[is.finite(x)]
              if(length(x)>0){
                y=BimodalityAmplitude(x,PlotIt=FALSE)

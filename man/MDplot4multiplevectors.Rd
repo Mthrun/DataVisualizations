@@ -16,7 +16,7 @@ GaussianColor = 'magenta', Gaussian_lwd = 1.5, BoxPlot = FALSE,
 
 BoxColor = 'darkred', MDscaling = 'width', LineSize = 0.01,
 
-LineColor = 'black', MinimalAmoutOfData = 40, MinimalAmoutOfUniqueData = 12,
+LineColor = 'black', QuantityThreshold = 40, UniqueValuesThreshold = 12,
 
 SampleSize = 5e+05, SizeOfJitteredPoints = 1, OnlyPlotOutput = TRUE)
 }
@@ -62,10 +62,10 @@ SampleSize = 5e+05, SizeOfJitteredPoints = 1, OnlyPlotOutput = TRUE)
    \item{LineColor}{
     Optional: string, color of line around the mirrored densities. \code{NA} disables this features which is usefull if ones wants to avoid vertical lines leading to outliers.
   }
-    \item{MinimalAmoutOfData}{
+    \item{QuantityThreshold}{
     Optional: numeric value defining a threshold. Below this threshold no density estimation is performed and a jitter plot with a median line is drawn. Only Data Science experts should change this value after they understand     how the density is estimated (see [Ultsch, 2005]).
   }
-      \item{MinimalAmoutOfUniqueData}{
+      \item{UniqueValuesThreshold}{
     Optional: numeric value defining a threshold. Below this threshold no density estimation and statistical testing is performed and a Jitter plot is drawn. Only Data Science experts should change this value after they understand how the density is estimated (see [Ultsch, 2005]).
   }
       \item{SampleSize}{

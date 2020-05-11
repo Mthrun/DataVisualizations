@@ -4,7 +4,13 @@ BimodalityAmplitude = function(x,PlotIt=FALSE){
   dd<-data.frame(dens$x,dens$y)
   
   maxima.ind = which(diff(sign(diff(dd[,2])))==-2)+1
+  if(length(maxima.ind)==0){#Wendepunkt nicht auffindbar
+    return(0)
+  }
   minima.ind_tmp = which(diff(sign(diff(dd[,2])))==2)+1
+  if(length(minima.ind_tmp)==0){#Wendepunkt nicht auffindbar
+    return(0)
+  } 
   
   minima.ind=minima.ind_tmp[which(minima.ind_tmp>maxima.ind[1]&minima.ind_tmp<tail(maxima.ind,1))]
   
