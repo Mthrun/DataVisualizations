@@ -69,12 +69,12 @@ data(ITS)
 data(MTY)
 library(vioplot)
 Data=cbind(ITS,MTY)
-MDplot(Data)+ylim(0,6000)+ggtitle('Two Features With Adjusted Range')
+#MDplot(Data)+ylim(0,6000)+ggtitle('Two Features With Adjusted Range')
 
-MDplot(Data,Scaling = "Robust")+ggtitle('"Shape-Invariant" Normalization')
+#MDplot(Data,Scaling = "Robust")+ggtitle('"Shape-Invariant" Normalization')
 
 #Data is now capped
-Data[Data[,2]>6000,2]=6000
+#Data[Data[,2]>6000,2]=6000
 MDplot(Data)+ylim(0,6000)+ggtitle('Two Features with MTY Capped')
 boxplot(Data,main='Two Features with MTY Capped')
 vioplot(Data[,1],Data[,2])

@@ -1,4 +1,4 @@
-MDplot = PDEviolinPlot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',
+MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',
                                   RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
                                   BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
                                   QuantityThreshold=40, UniqueValuesThreshold=12,SampleSize=5e+05,

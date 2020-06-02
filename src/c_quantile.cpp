@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 //https://github.com/RcppCore/Rcpp/issues/967
-//author Dirk eddelbuettel
+//author Dirk Eddelbuettel
 // [[Rcpp::export]]
 Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs) {
 //out=c_quantile(data, 0.5)
