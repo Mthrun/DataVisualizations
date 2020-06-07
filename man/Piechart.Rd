@@ -27,7 +27,7 @@ main='',col,Rline=1,...)
   \item{main}{
   Optional, title below the fan pie, see \code{plot}
 }
-  \item{col}{Optional, default as other colors in this packages, else the same as in \code{plot}
+  \item{col}{Optional, the default are the first [1:k] colors of the default color sequence used in this package, otherwise a character vector of [1:k] specifying the colors analog to \code{plot}
 }
 
   \item{Rline}{Optional, the radius of the pie in numerical numbers
@@ -42,6 +42,8 @@ If Number of Slices is higher than MaxNumberOfSlices then \code{ABCanalysis} is 
 If Number of Slices in group A is higher than MaxNumberOfSlices, then the most important ones out of group A are chosen.
 If MaxNumberOfSlices is higher than Slices in group A, additional slices are shown depending on the percentage (from high to low).
 Parameters of visualization a set as in [Schwabish, 2014] defined.
+
+Color sequence is automatically shortened to the MaxNumberOfSlices used in the pie chart.
 }
 \value{
 silent output by calling \code{invisible} of a list with

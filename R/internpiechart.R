@@ -33,14 +33,14 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
   nas=which(is.na(Datavector))
   if(length(nas)>0){
     Datavector[nas]='Missing (NA)'
-    print('Note: NA values found.')
+    message('Note: NA values found.')
   }
   if(is.numeric(Datavector)){
     nas=which(!is.finite(Datavector))
     if(length(nas)>0){
       Datavector=as.character(Datavector)
       Datavector[nas]='NaN'
-      print('Note: Infinitive and/or NaN values found.')
+      message('Note: Infinitive and/or NaN values found.')
     }
   }
   
@@ -54,6 +54,17 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
     Labels=as.character(Names)
 
   k=length(Labels)
+  
+  if(missing(col)){
+    colors=DataVisualizations::DefaultColorSequence[1:k]
+  }else{
+    if(length(col)==k)
+      colors=col
+    else{
+      warning('Length of colors doesnt match found names defined as labels.')
+      colors=DataVisualizations::DefaultColorSequence[1:k]
+    }
+  }
   
   if(missing(MaxNumberOfSlices)){
     MaxNumberOfSlices=k
@@ -87,8 +98,8 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
 
   tmp=setdiff(allu,Names)
   if(length(tmp)>0){
-    print('These Names where additionally in the Datavector;')
-    print(tmp)
+    message('These Names where additionally in the Datavector;')
+    message(tmp)
     indnonex=Datavector %in% tmp
     Datavector[indnonex]='other'
     Names=c(Names,'other')
@@ -125,7 +136,7 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
     abc=ABCanalysis::ABCanalysis(pct)
     if(!isTRUE(MaxNumberOfSlices)){
     if(length(abc$Aind)<MaxNumberOfSlices){#kein abc sondern einfach nuer die hoechsten
-      print('Not enough slices in group A of ABCanalysis comparing to MaxNumberOfSlices. Adding slices of highest percentage following after group A.')
+      message('Not enough slices in group A of ABCanalysis comparing to MaxNumberOfSlices. Adding slices of highest percentage following after group A.')
       pct2=sort(pct,decreasing = T,na.last = T)
       tempind=seq(from=(MaxNumberOfSlices+1),to=length(pct),by=1)
       pct_tmp=sum(pct2[tempind])
@@ -144,7 +155,7 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
     if(length(abc$Aind)>MaxNumberOfSlices){ #abc gruppe zu gross, reduziere
       pct2=pct[abc$Aind]
       
-      print('Too many slices in group A of ABCanalysis comparing to MaxNumberOfSlices. Selecting the most frequent subgoup out of group A.')
+      message('Too many slices in group A of ABCanalysis comparing to MaxNumberOfSlices. Selecting the most frequent subgoup out of group A.')
       
       pct2=sort(pct2,decreasing = T)
       pct_tmp=sum(pct2[seq(from=MaxNumberOfSlices+1,to=length(pct2),by=1)],na.rm = T)
@@ -168,16 +179,14 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
   Labels=paste0(Labels,': ',pct,"%")
   inds=which(pct==0)
   Labels[inds]=gsub('0%','<0.01%',Labels[inds])
-  if(missing(col)){
-    colors=DataVisualizations::DefaultColorSequence[1:knew]
+  
+  if(knew<=length(colors)){
+    colors=colors[1:knew]
   }else{
-    if(length(col)==knew)
-      colors=col
-    else{
-      warning('Length of colors doesnt match found names defined as labels.')
-      colors=DataVisualizations::DefaultColorSequence[1:knew]
-    }
+    colors=c(colors,tail(DataVisualizations::DefaultColorSequence,knew-length(colors)))
+    message('Colors added using the tail of DataVisualizations::DefaultColorSequence because number of colors was smaller than number of labels.')
   }
+    
 
    return(list(Percents=pct,Labels=Labels,Names=LabelsOut,Cols=colors,Count=count))
 }

@@ -1,7 +1,9 @@
+Version 1.1.13 (GitHub, 2020-06-17)
+- Fanplot and pieChart colors are defined by length of labels
+
 Version 1.1.12 (CRAN, 2020-05-10)
 - Bugfix MDplot for Ordering Bimodal in BimodalityAmplitude and improved nameing for two input parameters for MDplot
 - Improvement Classplot: ggplot2 added and if names exist, a switch to ggplot is taken per default because overlapping in long names can be avoided there
-
 
 Version 1.1.11 (GitHub, 2020-03-02)
 - Improvement of efficiency of ParetoDensityFunction using Rcpp by reducing computing time around 80 percent. Improvement is passed on to MDplot.

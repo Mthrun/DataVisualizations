@@ -28,7 +28,7 @@ MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1)
   \item{main}{
   Optional, title below the fan pie, see \code{plot}
 }
-  \item{col}{Optional, default as other colors in this packages, else the same as in \code{plot}
+  \item{col}{Optional, the default are the first [1:k] colors of the default color sequence used in this package, otherwise a character vector of [1:k] specifying the colors analog to \code{plot}
 }
   \item{MaxPercentage}{
   default FALSE; if true the biggest slice is 100 percent instead of the biggest procentual count
@@ -45,6 +45,8 @@ A normal pie plot is dificult to interpret for a human observer, because humans 
 If Number of Slices is higher than MaxNumberOfSlices then \code{ABCanalysis} is applied (see [Ultsch/Lotsch, 2015]) and group A chosen.
 If Number of Slices in group A is higher than MaxNumberOfSlices, then the most important ones out of group A are chosen.
 If MaxNumberOfSlices is higher than Slices in group A, additional slices are shown depending on the percentage (from high to low).
+
+Color sequence is automatically shortened to the MaxNumberOfSlices used in the fan plot. 
 }
 \value{
 silent output by calling \code{invisible} of a list with
