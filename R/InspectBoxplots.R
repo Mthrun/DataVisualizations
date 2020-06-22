@@ -15,6 +15,11 @@ InspectBoxplots=BoxplotData <- function(Data, Names,Means=TRUE){
     warning("This boxplot is for several features at once.Calling as.matrix()")
     Data = as.matrix(Data)
   }
+  if (!is.matrix(Data)) {
+    warning("This boxplot requires data as a matrix.Calling as.matrix()")
+    Data = as.matrix(Data)
+  }
+  
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
       Names = colnames(Data)
@@ -30,8 +35,11 @@ InspectBoxplots=BoxplotData <- function(Data, Names,Means=TRUE){
     }
   }
 
-  requireNamespace("reshape2")
-  dataframe = reshape2::melt(Data)
+  if(requireNamespace("reshape2")){
+	dataframe = reshape2::melt(Data)
+  }else{
+	stop('InspectBoxplots: Please install reshape2')
+  }
   colnames(dataframe) <- c('ID', 'Variables', 'Values')
   dataframe$Variables=as.character(dataframe$Variables)
   if (isTRUE(Means)) {

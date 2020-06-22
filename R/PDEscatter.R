@@ -1,6 +1,6 @@
-PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(sqrt(500000000),-3),
+PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,sampleParetoRadius,
                               
-                              NrOfContourLines=20,Plotter='native', DrawTopView = T,
+                              NrOfContourLines=20,Plotter='native', DrawTopView = TRUE,
                               
                               xlab="X", ylab="Y", main="PDEscatter",
                               
@@ -12,9 +12,10 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
 #  x[1:n]                  First feature
 #  y[1:n]                  Second feature
 #  OPTIONAL
+#  SampleSize             Sample Size in case of big data
 #  na.rm                   Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE
 #  ParetoRadius            The Pareto Radius; if ==0 or not given it will be calculated by ParetoRadius
-#  sampleSize               bottleneck is memmory allocation von matrizen, 500000000 entspricht ca 4gb memory momentan
+#  sampleParetoRadius      bottleneck is memmory allocation von matrizen, 500000000 entspricht ca 4gb memory momentan
 #  NrOfContourLines        Number of contour lines to be drawn
 #  kernelfactor            Factor to modify the resolution of the grid used to create the plot. Default: 1. Warning: This can increase runtime extremely!
 #  xlab                    Label for the x axis
@@ -38,7 +39,6 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
   ##############
   
   requireNamespace('parallelDist')
-  
   ## Input check
 
   x=checkFeature(x,'x')
@@ -49,15 +49,42 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
 
   isnumber=function(x) return(is.numeric(x)&length(x)==1)
 
-  if(!isnumber(paretoRadius))
-    stop('"paretoRadius" is not a numeric number of length 1. Please change Input.')
+  if(missing(ParetoRadius)){
+    ParetoRadius =0 #default as indication that pareto radius should be computed
+  }
+  
+  if(!isnumber(ParetoRadius))
+    stop('PDEscatter: "ParetoRadius" is not a numeric number of length 1. Please change Input.')
 
-  if(!isnumber(sampleSize))
-    stop('"sampleSize" is not a numeric number of length 1. Please change Input.')
+  
+  if(missing(SampleSize)){
+    SampleSize =-1
+  }
+  
+  if(missing(sampleParetoRadius)){
+    sampleParetoRadius=round(sqrt(500000000),-3)
+  }
+  
+  if(!isnumber(SampleSize))
+    stop('PDEscatter: "SampleSize" is not a numeric number of length 1. Please change Input.')
+  
+  if(!isnumber(sampleParetoRadius))
+    stop('PDEscatter: "sampleParetoRadius" is not a numeric number of length 1. Please change Input.')
+  
   
   if(!isnumber(NrOfContourLines))
-    stop('"NrOfContourLines" is not a numeric number of length 1. Please change Input.')
+    stop('PDEscatter: "NrOfContourLines" is not a numeric number of length 1. Please change Input.')
   
+  
+  if(!is.logical(na.rm))
+    stop('PDEscatter: "na.rm" is expected to be either TRUE or FALSE')
+  
+  if(!is.logical(PlotIt))
+    stop('PDEscatter: "PlotIt" is expected to be either TRUE or FALSE')
+  
+  if(!is.logical(DrawTopView))
+    stop('PDEscatter: "DrawTopView" is expected to be either TRUE or FALSE')
+
   ## Help function(s)
   toRange=function (data, lower, upper) 
   {
@@ -97,12 +124,22 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
   }
   
   ######
-  if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
+
+    
+  if(isTRUE(na.rm)){ 
     noNaNInd <- which(is.finite(x)&is.finite(y))
     x = x[noNaNInd]
     y = y[noNaNInd]
   }
   
+  nData <- length(x)
+  if(SampleSize>0){
+    if (SampleSize<nData) { 
+      sampleInd=sample(1:nData,size = SampleSize)
+      x=x[sampleInd]
+      y=y[sampleInd]
+    }
+  }
   if(missing(xlim))
     xlim = c(min(x,na.rm = T), max(x,na.rm = T))
   if(missing(ylim))
@@ -125,16 +162,17 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
 	##########
 	#distanzmatrix is quadratisch minus diagonale
 
-	if (sampleSize<nData) { # sample with uniform distribution MaximumNrSamples
-	  #warning('More Data than sampleSize. Consider raising sampleSize or using PDEscatterApprox')
-	  sampleInd <- floor(nData*c(runif(sampleSize))+1)
+	if (sampleParetoRadius<nData) { # sample with uniform distribution MaximumNrSamples
+	  #warning('More Data than SampleSize. Consider raising SampleSize or using PDEscatterApprox')
+	  #sampleInd <- floor(nData*c(runif(sampleInd))+1)
+	  par_sampleInd=sample(1:nData,size = sampleParetoRadius,replace = FALSE)
 	  #mt: cannot sample data for interpolation z plot
 	  # otherwise density plot is to stochastic and often incorrect
 	  # x=x[sampleInd]
 	  # y=y[sampleInd]
-	  sampleData = percentdata[sampleInd,]
+	  sampleData4radius = percentdata[par_sampleInd,]
 	} else {
-	  sampleData = percentdata
+	  sampleData4radius = percentdata
 	}
 	##########
 
@@ -142,29 +180,29 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
 	# berechnen vermindert Darstellungsfehler
 
 
-	#Dists = dist(sampleData)
-	Dists=parallelDist::parDist(sampleData,method = 'euclidean',diag = F,upper = F)
+	#Dists = dist(sampleData4radius)
+	Dists=parallelDist::parDist(sampleData4radius,method = 'euclidean',diag = F,upper = F)
 	Dists=as.vector(Dists)
-	if(paretoRadius <= 0){
-		 # paretoRadius <- paretoRadiusForGMM(Data = data)
-	  #paretoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen
-	  # if(sampleSize<nData)
+	if(ParetoRadius <= 0){
+		 # ParetoRadius <- ParetoRadiusForGMM(Data = data)
+	  #ParetoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen
+	  # if(SampleSize<nData)
 	  if(nData<500){
-	    paretoRadius <- quantile(Dists, 6/100, type = 5, na.rm = TRUE)
+	    ParetoRadius <- quantile(Dists, 6/100, type = 5, na.rm = TRUE)
 	  }else{
-	    paretoRadius <- c_quantile(Dists[is.finite(Dists)], 6/100)
+	    ParetoRadius <- c_quantile(Dists[is.finite(Dists)], 6/100)
 	  }
-      if(paretoRadius==0){         #pareto 20/80 rule
+      if(ParetoRadius==0){         #pareto 20/80 rule
         if(nData<500){
-          paretoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE)
+          ParetoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE)
         }else{
-          paretoRadius <- c_quantile(Dists[is.finite(Dists)], 20/100)
+          ParetoRadius <- c_quantile(Dists[is.finite(Dists)], 20/100)
         }
-        #paretoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE)
-        if(paretoRadius==0){
-          stop(paste0('Estimation of Radius(',paretoRadius,') for two-dimensional density not possible. Please provide paretoRadius manually.'))
+        #ParetoRadius <- quantile(Dists, 20/100, type = 5, na.rm = TRUE)
+        if(ParetoRadius==0){
+          stop(paste0('Estimation of Radius(',ParetoRadius,') for two-dimensional density not possible. Please provide ParetoRadius manually.'))
         }else{
-        warning(paste0('Estimation of Radius(',paretoRadius,') for two-dimensional density may not work properly. You can provide paretoRadius manually.'))
+        warning(paste0('Estimation of Radius(',ParetoRadius,') for two-dimensional density may not work properly. You can provide ParetoRadius manually.'))
         }
       }
 	  # else
@@ -172,9 +210,9 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
 	}
 
 	# Ersetzt InPShere2D
-	# inPSpheres = as.numeric(colSums(1 * (as.matrix(dist(percentdata)) <= paretoRadius)))
+	# inPSpheres = as.numeric(colSums(1 * (as.matrix(dist(percentdata)) <= ParetoRadius)))
 
-	inPSpheres = inPSphere2D(percentdata, paretoRadius)
+	inPSpheres = inPSphere2D(percentdata, ParetoRadius)
 
 	## Plotting now in zplot (again)
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
@@ -231,6 +269,6 @@ PDEscatter=function(x,y,na.rm=FALSE,PlotIt=TRUE,paretoRadius=0,sampleSize=round(
 	  })
 	}
 	
-	return(invisible(list(AnzInPSpheres=inPSpheres,ParetoRadius=paretoRadius,Handle=plt)))
+	return(invisible(list(AnzInPSpheres=inPSpheres,ParetoRadius=ParetoRadius,Handle=plt)))
 }
 

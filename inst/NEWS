@@ -1,5 +1,7 @@
 Version 1.1.13 (GitHub, 2020-06-17)
 - Fanplot and pieChart colors are defined by length of labels
+- PDEscatter: Implemented several error catches and enabled two options of drawing a sample depending on the size of data.
+- Classplot: Implemented several error catches and fixed bug in case of NaN values and given Names.
 
 Version 1.1.12 (CRAN, 2020-05-10)
 - Bugfix MDplot for Ordering Bimodal in BimodalityAmplitude and improved nameing for two input parameters for MDplot

@@ -1,10 +1,10 @@
 \name{InspectBoxplots}
 \alias{InspectBoxplots}
 \title{
-Enables to Insptecd the Boxplots for Multiple variables
+Inspect Boxplots
 }
 \description{
-This function creates a boxplot for each variable of the data matrix. Each boxplot also has a point for the mean of the variable.
+Enables to inspect the boxplots for multiple variables in ggplot2 syntax. Each boxplot also has a point for the mean of the variable.
 }
 \usage{
 InspectBoxplots(Data, Names,Means=TRUE)
@@ -35,4 +35,4 @@ InspectBoxplots(x)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ plot }
+\keyword{boxplot}

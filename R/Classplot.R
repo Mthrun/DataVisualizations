@@ -4,18 +4,21 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab = "X", ylab = 'Y',
   
   if(missing(Cls)) Cls=rep(1,length(X))
   
-  if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
-    noNaNInd <- which(is.finite(X)&is.finite(Y))
-    X = X[noNaNInd]
-    Y = Y[noNaNInd]
-    Cls=Cls[noNaNInd]
-  }
-  
   X=checkFeature(X,'X')
   Y=checkFeature(Y,'Y')
   Cls=checkCls(Cls,length(Y))
   if(length(X)!=length(Y)) stop('X and Y have to have the same length')
   
+  if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
+    noNaNInd <- which(is.finite(X)&is.finite(Y))
+    X = X[noNaNInd]
+    Y = Y[noNaNInd]
+    Cls=Cls[noNaNInd]
+    
+    if(!is.null(Names)){
+      Names=Names[noNaNInd]
+    }
+  }
   uu=unique(Cls)
   if(missing(Colors)){
     mc=length(uu)
@@ -31,7 +34,7 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab = "X", ylab = 'Y',
     else
       Plotter="ggplot"
   }
-  
+  if(Plotter=="ggplot2") Plotter="ggplot"
   
   
   if(Plotter=="plotly"){
