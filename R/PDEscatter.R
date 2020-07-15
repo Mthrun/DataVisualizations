@@ -79,8 +79,11 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
   if(!is.logical(na.rm))
     stop('PDEscatter: "na.rm" is expected to be either TRUE or FALSE')
   
-  if(!is.logical(PlotIt))
-    stop('PDEscatter: "PlotIt" is expected to be either TRUE or FALSE')
+  if(!is.logical(PlotIt)){
+    if(!(PlotIt==-1))
+      stop('PDEscatter: "PlotIt" is expected to be either TRUE, FALSE or -1.')
+  }
+    
   
   if(!is.logical(DrawTopView))
     stop('PDEscatter: "DrawTopView" is expected to be either TRUE or FALSE')
@@ -213,7 +216,11 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
 	# inPSpheres = as.numeric(colSums(1 * (as.matrix(dist(percentdata)) <= ParetoRadius)))
 
 	inPSpheres = inPSphere2D(percentdata, ParetoRadius)
-
+  
+	Matrix3D=cbind(x,y,inPSpheres)
+	if(PlotIt==-1)
+	  return(list(AnzInPSpheres=inPSpheres,Matrix3D=Matrix3D,ParetoRadius=ParetoRadius,Handle=NULL))
+	
 	## Plotting now in zplot (again)
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
 
@@ -269,6 +276,6 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
 	  })
 	}
 	
-	return(invisible(list(AnzInPSpheres=inPSpheres,ParetoRadius=ParetoRadius,Handle=plt)))
+	return(invisible(list(AnzInPSpheres=inPSpheres,Matrix3D=Matrix3D,ParetoRadius=ParetoRadius,Handle=plt)))
 }
 

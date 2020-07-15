@@ -30,8 +30,11 @@ The method was succesfully used in [Thrun, 2018; Thrun/Ultsch 2018].
   \item{na.rm}{Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE}
   \item{ParetoRadius}{Numeric, positiv scalar, the Pareto Radius. If omitted (or 0), calculate by paretoRad.}
    \item{sampleParetoRadius}{Numeric, positiv scalar, maximum size of the sample used for estimation of "kernel", should be significantly lower than SampleSize because requires distance computations which is memory expensive}
-    \item{PlotIt}{TRUE: plots with function call
-    FALSE: Does not plot, plotting can be done using the list element \code{Handle}
+    \item{PlotIt}{\code{TRUE}: plots with function call
+    
+    \code{FALSE}: Does not plot, plotting can be done using the list element \code{Handle}
+    
+    \code{-1}: Computes density only, does not perfom any preperation for plotting meaning that \code{Handle=NULL}
     }
 
   \item{NrOfContourLines}{Numeric, number of contour lines to be drawn. 20 by default.}
@@ -56,7 +59,9 @@ MT contributed with several adjustments
 
 \value{
  List of:
-  \item{AnzInPSpheres}{Number of points within the ParetoRadius of each point}
+  \item{AnzInPSpheres}{Number of points within the ParetoRadius of each point, i.e. density information}
+   \item{Matrix3D}{1:n,1:3] marix of x,y and density information}
+  
   \item{ParetoRadius}{ParetoRadius used for PDEscatter}
   \item{Handle}{Handle of the plot object. Information-string if native R plot is used.}
 
@@ -92,8 +97,10 @@ ylab ='MTY in EUR' ,main='Pareto Density Estimation indicates Bimodality' )
 }
 
 \author{Felix Pape}
+
 \keyword{scatter}
+\keyword{PDE}
+
+\concept{Density Estimation}
 \concept{scatter plot}
 \concept{scatter density plot}
-\keyword{PDE}
-\concept{Density Estimation}
