@@ -1,17 +1,20 @@
-\name{ShepardPDEscatter}
-\alias{ShepardPDEscatter}
+\name{ShepardDensityscatter}
+\alias{ShepardDensityScatter}
+\alias{ShepardDensityPlot}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Shepard PDE scatter}
 \description{
 Draws ein Shepard Diagram (scatterplot of distances) with an two-dimensional PDE density estimation .
 }
 \usage{
-%- all arguments (funktionsaufruf)
-ShepardPDEscatter(InputDists, OutputDists, Plotter = "native", 
 
-xlab ="Input Distances", ylab = "Output Distances", 
+ShepardDensityScatter(InputDists,OutputDists,
 
-main = "ProjectionMethod",sampleSize)
+Plotter='native',xlab='Input Distances',
+
+ylab='Output Distances',main='ProjectionMethod',
+
+ sampleSize=500000)
 }
 \arguments{
   \item{InputDists}{[1:n,1:n] with n cases of data in d variables/features:
@@ -32,7 +35,7 @@ see \code{PDEscatter} for details
   \item{main}{
 Title of the Shepard diagram
 }
-\item{sampleSize}{Optional, default(50000),  reduces a.ount of data for density estimation, if too many distances given}
+\item{sampleSize}{Optional, default(500000),  reduces a.ount of data for density estimation, if too many distances given}
 }
 \details{
 Introduced and described in [Thrun, 2018, p. 63] with examples in [Thrun, 2018, p. 71-72]}
@@ -51,15 +54,20 @@ res = stats::cmdscale(d = InputDist, k = 2, eig = TRUE,
 ProjectedPoints = as.matrix(res$points)
 \donttest{
 
-ShepardPDEscatter(InputDist,as.matrix(dist(ProjectedPoints)),main = 'MDS')
+ShepardDensityScatter(InputDist,as.matrix(dist(ProjectedPoints)),main = 'MDS')
 }
 \dontshow{
 
-ShepardPDEscatter(InputDist[1:100,1:100],as.matrix(dist(ProjectedPoints))[1:100,1:100],main = 'MDS')
+ShepardDensityScatter(InputDist[1:100,1:100],as.matrix(dist(ProjectedPoints))[1:100,1:100],main = 'MDS')
 }
 }
 \keyword{ShepardDensityPlot}
 \keyword{DensityPlot}
 \keyword{Shepard}
 \keyword{ShepardDiagram}
-\keyword{ShepardPDEscatter}
+\keyword{ShepardDensityScatter}
+\concept{Shepard Density Scatter}
+\concept{Shepard Density Plot}
+\concept{Density Estimation}
+\concept{scatter plot}
+\concept{scatter density plot}

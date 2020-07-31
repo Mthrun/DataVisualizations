@@ -1,4 +1,4 @@
-ShepardPDEscatter=ShepardDensityPlot=function(InputDists,OutputDists,Plotter='native',xlab='Input Distances',ylab='Output Distances',main='ProjectionMethod', sampleSize=50000){
+ShepardDensityScatter=ShepardDensityPlot=function(InputDists,OutputDists,Plotter='native',xlab='Input Distances',ylab='Output Distances',main='ProjectionMethod', sampleSize=500000){
   #  Plotter                 Plotting Backend to use. 
   #                          Possible values are: native, ggplot, plotly
   #
@@ -34,9 +34,9 @@ ShepardPDEscatter=ShepardDensityPlot=function(InputDists,OutputDists,Plotter='na
     ind=sample(size = sampleSize,replace = F,x = 1:xn)
     print('Too many distances. Drawing sample.')
 		plot(x[ind],y[ind],xlab='Input',ylab='Output',main='shepard diagram')
-    ggobject=PDEscatter(x[ind],y[ind],Plotter=Plotter,xlab=xlab, ylab=ylab, main=main)$Handle
+    ggobject=DensityScatter(x[ind],y[ind],DensityEstimation="SDH",Plotter=Plotter,xlab=xlab, ylab=ylab, main=main)$Handle
   }else{
-    ggobject=PDEscatter(x,y,Plotter=Plotter,xlab=xlab, ylab=ylab, main=main)$Handle
+    ggobject=DensityScatter(x,y,DensityEstimation="SDH",Plotter=Plotter,xlab=xlab, ylab=ylab, main=main)$Handle
   }
   # ggobject=PDEscatter(x,y)
   # ggobject=ggobject+ylab('Output Distances')+xlab('Input Distances')+ggtitle(label)#+

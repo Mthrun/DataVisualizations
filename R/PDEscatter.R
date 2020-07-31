@@ -44,7 +44,7 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
   x=checkFeature(x,'x')
   y=checkFeature(y,'y')
   if(identical(x,y)){
-    stop('Variable x is identical to variable y. Please check input.')
+    stop('PDEscatter: Variable x is identical to variable y. Please check input.')
   }
 
   isnumber=function(x) return(is.numeric(x)&length(x)==1)
@@ -219,7 +219,7 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
   
 	Matrix3D=cbind(x,y,inPSpheres)
 	if(PlotIt==-1)
-	  return(list(AnzInPSpheres=inPSpheres,Matrix3D=Matrix3D,ParetoRadius=ParetoRadius,Handle=NULL))
+	  return(list(X=x,Y=y,Densities=inPSpheres,Matrix3D=Matrix3D,ParetoRadius=ParetoRadius,Handle=NULL))
 	
 	## Plotting now in zplot (again)
 	plt = zplot(x = x,y = y,z = inPSpheres,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
@@ -276,6 +276,6 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
 	  })
 	}
 	
-	return(invisible(list(AnzInPSpheres=inPSpheres,Matrix3D=Matrix3D,ParetoRadius=ParetoRadius,Handle=plt)))
+	return(invisible(list(X=x,Y=y,Densities=inPSpheres,Matrix3D=Matrix3D,ParetoRadius=ParetoRadius,Handle=plt)))
 }
 

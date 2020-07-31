@@ -1,4 +1,4 @@
- Heatmap=function(DataOrDistances,Cls,method='euclidean',LowLim=0,HiLim){
+ Heatmap=function(DataOrDistances,Cls,method='euclidean',LowLim=0,HiLim,LineWidth=0.5){
 # Heatmap(DataOrDistances,Cls,Names,LowLim,HiLim) 
 # Heatmap: Distances of DataOrDistances sorted by Cls
 # INPUT
@@ -49,7 +49,7 @@
      DataDists=as.matrix(parallelDist::parDist(DataOrDistances[ind, ],method = method))
      #DataDists = DistanceMatrix(DataOrDistances, method = method)
    }
-
+   
    if (missing(HiLim)){}
      HiLim = max(DataDists,na.rm=T)
      
@@ -84,15 +84,34 @@
     # }
       cols=rep('black',cnn)
    } 
-     plt = Pixelmatrix(DataDists, c(), LowLim, HiLim) +
-       ylab(paste('|Cls No', Vunique[order(Vunique, decreasing = !SortOrder)], '| ', collapse = '')) +
-       xlab(paste('|Cls No', Vunique, '| ', collapse = '')) +
-       ggtitle('Distances of DataOrDistances sorted by Cls')+
-       theme(plot.title = element_text(hjust = 0.5),axis.text.x = element_blank())
+   
+   #Xnames has to be null so that this works!
+     plt = Pixelmatrix(DataDists,XNames = NULL,LowLim = LowLim, HiLim = HiLim) +
+       ggplot2::ggtitle("Distances Sorted by Clustering seperated by Lines ' | '",subtitle = paste(paste('Cluster No', Vunique), collapse = ' | '))+
+        ggplot2::theme(plot.subtitle = ggplot2::element_text(hjust = 0.5,vjust = 0),plot.title = ggplot2::element_text(hjust = 0.5),axis.text.x = ggplot2::element_blank(),axis.text.y = ggplot2::element_blank(),axis.ticks = ggplot2::element_blank())+
+        ylab(paste(paste('Cluster No', Vunique[order(Vunique, decreasing = !SortOrder)]), collapse = ' | ')) +
+        xlab(paste(paste('Cluster No', Vunique), collapse = ' | '))
      
      if (length(Vunique) > 1) {
-      plt = plt + geom_hline(yintercept = ClassSepLines,color=cols) + geom_vline(xintercept = ClassSepLines,color=cols)
+      plt = plt + ggplot2::geom_hline(yintercept = head(ClassSepLines,cnn-1),color=head(cols,cnn-1),lwd=LineWidth)#+geom_vline(xintercept = ClassSepLines,color=cols,lwd=LineWidth)
+
+     
+      #this works only for one segment
+       #plt=plt+ geom_segment(aes(x = ClassSepLines[3], y = 0, xend = ClassSepLines[3], yend = n),lwd=LineWidth,color="black")
+      
+      n=dim(DataDists)[1]
+      for(i in 1:(cnn-1)){
+         clsep=ClassSepLines[i]
+         plt = plt + ggplot2::geom_segment(x = clsep, y = -n, xend = clsep, yend = 0,lwd=LineWidth,color="black")
+         # segment_data = data.frame(
+         #    x = ClassSepLines,
+         #    xend = ClassSepLines, 
+         #    y = rep(0,cnn),
+         #    yend = rep(n,cnn)
+         # )
+         #plt=plt+ geom_segment(data = segment_data, mapping = aes(x = x, y = y, xend = xend, yend = yend))#geom_segment(x = clsep, y = 0, xend = clsep, yend = n,lwd=LineWidth,color="black")
+      }
      }
-   print(plt)
+     print(plt)
    return(invisible(plt))
 }                    
