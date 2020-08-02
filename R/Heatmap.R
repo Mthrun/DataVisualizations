@@ -1,5 +1,5 @@
- Heatmap=function(DataOrDistances,Cls,method='euclidean',LowLim=0,HiLim,LineWidth=0.5){
-# Heatmap(DataOrDistances,Cls,Names,LowLim,HiLim) 
+ Heatmap=function(DataOrDistances,Cls,method='euclidean',LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No."){
+# Heatmap(DataOrDistances,Cls,method) 
 # Heatmap: Distances of DataOrDistances sorted by Cls
 # INPUT
 # DataOrDistances                    [1:n,1:d] data cases in rows, variables in columns oder [1:n,1:n] distances
@@ -11,6 +11,7 @@
 
 # author: MT 08/2016, edited 28.01.2018
    #2.Editor: MT 06/18
+    #3.Editor: 07/2020 because of reviews in GMD journal
    requireNamespace('parallelDist')
    
    if(!is.matrix(DataOrDistances)){
@@ -39,7 +40,7 @@
      DataDists = DataOrDistances
    }
    else{
-      message('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
+      message('Distances are not in a symmetric matrix, Datamatrix is assumed and parallelDist::parDist is called')
      
      AnzVar = ncol(DataOrDistances)
      
@@ -87,10 +88,10 @@
    
    #Xnames has to be null so that this works!
      plt = Pixelmatrix(DataDists,XNames = NULL,LowLim = LowLim, HiLim = HiLim) +
-       ggplot2::ggtitle("Distances Sorted by Clustering seperated by Lines ' | '",subtitle = paste(paste('Cluster No', Vunique), collapse = ' | '))+
+       ggplot2::ggtitle("Distances Sorted by Clustering seperated by Lines ' | '",subtitle = paste(paste(Clabel, Vunique), collapse = ' | '))+
         ggplot2::theme(plot.subtitle = ggplot2::element_text(hjust = 0.5,vjust = 0),plot.title = ggplot2::element_text(hjust = 0.5),axis.text.x = ggplot2::element_blank(),axis.text.y = ggplot2::element_blank(),axis.ticks = ggplot2::element_blank())+
-        ylab(paste(paste('Cluster No', Vunique[order(Vunique, decreasing = !SortOrder)]), collapse = ' | ')) +
-        xlab(paste(paste('Cluster No', Vunique), collapse = ' | '))
+        ylab(paste(paste(Clabel, Vunique[order(Vunique, decreasing = !SortOrder)]), collapse = ' | ')) +
+        xlab(paste(paste(Clabel, Vunique), collapse = ' | '))
      
      if (length(Vunique) > 1) {
       plt = plt + ggplot2::geom_hline(yintercept = head(ClassSepLines,cnn-1),color=head(cols,cnn-1),lwd=LineWidth)#+geom_vline(xintercept = ClassSepLines,color=cols,lwd=LineWidth)

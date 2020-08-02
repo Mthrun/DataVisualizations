@@ -6,13 +6,13 @@ Heatmap for Clustering
 }
 \description{
 Heatmap of Distances of Data sorted by Cls. Clustering algorithms provide a Classifcation of data,  where the labels are defined as a numeric vector \code{Cls}. Then, a typical cluster-respectively group structure is displayed by the \code{Heatmap} function.
-At the margin of the heatmap a dendrogram can be shown, if hierarchical cluster algorithms are used.
-Here the dendrogram has to be shown separately and only the heatmap itself is displayed [Wilkinson,2009].
+At the margin of the heatmap a dendrogram can be shown, if hierarchical cluster algorithms are used [Wilkinson,2009].
+Here the dendrogram has to be shown separately and only the heatmap itself is displayed 
 }
 \usage{
 Heatmap(DataOrDistances,Cls,method='euclidean',
 
-LowLim=0,HiLim,LineWidth=0.5)
+LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No.")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,10 +34,12 @@ if \code{DataOrDistances} is a [1:n,1:d] not symmetric numerical matrix, please
   \item{LowLim}{ Optional: limits for the color axis }
   \item{HiLim}{ Optional: limits for the color axis }
     \item{LineWidth}{Width of lines seperating the clusters in the heatmap}
+    \item{Clabel}{Default "\code{Cluster No.}", for large number of clusters abbrevations can be used like "\code{Cls No.}" or "\code{C}" in order to fit as the x and y axis labels}
 }
 \details{
-“Cluster heatmaps are commonly used in biology and related fields to reveal hierarchical clusters in data matrices. Heatmaps visualize a data matrix by drawing a rectangular grid corresponding to rows and columns in the matrix and coloring the cells by their values in the data matrix. In their most basic form, heatmaps have been used for over a century {Wilkinson, 2012 #475}. In addition to coloring cells, cluster heatmaps reorder the rows and/or columns of the matrix based on the results of hierarchical clustering. (…). Cluster heatmaps have high data density, allowing them to compact large amounts of information into a small space {Weinstein, 2008 #1352}.”{Engle, 2017 #1351}.”
-For distance matrices, the procedure can be performed as described above. Here, the color scale is chosen such that pixels of low distances have blue and teal colors, pixels of middle distances yellow colors, and pixels of high distances have orange and red colors. The distances are ordered by the clustering and the clusters are divided by black lines. A clustering is valid if the intra-cluster distances are distinctively smaller that inter-cluster distances in the heatmap. For another example, please see {Thrun, 2018 #560} (Fig. 3.7, p. 31).
+"Cluster heatmaps are commonly used in biology and related fields to reveal hierarchical clusters in data matrices. Heatmaps visualize a data matrix by drawing a rectangular grid corresponding to rows and columns in the matrix and coloring the cells by their values in the data matrix. In their most basic form, heatmaps have been used for over a century [Wilkinson, 2012]. In addition to coloring cells, cluster heatmaps reorder the rows and/or columns of the matrix based on the results of hierarchical clustering. (...) . Cluster heatmaps have high data density, allowing them to compact large amounts of information into a small space [Weinstein, 2008]", [Engle, 2017].
+
+The procedure can be adapted to distance matrices [Thrun, 2018]. Then, the color scale is chosen such that pixels of low distances have blue and teal colors, pixels of middle distances yellow colors, and pixels of high distances have orange and red colors [Thrun, 2018]. The distances are ordered by the clustering and the clusters are divided by black lines. A clustering is valid if the intra-cluster distances are distinctively smaller that inter-cluster distances in the heatmap [Thrun, 2018]. For another example, please see [Thrun, 2018] (Fig. 3.7, p. 31).
 }
 \value{
 object of ggplot2
@@ -53,8 +55,12 @@ Michael Thrun
 data("Lsun3D")
 Cls=Lsun3D$Cls
 Data=Lsun3D$Data
-\donttest{
-Heatmap(as.matrix(dist(Data)),Cls = Cls)
+
+#Data
+\donttest{Heatmap(Data,Cls = Cls)
+}
+#Distances
+\donttest{Heatmap(as.matrix(dist(Data)),Cls = Cls)
 }
 \dontshow{
 Heatmap(as.matrix(dist(Data[1:50,])),Cls = Cls[1:50])
