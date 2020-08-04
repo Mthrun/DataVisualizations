@@ -92,7 +92,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
         warning('Colnames are not unique. Numerating duplicated colnames.')
         # Names = 1:dvariables
         Names=colnames(Data)
-        charbooleandupli=duplicated(Names)
+        charbooleandupli=duplicated(Names)&Names!=""&Names!=" "
         Names[charbooleandupli]=paste0(Names[charbooleandupli],2:(1+sum(charbooleandupli)))
         colnames(Data) <- Names
       }
@@ -100,14 +100,14 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
         warning('Some colnames are set to "" (blank). Numerating these colnames.')
         Names=colnames(Data)
         charmissing=which(Names=="")
-        Names[charmissing]=paste0(Names[charmissing],2:(1+sum(charmissing)))
+        Names[charmissing]=paste0("C",charmissing)
         colnames(Data) <- Names
       }
       if(any(Names==" ")){
         warning('Some colnames are set to "" (blank). Numerating these colnames.')
         Names=colnames(Data)
         charmissing=which(Names==" ")
-        Names[charmissing]=paste0(Names[charmissing],2:(1+sum(charmissing)))
+        Names[charmissing]=paste0("C",charmissing)
         colnames(Data) <- Names
       }
     } else{
@@ -367,10 +367,11 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     warning(paste('Some columns have less than,',QuantityThreshold,',finite data points or less than ',UniqueValuesThreshold,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
     DataDensity=Data
     #mm=apply(Data,2,median,na.rm=T)
+    #this part is obsolete now because geom_jitter does it properly
     #Transforms pdf estimation to median line drawing of pdf cannot be estimated
-    for(nc in 1:dvariables){
-      if(Npervar[nc]<QuantityThreshold){
-        DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
+    #for(nc in 1:dvariables){
+    #  if(Npervar[nc]<QuantityThreshold){
+        #DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
         
         #generated values around the median if not enoug non finite values given
         # this is done to draw a median line
@@ -379,9 +380,9 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
         # }else{
         #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
         # }
-      }
-      if(NUniquepervar[nc]<UniqueValuesThreshold){
-        DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
+    #  }
+    #  if(NUniquepervar[nc]<UniqueValuesThreshold){
+        #DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
         
         #generated values around the median if not enoug unique values given
         # this is done to draw a median line
@@ -390,12 +391,14 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
         # }else{
         #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
         # }
-      }
-    }
+    #  }
+    #}
     #Generates in the cases where pdf cannot be estimated a scatter plot
     DataJitter=DataDensity
     #Delete all scatters for features where distributions can be estimated
     DataJitter[,(Npervar>=QuantityThreshold&NUniquepervar>=UniqueValuesThreshold)]=NaN
+    #Delete all distributions for features where jitter plots are provided
+    DataDensity[,!(Npervar>=QuantityThreshold&NUniquepervar>=UniqueValuesThreshold)]=NaN
     #apply ordering
     dataframe = reshape2::melt(DataDensity[,Rangfolge])
   }else{
@@ -443,27 +446,31 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
       normaldist=as.matrix(normaldist)
       normaldist=cbind(normaldist,rep(NaN,Ncases))
       colnames(normaldist)=c(colnames(Data),'Cnan')
-    } 
-    DFtemp = reshape2::melt(normaldist)
-    colnames(DFtemp) <- c('ID', 'Variables', 'Values')
-    if(dvariables==1){#bugfix
-      DFtemp=DFtemp[DFtemp[,'Variables']==colnames(Data),]
     }
-    DFtemp$Variables=as.character(DFtemp$Variables)
-    #trimming in this case not required
-
-    plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),
-                          colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,
-                          na.rm = TRUE,trim = TRUE, fill = NA,position="identity",width=1)#+guides(fill=FALSE,scale=MDscaling)
+    #bugifix Computation failed in `stat_ydensity()`:replacement has 1 row, data has 0 
+    ind_sum=apply(normaldist,2,function(x) sum(!is.finite(x)))
+    normaldist=normaldist[,ind_sum!=nrow(normaldist),drop = FALSE]
+   
+    if(dim(normaldist)[2]>0){
+      DFtemp = reshape2::melt(normaldist)
+      colnames(DFtemp) <- c('ID', 'Variables', 'Values')
+      if(dvariables==1){#bugfix 
+        DFtemp=DFtemp[DFtemp[,'Variables']==colnames(Data),]
+      }
+      DFtemp$Variables=as.character(DFtemp$Variables)
+      #trimming in this case not required
+      
+      
+      plot=plot+geom_violin(data = DFtemp,mapping = aes_string(x = "Variables", group = "Variables", y = "Values"),
+                            colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,
+                            na.rm = TRUE,trim = TRUE, fill = NA,position="identity",width=1)#+guides(fill=FALSE,scale=MDscaling)
+    }#otherwise no robust gaussian exist
   }
 
   if(isTRUE(BoxPlot)){
     plot=plot+stat_boxplot(geom = "errorbar", width = 0.5, color=BoxColor)+geom_boxplot(width=1,outlier.colour = NA,alpha=0,fill='#ffffff', color=BoxColor,position="identity")
   }
 
-  # plot=plot + 
-  #   geom_violin(stat = "PDEdensity",fill=fill,scale=MDscaling,size=LineSize)+ theme(axis.text.x = element_text(size=rel(1.2)))
-  
   if(isTRUE(requireNamespace("ggExtra"))){
     plot=plot+ggExtra::rotateTextX()
   }else{

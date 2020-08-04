@@ -5,6 +5,7 @@ Version 1.2.0 (GitHub, 2020-07-28)
 	o Renamed ShepardPDEScatter to ShepardDensityScatter using "SDH" density estimation.
 	o InspectCorrelation added as shortcut to inspect correlations.
 	o Heatmap: Due to scientific reviews, documentation is elaborated and visualisation is now clearer.
+	o bugfixes MDplot: multiple missing column names declared as "" can now be plotted; disabled for R 4.0.x manual jittering as geom_jitter does it now properly; RobustGaussian=TRUE now does not give the warning "Computation failed in `stat_ydensity()`:replacement has 1 row, data has 0"  which priorly sometimes was written in console and was irritating because density estimation was always properly performed.
 
 Version 1.1.13 (GitHub, 2020-06-17)
 	o Fanplot and pieChart colors are defined by length of labels.
