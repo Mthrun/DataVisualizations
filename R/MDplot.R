@@ -444,7 +444,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     normaldist=normaldist[,Rangfolge]
     if(dvariables==1){#bugfix
       normaldist=as.matrix(normaldist)
-      normaldist=cbind(normaldist,rep(NaN,Ncases))
+      normaldist=cbind(normaldist,rep(NaN,length(normaldist)))
       colnames(normaldist)=c(colnames(Data),'Cnan')
     }
     #bugifix Computation failed in `stat_ydensity()`:replacement has 1 row, data has 0 

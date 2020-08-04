@@ -95,11 +95,13 @@ Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls)
 
 #plotly with line
 data(Lsun3D)
-Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,LineType="-",LineColor = "green")
+Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
+LineType="-",LineColor = "green")
 \donttest{
 #ggplot2 with line and labels
 data(Lsun3D)
-Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,Names = rownames(Lsun3D$Data),Size =2,LineType = 1)
+Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
+Names = rownames(Lsun3D$Data),Size =2,LineType = 1)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

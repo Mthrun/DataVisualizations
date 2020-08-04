@@ -1,4 +1,4 @@
-Version 1.2.0 (GitHub, 2020-07-28)
+Version 1.2.0 (CRAN, 2020-08-04)
 	o Standardized Output of PDEscatter
 	o Introduced SmoothedDensitiesXY for a very fast density estimation in case of large two-dimensional datasets.
 	o Generalized PDEscatter to a new function called DensityScatter with the two density estimation options PDE and SDH.

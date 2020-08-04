@@ -28,8 +28,7 @@ This function plots the Density on top of a scatterplot. Variances of x and y sh
    
   \item{SampleSize}{Numeric, positiv scalar, maximum size of the sample used for calculation. High values increase runtime significantly. The default is that no sample is drawn}
   \item{na.rm}{Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE}
-  \item{ParetoRadius}{Numeric, positiv scalar, the Pareto Radius. If omitted (or 0), calculate by paretoRad.}
-   \item{sampleParetoRadius}{Numeric, positiv scalar, maximum size of the sample used for estimation of "kernel", should be significantly lower than SampleSize because requires distance computations which is memory expensive}
+
     \item{PlotIt}{\code{TRUE}: plots with function call
     
     \code{FALSE}: Does not plot, plotting can be done using the list element \code{Handle}
