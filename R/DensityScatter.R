@@ -30,7 +30,7 @@ DensityScatter=function(x,y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotI
 #  Author MT 07/2020
   ##############
   
-  requireNamespace('parallelDist')
+ 
   ## Input check
 
   x=checkFeature(x,'x')
@@ -44,7 +44,6 @@ DensityScatter=function(x,y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotI
   if(missing(SampleSize)){
     SampleSize =-1
   }
-  
   
   if(!isnumber(SampleSize))
     stop('DensityScatter: "SampleSize" is not a numeric number of length 1. Please change Input.')
@@ -91,6 +90,7 @@ DensityScatter=function(x,y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotI
 
 
 if(DensityEstimation=="PDE"){
+  requireNamespace('parallelDist')
   V=PDEscatter(x,y,SampleSize,na.rm=FALSE,PlotIt=-1,...)
   Densities=V$Densities
   x=V$X

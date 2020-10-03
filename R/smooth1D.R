@@ -16,7 +16,7 @@ smooth1D = function(Y, lambda) {
   D2 = (diff(D1, 1))# D2(1:m-2,1:m) mit 1 -2 1 auf der Diagonale
   #muss das ein skalar sein?
   #matlab: P = lambda.^2 .* D2'*D2 + 2.*lambda .* D1'*D1;
-  P = lambda ^ 2 * ( t(D2) %*% D2) + 2 * lambda * ( t(D1) %*% D1)
+  P = lambda ^ 2 * ( t(D2) %*% D2) + 2 * lambda * ( t(D1) %*% D1) #penalty 
   Z= solve((E+P),Y)  # Gleichung 8 aus 04 Eilers aufgeloest nach Z
   return(Z)
 }
