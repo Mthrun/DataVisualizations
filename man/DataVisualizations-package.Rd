@@ -14,7 +14,7 @@ For a brief introduction to \pkg{DataVisualizations} please see the vignette \hr
 Please see \url{http://www.deepbionics.org/}. 
 Depending on the context please cite either [Thrun, 2018] regarding visualizations in the context of clustering or [Thrun/Ultsch, 2018] for other visualizations.
 
-For the Mirrored Density Plot (MD plot) please cite [Thrun et al., 2019] and see the extensive vignette in \url{https://md-plot.readthedocs.io/en/latest/index.html}. The MD plot is also available in Python \url{https://pypi.org/project/md-plot/}
+For the Mirrored Density Plot (MD plot) please cite [Thrun et al., 2020] and see the extensive vignette in \url{https://md-plot.readthedocs.io/en/latest/index.html}. The MD plot is also available in Python \url{https://pypi.org/project/md-plot/}
 
 \packageIndices{DataVisualizations}
 }
@@ -28,7 +28,8 @@ Maintainer: \packageMaintainer{DataVisualizations}
 
 [Thrun/Ultsch, 2018] Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
 
-[Thrun et al., 2019]	Thrun, M. C., Gehlert, Tino, & Ultsch, A. : Analyzing the Fine Structure of Distributions, arXiv:1908.06081, 2019. 
+[Thrun et al., 2020]	Thrun, M. C., Gehlert, T. & Ultsch, A.: Analyzing the Fine Structure of Distributions, PLoS ONE, Vol. 15(10), pp. 1-66, DOI 10.1371/journal.pone.0238835, 2020. 
+
 }
 \examples{
 

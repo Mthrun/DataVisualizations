@@ -56,11 +56,16 @@ InspectVariable(MTY,'MTY')
 
 ## Mirrored Density Plots (MD-plots)
 
-A clear model behind density estimation can outperform conventional visualization approaches. MD Plot combines the syntax of ggplot2 with Pareto density estimation and additional functionality usefull from the Data Scientist's point of view. The approach is published in [Thrun et al. ,2019].A detailed description of the usage and functionality can be found in https://md-plot.readthedocs.io/en/latest/index.html \url{https://md-plot.readthedocs.io/en/latest/index.html}. 
+A clear model behind density estimation can outperform conventional visualization approaches. MD Plot combines the syntax of ggplot2 with Pareto density estimation and additional functionality usefull from the Data Scientist's point of view. The approach is published in [Thrun et al., 2020]. A detailed description of the usage and functionality can be found in https://md-plot.readthedocs.io/en/latest/index.html \url{https://md-plot.readthedocs.io/en/latest/index.html}. 
 
 The MD plot is also available in Python https://pypi.org/project/md-plot/ \url{https://pypi.org/project/md-plot/}
 
-In the example, one feature is multimodal the other one has a large range of values.
+All dependencies have to be installed so that the MDplot can be used:
+```{}
+install.packages("DataVisualizations",dependencies = TRUE)
+```
+
+Here, one feature is bi-modal the other one has a large range of values.
 
 ```{r,fig.width=4, fig.height=4, message=FALSE}
 library(DataVisualizations)
@@ -217,26 +222,31 @@ In this special case, the mean silh does not change much and the distribution of
 ```{r,fig.width=4, fig.height=4,warning=FALSE}
 library(DataVisualizations)
 data("Lsun3D")
-Accuracy=c()
+Accuracy=matrix(NaN,100,2)
+Algorithms=c("MacQueen","Lloyd")
+colnames(Accuracy)=Algorithms
 for(i in 1:100){
-  Cls=kmeans(Lsun3D$Data,4,algorithm="MacQueen")$cluster
+  Cls=kmeans(Lsun3D$Data,4,algorithm=Algorithms[1])$cluster
+  Cls2=kmeans(Lsun3D$Data,4,algorithm=Algorithms[2])$cluster
   #this is an artifical example, because the problem of arbitrary class labels is not accounted for
   #please choose an appropiate internal index or an external index
-  Accuracy[i]=sum(Cls==Lsun3D$Cls)
+  Accuracy[i,1]=sum(Cls==Lsun3D$Cls)/length(Lsun3D$Cls)
+  Accuracy[i,2]=sum(Cls2==Lsun3D$Cls)/length(Lsun3D$Cls)
 }
 
-DF=data.frame(ID=1:length(Accuracy),Accuracy=Accuracy)
-ggplot2::ggplot(DF, mapping = ggplot2::aes_string(y = 'Accuracy',x='ID')) + ggplot2::geom_violin(stat = "PDEdensity",fill = "black")+ggplot2::theme_bw()+ggplot2::ylab('Range of Values of the Evaluation of an Algorithm')+ggplot2::xlab('Output of Evaluation of Algorithm')
+MDplot(Accuracy) + xlab('Output of Evaluation of two Algorithms') +
+  ylab('Range of Values of the Evaluation of an Algorithm') +
+  ggtitle("Simple Benchmarking")
 ```
 
 # References
 
 [Thrun, 2018A]    Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, https://doi.org/10.1007/978-3-658-20540-9, 2018. 
 
-[Thrun, 2018B]    Thrun, M. C.: : Cluster Analysis of Per Capita Gross Domestic Products, Entrepreneurial Business and Economics Review (EBER), Vol. 7(1), pp. 217-231, https://doi.org/10.15678/EBER.2019.070113, 2019. 
+[Thrun, 2018B]    Thrun, M. C.: Cluster Analysis of Per Capita Gross Domestic Products, Entrepreneurial Business and Economics Review (EBER), Vol. 7(1), pp. 217-231, https://doi.org/10.15678/EBER.2019.070113, 2019. 
 
-[Thrun/Ultsch, 2018]    Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
+[Thrun/Ultsch, 2018]    Thrun, M. C., & Ultsch, A.: Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
 
-[Thrun et al., 2019]	Thrun, M. C., Gehlert, Tino, & Ultsch, A. : Analyzing the Fine Structure of Distributions, arXiv:1908.06081, 2019. 
+[Thrun et al., 2020]	Thrun, M. C., Gehlert, T. & Ultsch, A.: Analyzing the Fine Structure of Distributions, PLoS ONE, Vol. 15(10), pp. 1-66, DOI 10.1371/journal.pone.0238835, 2020. 
 
 [Tukey, 1977]  Tukey, J. W.: Exploratory data analysis, United States Addison-Wesley Publishing Company, ISBN: 0-201-07616-0, 1977.

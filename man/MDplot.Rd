@@ -5,8 +5,8 @@ Mirrored Density plot (MD-plot)
 }
 \description{
 This function creates a MD-plot for each variable of the data matrix. 
-The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun et al., 2019].
-It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2019].
+The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun et al., 2020].
+It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2020].
 
 A complete guide about the MDplot can be found in \url{https://md-plot.readthedocs.io/en/latest/index.html}.
 }
@@ -232,9 +232,9 @@ For the paramter \code{Scaling} the following options are possible:
 }
 }
 \references{
-[Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
+[Thrun et al., 2020]	Thrun, M. C., Gehlert, T. & Ultsch, A.: Analyzing the Fine Structure of Distributions, PLoS ONE, Vol. 15(10), pp. 1-66, DOI 10.1371/journal.pone.0238835, 2020. 
 
-[Thrun et al., 2019]	Thrun, M. C., Gehlert, Tino, & Ultsch, A. : Analyzing the Fine Structure of Distributions, arXiv:1908.06081, 2019. 
+[Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
 
 [Zhang et al., 2003] Zhang, C., Mapes, B., & Soden, B.: Bimodality in tropical water vapour, Quarterly Journalof the Royal Meteorological Society, 129(594), 2847-2866, 2003.
 }

@@ -5,8 +5,8 @@ Mirrored Density plot (MD-plot)for Multiple Vectors
 }
 \description{
 This function creates a MD-plot for multiple numerical vectors of various lenghts.
-The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun et al., 2019].
-It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2019].
+The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun et al., 2020].
+It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2020].
 }
 \usage{
 MDplot4multiplevectors(\dots, Names, Ordering = 'Default',
@@ -137,7 +137,7 @@ Please see \code{\link{MDplot}} for details.
 \references{
 [Ultsch, 2005]  Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in  Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.
 
-[Thrun et al., 2019]	Thrun, M. C., Gehlert, Tino, & Ultsch, A. : Analyzing the Fine Structure of Distributions, arXiv:1908.06081, 2019. 
+[Thrun et al., 2020]	Thrun, M. C., Gehlert, T. & Ultsch, A.: Analyzing the Fine Structure of Distributions, PLoS ONE, Vol. 15(10), pp. 1-66, DOI 10.1371/journal.pone.0238835, 2020. 
 }
 
 \seealso{
