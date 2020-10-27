@@ -71,7 +71,7 @@ Data=cbind(runif(500,min=-3,max=3),rnorm(500))
 Cls=ifelse(Data[,1]>0,1,2)
 Plot3D(Data,Cls,UniqueColors = DataVisualizations::DefaultColorSequence[c(1,3)],size=2)
 
-\donttest{
+\dontrun{
 #Points with Non-Overlapping Labels
 #require(ggrepel)
 Data=cbind(runif(30,min=-1,max=1),rnorm(30,0,0.5))

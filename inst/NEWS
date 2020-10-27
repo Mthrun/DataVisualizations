@@ -1,3 +1,8 @@
+Version 1.2.1 (CRAN, 2020-10-27)
+	o Major Bugifx for MDplot, we forgot to disable horizontal jittering of points priorly, this is fixed now.
+	o Reimplemented ClassMDplot based on the published version of the MDplot. Violins do not have a color depending on the class yet, because we do not know how to implement this feature at the moment.
+	o Stale sp data objects of wolrd_copuntry_polygons.rda were rebuild and updated using new sp package.
+	
 Version 1.2.0 (CRAN, 2020-08-04)
 	o Standardized Output of PDEscatter
 	o Introduced SmoothedDensitiesXY for a very fast density estimation in case of large two-dimensional datasets.

@@ -435,8 +435,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     colnames(dataframejitter) <- c('ID', 'Variables', 'Values')
     }
     plot=plot+geom_jitter(colour=Fill,size=SizeOfJitteredPoints,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
-                          position=position_jitter(0.15))
-    
+                          height = 0,width=0.15)#no vertical jitter!
+    #geom_jitter(position=position_jitter(0.15))
   }
 
   if(isTRUE(RobustGaussian)){
