@@ -60,19 +60,24 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
     Cls=checkCls(Cls,AnzData,Normalize=FALSE)
   }
   #ClCou <- ClassCount(Cls)
-  UniqueClasses = sort(unique(Cls))#ClCou$UniqueClasses
+  UniqueClasses = unique(Cls)#ClCou$UniqueClasses
   #CountPerClass = ClCou$countPerClass
   NrOfClasses = length(UniqueClasses)#ClCou$NumberOfClasses
   # ClassPercentages = ClCou$classPercentages # KlassenZaehlen
   
   if (is.null(ClassNames)) {
     ClassNames = unique(Cls)
-    ClassNames <- paste("Class ", ClassNames, sep = "")
+    names(ClassNames)=paste("Class ", ClassNames, sep = "")
   }else{
-    if(!is.character(ClassNames)){
-      warning('ClassNames should be a character vector. Ignoring input and setting to default.')
+    if(!is.numeric(ClassNames)){
+      warning('ClassNames should be a numeric vector. Ignoring input and setting to default.')
       ClassNames = unique(Cls)
-      ClassNames <- paste("Class ", ClassNames, sep = "")
+      names(ClassNames) = paste("Class ", ClassNames, sep = "")
+    }
+    if(is.null(names(ClassNames))){
+      warning('Numeric vector "ClassNames" does not have names specified. Ignoring input and setting to default.')
+      ClassNames = unique(Cls)
+      names(ClassNames) = paste("Class ", ClassNames, sep = "")
     }
   }
   
@@ -80,8 +85,22 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
     warning("Number of classes does not equal number of ClassNames!
               This might result in a wrong plot")
   
-  ColorsUnique=ColorSequence[1:NrOfClasses]
-  names(ClassNames)=UniqueClasses
+   ColorsUnique=ColorSequence[1:NrOfClasses]
+  
+   indMatched=match(table = ClassNames,UniqueClasses,nomatch = 0)
+   inNomatch=which(indMatched==0)
+   if(length(inNomatch)>0){
+     warning("Not all classes could be matched, not matched classes are named automatically.")
+     ClassNamesNew=UniqueClasses
+     names(ClassNamesNew) = paste("Class ", ClassNamesNew, sep = "")
+     ClassNamesNew[match(table = ClassNamesNew,ClassNames)]=ClassNames
+     ClassNames=ClassNamesNew
+     ClassNames=ClassNames[match(table = ClassNames,UniqueClasses,nomatch = 0)]
+   }else{
+     ClassNames=ClassNames[indMatched]
+    }
+  #print(cbind(ClassNames,UniqueClasses))
+  #names(ClassNames)=UniqueClasses
 
   # hex_hlp = function(cname) {
   #   colMat <- grDevices::col2rgb(cname)
@@ -96,7 +115,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   # ClassColorsHex=rep(NaN,length(Cls))
   for(i in 1:NrOfClasses){
     Colors[Cls==UniqueClasses[i]]=ColorsUnique[i]
-    ClassNamesVec[Cls==UniqueClasses[i]]=ClassNames[i]
+    ClassNamesVec[Cls==UniqueClasses[i]]=names(ClassNames)[i]
     # ClassColorsHex[Cls==UniqueClasses[i]]=ColorsUniqueHex[i]
   }
 
@@ -106,7 +125,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   }
   DataPerClass=as.matrix(do.call(CombineCols,DataPerClassList))
   
-  ggobject=MDplot(Data = DataPerClass,Names = ClassNames,Ordering = Ordering,
+  ggobject=MDplot(Data = DataPerClass,Names = names(ClassNames),Ordering = Ordering,
                   QuantityThreshold = MinimalAmoutOfData,
                   UniqueValuesThreshold = MinimalAmoutOfUniqueData,SampleSize = SampleSize,OnlyPlotOutput = TRUE,...)
   # ClassData = data.frame(cbind(data = Data, class = Cls))

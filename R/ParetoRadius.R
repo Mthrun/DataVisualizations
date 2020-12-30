@@ -13,7 +13,7 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
   # ParatoRadius				the paret radius
   
   #MT 2019
-  requireNamespace('parallelDist')
+
   ntemp = sum(is.nan(Data))
   if (ntemp > 0) {
     warning('Data has NaN values, Pareto Radius may not be calculated.')
@@ -38,13 +38,17 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
   }
   
   # calculate distances
-  distvec = as.vector(parallelDist::parallelDist(
-    as.matrix(sampleData),
-    method = 'euclidean',
-    upper = F,
-    diag = F
-  ))
-  
+  if(  requireNamespace('parallelDist',quietly = TRUE))
+	  distvec = as.vector(parallelDist::parallelDist(
+		as.matrix(sampleData),
+		method = 'euclidean',
+		upper = F,
+		diag = F
+	  ))
+  else{
+   temp=dist(as.matrix(sampleData),method = 'euclidean')
+   distvec = as.vector(temp[lower.tri(temp,diag=FALSE)])
+  }
   # selection of ParetoRadius
   #paretoRadius=quantile(distvec,probs = 18/100,na.rm = T,type=8)#minimal unrealized potential (->Ultsch2005)
   

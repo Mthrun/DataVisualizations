@@ -92,7 +92,7 @@ List of
 Michael Thrun
 }
 \note{
-You could read \url{https://www.r-bloggers.com/case-study-mapping-german-zip-codes-in-r/}, if you want to change the map.
+You could read \url{https://www.r-bloggers.com/2016/05/case-study-mapping-german-zip-codes-in-r/}, if you want to change the map.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

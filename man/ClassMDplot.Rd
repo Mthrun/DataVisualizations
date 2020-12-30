@@ -36,7 +36,7 @@ ClassMDplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
   Optional: [1:k] vector, The sequence of colors used, Default: DataVisualizations::DefaultColorSequence
   }
   \item{ClassNames}{
-  Optional: [1:k] vector, The names of the classes. Default: C1 - C(Number of Classes)
+  Optional: [1:k] named numerical vector, The names of the classes. Default: Class 1 - Class k with k beeing the number of classes
   }
   \item{PlotLegend}{
   Optional: Add a legent to plot. Default: TRUE)
@@ -102,8 +102,9 @@ Classification = kmeans(ITS, centers = 2)$cluster
 #Classification=AdaptGauss::ClassifyByDecisionBoundaries(ITS,
 
 #DecisionBoundaries = AdaptGauss::BayesDecisionBoundaries(model$Means,model$SDs,model$Weights))
-
-ClassMDplot(ITS,Classification,ClassNames = c("low","high"))
+ClassNames=c(1,2)
+names(ClassNames)=c("Insert name \n of Class 1","Insert name \n  of Class 2")
+ClassMDplot(ITS,Classification,ClassNames = ClassNames)
 }
 }
 

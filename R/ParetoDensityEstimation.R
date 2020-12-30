@@ -25,7 +25,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
 
 ###############################################
 ###############################################
-  requireNamespace('pracma') #fuer trapz
+ 
   if (!is.vector(Data)) {
     Data = as.vector(Data)
     warning('Beware: ParetoDensityEstimation: Data set not univariate !')
@@ -178,7 +178,12 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   # }
   # print(paretoDensity-paretoDensity2)
   # 
-  area <- pracma::trapz(kernels, paretoDensity)
+  if(requireNamespace('pracma',quietly = TRUE)){ #fuer trapz
+		area <- pracma::trapz(kernels, paretoDensity)
+  }else{
+     warning("ParetoDensityEstimation requires the package (pracma) specified in suggest to be installed. Please install this package. Beware: PDE is now not normalized!")
+     area=1
+  }
   #adhoc numerical calc (not preferable)
   #idx = 2:length(kernels)
   #area <- (as.double((kernels[idx] - kernels[idx - 1]) %*% (paretoDensity[idx] + paretoDensity[idx - 1]))/2)
