@@ -78,5 +78,5 @@ Heatmap(as.matrix(dist(Data[1:50,])),Cls = Cls[1:50])
 
 [Weinstein, 2008]  Weinstein, J. N.: A postgenomic visual icon, Science, Vol. 319(5871), pp. 1772-1773. 2008.
 
-[Thrun, 2018]  Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, \url{https://doi.org/10.1007/978-3-658-20540-9}, 2018. 
+[Thrun, 2018]  Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, \doi{10.1007/978-3-658-20540-9}, 2018. 
 }
