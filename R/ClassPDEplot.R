@@ -15,7 +15,7 @@ ClassPDEplot <- function(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend =1,
   # OUTPUT
   # Kernels,ClassParetoDensities         die PDEs
   
-  # USES ClassCount, ClassUniqeAnz, ParetoDensityEstimation, PDEplot, BMClassColor, DefaultColorSequence, DefaultColorSymbSequence
+  # USES  ClassUniqeAnz, ParetoDensityEstimation, PDEplot, BMClassColor, DefaultColorSequence, DefaultColorSymbSequence
   # author: 04/2015 Rabea Griese, imported from matlab
   # 1.editor: 04/2015 MT, in max/min na.rm=T added, Fehlerabfang, bei CLS, xlim added
   
@@ -38,7 +38,6 @@ ClassPDEplot <- function(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend =1,
   if(missing(ColorSymbSequence))
     ColorSymbSequence = c(20, 4, 3, 2, 6, 8, 9, 10, 15, 16,  17)
   
-  #ClCou <- ClassCount(Cls)
   UniqueClasses = unique(Cls)#ClCou$UniqueClasses
   CountPerClass = #ClCou$CountPerClass
   NrOfClasses = length(UniqueClasses)#ClCou$NumberOfClasses

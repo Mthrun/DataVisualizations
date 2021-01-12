@@ -29,7 +29,14 @@ DensityScatter=function(x,y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotI
 #
 #  Author MT 07/2020
   ##############
-  
+  if (!requireNamespace('MBA',quietly = TRUE)){
+    
+    message('Subordinate package (MBA) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (MBA) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
  
   ## Input check
 

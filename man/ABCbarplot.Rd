@@ -51,8 +51,8 @@ Data=as.matrix(FundamentalData_Q1_2018$Data)
 Data[!is.finite(Data)]=0
 results=prcomp(Data)
 main="Scree plot with Class A of the Most-Important Eigenvalues"
-ABCbarplot(results$sdev,ylab='Eigenvalues',main=main)$ggobject
-
+plotlist = ABCbarplot(results$sdev,ylab='Eigenvalues',main=main)
+\donttest{plotlist$ggobject}
 }
 
 \keyword{scree}

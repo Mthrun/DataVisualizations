@@ -6,6 +6,8 @@ DiagnosticAbility4Classifiers=function(TrueCondition_Cls,ManyPredictedCondition_
     'unequal length of classifications'
   )
 
+  
+  
   X=c()
   Y=c()
   for(col in 1:ncol(ManyPredictedCondition_Cls)){
@@ -93,7 +95,14 @@ DiagnosticAbility4Classifiers=function(TrueCondition_Cls,ManyPredictedCondition_
   }
   fig
   if (SaveIt) {
-    requireNamespace("htmlwidgets")
+    if (!requireNamespace('htmlwidgets',quietly = TRUE)){
+    
+    message('Subordinate package (htmlwidgets) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (htmlwidgets) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
     savename=paste0( PlotType,".html")
     htmlwidgets::saveWidget(fig, file =savename)
   }

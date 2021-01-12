@@ -22,7 +22,7 @@ for(i in 1:length(u)){
 Classification[!is.finite(Classification)]=9999999
 
 if(isTRUE(Summary)){
-  V=ClassCount(Classification)
+  V= FCPS::ClusterCount(Classification)
   print(V[1:4])
 }
 return(Classification)

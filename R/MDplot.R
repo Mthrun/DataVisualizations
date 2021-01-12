@@ -17,8 +17,34 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   # Author MT 2018: used general idea of FP to apply ggplot2 frameworks 
   
   #always required:
-  requireNamespace("reshape2")
-
+  #requireNamespace("reshape2")
+  if (!requireNamespace('DatabionicSwarm',quietly = TRUE)){
+    
+    message('Subordinate package (DatabionicSwarm) is missing. Please install the package which is defined in "Suggests" to select this scaling. Setting scaling to "None".')
+    
+    Scaling="None"
+  }
+  
+  if (!requireNamespace('moments',quietly = TRUE)){
+    
+    message('Subordinate package (moments) is missing. Please install the package which is defined in "Suggests" to select this Ordering or "RobustGaussian=TRUE". Setting Ordering to "Default" and "RobustGaussian=FALSE".')
+    RobustGaussian=FALSE
+    Ordering='Default'
+  }
+  if (!requireNamespace('diptest',quietly = TRUE)){
+    
+    message('Subordinate package (diptest) is missing. Please install the package which is defined in "Suggests" to select this Ordering or "RobustGaussian=TRUE". Setting Ordering to "Default" and "RobustGaussian=FALSE".')
+    RobustGaussian=FALSE
+    Ordering='Default'
+  }
+  
+  if (!requireNamespace('signal',quietly = TRUE)){
+    
+    message('Subordinate package (diptest) is missing. Please install the package which is defined in "Suggests" to select this Ordering or "RobustGaussian=TRUE". Setting Ordering to "Columnwise" and "RobustGaussian=FALSE".')
+    RobustGaussian=FALSE
+    Ordering='Columnwise'
+  }
+  
   ## Error Catching ----
   if (is.vector(Data)) {
     print("This MD-plot is typically for several features at once. By calling as.matrix(), it will be now used with one feature.")
@@ -471,7 +497,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     plot=plot+stat_boxplot(geom = "errorbar", width = 0.5, color=BoxColor)+geom_boxplot(width=1,outlier.colour = NA,alpha=0,fill='#ffffff', color=BoxColor,position="identity")
   }
 
-  if(isTRUE(requireNamespace("ggExtra"))){
+  if(isTRUE(requireNamespace("ggExtra",quietly = TRUE))){
     plot=plot+ggExtra::rotateTextX()
   }else{
     warning('Package ggExtra is not installed. Labels of Variablenames are not rotated.')

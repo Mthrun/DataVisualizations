@@ -1,5 +1,14 @@
 DualaxisLinechart=DualAxisLineChart=function(X,Y1,Y2,xlab='X',y1lab='Y1',y2lab='Y2',main='Dual Axis Line Chart',cols=c('black','blue'),Overlaying='y',SaveIt=FALSE){
-  requireNamespace('plotly')
+  if (!requireNamespace('plotly',quietly = TRUE)){
+    
+    message('Subordinate package (plotly) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (plotly) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
+  
+
   p <- plotly::plot_ly()
   p <-
     plotly::add_lines(

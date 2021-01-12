@@ -36,7 +36,15 @@
 
 # 
 #      [Gohil, 2015]  Gohil, Atmajitsinh. R data Visualization cookbook. Packt Publishing Ltd, 2015.
-  
+    if (!requireNamespace('plotrix',quietly = TRUE)){
+       
+       message('Subordinate package (plotrix) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+       
+       return('Subordinate package (plotrix) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    }
+    
    V=internpiechart(Datavector,Names,Labels,MaxNumberOfSlices,col)
    
    Labels=V$Labels
@@ -45,7 +53,7 @@
 
    main=paste(length(Datavector),main)
    
-  requireNamespace('plotrix')
+ 
   pct[pct==0]=0.004
 
   plotrix::fan.plot(pct,labels=Labels,col=colors,max.span=pi,align="left",main='',include.sumx=MaxPercentage,shrink=ShrinkPies,label.radius = Rline)

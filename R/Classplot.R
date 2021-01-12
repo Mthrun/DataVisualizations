@@ -2,6 +2,8 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab = "X", ylab = 'Y',
                        main = "Class Plot", Colors,Size=8,LineColor=NULL,
 					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter,SaveIt = FALSE){
   
+
+  
   if(missing(Cls)) Cls=rep(1,length(X))
   
   X=checkFeature(X,'X')
@@ -38,6 +40,14 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab = "X", ylab = 'Y',
   
   
   if(Plotter=="plotly"){
+    if (!requireNamespace('plotly',quietly = TRUE)){
+    
+    message('Subordinate package (plotly) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (plotly) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
   p <- plotly::plot_ly(type='scatter',mode='markers',colors=Colors,marker = list(size = Size))
   
   if(!is.null(LineColor)){

@@ -90,6 +90,14 @@ zplot <- function(x,y,z,DrawTopView = TRUE,NrOfContourLines = 20, TwoDplotter = 
   #               yo=ybins,
   #               linear=T,
   #               duplicate = 'mean')
+  if (!requireNamespace('MBA',quietly = TRUE)){
+    
+    message('Subordinate package (MBA) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (MBA) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
   requireNamespace('MBA')
   fld<- MBA::mba.surf(xyz = data,no.X = nrofbins,no.Y=nrofbins)$xyz.est
 

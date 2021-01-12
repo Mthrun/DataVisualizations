@@ -51,14 +51,12 @@ Data=Lsun3D$Data
 InputDist=as.matrix(dist(Data))
 res = stats::cmdscale(d = InputDist, k = 2, eig = TRUE, 
         add = FALSE, x.ret = FALSE)
-ProjectedPoints = as.matrix(res$points)
 \donttest{
-
+ProjectedPoints = as.matrix(res$points)
 ShepardDensityScatter(InputDist,as.matrix(dist(ProjectedPoints)),main = 'MDS')
-}
-\dontshow{
+ShepardDensityScatter(InputDist[1:100,1:100],
 
-ShepardDensityScatter(InputDist[1:100,1:100],as.matrix(dist(ProjectedPoints))[1:100,1:100],main = 'MDS')
+as.matrix(dist(ProjectedPoints))[1:100,1:100],main = 'MDS')
 }
 }
 \keyword{ShepardDensityPlot}

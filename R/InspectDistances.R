@@ -12,7 +12,8 @@ InspectDistances=function(DataOrDistances,method= "euclidean",sampleSize = 50000
   #                 'euclidean','sqEuclidean','mahalanobis','cityblock=manhatten','cosine','chebychev'=max(abs(x-y)),'jaccard','minkowski','manhattan','binary', 'canberra'=sum abs(x-y)/sum(abs(x)-abs(y)), 'maximum', 'braycur'=sum abs(x -y)/abs(x+y)
   #author: MT 06/16
   #1.Editor: MT 06/18
-  requireNamespace('parallelDist')
+
+
   
   if(!is.matrix(DataOrDistances)){
     warning('DataOrDistances is not a matrix. Calling as.matrix()')
@@ -30,7 +31,14 @@ InspectDistances=function(DataOrDistances,method= "euclidean",sampleSize = 50000
   else{
     print('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
     #InputDistances = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
+    if (!requireNamespace('parallelDist',quietly = TRUE)){
+      message('Subordinate package (parallelDist) is missing. No computations are performed.
+Please install the package which is defined in "Suggests". Falling back to dist().')
+      DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
+      vecdist=as.vector(DataDists[upper.tri(DataDists,diag = F)])
+    }else{
     vecdist=as.vector(parallelDist::parDist(DataOrDistances,method = method,diag = F,upper = F))
+    }
     #DataDists = DistanceMatrix(DataOrDistances, method = method)
   }
   

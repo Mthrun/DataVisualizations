@@ -1,7 +1,8 @@
-Version 1.2.2 (GitHub, 2020-12-30)
+Version 1.2.2 (CRAN, 2021-01-12)
 	o Bugfix of ClassNames for ClassMDplot
 	o ParetoRadius now checks suggested namespace and falls back if package does not exist instead of getting an error
 	o ParetoDensityEstimation now checks suggested namespace and falls back to R base if package does not exist instead of getting an error
+	o Namespaces fallbacks or bugfixes in case that suggested packages are not installed for the following functions:  ABCbarplot, Choroplethmap, Classplot, DensityScatter, DualaxisLinechart, Fanplot, GoogleMapsCoordinates, Heatmap, InspectDistances, MDplot, PDEscatter, Silhouetteplot, Worldmap, zplot
 	
 Version 1.2.1 (CRAN, 2020-10-27)
 	o Major Bugifx for MDplot, we forgot to disable horizontal jittering of points priorly, this is fixed now.

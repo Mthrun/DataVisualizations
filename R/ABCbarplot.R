@@ -9,6 +9,15 @@ ABCbarplot=ABC_screeplot=function(Data,Colors=DataVisualizations::DefaultColorSe
                                                                        
 # OPTIONAL
 # Colors             colors for A,B,C ; default:  DefaultColorSequence
+  if (!requireNamespace('ABCanalysis',quietly = TRUE)){
+    
+    message('Subordinate package (ABCanalysis) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (ABCanalysis) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
+  
 if(missing(main)) main="Barplot colored by ABCanalysis Indicating Most-Important Values"
 Data=Data[is.finite(Data)]
 SortedData = sort(Data,decreasing = T,na.last = T)

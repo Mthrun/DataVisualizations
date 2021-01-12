@@ -37,8 +37,7 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
   #requireRpackage('akima')
  # requireRpackage('plotly')
   ##############
-  
-  requireNamespace('parallelDist')
+
   ## Input check
 
   x=checkFeature(x,'x')
@@ -184,8 +183,17 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
 
 
 	#Dists = dist(sampleData4radius)
+	if (!requireNamespace('parallelDist',quietly = TRUE)){
+	  
+	  message('Subordinate package (parallelDist) is missing. No computations are performed.
+Please install the package which is defined in "Suggests". Falling back to dist().')
+	  DataDists = as.matrix(dist(sampleData4radius, method = 'euclidean', diag =TRUE))
+	  Dists=as.vector(DataDists[upper.tri(DataDists,diag = F)])
+	}else{
 	Dists=parallelDist::parDist(sampleData4radius,method = 'euclidean',diag = F,upper = F)
 	Dists=as.vector(Dists)
+	}
+
 	if(ParetoRadius <= 0){
 		 # ParetoRadius <- ParetoRadiusForGMM(Data = data)
 	  #ParetoRadius <- prctile(Dists, 6) # aus Matlab uerbernommen

@@ -245,7 +245,7 @@ For the paramter \code{Scaling} the following options are possible:
 
 \url{https://pypi.org/project/md-plot/}
 }
-\keyword{violin plot}
+\concept{violin plot}
 \keyword{geom_violin}
 \keyword{PDE}
 \keyword{violin}
@@ -253,15 +253,15 @@ For the paramter \code{Scaling} the following options are possible:
 \keyword{MD-plot}
 \keyword{MD}
 \keyword{pdf}
-\keyword{Mirrored Density plot}
-\keyword{Mirrored Density}
+\concept{Mirrored Density plot}
+\concept{Mirrored Density}
 \keyword{Density}
 \keyword{density}
 \keyword{pdf}
-\keyword{probability density function}
-\keyword{bean plot}
-\keyword{vase plot}
+\concept{probability density function}
+\concept{bean plot}
+\concept{vase plot}
 \keyword{multivariate}
-\keyword{box plot}
-\keyword{box whisker diagramm}
-\keyword{schematic plot}
+\concept{box plot}
+\concept{box whisker diagramm}
+\concept{schematic plot}

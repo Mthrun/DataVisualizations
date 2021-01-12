@@ -12,7 +12,8 @@
 # author: MT 08/2016, edited 28.01.2018
    #2.Editor: MT 06/18
     #3.Editor: 07/2020 because of reviews in GMD journal
-   requireNamespace('parallelDist')
+
+
    
    if(!is.matrix(DataOrDistances)){
      message('DataOrDistances is not a matrix. Calling as.matrix()')
@@ -47,7 +48,13 @@
      # nach Cls sortieren
      DataOrDistances = DataOrDistances[ind, ]
      #DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
-     DataDists=as.matrix(parallelDist::parDist(DataOrDistances[ind, ],method = method))
+     if (!requireNamespace('parallelDist',quietly = TRUE)){
+        message('Subordinate package (parallelDist) is missing. No computations are performed.
+Please install the package which is defined in "Suggests". Falling back to dist().')
+        DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
+     }else{
+         DataDists=as.matrix(parallelDist::parDist(DataOrDistances[ind, ],method = method))
+     }
      #DataDists = DistanceMatrix(DataOrDistances, method = method)
    }
    

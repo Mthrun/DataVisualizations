@@ -40,6 +40,9 @@ Optional, string
   \item{LineColor}{
 Optional, name of color, then all points are connected by a curve
 }
+  \item{Size}{
+Optional, number defining the Size of the curve
+}
   \item{LineWidth}{
 Optional, number defining the width of the curve
 }
@@ -48,9 +51,6 @@ Optional, string defining the type of the curve
 }
   \item{Showgrid}{
 Optional, boolean
-}
-  \item{PlotIt}{
-Optional, boolean, if false does not plot in order to change ploty layut by user
 }
   \item{SaveIt}{
 Optional, boolean, if true saves plot as html

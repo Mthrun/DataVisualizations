@@ -43,9 +43,18 @@ Silhouetteplot=SilhouettePlot = function(DataOrDistances, Cls=NULL,method= "eucl
   }
   else{
     message('Distances are not in a symmetric matrix, Datamatrix is assumed and dist() ist called')
-    requireNamespace('parallelDist')
+    
+    if (!requireNamespace('parallelDist',quietly = TRUE)){
+      
+      message('Subordinate package (parallelDist) is missing. No computations are performed.
+Please install the package which is defined in "Suggests". Falling back to dist().')
+      InputDistances = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
+    }else{
+      
+    
     #InputDistances = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
     InputDistances=as.matrix(parallelDist::parDist(DataOrDistances,method = method))
+    }
     #DataDists = DistanceMatrix(DataOrDistances, method = method)
   }
   

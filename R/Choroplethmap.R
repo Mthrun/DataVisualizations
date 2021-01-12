@@ -69,6 +69,15 @@ Choroplethmap=plotChoroplethMap=function(Counts,PostalCodes,NumberOfBins=0,Break
 # 
 # author:   Michael Thrun
 # 
+  
+  if (!requireNamespace('choroplethr',quietly = TRUE)){
+    
+    message('Subordinate package (choroplethr) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (choroplethr) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
   if(length(Counts)!=length(PostalCodes)) warning('Length of PostalCodes and Counts should match')
   if(max(percentiles)>1) stop('percentiles have to between zero and 1.')
   if(percentiles[1]>percentiles[2]) stop('first percentile has to be smaller then second.')

@@ -18,6 +18,15 @@ GoogleMapsCoordinates=function(Longitude,Latitude,Cls=rep(1,length(Longitude)),z
 # ggobject()              #falls ploz angepasst werden soll, ansosnten word nur geplottet
 #author: MT 12/16
   
+  if (!requireNamespace('ggmap',quietly = TRUE)){
+    
+    message('Subordinate package (ggmap) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+    
+    return('Subordinate package (ggmap) is missing. No computations are performed.
+Please install the package which is defined in "Suggests".')
+  }
+  
   if(!is.vector(Longitude)){
     Longitude=as.vector(Longitude)
     warning('Longitude is not a vector')
@@ -55,7 +64,7 @@ GoogleMapsCoordinates=function(Longitude,Latitude,Cls=rep(1,length(Longitude)),z
   
   Cls=checkCls(Cls,length(Longitude))
   
-  requireNamespace('ggmap')
+
   requireNamespace('ggplot2')
   
    cpd=cbind(Longitude,Latitude,Cls)
