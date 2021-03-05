@@ -2,7 +2,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
                                   RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
                                   BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
                                   QuantityThreshold=50, UniqueValuesThreshold=12,SampleSize=5e+05,
-                                  SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE){
+                                  SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,main="MD-plot",
+                                  ylab="Range of values in which PDE is estimated",BW=FALSE,ForceNames=FALSE){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
   #
@@ -44,6 +45,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     RobustGaussian=FALSE
     Ordering='Columnwise'
   }
+  if(Ordering=="AsIs") #synonym
+    Ordering='Columnwise'
   
   ## Error Catching ----
   if (is.vector(Data)) {
@@ -153,9 +156,11 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
 
   }
   #bugfix numeric columns names result in some strange behaviour in either reshape2 or ggplot2
-  Names=colnames(Data)
-  NamesNumeric=suppressWarnings(as.numeric(Names))
-  colnames(Data)=ifelse(!is.na(NamesNumeric),paste0('C_',Names),Names)
+  if(isFALSE(ForceNames)){
+    Names=colnames(Data)
+    NamesNumeric=suppressWarnings(as.numeric(Names))
+    colnames(Data)=ifelse(!is.na(NamesNumeric),paste0('C_',Names),Names)
+  }
   # for(i in 1:dvariables){
   #   if(!is.na(NamesNumeric[i])){
   #     colnames(Data)[i]=paste0('C_',NamesNumeric[i])
@@ -447,6 +452,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     ggplot(data = dataframe,
            aes_string(x = "Variables", group = "Variables", y = "Values"))+scale_x_discrete(limits=Rangfolge)
   
+  if(isTRUE(BW))
+    plot=plot+theme_bw()
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
   plot=plot + geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=LineSize,trim = TRUE,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
@@ -502,6 +509,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   }else{
     warning('Package ggExtra is not installed. Labels of Variablenames are not rotated.')
   }
+  plot=plot+ggtitle(main)+theme(plot.title = element_text(hjust = 0.5))+ylab(ylab)
+  
   if(OnlyPlotOutput){
       return(ggplotObj = plot)
   }else{

@@ -7,14 +7,14 @@ Minus versus Add plot
 Bland-Altman plot [Altman/Bland, 1983].
 }
 \usage{
-MAplot(x,y,islog=TRUE,densityplot=FALSE,
+MAplot(X,Y,islog=TRUE,densityplot=FALSE,
 
 main='MA-plot',xlab,ylab,Cls)
 }
 \arguments{
-  \item{x}{[1:n] numerical vector of a feature/variable
+  \item{X}{[1:n] numerical vector of a feature/variable
 }
-  \item{y}{[1:n] another numerical vector of a feature/variable
+  \item{Y}{[1:n] another numerical vector of a feature/variable
 }
   \item{islog}{ TRUE: MAplot, FALSE: M=x-y versus a=0.5(x+y)
 }

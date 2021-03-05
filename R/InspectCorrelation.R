@@ -1,25 +1,29 @@
-InspectCorrelation=function(x,y,DensityEstimation="SDH",CorMethod='spearman',na.rm=TRUE,SampleSize=round(sqrt(500000000),-3),
+InspectCorrelation=function(X,Y,DensityEstimation="SDH",CorMethod='spearman',na.rm=TRUE,SampleSize=round(sqrt(500000000),-3),
                             
                             NrOfContourLines=20,Plotter='native', DrawTopView = T,
                             
-                            xlab="X", ylab="Y", main='Spearman correlation coef.:',
+                            xlab, ylab, main='Spearman correlation coef.:',
                             
                             xlim, ylim, Legendlab_ggplot="value",...){
-  x=checkFeature(x,'x')
-  y=checkFeature(y,'y')
+  
+  if(missing(xlab)) xlab=deparse1(substitute(X))
+  if(missing(ylab)) ylab=deparse1(substitute(Y))
+  
+  X=checkFeature(X,'X')
+  Y=checkFeature(Y,'Y')
   #requireNamespace('ggExtra')
-  if(identical(x,y)){
-    stop('Variable x is identical to variable y. Please check input.')
+  if(identical(X,Y)){
+    stop('Variable X is identical to variable Y. Please check input.')
   }
   if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
-    noNaNInd <- which(is.finite(x)&is.finite(y))
-    x <- x[noNaNInd]
-    y <- y[noNaNInd]
+    noNaNInd <- which(is.finite(X)&is.finite(Y))
+    X <- X[noNaNInd]
+    Y <- Y[noNaNInd]
   }
-  ccc=round(cor(x,y,method = CorMethod),2)
+  ccc=round(cor(X,Y,method = CorMethod),2)
   
   main=paste(main,ccc)
-ggobject=DensityScatter(x,y,DensityEstimation=DensityEstimation,na.rm=FALSE,SampleSize =SampleSize,
+ggobject=DensityScatter(X,Y,DensityEstimation=DensityEstimation,na.rm=FALSE,SampleSize =SampleSize,
              
              NrOfContourLines=NrOfContourLines,Plotter='ggplot', DrawTopView = TRUE,
              
@@ -27,6 +31,6 @@ ggobject=DensityScatter(x,y,DensityEstimation=DensityEstimation,na.rm=FALSE,Samp
              
              xlim=xlim, ylim=ylim, Legendlab_ggplot=Legendlab_ggplot,...)$Handle
 #print(ggobject)
-#ggExtra::ggMarginal(ggobject, type="histogram", bins = 25,x='x',y='y')
+#ggExtra::ggMarginal(ggobject, type="histogram", bins = 25,X='X',Y='Y')
 return(ggobject)  
 }

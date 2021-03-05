@@ -9,16 +9,16 @@ The product-ratio plot as defined in [Tukey, 1977, p. 594].
 
 }
 \usage{
-PlotProductratio(x, y, na.rm = FALSE, 
+PlotProductratio(X, Y, na.rm = FALSE, 
 
 main='Product Ratio Analysis',xlab = "Log of Ratio",ylab = "Root of Product", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
+  \item{X}{
 [1:n] positive numerical vector, negativ values are removed automatically
 }
-  \item{y}{
+  \item{Y}{
 [1:n] positive numerical vector, negativ values are removed automatically
 }
   \item{na.rm}{

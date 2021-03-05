@@ -1,10 +1,13 @@
-Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab = "X", ylab = 'Y', 
+Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab, 
                        main = "Class Plot", Colors,Size=8,LineColor=NULL,
 					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter,SaveIt = FALSE){
   
 
   
   if(missing(Cls)) Cls=rep(1,length(X))
+  
+  if(missing(xlab)) xlab=deparse1(substitute(X))
+  if(missing(ylab)) ylab=deparse1(substitute(Y))
   
   X=checkFeature(X,'X')
   Y=checkFeature(Y,'Y')

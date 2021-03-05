@@ -1,4 +1,4 @@
-Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main = '',FillNotFiniteWithHighestValue=FALSE) {
+Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main,FillNotFiniteWithHighestValue=FALSE) {
     #PixelMatrixPlot = function(Data, XNames=NULL, LowLim=NULL, HiLim=NULL, YNames=NULL,main='')
     # PixelMatrixPlot(Data,XNames,LowLim,HiLim,YNames);
     #  plot Data matrix as a pixel colour picture
@@ -14,6 +14,7 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main 
     #  author: Michael Thrun, Felix Pape                                                                                                                                       ?
     
     ### Define the Heat Color
+  if(missing(main)) main=paste0("Dataset: ",deparse1(substitute(Data)))
   if(!is.matrix(Data)){
     warning('Data is not a matrix. Calling as.matrix()')
     Data=as.matrix(Data)

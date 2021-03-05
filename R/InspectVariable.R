@@ -1,12 +1,12 @@
-InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,main){
-#InspectVariable(Feature,i,N)
+InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,main){
+#InspectVariable(Feature,i,Name)
 # ermoeglichst eine Schnelle Verteilungsbetrachtung einzelner variable
 #
 # INPUT
 # Feature[1:n]               Vector of Data to be plotted
 #
 # OPTIONAL
-# N                       string, welcher Variablennamen angibt
+# Name                       string, welcher Variablennamen angibt
 # i                       In for schleife bei vielen Variablen, Nummer der Variablen
 # xlim[2]                 x-Achsengrenzen fuer PDEplot
 # ylim[2]                 y-Achsengrenzen fuer PDEplot
@@ -17,6 +17,9 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
 # uses histopt()
 #
 # MT 11/2014
+  
+  if(missing(Name)) Name=deparse1(substitute(Feature))
+  
   isnumber=function(x) return(is.numeric(x)&length(x)==1)
   
   if(!isnumber(i))
@@ -56,7 +59,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   #    maxData = max(D,na.rm = TRUE)
   #    i = maxData-minData
   #    optBreaks = seq(minData, maxData, i/optNrOfBins) # bins in fixed intervals
-  #    hist(D, breaks=optBreaks,xlab=N)
+  #    hist(D, breaks=optBreaks,xlab=Name)
  
   optNrOfBins=OptimalNoBins(D)
   optNrOfBins = min(100,optNrOfBins) #
@@ -71,7 +74,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
    #box();
    Breaks <- temp$breaks;  nB <- length(Breaks)
    y <- temp$counts;
-   xlab=N 
+   xlab=Name 
    ylab='Frequency' 
    plot(x=c(MinD,MaxD), y=c(0, max(temp$counts,na.rm=TRUE)*1.2), type="n", main='',xaxs='i',yaxs='i',axes=FALSE,xlab=xlab, ylab='',xlim=c(MinD,MaxD), ylim=c(0, max(temp$counts,na.rm=TRUE)*1.2))
    par(mgp=c(2.2,0.6,0)) #Abstand: c(Titel, Label, Achse)
@@ -80,7 +83,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
    axis(2,col="black",las=1,yaxs='i') #y-Achse
    title(ylab=ylab)
 
-  #histopt(D, '', AxisLabs = TRUE, xlab = N)
+  #histopt(D, '', AxisLabs = TRUE, xlab = Name)
   
   #lines(x=a$kernels,y=rep(0,length(a$kernels)),col = "black",lwd = 1)
   
@@ -101,7 +104,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
       type = 'l',
       xaxs = 'i',
       yaxs = 'i',
-      xlab = N,
+      xlab = Name,
       ylab = 'PDE',
       col = 'blue'
     )
@@ -112,7 +115,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
       type = 'l',
       xaxs = 'i',
       yaxs = 'i',
-      xlab = N,
+      xlab = Name,
       ylab = 'PDE',
       xlim = xlim,
       ylim = NULL,
@@ -125,7 +128,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
       type = 'l',
       xaxs = 'i',
       yaxs = 'i',
-      xlab = N,
+      xlab = Name,
       ylab = 'PDE',
       xlim = xlim,
       ylim = ylim,
@@ -135,7 +138,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   
   #Fenster fuer QQplot
   #par(mgp=c(2,0.5,0)) #Abstand: c(Titel, Label, Achse)
-  #plot(x=c(-4.5,4.5),y=c(min(Feature),max(Feature)), xlab="Normalverteilung", ylab=N,axes=TRUE,type='n',xlim=c(-4.5,4.5),ylim=c(min(Feature),max(Feature)))
+  #plot(x=c(-4.5,4.5),y=c(min(Feature),max(Feature)), xlab="Normalverteilung", ylab=Name,axes=TRUE,type='n',xlim=c(-4.5,4.5),ylim=c(min(Feature),max(Feature)))
   #par(mar=c(3,4,2,1)) #c(u,li,o,re)
   par(pty = "s")# Plot immer quadratisch
   
@@ -148,7 +151,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
     ylim = c(MinD, MaxD),
     main = '',
     xlab = "Normal Distribution",
-    ylab = N
+    ylab = Name
   )
   axis(4, col = "black", las = 3) #y-Achse
   grid(lty = 'dashed', col = 'black')
@@ -202,7 +205,7 @@ InspectVariable=function(Feature,N='Feature',i=1,xlim,ylim,sampleSize=100000,mai
   def = par(fig = c(0, 0.9, 0.8, 1), new = TRUE)
   if (missing(main))
     mtext(
-      paste('VarNr.:', i, N),
+      paste('VarNr.:', i, Name),
       side = 3,
       line = 1,
       cex = 1.5,

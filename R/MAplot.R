@@ -1,13 +1,13 @@
-MAplot=function(x,y,islog=TRUE,densityplot=FALSE,main='MA-plot',xlab,ylab,Cls){
-#res=MAplot(x,y,islog=TRUE,densityplot=FALSE,main='Minus versus Add plot',xlab='A',ylab='M',Cls)  
+MAplot=function(X,Y,islog=TRUE,densityplot=FALSE,main='MA-plot',xlab,ylab,Cls){
+#res=MAplot(X,Y,islog=TRUE,densityplot=FALSE,main='Minus versus Add plot',xlab='A',ylab='M',Cls)  
 #Minus versus Add plot
 #   Bland-Altman plot [Altman/Bland, 1983].
 # #INPUT
-#   \item{x}{[1:n] numerical vector of a feature/variable
+#   \item{X}{[1:n] numerical vector of a feature/variable
 #   }
-#   \item{y}{[1:n] another numerical vector of a feature/variable
+#   \item{Y}{[1:n] another numerical vector of a feature/variable
 #   }
-#   \item{islog}{ TRUE: MAplot, FALSE: M=x-y versus a=0.5(x+y)
+#   \item{islog}{ TRUE: MAplot, FALSE: M=X-Y versus a=0.5(X+Y)
 #   }
 #   \item{densityplot}{ FALSE: Scatterplot, TRUE: density scatter plot with PDE
 #   }
@@ -29,45 +29,46 @@ MAplot=function(x,y,islog=TRUE,densityplot=FALSE,main='MA-plot',xlab,ylab,Cls){
 #   }
 # 
 # author: Michael Thrun
-
-   x=checkFeature(x,'x')
-   y=checkFeature(y,'y')
+  if(missing(xlab)) xlabstr=deparse1(substitute(X))
+  if(missing(ylab)) ylabstr=deparse1(substitute(Y))
+   X=checkFeature(X,'X')
+   Y=checkFeature(Y,'Y')
  
-  if(length(x)!=length(x)) stop('Length of x does not equal length of y')
+  if(length(X)!=length(X)) stop('Length of X does not equal length of Y')
   
   if(isTRUE(islog)){
-    absX = abs(x)
-    s = sign(x)
+    absX = abs(X)
+    s = sign(X)
     newX=s * log10(absX + 1)
     
-    absY = abs(y)
-    s2 = sign(y)
+    absY = abs(Y)
+    s2 = sign(Y)
     newY=s * log10(absY + 1)
     
    M=newX-newY
    A=0.5*(newX+newY)
    
-    if(missing(xlab)) xlab='log(sqrt(x*y))'
-   if(missing(ylab)) ylab='log(x/y)'
+    if(missing(xlab)) xlab=paste0('log(sqrt(',xlabstr,' * ',ylabstr,'))')
+   if(missing(ylab)) ylab=paste0('log(',xlabstr,' / ',ylabstr,')')
    
   }else{
-    M=x-y
-    A=0.5*(x+y)
-    if(missing(xlab)) xlab='0.5(x+y)'
-    if(missing(ylab)) ylab='x-y'
+    M=X-Y
+    A=0.5*(X+Y)
+    if(missing(xlab)) xlab=paste0('0.5*(',xlabstr,' + ',ylabstr,')')
+    if(missing(ylab)) ylab=paste0(xlabstr,' - ',ylabstr)
   }
   
   if(isTRUE(densityplot)){
     if(!missing(Cls)){warning('Cls not usable in density plots')}
-    ggplot=PDEscatter(x = x,y = y,xlab = xlab,ylab = ylab,main = main)
+    ggplot=PDEscatter(X = X,Y = Y,xlab = xlab,ylab = ylab,main = main)
     print(ggplot)
   }else{
     ggplot=NULL
     if(!missing(Cls)){
-      Cls=checkCls(Cls,length(x)) #Normalized Cls of equal length
+      Cls=checkCls(Cls,length(X)) #Normalized Cls of equal length
       k=length(unique(Cls))
       UniqueColors=DataVisualizations::DefaultColorSequence[1:k]
-      Colors=rep('black',length(x))
+      Colors=rep('black',length(X))
       for(i in 1:length(Cls)){
         Colors[i]=UniqueColors[Cls[i]]
       }

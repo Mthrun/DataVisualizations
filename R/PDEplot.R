@@ -1,19 +1,19 @@
-PDEplot <- function(data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=TRUE,title="ParetoDensityEstimation(PDE)",color="blue",xpoints=FALSE, xlim,ylim,xlab ='Data',ylab ='PDE',ggPlot=ggplot(),sampleSize=200000,lwd=2)
+PDEplot <- function(Data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=TRUE,title="ParetoDensityEstimation(PDE)",color="blue",xpoints=FALSE, xlim,ylim,xlab,ylab ='PDE',ggPlot=ggplot(),sampleSize=200000,lwd=2)
 {
 #plot ParetoDensityEstimation (PDE) and Gaussian with empirical Mean and  Variance
-#E <-  PDEplot(data,paretoRadius,weight,kernels,ylabel,plot,title,color,xpoints,defaultAxis, xlim,ylim ,xlab,ylab,PlotSymbolPDE=color);
+#E <-  PDEplot(Data,paretoRadius,weight,kernels,ylabel,plot,title,color,xpoints,defaultAxis, xlim,ylim ,xlab,ylab,PlotSymbolPDE=color);
 #Kernels        <- E$kernels;
 #ParetoDensity  <- E$paretoDensity;
 #ParetoRadius   <- E$paretoRadius;
 #ParetoPlot     <- E$plot;
 #
 # INPUT
-# data[1:n]               Vector of Data to be plotted
+# Data[1:n]               Vector of Data to be plotted
 # 
 # OPTIONAL
 # paretoRadius            the Pareto Radius, if omitted, ==0 or ==NaN then ParetoRadius = ParetoRadius(Data);
-# weight                  plot PDE(data)*weight, default weight=1
-# kernel                  the x points of the density plots if kernels==0, these are estimated trough ParetoDensityEstimation(data,paretoRadius,kernels)
+# weight                  plot PDE(Data)*weight, default weight=1
+# kernel                  the x points of the density plots if kernels==0, these are estimated trough ParetoDensityEstimation(Data,paretoRadius,kernels)
 # PlotIt                    if not plot==TRUE no plot is done (deprecated)
 # LogPlot                 LogLog PDEplot if TRUE
 # title                   label for the title  of the plot 
@@ -44,7 +44,9 @@ PDEplot <- function(data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
 #  require('reshape2')
 # 3.Editor: MT: Fehlerabfang fuer ggobject, sampelsize
   # Daten normalisieren
-  data=checkFeature(data,'data')
+  if(missing(xlab)) xlab=deparse1(substitute(Data))
+  
+  Data=checkFeature(Data,'Data')
   isnumber=function(x) return(is.numeric(x)&length(x)==1)
   
   if(!isnumber(weight))
@@ -57,28 +59,28 @@ PDEplot <- function(data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
   if(!isnumber(sampleSize))
     stop('"sampleSize" is not a numeric number of length 1. Please change Input.')
   
-  if(length(data)>sampleSize){
-    ind=sample(1:length(data),size = sampleSize)
-    data=data[ind]
+  if(length(Data)>sampleSize){
+    ind=sample(1:length(Data),size = sampleSize)
+    Data=Data[ind]
   }
 
   if(length(paretoRadius)<1 || is.nan(paretoRadius)  || (paretoRadius==0))
-    pdeVal        <- ParetoDensityEstimation(data,NULL,kernels)
+    pdeVal        <- ParetoDensityEstimation(Data,NULL,kernels)
   else
-    pdeVal        <- ParetoDensityEstimation(data,paretoRadius,kernels)
+    pdeVal        <- ParetoDensityEstimation(Data,paretoRadius,kernels)
  
   paretoDensity <- pdeVal$paretoDensity*weight
 
-  df = data.frame(kernels = pdeVal$kernels, density = paretoDensity)
+  df = Data.frame(kernels = pdeVal$kernels, density = paretoDensity)
   plt <- ggPlot
   if(length(grep(pattern = 'gg',attributes(ggPlot)$class))<1){
     warning('ggobject of Inputparameter ggPlot, could not be found. Creating new object.')
     plt=ggplot2::ggplot()
   }
   if(isTRUE(xpoints)){
-    plt <- plt + ggplot2::geom_point(data = df, aes_string(x = "kernels", y = "density"), colour = color)
+    plt <- plt + ggplot2::geom_point(Data = df, aes_string(x = "kernels", y = "density"), colour = color)
   }else{
-    plt <- plt + ggplot2::geom_line(data = df, aes_string(x = "kernels", y = "density"), colour = color,size=lwd)  
+    plt <- plt + ggplot2::geom_line(Data = df, aes_string(x = "kernels", y = "density"), colour = color,size=lwd)  
   }
   plt <- plt  + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)+ggplot2::ylim(c(0,1.05*max(df$density)))
 

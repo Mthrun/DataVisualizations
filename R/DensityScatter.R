@@ -2,7 +2,7 @@ DensityScatter=function(x,y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotI
                               
                               NrOfContourLines=20,Plotter='native', DrawTopView = TRUE,
                               
-                              xlab="X", ylab="Y", main="DensityScatter",
+                              xlab, ylab, main="DensityScatter",
                               
                               xlim, ylim, Legendlab_ggplot="value",...){
 # DensityScatter
@@ -39,7 +39,10 @@ Please install the package which is defined in "Suggests".')
   }
  
   ## Input check
-
+  
+  if(missing(xlab)) xlab=deparse1(substitute(X))
+  if(missing(ylab)) ylab=deparse1(substitute(Y))
+  
   x=checkFeature(x,'x')
   y=checkFeature(y,'y')
   if(identical(x,y)){

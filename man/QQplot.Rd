@@ -8,7 +8,7 @@ QQplot with a Linear Fit
 Qantile-quantile plot with a linear fit
 }
 \usage{
-QQplot(X,Y,xlab ='X', ylab='Y',col="red",main='',...)
+QQplot(X,Y,xlab, ylab,col="red",main='',...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

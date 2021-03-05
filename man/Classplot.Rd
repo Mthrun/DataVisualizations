@@ -12,7 +12,7 @@ Usefull to see if temporal clustering has time dependent variations and for Hidd
 \usage{
 Classplot(X, Y, Cls,Names=NULL,
 
-na.rm=FALSE, xlab = "X", ylab = "Y",
+na.rm=FALSE, xlab , ylab ,
 
 main = "Class Plot", Colors,Size=8,
 

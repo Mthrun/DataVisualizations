@@ -5,8 +5,7 @@ Mirrored Density plot (MD-plot)
 }
 \description{
 This function creates a MD-plot for each variable of the data matrix. 
-The MD-plot is a visualization for a boxplot-like Shape of the PDF published in [Thrun et al., 2020].
-It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2020].
+The MD-plot is a visualization for a boxplot-like shape of the PDF published in [Thrun et al., 2020] with the default ordering by shape. It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2020]. 
 
 A complete guide about the MDplot can be found in \url{https://md-plot.readthedocs.io/en/latest/index.html}.
 }
@@ -21,17 +20,21 @@ MDscaling='width', LineColor='black', LineSize=0.01,
 
 QuantityThreshold=50, UniqueValuesThreshold=12,
 
-SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE)
+SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,
+
+main="MD-plot",ylab="Range of values in which PDE is estimated",
+
+BW=FALSE,ForceNames=FALSE)
 }
 
 \arguments{
   \item{Data}{
     [1:n,1:d] Numerical Matrix containing the n cases of d variables. Each column is one variable. A data.frame is automatically transformed to a numerical matrix.}
   \item{Names}{
-    Optional: [1:d] Names of the variables. If missing, the columnnames of data are used.
+    Optional: [1:d] Names of the variables. If missing, the columnnames of data are used. If not missing, than the names can be cleaned or not (see \code{ForceNames}).
   }
       \item{Ordering}{
-    Optional: string, either \code{Default}, \code{Columnwise}, \code{Alphabetical}, \code{Average}, \code{Bimodal}, \code{Variance}  or \code{Statistics}. Please see details for explanation.
+    Optional: string, either \code{Default}, \code{Columnwise} or \code{AsIs}, \code{Alphabetical}, \code{Average}, \code{Bimodal}, \code{Variance}  or \code{Statistics}. Please see details for explanation.
   }
       \item{Scaling}{
     Optional, Default is \code{None}, \code{Percentalize}, \code{CompleteRobust}, \code{Robust} or \code{Log}, Please see details for explanation.
@@ -81,6 +84,23 @@ SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE)
   \item{OnlyPlotOutput}{
    Optional: Default TRUE only a ggplot object is given back, if FALSE: Additinally, scaled data and ordering are the output of this function in a \code{list}.
   }
+     \item{main}{
+     string defining the (centered) title of the plot
+     }
+     \item{ylab}{
+     string defining the y label, PDE= pareto density estimation (see [Ultsch, 2005])
+     }
+      \item{BW}{
+      FALSE: usual ggplot2 background and style which is good for screen visualizations
+      
+      TRUE: theme_bw() is used which is more appropriate for publications
+    }
+    
+    \item{ForceNames}{
+      FALSE: Per Default column names are cleaned for propper plotting
+      
+      TRUE: forces to set the column names as given. Beware, this can result in plotting errors.
+    }
 }
 
 \value{
@@ -183,15 +203,17 @@ MDplot(Data)
 }
 
 \note{
-1.) One would assume that in the first of the two following cases ggplot only adjusts the plotting region but: 
+1.) One would assume that in the first of the two following cases ggplot2 only adjusts the plotting region but: 
 
 \code{MDplot(MTY)+ylim(c(0,7000))} is equal to \code{MDplot(MTY[MTY<7000])}. 
 
 This means in both cases the data is clipped and AFTERWARDS the density estimation is performed. 
 
-2.) Because of a (sometimes) strange behavior of either ggplot2 or reshape2, numerical column names are changed to character by adding 'C_'.
+2.) Because of a (sometimes) strange behavior of either ggplot2 or reshape2, numerical column names are changed to character by adding 'C_' which can disabled using \code{ForceNames=TRUE}.
 
-3.) Overlaying MD-plots with robustly estimated gaussians seldomly will yield magenta  (or other \code{GaussianColor}) lines overlaying more than the violin plot they should overlay, because the width of the two plots is not the same (but I am unable to set it strictly in ggplot). In such a case just call the function again.
+3.) Columnnames will be automatically deblanked and cleaned. To force specific columnnames the input \code{Names} can be used in combination with \code{ForceNames=TRUE}. However, this can result in plotting errors or other strange behavior.
+
+4.) Overlaying MD-plots with robustly estimated gaussians seldomly will yield magenta  (or other \code{GaussianColor}) lines overlaying more than the violin plot they should overlay, because the width of the two plots is not the same (but I am unable to set it strictly in ggplot). In such a case just call the function again.
 }
 
 \details{
@@ -203,9 +225,10 @@ Statistical testing is performed with \code{\link[diptest]{dip.test}} and \code{
 
 For the paramter \code{Ordering} the following options are possible:
 \describe{
-\item{\code{Default}}{Ordering of plots by convex/concav/unimodal/nonunimodal shapes. In this case the \pkg{signal} is required.}
+\item{\code{Default}}{Ordering of plots by convex/concav/unimodal/nonunimodal shapes using statistical criteria. In this case the \pkg{signal} is required.}
 
 \item{\code{Columnwise}}{Ordering of plots by the order of columns of \code{Data}.}
+\item{\code{AsIs}}{Synonym of Columnwise: Ordering of plots by the order of columns of \code{Data}.}
 
 \item{\code{Alphabetical}}{Ordering of plots by the order of columns of \code{Data} sorted in alphabetical order by column names.}
 

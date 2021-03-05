@@ -11,7 +11,7 @@ SampleSize, na.rm=FALSE,PlotIt=TRUE,
                               
 NrOfContourLines=20,Plotter='native', DrawTopView = TRUE,
                               
-xlab="X", ylab="Y", main="DensityScatter",
+xlab, ylab, main="DensityScatter",
                               
 xlim, ylim, Legendlab_ggplot="value",\dots)
 }

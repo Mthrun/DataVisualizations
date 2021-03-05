@@ -1,4 +1,4 @@
-QQplot=function(X,Y,xlab ='X', ylab='Y',col="red",main='',...){
+QQplot=function(X,Y,xlab, ylab,col="red",main='',...){
 
 # qqnormfit(x,xug,xog)
 # % QQ-Plot von Daten und Transforierten Daten im Vergleich und jeweils mit Ausgleichsgerade
@@ -12,6 +12,10 @@ QQplot=function(X,Y,xlab ='X', ylab='Y',col="red",main='',...){
 # xlab			        legend for x-axis
 # ylab			        legend for x-axis
 # main			        title for plot  
+  
+  if(missing(xlab)) xlab=deparse1(substitute(X))
+  if(missing(ylab)) ylab=deparse1(substitute(Y))
+  
  def.par <- par(no.readonly = TRUE) # save default, for resetting...
 
  par(oma=c(0,0,1,0))#c(u,li,o,re) in

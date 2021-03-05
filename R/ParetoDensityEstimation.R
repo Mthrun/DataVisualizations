@@ -25,7 +25,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
 
 ###############################################
 ###############################################
- 
+ xlab=deparse1(substitute(Data))
   if (!is.vector(Data)) {
     Data = as.vector(Data)
     warning('Beware: ParetoDensityEstimation: Data set not univariate !')
@@ -44,7 +44,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   if (length(values) > 2 & length(values) < 5) {
     warning('Less than 5 unqiue values for density estimation. Function may not work')
   }
-  
+  FLAG_kernels_manualSet=TRUE
   if (length(values) < 3) {
     warning(
       '1 or 2 unique values for density estimation. Dirac Delta distribution(s) is(are) assumed. Input of "kernels", "paretoRadius" and "MinAnzKernels" or ignored!'
@@ -88,7 +88,8 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
         xaxs = 'i',
         yaxs = 'i',
         xlab = 'Data',
-        ylab = 'PDE'
+        ylab = 'PDE',
+        ylim=c(0,max(paretoDensity)*1.1)
       )
     }
     return (list(
@@ -96,22 +97,36 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       paretoDensity = paretoDensity,
       paretoRadius = 0
     ))
-  }
+  }# end if if (length(values) < 3)
   
   if (length(Data) < 10) {
     warning('Less than 10 datapoints given, ParetoRadius potientially cannot be calcualted.')
   }
   
-  if (missing(paretoRadius)) {
-    paretoRadius = ParetoRadius(Data)
-  } else if (is.null(paretoRadius)) {
-    paretoRadius = ParetoRadius(Data)
-  } else if (is.na(paretoRadius)) {
-    paretoRadius = ParetoRadius(Data)
-  } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
-    paretoRadius = ParetoRadius(Data)
-  } else{
-    
+  if(length(Data)<10e4){#smaller data
+    if (missing(paretoRadius)) {#10% or bigger sample is taken
+      paretoRadius = ParetoRadius(Data)
+    } else if (is.null(paretoRadius)) {
+      paretoRadius = ParetoRadius(Data)
+    } else if (is.na(paretoRadius)) {
+      paretoRadius = ParetoRadius(Data)
+    } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
+      paretoRadius = ParetoRadius(Data)
+    } else{
+      #ToNothing because radius is given by user
+    }
+  }else{#big data
+    if (missing(paretoRadius)) {#multiple small samples are taken
+      paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+    } else if (is.null(paretoRadius)) {
+      paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+    } else if (is.na(paretoRadius)) {
+      paretoRadius = ParetoRadius(Data)
+    } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
+      paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+    } else{
+      #ToNothing because radius is given by user
+    }
   }
   minData = min(Data, na.rm = TRUE)
   maxData = max(Data, na.rm = TRUE)
@@ -135,15 +150,25 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       nB = length(breaks)
       mids = 0.5 * (breaks[-1L] + breaks[-nB])
       kernels = mids
+      FLAG_kernels_manualSet=FALSE
     }
   }
   #bugfix: MT 2020
   #sicherstellen das alle daten auch in einer ParetoKugel enthalten sind
-  if((kernels[1]-paretoRadius)!=minData){
-    kernels=c(minData,kernels)
-  } 
-  if((tail(kernels,1)+paretoRadius)!=maxData){
-    kernels=c(kernels,maxData)
+  if(isFALSE(FLAG_kernels_manualSet)){
+    if((kernels[1]-paretoRadius)!=minData){
+      kernels=c(minData,kernels)
+    } 
+    if((tail(kernels,1)+paretoRadius)!=maxData){
+      kernels=c(kernels,maxData)
+    }
+  }else{#design choice: user entscheidung geht vor
+    if((kernels[1]-paretoRadius)!=minData){#aber ueble warneldung vorgeben!
+      warning("ERROR in ParetoDensityEstimation(): Kernels do not contain all datapoints. Density estimation is incorrect. Please either set kernels correctly or let the function set the kernels automatically!")
+    } 
+    if((tail(kernels,1)+paretoRadius)!=maxData){
+      warning("ERROR in ParetoDensityEstimation(): Kernels do not contain all datapoints. Density estimation is incorrect. Please either set kernels correctly or let the function set the kernels automatically!")
+    }
   }
   nKernels = length(kernels)
   #Randapproximierung
@@ -195,6 +220,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     paretoDensity <- paretoDensity / area
   }
   if (isTRUE(PlotIt)) {
+    
     plot(
       kernels,
       paretoDensity,
@@ -202,8 +228,9 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       main = 'Raw PDE R plot',
       xaxs = 'i',
       yaxs = 'i',
-      xlab = 'Data',
-      ylab = 'PDE'
+      xlab = xlab,
+      ylab = 'PDE',
+      ylim=c(0,max(paretoDensity)*1.1)
     )
   }
   return (list(

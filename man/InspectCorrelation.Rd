@@ -8,7 +8,7 @@ Inspect the Correlation
 Inspects the correlation between two given features using density scatter plots.
 }
 \usage{
-InspectCorrelation(x, y, DensityEstimation = "SDH",
+InspectCorrelation(X, Y, DensityEstimation = "SDH",
 
 CorMethod = "spearman", na.rm = TRUE,
 
@@ -16,7 +16,7 @@ SampleSize = round(sqrt(5e+08), -3),
 
 NrOfContourLines = 20, Plotter = "native",
 
-DrawTopView = T, xlab = "X", ylab = "Y",
+DrawTopView = T, xlab, ylab,
 
 main = "Spearman correlation coef.:", xlim, ylim, 
 
@@ -24,8 +24,8 @@ Legendlab_ggplot = "value", ...)
 }
 
 \arguments{
- \item{x}{Numeric vector [1:n], first feature (for x axis values)}
-  \item{y}{Numeric vector [1:n], second feature (for y axis values)}
+ \item{X}{Numeric vector [1:n], first feature (for x axis values)}
+  \item{Y}{Numeric vector [1:n], second feature (for y axis values)}
    \item{DensityEstimation}{"SDH" is very fast but maybe not correct, "PDE" is slow but proably more correct.}
    
   \item{CorMethod}{

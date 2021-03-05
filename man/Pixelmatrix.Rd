@@ -10,7 +10,7 @@
 \usage{
 Pixelmatrix(Data, XNames, LowLim, HiLim,
 
-YNames, main = '',FillNotFiniteWithHighestValue=FALSE) 
+YNames, main,FillNotFiniteWithHighestValue=FALSE) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

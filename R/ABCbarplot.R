@@ -1,4 +1,4 @@
-ABCbarplot=ABC_screeplot=function(Data,Colors=DataVisualizations::DefaultColorSequence[1:3],main,xlab="Fraction of Data in %",ylab="Value"){
+ABCbarplot=ABC_screeplot=function(Data,Colors=DataVisualizations::DefaultColorSequence[1:3],main,xlab,ylab="Value"){
 # V= ABCbarPlot(Data);
 # V has the elements Aind,Bind,Cind,ABlimit,BClimit
 # barplot of sortdescending(Data) with the sets in different colours
@@ -17,6 +17,9 @@ Please install the package which is defined in "Suggests".')
     return('Subordinate package (ABCanalysis) is missing. No computations are performed.
 Please install the package which is defined in "Suggests".')
   }
+  
+  
+  if(missing(xlab)) xlab=paste0("Fraction of ",deparse1(substitute(Data))," in %")
   
 if(missing(main)) main="Barplot colored by ABCanalysis Indicating Most-Important Values"
 Data=Data[is.finite(Data)]

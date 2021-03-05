@@ -1,12 +1,16 @@
-smooth1D = function(Y, lambda) {
+smooth1D = function(Y, lambda,na.rm=FALSE,Silent=FALSE) {
 #  Z = smooth1D(Y,lambda)
 # apply the smoother lineweise to a histogram given in a matrix Y:
 # Z is the smoother matrix  see equation 8 in 04 Eilers
   if(is.vector(Y)){
-    warning("smooth1D expected matrix. Calling as.matrix()")
+    if(isFALSE(Silent))
+      warning("smooth1D expected matrix. Calling as.matrix()")
+    
     Y=as.matrix(Y)
   }
-
+  if(isTRUE(na.rm))
+    Y[!is.finite(Y)]=0
+  
   dd = dim(Y)
   m = dd[1] #m  zeilennlaenge von Y
   #n = dd[2]

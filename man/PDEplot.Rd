@@ -10,7 +10,7 @@ PDEplot(data, paretoRadius = 0, weight = 1, kernels = NULL,
                  LogPlot = F, PlotIt = TRUE, title =
                  "ParetoDensityEstimation(PDE)", color = "blue",
 				 
-                 xpoints = FALSE, xlim, ylim, xlab = "Data", ylab =
+                 xpoints = FALSE, xlim, ylim, xlab, ylab =
                  "PDE", ggPlot = ggplot(), sampleSize = 2e+05, lwd = 2)
 				 }
 

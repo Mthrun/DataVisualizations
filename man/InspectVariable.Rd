@@ -2,13 +2,13 @@
 \alias{InspectVariable}
 \title{Visualization of Distribution of one variable}
 \usage{
-InspectVariable(Feature, N = "Feature", i = 1, xlim, ylim,
+InspectVariable(Feature, Name, i = 1, xlim, ylim,
 
  sampleSize =1e+05, main)
  }
 \arguments{
 \item{Feature}{[1:n] Variable/Vector of Data to be plotted}
-\item{N}{Optional, string, for x label}
+\item{Name}{Optional, string, for x label}
 \item{i}{Optional, No. of variable/feature, an integer of the for lope}
 \item{xlim}{[2] Optional, range of x-axis for PDEplot }
 \item{ylim}{[2] Optional, range of y-axis for PDEplot }
@@ -38,11 +38,11 @@ data("ITS")
 # in the CRAN check
 ind=sample(length(ITS),1000)
 
-InspectVariable(ITS[ind],N='Income in EUR',main='ITS')
+InspectVariable(ITS[ind],Name='Income in EUR',main='ITS')
 }
 \donttest{
 data("ITS")
-InspectVariable(ITS,N='Income in EUR',main='ITS')
+InspectVariable(ITS,Name='Income in EUR',main='ITS')
 }
 }
 
