@@ -71,16 +71,17 @@ PDEplot <- function(Data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
  
   paretoDensity <- pdeVal$paretoDensity*weight
 
-  df = Data.frame(kernels = pdeVal$kernels, density = paretoDensity)
+  df = data.frame(kernels = pdeVal$kernels, density = paretoDensity)
+
   plt <- ggPlot
   if(length(grep(pattern = 'gg',attributes(ggPlot)$class))<1){
     warning('ggobject of Inputparameter ggPlot, could not be found. Creating new object.')
     plt=ggplot2::ggplot()
   }
   if(isTRUE(xpoints)){
-    plt <- plt + ggplot2::geom_point(Data = df, aes_string(x = "kernels", y = "density"), colour = color)
+    plt <- plt + ggplot2::geom_point(data = df, ggplot2::aes_string(x = "kernels", y = "density"), colour = color)
   }else{
-    plt <- plt + ggplot2::geom_line(Data = df, aes_string(x = "kernels", y = "density"), colour = color,size=lwd)  
+    plt <- plt + ggplot2::geom_line(data = df, ggplot2::aes_string(x = "kernels", y = "density"), colour = color,size=lwd)  
   }
   plt <- plt  + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)+ggplot2::ylim(c(0,1.05*max(df$density)))
 
