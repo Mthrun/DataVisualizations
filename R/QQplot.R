@@ -16,6 +16,9 @@ QQplot=function(X,Y,xlab, ylab,col="red",main='',...){
   if(missing(xlab)) xlab=deparse1(substitute(X))
   if(missing(ylab)) ylab=deparse1(substitute(Y))
   
+  X=checkFeature(X,varname = 'X',Funname = "QQplot")
+  Y=checkFeature(Y,varname = 'Y',Funname = "QQplot")
+  
  def.par <- par(no.readonly = TRUE) # save default, for resetting...
 
  par(oma=c(0,0,1,0))#c(u,li,o,re) in

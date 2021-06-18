@@ -18,7 +18,7 @@ main = "Class Plot", Colors,Size=8,
 
 LineColor = NULL, LineWidth = 1, LineType = NULL,
 
-Showgrid = TRUE, Plotter, SaveIt = FALSE)
+Showgrid = TRUE, Plotter, SaveIt = FALSE,\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -68,10 +68,13 @@ for ggplot2: just set =1 here and then the curve is plotted
 Optional, boolean (plotly only)
 }
   \item{Plotter}{
-Optional, either "\code{ggplot}" or "\code{plotly}", other string results in simple native plot
+Optional, either "\code{ggplot}", "\code{plotly}", or "\code{native}"
 }
   \item{SaveIt}{
 Optional, boolean, if true saves plot as html (plotly) or png (ggplot2)
+}
+\item{\dots}{
+Further arguments for \code{ggplot2::ggplot},or  \code{plotly::plot_ly}, or \code{\link{plot}} (except "\code{pch}"" and "\code{type}") depending on \code{Plotter}
 }
 }
 

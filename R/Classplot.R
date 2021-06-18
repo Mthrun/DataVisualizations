@@ -1,6 +1,6 @@
 Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab, 
                        main = "Class Plot", Colors,Size=8,LineColor=NULL,
-					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter,SaveIt = FALSE){
+					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter,SaveIt = FALSE,...){
   
 
   
@@ -8,9 +8,9 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab,
   
   if(missing(xlab)) xlab=deparse1(substitute(X))
   if(missing(ylab)) ylab=deparse1(substitute(Y))
-  
-  X=checkFeature(X,'X')
-  Y=checkFeature(Y,'Y')
+ 
+  X=checkFeature(X,varname='X',Funname="Classplot")
+  Y=checkFeature(Y,varname='Y',Funname="Classplot")
   Cls=checkCls(Cls,length(Y))
   if(length(X)!=length(Y)) stop('X and Y have to have the same length')
   
@@ -33,6 +33,13 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab,
       Colors=DataVisualizations::DefaultColorSequence[-2][1:mc] #no yellow
   }
   
+  ColorVec=Cls*0
+  k=1
+  for(i in uu){
+    ColorVec[Cls==i]=Colors[k]
+    k=k+1
+  }
+  
   if(missing(Plotter)){
     if(is.null(Names))
       Plotter="plotly"
@@ -51,7 +58,7 @@ Please install the package which is defined in "Suggests".')
     return('Subordinate package (plotly) is missing. No computations are performed.
 Please install the package which is defined in "Suggests".')
   }
-  p <- plotly::plot_ly(type='scatter',mode='markers',colors=Colors,marker = list(size = Size))
+  p <- plotly::plot_ly(type='scatter',mode='markers',colors=Colors,marker = list(size = Size),...)
   
   if(!is.null(LineColor)){
     p <- plotly::add_lines(p, x = ~X, y = ~Y,line = list(color = LineColor, width = LineWidth, dash = LineType), name = 'Line')
@@ -85,12 +92,7 @@ Please install the package which is defined in "Suggests".')
     if(!is.null(Names))
       df$Names=rownames(Names)
 
-    ColorVec=Cls*0
-    k=1
-    for(i in uu){
-      ColorVec[Cls==i]=Colors[k]
-      k=k+1
-    }
+
    #    
     colMat <- grDevices::col2rgb(ColorVec)
     hex=rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3,]/255)
@@ -101,7 +103,7 @@ Please install the package which is defined in "Suggests".')
     colMat <- grDevices::col2rgb(Colors)
     hex=grDevices::rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3,]/255)
     
-    p <- ggplot2::ggplot(df, ggplot2::aes_string(x = "X",y =  "Y", label = "Names",group="Cls",color="Colors")) + ggplot2::geom_point(size=Size)+
+    p <- ggplot2::ggplot(df, ggplot2::aes_string(x = "X",y =  "Y", label = "Names",group="Cls",color="Colors"),...) + ggplot2::geom_point(size=Size)+
       ggplot2::theme_bw()+ggplot2::scale_color_identity()
     
     if(!is.null(LineType))
@@ -122,12 +124,12 @@ Please install the package which is defined in "Suggests".')
     
     return(p)
   }
+  if(Plotter!="native")
+    message('Incorrect plotter selected, performing simple native plot')
   
-  message('Incorrect plotter selected, performing simple native plot')
-  
-  if(Size==8) 
+  if(Size==8){
     Size=Size-6 #adapting default size
-  
-  plot(X,Y,col=Colors,main=main,xlab=xlab,ylab = xlab,type='p',cex=Size,pch=20)
+  }
+  plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab = ylab,type='p',cex=Size,pch=20,...)
 }
 

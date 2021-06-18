@@ -28,7 +28,7 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
 #   Names[1:k]
 
   
-   #Datavector= checkFeature(Datavector,'Datavector')
+   #Datavector= checkFeature(Datavector,varname='Datavector',Funname="internpiechart")
   
   nas=which(is.na(Datavector))
   if(length(nas)>0){

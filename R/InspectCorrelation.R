@@ -6,11 +6,13 @@ InspectCorrelation=function(X,Y,DensityEstimation="SDH",CorMethod='spearman',na.
                             
                             xlim, ylim, Legendlab_ggplot="value",...){
   
+
   if(missing(xlab)) xlab=deparse1(substitute(X))
   if(missing(ylab)) ylab=deparse1(substitute(Y))
   
-  X=checkFeature(X,'X')
-  Y=checkFeature(Y,'Y')
+  X=checkFeature(X,varname='X',Funname="InspectCorrelation")
+  Y=checkFeature(Y,varname='Y',Funname="InspectCorrelation")
+  
   #requireNamespace('ggExtra')
   if(identical(X,Y)){
     stop('Variable X is identical to variable Y. Please check input.')

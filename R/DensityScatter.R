@@ -1,4 +1,4 @@
-DensityScatter=function(x,y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotIt=TRUE,
+DensityScatter=function(X,Y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotIt=TRUE,
                               
                               NrOfContourLines=20,Plotter='native', DrawTopView = TRUE,
                               
@@ -9,14 +9,14 @@ DensityScatter=function(x,y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotI
 #  plot the PDE on top of a scatterplot
 #
 #  INPUT
-#  x[1:n]                  First feature
-#  y[1:n]                  Second feature
+#  X[1:n]                  First feature
+#  Y[1:n]                  Second feature
 #  DensityEstimation        Either "PDE" or "SDH"
 #  OPTIONAL
 #  SampleSize             Sample Size in case of big data
 #  na.rm                   Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE
 
-#  ylab                    Label for the y axis
+#  ylab                    Label for the Y axis
 #  Legendlab_ggplot               Label for the legend
 #  Plotter                 Plotting Backend to use.
 #                          Possible values are: native, ggplot, plotly
@@ -43,13 +43,13 @@ Please install the package which is defined in "Suggests".')
   if(missing(xlab)) xlab=deparse1(substitute(X))
   if(missing(ylab)) ylab=deparse1(substitute(Y))
   
-  x=checkFeature(x,'x')
-  y=checkFeature(y,'y')
-  if(identical(x,y)){
-    stop('DensityScatter: Variable x is identical to variable y. Please check input.')
+  X=checkFeature(X,varname = 'X',Funname = "DensityScatter")
+  Y=checkFeature(Y,varname = 'Y',Funname = "DensityScatter")
+  if(identical(X,Y)){
+    stop('DensityScatter: Variable X is identical to variable Y. Please check input.')
   }
 
-  isnumber=function(x) return(is.numeric(x)&length(x)==1)
+  isnumber=function(X) return(is.numeric(X)&length(X)==1)
 
   if(missing(SampleSize)){
     SampleSize =-1
@@ -76,44 +76,44 @@ Please install the package which is defined in "Suggests".')
 
     
   if(isTRUE(na.rm)){ 
-    noNaNInd <- which(is.finite(x)&is.finite(y))
-    x = x[noNaNInd]
-    y = y[noNaNInd]
+    noNaNInd <- which(is.finite(X)&is.finite(Y))
+    X = X[noNaNInd]
+    Y = Y[noNaNInd]
   }
   
-  nData <- length(x)
+  nData <- length(X)
   if(SampleSize>0){
     if (SampleSize<nData) { 
       sampleInd=sample(1:nData,size = SampleSize)
-      x=x[sampleInd]
-      y=y[sampleInd]
+      X=X[sampleInd]
+      Y=Y[sampleInd]
     }
   }
   if(missing(xlim))
-    xlim = c(min(x,na.rm = T), max(x,na.rm = T))
+    xlim = c(min(X,na.rm = T), max(X,na.rm = T))
   if(missing(ylim))
-    ylim = c(min(y,na.rm = T), max(y,na.rm = T))
+    ylim = c(min(Y,na.rm = T), max(Y,na.rm = T))
 
 
-	data <- cbind(x,y)
-	nData <- length(x)
+	data <- cbind(X,Y)
+	nData <- length(X)
 
 
 if(DensityEstimation=="PDE"){
   requireNamespace('parallelDist')
-  V=PDEscatter(x,y,SampleSize,na.rm=FALSE,PlotIt=-1,...)
+  V=PDEscatter(X,Y,SampleSize,na.rm=FALSE,PlotIt=-1,...)
   Densities=V$Densities
-  x=V$X
-  y=V$Y
+  X=V$X
+  Y=V$Y
 }else if(DensityEstimation=="SDH"){
-  V=SmoothedDensitiesXY(X=x,Y=y,PlotIt=FALSE,...)
+  V=SmoothedDensitiesXY(X=X,Y=Y,PlotIt=FALSE,...)
   Densities=V$Densities
-  #x and y remain the same
+  #X and Y remain the same
 }else{
   stop('DensityScatter: Please choose "DensityEstimation" with eihter "PDE" or "SDH"')
 }
 	## Plotting now in zplot (again)
-	plt = zplot(x = x,y = y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
+	plt = zplot(x = X,y = Y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
 
 	if(DrawTopView){
 	  # Assign labels to axis/legend/...
@@ -167,6 +167,6 @@ if(DensityEstimation=="PDE"){
 	  })
 	}
 	
-	return(invisible(list(X=x,Y=y,Densities=Densities,Handle=plt)))
+	return(invisible(list(X=X,Y=Y,Densities=Densities,Handle=plt)))
 }
 

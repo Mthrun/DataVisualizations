@@ -5,7 +5,7 @@
 Density estimation (PDE) [Ultsch, 2005] or "SDH" [Eilers/Goeman, 2004] used for a scatter density plot. 
 }
 \usage{
-DensityScatter(x,y, DensityEstimation="SDH",
+DensityScatter(X,Y, DensityEstimation="SDH",
 
 SampleSize, na.rm=FALSE,PlotIt=TRUE,
                               
@@ -22,8 +22,8 @@ This function plots the Density on top of a scatterplot. Variances of x and y sh
 \code{PlotIt=FALSE} is usefull if one likes to perform adjustements like axis scaling prior to plotting with \pkg{ggplot2} or  \pkg{plotly}. In the case of "\code{native}"" the handle returns \code{NULL} because the basic R functon \code{plot}() is used
 }
 \arguments{
-  \item{x}{Numeric vector [1:n], first feature (for x axis values)}
-  \item{y}{Numeric vector [1:n], second feature (for y axis values)}
+  \item{X}{Numeric vector [1:n], first feature (for x axis values)}
+  \item{Y}{Numeric vector [1:n], second feature (for y axis values)}
    \item{DensityEstimation}{"SDH" is very fast but maybe not correct, "PDE" is slow but proably more correct.}
    
   \item{SampleSize}{Numeric, positiv scalar, maximum size of the sample used for calculation. High values increase runtime significantly. The default is that no sample is drawn}

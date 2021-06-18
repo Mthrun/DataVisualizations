@@ -40,8 +40,8 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
 
   ## Input check
 
-  x=checkFeature(x,'x')
-  y=checkFeature(y,'y')
+  x=checkFeature(x,varname='x',Funname="PDEscatter")
+  y=checkFeature(y,varname='y',Funname="PDEscatter")
   if(identical(x,y)){
     stop('PDEscatter: Variable x is identical to variable y. Please check input.')
   }

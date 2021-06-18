@@ -44,9 +44,11 @@ PDEplot <- function(Data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
 #  require('reshape2')
 # 3.Editor: MT: Fehlerabfang fuer ggobject, sampelsize
   # Daten normalisieren
+
+	
   if(missing(xlab)) xlab=deparse1(substitute(Data))
-  
-  Data=checkFeature(Data,'Data')
+  Data=checkFeature(Data,varname='Data',Funname="PDEplot")
+	  
   isnumber=function(x) return(is.numeric(x)&length(x)==1)
   
   if(!isnumber(weight))

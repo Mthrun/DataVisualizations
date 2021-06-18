@@ -17,9 +17,12 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
 # uses histopt()
 #
 # MT 11/2014
-  
+
+	
   if(missing(Name)) Name=deparse1(substitute(Feature))
   
+  Feature=checkFeature(Feature,varname=Name,Funname="InspectVariable")
+	
   isnumber=function(x) return(is.numeric(x)&length(x)==1)
   
   if(!isnumber(i))

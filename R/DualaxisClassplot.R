@@ -1,12 +1,12 @@
 DualaxisClassplot=function(X, Y1, Y2,Cls1,Cls2, xlab = "X", y1lab = 'Y1', y2lab = 'Y2', 
 main = "Dual Axis Class Plot", Colors,Showgrid=TRUE, SaveIt = FALSE){
  
-  Y1=checkFeature(Y1,'Y1')
+  Y1=checkFeature(Y1,varname='Y1',Funname="DualaxisClassplot")
   n1=length(Y1)
   if(length(X)!=n1) stop('X and Y have to have the same length')
   
   Cls1=checkCls(Cls1,n1)
-  Y2=checkFeature(Y2,'Y2')
+  Y2=checkFeature(Y2,varname='Y2',Funname="DualaxisClassplot")
   n2=length(Y2)
 
   
