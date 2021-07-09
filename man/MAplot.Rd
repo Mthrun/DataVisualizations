@@ -9,36 +9,40 @@ Bland-Altman plot [Altman/Bland, 1983].
 \usage{
 MAplot(X,Y,islog=TRUE,LoA=FALSE,CI=FALSE,densityplot=FALSE,
 
-main='MA-plot',xlab,ylab,Cls,lwd=2,\dots)
+main='MA-plot',xlab,ylab,Cls,lwd=2,ylim=NULL,\dots)
 }
 \arguments{
   \item{X}{[1:n] numerical vector of a feature/variable
 }
   \item{Y}{[1:n] another numerical vector of a feature/variable
 }
-  \item{islog}{ TRUE: MAplot, FALSE: M=x-y versus a=0.5(x+y)
+  \item{islog}{Optional, TRUE: MAplot, FALSE: M=x-y versus a=0.5(x+y)
 }
-  \item{LoA}{ TRUE: limits of agreement are plottet as lines if densityplot=FALSE
+  \item{LoA}{Optional, if TRUE: limits of agreement are plottet as lines if densityplot=FALSE
 }
-  \item{CI}{ TRUE: confidence intervals for LoA, see [Stockl et al., 2004], if  densityplot=FALSE
+  \item{CI}{Optional, if TRUE: confidence intervals for LoA, see [Stockl et al., 2004], if  densityplot=FALSE
 }
-  \item{densityplot}{ FALSE: Scatterplot using \code{ \link{Classplot}}, TRUE: density scatter plot with \code{\link{DensityScatter}}
+  \item{densityplot}{Optional, FALSE: Scatterplot using \code{ \link{Classplot}}, TRUE: density scatter plot with \code{\link{DensityScatter}}
 }
-  \item{main}{see \code{plot}
+  \item{main}{Optional, see \code{plot}
 }  
-  \item{xlab}{see \code{plot}
+  \item{xlab}{Optional, see \code{plot}
 }
   \item{ylab}{
-  see \code{plot}
+  Optional, see \code{plot}
 }
   \item{Cls}{
-	prior Classification as a numeric vector.
+	Optional, prior Classification as a numeric vector.
 }
   \item{lwd}{
-	if \code{LoA=TRUE} or \code{CI=TRUE} the width of the lines, otherwise input argument is ignored
+	Optional, if \code{LoA=TRUE} or \code{CI=TRUE} the width of the lines, otherwise input argument is ignored
 }
+  \item{ylim}{
+	Optional, default \code{=NULL} sets this parameter automatically, otherwise see \code{Classplot}.
+}
+
   \item{\dots}{
-Please see either\code{ \link{Classplot}} or \code{\link{DensityScatter}} for further arguments depending on \code{densityplot}, see also details
+for example, \code{ylim}, Please see either\code{ \link{Classplot}} in the mode \code{Plotter="native"}, or \code{\link{DensityScatter}} for further arguments depending on \code{densityplot}, see also details
 }
 
 }
@@ -54,6 +58,8 @@ In case of \code{densityplot=FALSE}, the function \code{ \link{Classplot}} is al
 }
   \item{Handle}{see \code{\link{DensityScatter}} for output options, if densityplot=TRUE, otherwise NULL
 }
+  \item{Statistics}{Named list of four element, each consisting of one value depending on input parameters \code{LoA} and \code{CI}, of this function. If not specifically set each list element is \code{NULL}. The elements are  \code{Mean_value} - mean allowed difference,  \code{SD_value} - standard deviation of difference,  \code{LoA_value} - Limits of agreement=1.96*SD,  \code{CI_value} - confidence intervall, i.e., maximum allowed difference
+}
 }
 \references{
 [Altman/Bland, 1983]  Altman D.G., Bland J.M.: Measurement in medicine: the analysis of method comparison studies, The Statistician, Vol. 32, p. 307-317, doi:10.2307/2987937, 1983.
@@ -61,8 +67,6 @@ In case of \code{densityplot=FALSE}, the function \code{ \link{Classplot}} is al
 \url{https://www.medcalc.org/manual/bland-altman-plot.php}
 
 [Stockl et al., 2004]  Stockl, D., Rodríguez Cabaleiro, D., Van Uytfanghe, K., & Thienpont, L. M.: Interpreting method comparison studies by use of the Bland-Altman plot: reflecting the importance of sample size by incorporating confidence limits and predefined error limits in the graphic, Clinical chemistry, Vol. 50(11), pp. 2216-2218. 2004.
-
-
 }
 \author{
 Michael Thrun

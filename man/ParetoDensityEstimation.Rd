@@ -4,7 +4,7 @@
 \title{Pareto Density EstimationV2}
 \usage{
 ParetoDensityEstimation(Data, paretoRadius, kernels = NULL,
-  MinAnzKernels = 100,PlotIt=FALSE)
+  MinAnzKernels = 100,PlotIt=FALSE,Silent=FALSE)
 }
 \arguments{
 \item{Data}{numeric vector of data.}
@@ -15,6 +15,8 @@ ParetoDensityEstimation(Data, paretoRadius, kernels = NULL,
 
 \item{MinAnzKernels}{Optional, minimal number of kernels, default MinAnzKernels==100}
   \item{PlotIt}{Optional, if TRUE: raw basic r plot of density estimation of debugging purposes. Usually please use \pkg{ggplot2} interface via \code{\link{PDEplot}} or \code{\link{MDplot}}}
+  
+    \item{Silent}{Optional, if TRUE: disables all warnings}
 }
 \value{
 List With 

@@ -76,7 +76,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   
   if(Ncases>SampleSize){
     warning('Data has more cases than "SampleSize". Drawing a sample for faster computation.
-            You can omit this by setting "SampleSize=nrow(Data".')
+    You can omit this by setting "SampleSize=nrow(Data).".')
     #if(isTRUE(requireNamespace('rowr'))){
     #here only finite values are sampled
     indmat=matrix(0,nrow = SampleSize,ncol = dvariables)

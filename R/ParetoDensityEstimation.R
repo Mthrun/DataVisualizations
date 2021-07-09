@@ -1,4 +1,4 @@
-ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE){
+ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE,Silent=FALSE){
 #  V = ParetoDensityEstimation(Data,ParetoRadius,Kernels)
 #  V = ParetoDensityEstimation(Data)
 #  ParetoDensity=V$paretoDensity
@@ -28,10 +28,12 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
  xlab=deparse1(substitute(Data))
   if (!is.vector(Data)) {
     Data = as.vector(Data)
+    if(isFALSE(Silent))
     warning('Beware: ParetoDensityEstimation: Data set not univariate !')
   }
   if (!is.numeric(Data)) {
     Data = as.numeric(Data)
+    if(isFALSE(Silent))
     warning('Beware: ParetoDensityEstimation: Data set not numeric !')
   }
   
@@ -42,10 +44,12 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   values = unique(Data)
   
   if (length(values) > 2 & length(values) < 5) {
+    if(isFALSE(Silent))
     warning('Less than 5 unqiue values for density estimation. Function may not work')
   }
   FLAG_kernels_manualSet=TRUE
   if (length(values) < 3) {
+    if(isFALSE(Silent))
     warning(
       '1 or 2 unique values for density estimation. Dirac Delta distribution(s) is(are) assumed. Input of "kernels", "paretoRadius" and "MinAnzKernels" or ignored!'
     )
@@ -100,6 +104,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   }# end if if (length(values) < 3)
   
   if (length(Data) < 10) {
+    if(isFALSE(Silent))
     warning('Less than 10 datapoints given, ParetoRadius potientially cannot be calcualted.')
   }
   
@@ -141,6 +146,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
         if (nBins > 1E4) {
           #MT: Fehlerabdfang bei zu vielen Bins
           nBins = 1E4
+          if(isFALSE(Silent))
           warning('Too many bins estimated, try to transform or sample the data')
         } else{
           nBins = nBins * 3 + 1
@@ -164,9 +170,11 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     }
   }else{#design choice: user entscheidung geht vor
     if((kernels[1]-paretoRadius)!=minData){#aber ueble warneldung vorgeben!
+      if(isFALSE(Silent))
       warning("ERROR in ParetoDensityEstimation(): Kernels do not contain all datapoints. Density estimation is incorrect. Please either set kernels correctly or let the function set the kernels automatically!")
     } 
     if((tail(kernels,1)+paretoRadius)!=maxData){
+      if(isFALSE(Silent))
       warning("ERROR in ParetoDensityEstimation(): Kernels do not contain all datapoints. Density estimation is incorrect. Please either set kernels correctly or let the function set the kernels automatically!")
     }
   }
@@ -206,6 +214,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   if(requireNamespace('pracma',quietly = TRUE)){ #fuer trapz
 		area <- pracma::trapz(kernels, paretoDensity)
   }else{
+    if(isFALSE(Silent))
      warning("ParetoDensityEstimation requires the package (pracma) specified in suggest to be installed. Please install this package. Beware: PDE is now not normalized!")
      area=1
   }
