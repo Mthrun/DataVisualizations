@@ -109,6 +109,15 @@ if(DensityEstimation=="PDE"){
   V=SmoothedDensitiesXY(X=X,Y=Y,PlotIt=FALSE,...)
   Densities=V$Densities
   #X and Y remain the same
+}else if(DensityEstimation=="kde2d"){
+	#flos density ansatz
+  densityMap = MASS::kde2d(Data[,1], Data[,2], n = 100)
+  Densities = sapply(1:nrow(Data), function(i){
+    densityMap$z[
+      which.min(abs(densityMap$x - Data[i,1])),
+      which.min(abs(densityMap$y - Data[i,2]))
+      ]
+  })
 }else{
   stop('DensityScatter: Please choose "DensityEstimation" with eihter "PDE" or "SDH"')
 }

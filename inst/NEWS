@@ -1,4 +1,5 @@
-Version 1.1.13 (GitHub, 2021-06-18)
+Version 1.2.3 (GitHub, 2022-01-21)
+	o Classplot: Als to color mapping is now based on consecutive numbers of Cls instead of order of appearance in Cls
 	o Changed design choice in ParetoDensityEstimation(): If user sets kernels incorrectly, intead of correcting kernels, the density is now estimated incorrectly and a warning is given back.
 	o Bugfix ParetoDensityEstimation() for big data with high peaks: sometimes the pareto radius is estimated too small if data size is above 10e5 because sample size for pareto radius estimation gets below 10 percent. In this case, not all data points lie within a pareto radius and the density is not estimated correctly. To fix this: Instead of one sample, multiple samples are taken in this case to estimate an average pareto radius.
 	o Improvements: MD-plot now allows the possiblity to force non-conventional names of columns at the risk that plotting may not work correctly. Moreover the boolean BW can be set to switch between the visualization on the screen and an automatic black and white background for paper. Additionaly, the centered title of the plot and ylabel can be set swiftly.

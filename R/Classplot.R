@@ -24,7 +24,7 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab,
       Names=Names[noNaNInd]
     }
   }
-  uu=unique(Cls)
+  uu=sort(unique(Cls),decreasing = F)
   if(missing(Colors)){
     mc=length(uu)
     if(is.null(Names))

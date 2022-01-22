@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // c_inPSphere2D
 IntegerVector c_inPSphere2D(NumericMatrix data, IntegerVector xBinNr, IntegerVector yBinNr, unsigned int nrXBins, unsigned int nrYBins, unsigned int nrData, double paretoRadius);
 RcppExport SEXP _DataVisualizations_c_inPSphere2D(SEXP dataSEXP, SEXP xBinNrSEXP, SEXP yBinNrSEXP, SEXP nrXBinsSEXP, SEXP nrYBinsSEXP, SEXP nrDataSEXP, SEXP paretoRadiusSEXP) {
