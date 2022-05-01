@@ -130,6 +130,10 @@ Please install the package which is defined in "Suggests".')
   if(Size==8){
     Size=Size-6 #adapting default size
   }
-  plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab = ylab,type='p',cex=Size,pch=20,...)
+  
+  if(missing(pch))
+    pch=20
+  
+  plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab = ylab,type='p',cex=Size,pch=pch,...)
 }
 
