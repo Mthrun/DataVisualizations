@@ -1,11 +1,13 @@
 \name{Choroplethmap}
+\alias{plotChoroplethMap}
 \alias{Choroplethmap}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Plots the Choropleth Map
 }
 \description{
-A thematic map with areas colored in proportion to the measurement of the statistical variable being displayed on the map. A political map geneated by this function was used in the conference talk of the publication [Thrun/Ultsch, 2018]}
+A thematic map with areas colored in proportion to the measurement of the statistical variable being displayed on the map. A political map geneated by this function was used in the conference talk of the publication [Thrun/Ultsch, 2018].}
 \usage{
 Choroplethmap(Counts, PostalCodes, NumberOfBins = 0,
 
@@ -46,7 +48,7 @@ number of digits for \code{round}
 Specially prepared shape file with postal codes and geographic boundaries.
 If you set this object, then you can use non german zip codes.
 You can see the required structure in map.df,  github trulia choroplethr blob master r chloropleth. 
-
+The German PostalCodesShapes can be downloaded from \url{https://github.com/Mthrun/DataVisualizations/tree/master/data}.
 }
   \item{PlotIt}{
 Either Plot the map directly or change the object manually before plotting it
@@ -92,10 +94,8 @@ List of
 Michael Thrun
 }
 \note{
-You could read \url{https://www.r-bloggers.com/2016/05/case-study-mapping-german-zip-codes-in-r/}, if you want to change the map.
+You could read \url{https://www.r-bloggers.com/2016/05/case-study-mapping-german-zip-codes-in-r/}, if you want to change the map (\code{PostalCodesShapes} shape object).
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 Google \code{choroplethr} package.

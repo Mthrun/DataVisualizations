@@ -128,9 +128,9 @@ Exemplary two postal codes in the upper left corner of the map. Bins are only pr
 
 If you download the package from CRAN, please do the following steps:
 
-1. Step: Downlaod the shape file from the website  www.deepbionics.org/Projects/DataVisualizations.html
+1. Step: Downlaod the shape file from https://github.com/Mthrun/DataVisualizations/tree/master/data
 
-2. Step: load it from the local path od the downloaded file with
+2. Step: load it from the local path of the downloaded file with
 
 ```{}
 load(file='GermanPostalCodesShapes.rda')
@@ -218,7 +218,7 @@ Silhouetteplot(Lsun3D$Data,Lsun3D$Cls,PlotIt = T)
 ## Visualizations of Supervised Indices
 
 Stochastic algorithms like k-means have and clustering output depending on the trial. In [Thrun et al.,2018] we proposed and approach to compare different clustering algorithms with each other.We would normally choose adjusted Rand index or something similar which can be calculated using other CRAN packages like DatabionicSwarm (e.g. ClusteringAccuracy).
-In this special case, the mean silh does not change much and the distribution of changes is uniform. However, large variances and various distributions are very common (http://www.deepbionics.de/Projects/ClusteringAlgorithms.html) if not a hierarchical clustering algorithm is used.
+In this special case, the mean silh does not change much and the distribution of changes is uniform. However, large variances and various distributions are very common (https://doi.org/10.1038/s41598-021-98126-1) if not a hierarchical clustering algorithm is used.
 ```{r,fig.width=4, fig.height=4,warning=FALSE}
 library(DataVisualizations)
 data("Lsun3D")

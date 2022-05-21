@@ -45,8 +45,6 @@ For \code{\link[ggplot2]{geom_point}} only \code{size} and \code{na.rm} is avail
 
 \references{
 RGL vignette in \url{https://cran.r-project.org/package=rgl}
-
-Spin3D in \url{https://www.uni-marburg.de/fb12/arbeitsgruppen/datenbionik/software-en}
 }
 \author{
 Michael Thrun
