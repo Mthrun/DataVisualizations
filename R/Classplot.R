@@ -1,6 +1,7 @@
-Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab, 
+Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab,
                        main = "Class Plot", Colors,Size=8,LineColor=NULL,
-					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter,SaveIt = FALSE,...){
+					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter, pch = 20, 
+					   SaveIt = FALSE,...){
   
 
   
@@ -130,9 +131,6 @@ Please install the package which is defined in "Suggests".')
   if(Size==8){
     Size=Size-6 #adapting default size
   }
-  
-  if(missing(pch))
-    pch=20
   
   plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab = ylab,type='p',cex=Size,pch=pch,...)
 }

@@ -44,7 +44,7 @@ Please install the package which is defined in "Suggests". Falling back to dist(
   
   
   # if(method!='euclidean')
-  InspectVariable(vecdist,N = paste(method,'distance'),sampleSize=sampleSize,...)
+    InspectVariable(vecdist,Name=paste(method,'distance'),sampleSize=sampleSize,...)
   # else
   #   InspectVariable(vecdist,sampleSize = 10000,N = paste('Euclidean','distance'),main=main)
   # 

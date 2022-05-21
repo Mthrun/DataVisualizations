@@ -8,7 +8,15 @@ DiagnosticAbility4Classifiers
 DiagnosticAbility4Classifiers as applied in [...].
 }
 \usage{
-DiagnosticAbility4Classifiers(TrueCondition_Cls, ManyPredictedCondition_Cls, NamesOfConditions = NULL, PlotType = "PRC", xlab = "True Positive Rate", ylab = "False Positive Rate", main = "ROC Space", Colors, LineColor = NULL, Size = 8, LineWidth = 1, LineType = NULL, Showgrid = TRUE, SaveIt = FALSE)
+DiagnosticAbility4Classifiers(TrueCondition_Cls, ManyPredictedCondition_Cls,
+
+NamesOfConditions = NULL, PlotType = "PRC", xlab = "True Positive Rate",
+
+ylab = "False Positive Rate", main = "ROC Space",
+
+Colors, LineColor = NULL, Size = 8, LineWidth = 1,
+
+LineType = NULL, Showgrid = TRUE, SaveIt = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

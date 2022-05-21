@@ -111,11 +111,11 @@ if(DensityEstimation=="PDE"){
   #X and Y remain the same
 }else if(DensityEstimation=="kde2d"){
 	#flos density ansatz
-  densityMap = MASS::kde2d(Data[,1], Data[,2], n = 100)
-  Densities = sapply(1:nrow(Data), function(i){
+  densityMap = MASS::kde2d(data[,1], data[,2], n = 100)
+  Densities = sapply(1:nrow(data), function(i){
     densityMap$z[
-      which.min(abs(densityMap$x - Data[i,1])),
-      which.min(abs(densityMap$y - Data[i,2]))
+      which.min(abs(densityMap$x - data[i,1])),
+      which.min(abs(densityMap$y - data[i,2]))
       ]
   })
 }else{

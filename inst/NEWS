@@ -1,12 +1,14 @@
-Version 1.2.3 (GitHub, 2022-01-21)
+Version 1.2.3 (CRAN, 2022-05-21)
+	o ParetoDensityEstimation(): If user sets kernels, the function is implemented by using function approximation instead of using these kernels for the internal density estimaton.
+	o Changed design choice in ParetoDensityEstimation(): If user sets kernels incorrectly, intead of correcting kernels, the density is now estimated incorrectly and a message is given back.
 	o Classplot: Als to color mapping is now based on consecutive numbers of Cls instead of order of appearance in Cls
-	o Changed design choice in ParetoDensityEstimation(): If user sets kernels incorrectly, intead of correcting kernels, the density is now estimated incorrectly and a warning is given back.
 	o Bugfix ParetoDensityEstimation() for big data with high peaks: sometimes the pareto radius is estimated too small if data size is above 10e5 because sample size for pareto radius estimation gets below 10 percent. In this case, not all data points lie within a pareto radius and the density is not estimated correctly. To fix this: Instead of one sample, multiple samples are taken in this case to estimate an average pareto radius.
 	o Improvements: MD-plot now allows the possiblity to force non-conventional names of columns at the risk that plotting may not work correctly. Moreover the boolean BW can be set to switch between the visualization on the screen and an automatic black and white background for paper. Additionaly, the centered title of the plot and ylabel can be set swiftly.
 	o Improvements: Serveral function now show the name(s) of variable(s) per default as xlabel and ylabel
 	o Improvements: MA-plot provides now optionally confidence intervalls and limits of agreement and user either Classplot or DensityScatter
 	o Standardized Output of DensityScatter using captial X and captial Y instead of x and y
 	o Bugfix Classplot(): plots the colors of the points now correctly for Plotter="native" 
+	o Bugfix Classplot(): colors of points are now consecutively mapped to labels of Cls
 	
 Version 1.2.2 (CRAN, 2021-01-12)
 	o Bugfix of ClassNames for ClassMDplot

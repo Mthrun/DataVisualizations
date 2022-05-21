@@ -7,9 +7,11 @@ Minus versus Add plot
 Bland-Altman plot [Altman/Bland, 1983].
 }
 \usage{
-MAplot(X,Y,islog=TRUE,LoA=FALSE,CI=FALSE,densityplot=FALSE,
+MAplot(X,Y,islog=TRUE,LoA=FALSE,CI=FALSE,
 
-main='MA-plot',xlab,ylab,Cls,lwd=2,ylim=NULL,\dots)
+densityplot=FALSE,main,xlab,ylab,
+
+Cls,lwd=2,ylim=NULL,\dots)
 }
 \arguments{
   \item{X}{[1:n] numerical vector of a feature/variable
@@ -66,7 +68,7 @@ In case of \code{densityplot=FALSE}, the function \code{ \link{Classplot}} is al
 
 \url{https://www.medcalc.org/manual/bland-altman-plot.php}
 
-[Stockl et al., 2004]  Stockl, D., Rodríguez Cabaleiro, D., Van Uytfanghe, K., & Thienpont, L. M.: Interpreting method comparison studies by use of the Bland-Altman plot: reflecting the importance of sample size by incorporating confidence limits and predefined error limits in the graphic, Clinical chemistry, Vol. 50(11), pp. 2216-2218. 2004.
+[Stockl et al., 2004]  Stockl, D., Rodriguez Cabaleiro, D., Van Uytfanghe, K., & Thienpont, L. M.: Interpreting method comparison studies by use of the Bland-Altman plot: reflecting the importance of sample size by incorporating confidence limits and predefined error limits in the graphic, Clinical chemistry, Vol. 50(11), pp. 2216-2218. 2004.
 }
 \author{
 Michael Thrun

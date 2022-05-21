@@ -18,7 +18,7 @@ main = "Class Plot", Colors,Size=8,
 
 LineColor = NULL, LineWidth = 1, LineType = NULL,
 
-Showgrid = TRUE, Plotter, SaveIt = FALSE,\dots)
+Showgrid = TRUE, Plotter, pch,SaveIt = FALSE,\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -70,6 +70,7 @@ Optional, boolean (plotly only)
   \item{Plotter}{
 Optional, either "\code{ggplot}", "\code{plotly}", or "\code{native}"
 }
+\item{pch}{scalar, symbol to use, for native \code{Plotter} only}
   \item{SaveIt}{
 Optional, boolean, if true saves plot as html (plotly) or png (ggplot2)
 }
