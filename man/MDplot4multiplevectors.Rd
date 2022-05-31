@@ -9,7 +9,7 @@ The MD-plot is a visualization for a boxplot-like Shape of the PDF published in 
 It is an improvement of violin or so-called bean plots and posses advantages in comparison to the conventional well-known box plot [Thrun et al., 2020].
 }
 \usage{
-MDplot4multiplevectors(\dots, Names, Ordering = 'Default',
+MDplot4multiplevectors(\dots, Names, Ordering = 'Columnwise',
 Scaling = "None", Fill = 'darkblue', RobustGaussian = TRUE,
 
 GaussianColor = 'magenta', Gaussian_lwd = 1.5, BoxPlot = FALSE,

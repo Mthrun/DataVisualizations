@@ -1,6 +1,6 @@
 MDplot4multiplevectors = function(...,
                                   Names,
-                                  Ordering = 'Default',
+                                  Ordering = 'Columnwise',
                                   Scaling = "None",
                                   Fill = 'darkblue',
                                   RobustGaussian = TRUE,
