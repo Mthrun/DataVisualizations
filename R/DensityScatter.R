@@ -103,8 +103,6 @@ if(DensityEstimation=="PDE"){
   requireNamespace('parallelDist')
   V=PDEscatter(X,Y,SampleSize,na.rm=FALSE,PlotIt=-1,...)
   Densities=V$Densities
-  X=V$X
-  Y=V$Y
 }else if(DensityEstimation=="SDH"){
   V=SmoothedDensitiesXY(X=X,Y=Y,PlotIt=FALSE,...)
   Densities=V$Densities
@@ -122,11 +120,12 @@ if(DensityEstimation=="PDE"){
   stop('DensityScatter: Please choose "DensityEstimation" with eihter "PDE" or "SDH"')
 }
 	## Plotting now in zplot (again)
-	plt = zplot(x = X,y = Y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
 
 	if(DrawTopView){
 	  # Assign labels to axis/legend/...
 	  switch(Plotter,'ggplot'={
+	    plt = zplot(x = X,y = Y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
+	    
 	    plt <- plt +
 	      xlab(xlab) +
 	      ylab(ylab) +
@@ -136,10 +135,22 @@ if(DensityEstimation=="PDE"){
 	      print(plt)
 
 	  },'native'={
+	    
+	    colpalette=colorRampPalette(c("blue","turquoise","green","yellow","orange","red"))
+	    noNaNInd <- is.finite(X) & is.finite(Y)
+	    colpal <- cut(Densities, length(Densities), labels = FALSE)
+	    cols <- rep(NA_character_, length(noNaNInd))
+	    #colramp = colorRampPalette(blues9[-(1:3)])
+	    cols[noNaNInd] <- colpalette(length(Densities))[colpal]
+	    plot(X[noNaNInd],Y[noNaNInd],col=cols,pch=".",xlim = xlim,
+	         ylim = ylim,xlab="",ylab="",main="",...)
+	    
 	    title(main = main, xlab = xlab, ylab = ylab)
 	    plt <- 'Native does not have a Handle'
 	    if(!isTRUE(PlotIt)) warning('for native plotting cannot be disabled')
 	  }, 'plotly'={
+	    plt = zplot(x = X,y = Y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
+	    
 	  requireNamespace('plotly')
 	    plt <- plotly::layout(plt,xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),
@@ -150,6 +161,8 @@ if(DensityEstimation=="PDE"){
 	  })
 	}else{
 	  switch(Plotter,'ggplot'={
+	    plt = zplot(x = X,y = Y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
+	    
       print('Plotly plot is used because ggplot is not implemented for option DrawTopView=FALSE.')
 	    requireNamespace('plotly')
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
@@ -158,6 +171,8 @@ if(DensityEstimation=="PDE"){
 	    if(isTRUE(PlotIt))
 	      print(plt)
 	  },'native'={
+	    plt = zplot(x = X,y = Y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
+	    
 	    print('Plotly plot is used because native is not implemented for option DrawTopView=FALSE.')
 	    requireNamespace('plotly')
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
@@ -166,6 +181,8 @@ if(DensityEstimation=="PDE"){
 	    if(isTRUE(PlotIt))
 	      print(plt)
 	  }, 'plotly'={
+	    plt = zplot(x = X,y = Y,z = Densities,DrawTopView,NrOfContourLines, TwoDplotter = Plotter, xlim = xlim, ylim = ylim)
+	    
 	    requireNamespace('plotly')
 	    plt <- plotly::layout(plt,scene=list(xaxis= list(title=xlab),
 	                                  yaxis= list(title=ylab),zaxis= list(title='PDE'),

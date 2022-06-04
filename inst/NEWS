@@ -1,3 +1,6 @@
+Version 1.2.4 (GitHub, 2022-06-04)
+	o DensityScatter: Reimplemted method for option native. IT now plots densities as well as scatter plot instead of only a density-based contour.
+	
 Version 1.2.3 (CRAN, 2022-05-21)
 	o ParetoDensityEstimation(): If user sets kernels, the function is implemented by using function approximation instead of using these kernels for the internal density estimaton.
 	o Changed design choice in ParetoDensityEstimation(): If user sets kernels incorrectly, intead of correcting kernels, the density is now estimated incorrectly and a message is given back.
