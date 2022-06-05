@@ -13,7 +13,9 @@ NrOfContourLines=20,Plotter='native', DrawTopView = TRUE,
                               
 xlab, ylab, main="DensityScatter",
                               
-xlim, ylim, Legendlab_ggplot="value",\dots)
+xlim, ylim, Legendlab_ggplot="value",
+
+AddString2lab="",NoBinsOrPareto=NULL,\dots)
 }
 \details{
 The \code{DensityScatter} function generates the density of the xy data as a z coordinate. Afterwards xyz will be plotted either as a contour plot or a 3d plot. It assumens that the cases of x and y are mapped to each other meaning that a \code{cbind(x,y)} operation is allowed.
@@ -24,7 +26,7 @@ This function plots the Density on top of a scatterplot. Variances of x and y sh
 \arguments{
   \item{X}{Numeric vector [1:n], first feature (for x axis values)}
   \item{Y}{Numeric vector [1:n], second feature (for y axis values)}
-   \item{DensityEstimation}{"SDH" is very fast but maybe not correct, "PDE" is slow but proably more correct.}
+   \item{DensityEstimation}{\code{"SDH"} is very fast but maybe not correct, \code{"PDE"} is slow but proably more correct, third alternativ is the typical R density estimation with \code{"kde2d"} which is sensitive to parameters}
    
   \item{SampleSize}{Numeric, positiv scalar, maximum size of the sample used for calculation. High values increase runtime significantly. The default is that no sample is drawn}
   \item{na.rm}{Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE}
@@ -49,8 +51,10 @@ This function plots the Density on top of a scatterplot. Variances of x and y sh
     see \code{plot()} function
   }
     \item{Legendlab_ggplot}{String, in case of \code{Plotter="ggplot"} label for the legend. Default: "value"}
-    
-      \item{\dots}{Density specifc parameters, for \code{PDEscatter()} or SDH (nbins,lambda,Xkernels,Ykernel))}
+        \item{AddString2lab}{adds the same string of information to x and y axis label, e.g. usefull for adding SI units}
+      \item{NoBinsOrPareto}{Density specifc parameters, for \code{PDEscatter(ParetoRadius)} or SDH (nbins)) or kde2d(bins)}
+      
+      \item{\dots}{further plot arguments}
 }
 \note{
 MT contributed with several adjustments

@@ -4,7 +4,7 @@ DensityScatter=function(X,Y,DensityEstimation="SDH",SampleSize,na.rm=FALSE,PlotI
                               
                               xlab, ylab, main="DensityScatter",
                               
-                              xlim, ylim, Legendlab_ggplot="value",...){
+                              xlim, ylim, Legendlab_ggplot="value",AddString2lab="",NoBinsOrPareto=NULL,...){
 # DensityScatter
 #  plot the PDE on top of a scatterplot
 #
@@ -42,6 +42,11 @@ Please install the package which is defined in "Suggests".')
   
   if(missing(xlab)) xlab=deparse1(substitute(X))
   if(missing(ylab)) ylab=deparse1(substitute(Y))
+  
+  if(AddString2lab!=""){
+    xlab=paste0(xlab,AddString2lab)
+    ylab=paste0(ylab,AddString2lab)
+  }
   
   X=checkFeature(X,varname = 'X',Funname = "DensityScatter")
   Y=checkFeature(Y,varname = 'Y',Funname = "DensityScatter")
@@ -101,15 +106,19 @@ Please install the package which is defined in "Suggests".')
 
 if(DensityEstimation=="PDE"){
   requireNamespace('parallelDist')
-  V=PDEscatter(X,Y,SampleSize,na.rm=FALSE,PlotIt=-1,...)
+  V=PDEscatter(X,Y,SampleSize,na.rm=FALSE,PlotIt=-1,ParetoRadius = NoBinsOrPareto)
   Densities=V$Densities
 }else if(DensityEstimation=="SDH"){
-  V=SmoothedDensitiesXY(X=X,Y=Y,PlotIt=FALSE,...)
+  V=SmoothedDensitiesXY(X=X,Y=Y,PlotIt=FALSE,nbins = NoBinsOrPareto)
   Densities=V$Densities
   #X and Y remain the same
 }else if(DensityEstimation=="kde2d"){
 	#flos density ansatz
+  if(!is.null(NoBinsOrPareto))
+    densityMap = MASS::kde2d(data[,1], data[,2], n = NoBinsOrPareto)
+  else
   densityMap = MASS::kde2d(data[,1], data[,2], n = 100)
+  
   Densities = sapply(1:nrow(data), function(i){
     densityMap$z[
       which.min(abs(densityMap$x - data[i,1])),
@@ -135,17 +144,29 @@ if(DensityEstimation=="PDE"){
 	      print(plt)
 
 	  },'native'={
-	    
-	    colpalette=colorRampPalette(c("blue","turquoise","green","yellow","orange","red"))
+	    #bettern to strange range than repeat colors
+	    ncolors=1
+	    ncolors2=1
+	    colpalette=colorRampPalette(c("navyblue","darkblue",rep("blue",ncolors2),
+	                                  rep("turquoise",ncolors2),rep("green",ncolors),
+	                                  rep("chartreuse",ncolors),rep("yellow",ncolors),
+	                                  rep("orange",ncolors),rep("red",ncolors),
+	                                  rep("darkred",ncolors2)
+	                                  )
+	                                )
 	    noNaNInd <- is.finite(X) & is.finite(Y)
-	    colpal <- cut(Densities, length(Densities), labels = FALSE)
-	    cols <- rep(NA_character_, length(noNaNInd))
-	    #colramp = colorRampPalette(blues9[-(1:3)])
-	    cols[noNaNInd] <- colpalette(length(Densities))[colpal]
-	    plot(X[noNaNInd],Y[noNaNInd],col=cols,pch=".",xlim = xlim,
-	         ylim = ylim,xlab="",ylab="",main="",...)
 	    
-	    title(main = main, xlab = xlab, ylab = ylab)
+	    ##robust normalization does not influence cut
+	    # quants=quantile(Densities,c(0.001,0.5,0.99))
+	    # minU=quants[1]
+	    # maxU=quants[3]
+	    #Densities4Colors=(Densities-minU)/(maxU-minU)+1
+	    Densities4Colors=Densities^0.5#stretches range for low densities
+	    colpal <- cut(Densities4Colors, length(Densities4Colors), labels = FALSE)
+	    cols <- rep(NA_character_, length(noNaNInd))
+	    cols[noNaNInd] <- colpalette(length(Densities4Colors))[colpal]
+	    plot(X[noNaNInd],Y[noNaNInd],col=cols,pch=".",xlim = xlim,
+	         ylim = ylim,xlab=xlab,ylab=ylab,main=main,...)
 	    plt <- 'Native does not have a Handle'
 	    if(!isTRUE(PlotIt)) warning('for native plotting cannot be disabled')
 	  }, 'plotly'={

@@ -51,6 +51,9 @@ PDEscatter=function(x,y,SampleSize,na.rm=FALSE,PlotIt=TRUE,ParetoRadius,samplePa
   if(missing(ParetoRadius)){
     ParetoRadius =0 #default as indication that pareto radius should be computed
   }
+  if(is.null(ParetoRadius)){
+    ParetoRadius =0 #default as indication that pareto radius should be computed
+  }
   
   if(!isnumber(ParetoRadius))
     stop('PDEscatter: "ParetoRadius" is not a numeric number of length 1. Please change Input.')
