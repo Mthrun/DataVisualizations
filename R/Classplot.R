@@ -1,7 +1,7 @@
 Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab,
                        main = "Class Plot", Colors,Size=8,LineColor=NULL,
 					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter, pch = 20, 
-					   SaveIt = FALSE,...){
+					   SaveIt = FALSE,Nudge_x_Names=0,Nudge_y_Names=0,...){
   
 
   
@@ -111,10 +111,10 @@ Please install the package which is defined in "Suggests".')
       p=p+geom_line(aes_string(group = "Cls"))
     
     if(!is.null(Names))
-      p <- p + ggrepel::geom_text_repel() 
+      p <- p + ggrepel::geom_text_repel(nudge_y=Nudge_y_Names,nudge_x=Nudge_x_Names) 
 
     
-    p=p+ ggplot2::labs(title = main)+ggplot2::xlab(xlab)+ggplot2::ylab(ylab)
+    p=p+ ggplot2::ggtitle(label =  main)+ggplot2::xlab(xlab)+ggplot2::ylab(ylab)+theme(plot.title = element_text(hjust = 0.5))
     p
     
     
