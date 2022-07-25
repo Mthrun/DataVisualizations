@@ -7,7 +7,6 @@ Classplot
 \description{
 Allows to plot one time series or feauture with a classification as a labeled scatter plot with a line.
 The colors are the labels defined by the classification.
-Usefull to see if temporal clustering has time dependent variations and for Hidden Markov Models (see Mthrun/RHmm on GitHub).
 }
 \usage{
 Classplot(X, Y, Cls,Names=NULL,
@@ -18,7 +17,9 @@ main = "Class Plot", Colors,Size=8,
 
 LineColor = NULL, LineWidth = 1, LineType = NULL,
 
-Showgrid = TRUE, Plotter, pch,SaveIt = FALSE,\dots)
+Showgrid = TRUE, Plotter, pch,SaveIt = FALSE,
+
+Nudge_x_Names=0,Nudge_y_Names=0,\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -74,6 +75,12 @@ Optional, either "\code{ggplot}", "\code{plotly}", or "\code{native}"
   \item{SaveIt}{
 Optional, boolean, if true saves plot as html (plotly) or png (ggplot2)
 }
+  \item{Nudge_x_Names}{
+Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Names} are set, moves them consistently respective to x-axis within units of x-axis
+}
+  \item{Nudge_y_Names}{
+Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Names} are set, moves them consistently respective to y-axis within units of y-axis
+}
 \item{\dots}{
 Further arguments for \code{ggplot2::ggplot},or  \code{plotly::plot_ly}, or \code{\link{plot}} (except "\code{pch}"" and "\code{type}") depending on \code{Plotter}
 }
@@ -81,6 +88,8 @@ Further arguments for \code{ggplot2::ggplot},or  \code{plotly::plot_ly}, or \cod
 
 \details{
 Default is "\code{plotly}" if \code{Names} are \code{NULL}. However,  ggplot2 is preferable in case that \code{Names} parameter is used because overlapping text labels are avoided. In that case  the default is "\code{ggplot}". Note that ggplot2 options are currently slightly restricted. 
+
+For example, the function is usefull to see if temporal clustering has time dependent variations and for Hidden Markov Models (see Mthrun/RHmm on GitHub).
 }
 \value{
 plotly object or ggplot2 objected depending on \code{Plotter}
