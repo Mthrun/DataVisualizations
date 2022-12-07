@@ -1,7 +1,7 @@
 Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab,
                        main = "Class Plot", Colors,Size=8,LineColor=NULL,
 					   LineWidth=1,LineType=NULL,Showgrid=TRUE, Plotter, pch = 20, 
-					   SaveIt = FALSE,Nudge_x_Names=0,Nudge_y_Names=0,...){
+					   SaveIt = FALSE,Nudge_x_Names=0,Nudge_y_Names=0,ggplot_legend,...){
   
 
   
@@ -25,7 +25,13 @@ Classplot=function(X, Y,Cls,Names=NULL,na.rm=FALSE, xlab, ylab,
       Names=Names[noNaNInd]
     }
   }
-  uu=sort(unique(Cls),decreasing = F)
+  u=unique(Cls)
+  uu=sort(u,decreasing = F)
+  
+  if(!is.null(Names)){
+    #for legend
+  u_names=unique(Names)[order(u,decreasing = F)]
+  }
   if(missing(Colors)){
     mc=length(uu)
     if(is.null(Names))
@@ -105,8 +111,13 @@ Please install the package which is defined in "Suggests".')
     hex=grDevices::rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3,]/255)
     
     p <- ggplot2::ggplot(df, ggplot2::aes_string(x = "X",y =  "Y", label = "Names",group="Cls",color="Colors"),...) + ggplot2::geom_point(size=Size)+
-      ggplot2::theme_bw()+ggplot2::scale_color_identity()
+      ggplot2::theme_bw()
     
+    if(!missing(ggplot_legend)){
+      p=p+ggplot2::scale_color_identity(name=ggplot_legend,breaks=Colors,labels=u_names,guide="legend")
+    }else{
+      p=p+ggplot2::scale_color_identity()
+    }
     if(!is.null(LineType))
       p=p+geom_line(aes_string(group = "Cls"))
     

@@ -19,7 +19,9 @@ LineColor = NULL, LineWidth = 1, LineType = NULL,
 
 Showgrid = TRUE, Plotter, pch,SaveIt = FALSE,
 
-Nudge_x_Names=0,Nudge_y_Names=0,\dots)
+Nudge_x_Names=0,Nudge_y_Names=0,ggplot_legend,
+
+\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -33,7 +35,7 @@ Nudge_x_Names=0,Nudge_y_Names=0,\dots)
 [1:n] numeric vector of k classes, if not set per default every point is in first class
 }
   \item{Names}{
-[1:n] character vector of k classes, if not set perdefault Cls is used, if set, names the legend and the points
+[1:n] character vector of k classes, if not set per default Cls is used, if set, names the legend and the points
 }
   \item{na.rm}{Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE}
   
@@ -81,6 +83,10 @@ Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Na
   \item{Nudge_y_Names}{
 Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Names} are set, moves them consistently respective to y-axis within units of y-axis
 }
+  \item{ggplot_legend}{
+Optional, if argument is not missing, it enables legend in ggplot2 by providing a string as a title of the legend.
+}
+
 \item{\dots}{
 Further arguments for \code{ggplot2::ggplot},or  \code{plotly::plot_ly}, or \code{\link{plot}} (except "\code{pch}"" and "\code{type}") depending on \code{Plotter}
 }
@@ -115,6 +121,13 @@ LineType="-",LineColor = "green")
 data(Lsun3D)
 Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
 Names = rownames(Lsun3D$Data),Size =2,LineType = 1)
+}
+
+\donttest{
+#ggplot2 with labels and legend per class
+data(Lsun3D)
+Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
+Names = paste0("C",Lsun3D$Cls),Size =2,ggplot_legend ="Classes")
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
