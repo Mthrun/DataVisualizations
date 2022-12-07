@@ -1,5 +1,8 @@
-Version 1.2.4 (GitHub, 2022-06-04)
+Version 1.2.4 (GitHub, 2022-12-07)
 	o DensityScatter: Reimplemted method for option native. IT now plots densities as well as scatter plot instead of only a density-based contour.
+	o Bugfix Inspectvariable: PDE plot ylim starts now in zero.
+	o Improved InspectVariable by reducing margins and integrating QQplot()
+	o Integrated lwd and pch optionality in QQ-plot function
 	
 Version 1.2.3 (CRAN, 2022-05-21)
 	o ParetoDensityEstimation(): If user sets kernels, the function is implemented by using function approximation instead of using these kernels for the internal density estimaton.

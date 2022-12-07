@@ -51,9 +51,11 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
   
   
   #m <- layout(matrix(c(1, 1, 3, 3,1,1,3,3,2,2,3,3,2,2,4,4), 4, 4))
-  m <-
-    graphics::layout(matrix(c(1, 1, 3, 3, 1, 1, 3, 3, 2, 2, 4, 4, 2, 2, 5, 5), 4, 4))
-  par(oma = c(0, 0, 1, 0))#c(u,li,o,re) in
+  m <-graphics::layout(matrix(c(1, 1, 3, 3, 1, 1, 3, 3, 2, 2, 4, 4, 2, 2, 5, 5), 4, 4))
+  
+  #m <-graphics::layout(matrix(c(1, 1, 3, 3, 1, 1, 3, 3, 1,1,3, 3, 2,2,3,3,2, 2, 4, 4,2,2, 5, 5), 4, 6))
+  
+  par(oma = c(0, 0, 1, 0),mai=c(0.44,0.44,0.23,0.1))#c(u,li,o,re) in
   
   # histogramme
   #par(fig=c(0, .51, 0.5, 0.98), new = TRUE)
@@ -79,12 +81,12 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
    y <- temp$counts;
    xlab=Name 
    ylab='Frequency' 
-   plot(x=c(MinD,MaxD), y=c(0, max(temp$counts,na.rm=TRUE)*1.2), type="n", main='',xaxs='i',yaxs='i',axes=FALSE,xlab=xlab, ylab='',xlim=c(MinD,MaxD), ylim=c(0, max(temp$counts,na.rm=TRUE)*1.2))
+   plot(x=c(MinD,MaxD), y=c(0, max(temp$counts,na.rm=TRUE)*1.2), type="n", main='',xaxs='i',yaxs='i',axes=FALSE,xlab="", ylab='',xlim=c(MinD,MaxD), ylim=c(0, max(temp$counts,na.rm=TRUE)*1.2))
    par(mgp=c(2.2,0.6,0)) #Abstand: c(Titel, Label, Achse)
-   rect(Breaks[-nB], 0, Breaks[-1], y, col="blue", border="light blue",xlab='',ylab=ylab,xlim=c(MinD,MaxD), ylim=c(0, max(temp$counts,na.rm=TRUE)*1.2))
+   rect(Breaks[-nB], 0, Breaks[-1], y, col="blue", border="light blue",xlab="",ylab="",xlim=c(MinD,MaxD), ylim=c(0, max(temp$counts,na.rm=TRUE)*1.2))
    axis(1,col="black",las=1,xaxs='i') #x-Achse
    axis(2,col="black",las=1,yaxs='i') #y-Achse
-   title(ylab=ylab)
+   title(ylab=ylab,xlab=xlab)
 
   #histopt(D, '', AxisLabs = TRUE, xlab = Name)
   
@@ -109,7 +111,9 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
       yaxs = 'i',
       xlab = Name,
       ylab = 'PDE',
-      col = 'blue'
+      ylim=c(0,max(pdeVal$paretoDensity,na.rm = T)*1.05),
+      col = 'blue',
+      lwd=2
     )
   } else if (missing(ylim)) {
     plot(
@@ -121,8 +125,9 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
       xlab = Name,
       ylab = 'PDE',
       xlim = xlim,
-      ylim = NULL,
-      col = 'blue'
+      ylim=c(0,max(pdeVal$paretoDensity,na.rm = T)*1.05),
+      col = 'blue',
+      lwd=2
     )
   } else{
     plot(
@@ -135,7 +140,8 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
       ylab = 'PDE',
       xlim = xlim,
       ylim = ylim,
-      col = 'blue'
+      col = 'blue',
+      lwd=2
     )
   }
   
@@ -144,28 +150,28 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
   #plot(x=c(-4.5,4.5),y=c(min(Feature),max(Feature)), xlab="Normalverteilung", ylab=Name,axes=TRUE,type='n',xlim=c(-4.5,4.5),ylim=c(min(Feature),max(Feature)))
   #par(mar=c(3,4,2,1)) #c(u,li,o,re)
   par(pty = "s")# Plot immer quadratisch
-  
-  qqnorm(
-    D2,
-    pch = 20,
-    col = "blue",
-    axes = TRUE,
-    xlim = c(-4.5, 4.5),
-    ylim = c(MinD, MaxD),
-    main = '',
-    xlab = "Normal Distribution",
-    ylab = Name
-  )
-  axis(4, col = "black", las = 3) #y-Achse
-  grid(lty = 'dashed', col = 'black')
-  mtext(
-    'Normal QQ-Plot',
-    side = 3,
-    line = 0,
-    cex = 1,
-    col = "black"
-  )
-  box(lwd = 1, col = 'White') # box + Liniendick
+  QQplot(rnorm(50000),D2,xlab="Normal Distribution",ylab=Name,main="",lwd=1.3,pch=".",subplot = T,cex=2.8)
+  # qqnorm(
+  #   D2,
+  #   pch = 20,
+  #   col = "blue",
+  #   axes = TRUE,
+  #   xlim = c(-4.5, 4.5),
+  #   ylim = c(MinD, MaxD),
+  #   main = '',
+  #   xlab = "Normal Distribution",
+  #   ylab = Name
+  # )
+  # axis(4, col = "black", las = 3) #y-Achse
+  # grid(lty = 'dashed', col = 'black')
+  # mtext(
+  #   'Normal QQ-Plot',
+  #   side = 3,
+  #   line = 0,
+  #   cex = 1,
+  #   col = "black"
+  # )
+  # box(lwd = 1, col = 'White') # box + Liniendick
   # Fenster fuer Box-whisker diagramm
   #par(fig=c(.75, 1, 0, 0.5), new = TRUE)
   par(pty = "m")

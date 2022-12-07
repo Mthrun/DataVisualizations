@@ -8,7 +8,8 @@ QQplot with a Linear Fit
 Qantile-quantile plot with a linear fit
 }
 \usage{
-QQplot(X,Y,xlab, ylab,col="red",main='',...)
+QQplot(X,Y,xlab, ylab,col="red",main='',
+lwd=3,pch=20,subplot=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,12 +28,21 @@ First Feature}
   \item{main}{
   title of plot, see \code{plot}
   }
+    \item{lwd}{
+  line width of plot, see \code{plot}
+  }
+    \item{pch}{
+  type of point, see \code{plot}
+  }
+    \item{subplot}{
+    FALSE: par is set specifically, TRUE: assumption is the usage as a subfigure, par has to be set by the user, no checks are performed, labels have to be set by the user
+  }
   \item{\dots}{
 other parameters for \code{qqplot}
 }
 }
 \details{
-Output is the evaluation of a linear fit of \code{lm} called 'line' and a quantile quantile plot (QQplot).
+Output is the evaluation of a linear (regression) fit of \code{lm} called 'line' and a quantile quantile plot (QQplot).
 }
 \value{
 List with
