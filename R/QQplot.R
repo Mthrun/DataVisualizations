@@ -1,4 +1,4 @@
-QQplot=function(X,Y,xlab, ylab,col="red",main='',lwd=3,pch=20,subplot=FALSE,...){
+QQplot=function(X,Y,Type=8,NoQuantiles=10000,xlab, ylab,col="red",main='',lwd=3,pch=20,subplot=FALSE,...){
 
 # qqnormfit(x,xug,xog)
 # % QQ-Plot von Daten und Transforierten Daten im Vergleich und jeweils mit Ausgleichsgerade
@@ -25,14 +25,27 @@ QQplot=function(X,Y,xlab, ylab,col="red",main='',lwd=3,pch=20,subplot=FALSE,...)
  par(pty="s")# Plot immer quadratisch
  } 
  #QQPlot of X
- quants=qqplot(X,Y, col="blue", pch=pch, xlab = xlab, ylab = ylab,main=main, ...) 
+  q_x = quantile(
+    X,
+    probs = c(1:NoQuantiles) / NoQuantiles,
+    na.rm = T,
+    type = Type
+  )
+  q_y = quantile(
+    Y,
+    probs = c(1:NoQuantiles) / NoQuantiles,
+    na.rm = T,
+    type = Type
+  )
+  plot(q_x,q_y, col="blue", pch=pch, xlab = xlab, ylab = ylab,main=main, ...)
+ #quants=qqplot(X,Y, col="blue", pch=pch, xlab = xlab, ylab = ylab,main=main, ...) 
  grid(lty='dashed',col='black')
 
- line=lm(quants$y~quants$x)
+ line=lm(q_y~q_x)
  abline(line, col = col, lwd = lwd)
  Summary=summary(line)
  if(isFALSE(subplot)){
    par(def.par)
  }
- return(invisible(list(Residuals=residuals.lm(line),Anova=anova(line),Summary=Summary)))
+ return(invisible(list(Quantiles=cbind(q_x,q_y),Residuals=residuals.lm(line),Anova=anova(line),Summary=Summary)))
 }

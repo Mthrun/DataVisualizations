@@ -8,7 +8,7 @@ QQplot with a Linear Fit
 Qantile-quantile plot with a linear fit
 }
 \usage{
-QQplot(X,Y,xlab, ylab,col="red",main='',
+QQplot(X,Y,Type=8,NoQuantiles=10000,xlab, ylab,col="red",main='',
 lwd=3,pch=20,subplot=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -17,6 +17,12 @@ lwd=3,pch=20,subplot=FALSE,...)
 First Feature}
   \item{Y}{
 1:n] numerical vector, Second Feature to compare first feature with}
+  \item{Type}{
+  an integer between 1 and 9 selecting one of the nine quantile algorithms detailed in \code{quantile }
+  }
+  \item{NoQuantiles}{
+  number of quantiles used in QQ-plot, if number is low and the data has outliers, there may be empty space visible in the plot}
+  
   \item{xlab}{
   x label, see \code{plot}
 ...}
@@ -42,10 +48,12 @@ other parameters for \code{qqplot}
 }
 }
 \details{
-Output is the evaluation of a linear (regression) fit of \code{lm} called 'line' and a quantile quantile plot (QQplot).
+Output is the evaluation of a linear (regression) fit of \code{lm} called 'line' and a quantile quantile plot (QQplot). Per default 10.000 quantiles are chosen, but in the case of very large data vectors one can reduce the quantiles for faster computation.
 }
 \value{
 List with
+
+\item{Quantiles}{[1:100,1:2] quantiles in y and y}
 \item{Residuals}{Output of\code{residuals.lm(line)}}
 \item{Summary}{Output of\code{summaryline)}}
 \item{Anova}{Output of\code{anova(line)}}
@@ -57,4 +65,8 @@ Michael, J. R.: The stabilized probability plot, Biometrika, Vol. 70(1), pp. 11-
 Michael Thrun
 }
 \keyword{qqplot}% use one of  RShowDoc("KEYWORDS")
-
+\examples{
+data(MTY)
+NormalDistribution=rnorm(50000)
+QQplot(NormalDistribution,MTY)
+}
