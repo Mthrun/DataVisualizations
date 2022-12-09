@@ -41,7 +41,22 @@ QQplot=function(X,Y,Type=8,NoQuantiles=10000,xlab, ylab,col="red",main='',lwd=3,
  #quants=qqplot(X,Y, col="blue", pch=pch, xlab = xlab, ylab = ylab,main=main, ...) 
  grid(lty='dashed',col='black')
 
- line=lm(q_y~q_x)
+ #use only percentiles for regression
+ #to be more robust against outliers
+ pct_x = quantile(
+   X,
+   probs = c(1:100) / 100,
+   na.rm = T,
+   type = Type
+ )
+ pct_y = quantile(
+   Y,
+   probs = c(1:100) / 100,
+   na.rm = T,
+   type = Type
+ )
+ 
+ line=lm(pct_x~pct_y)
  abline(line, col = col, lwd = lwd)
  Summary=summary(line)
  if(isFALSE(subplot)){
