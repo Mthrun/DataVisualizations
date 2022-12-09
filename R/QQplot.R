@@ -37,7 +37,7 @@ QQplot=function(X,Y,Type=8,NoQuantiles=10000,xlab, ylab,col="red",main='',lwd=3,
     na.rm = T,
     type = Type
   )
-  plot(q_x,q_y, col="blue", pch=pch, xlab = xlab, ylab = ylab,main=main, ...)
+  plot(q_x,q_y, col="dodgerblue1", pch=pch, xlab = xlab, ylab = ylab,main=main, ...)
  #quants=qqplot(X,Y, col="blue", pch=pch, xlab = xlab, ylab = ylab,main=main, ...) 
  grid(lty='dashed',col='black')
 
@@ -55,7 +55,7 @@ QQplot=function(X,Y,Type=8,NoQuantiles=10000,xlab, ylab,col="red",main='',lwd=3,
    na.rm = T,
    type = Type
  )
- 
+ points(pct_x,pct_y, pch=pch, col="blue")
  line=lm(pct_y~pct_x)
  abline(line, col = col, lwd = lwd)
  Summary=summary(line)

@@ -49,14 +49,15 @@ other parameters for \code{qqplot}
 }
 \details{
 Output is the evaluation of a linear (regression) fit of \code{lm} called 'line' and a quantile quantile plot (QQplot). Per default 10.000 quantiles are chosen, but in the case of very large data vectors one can reduce the quantiles for faster computation.
+The 100 percentiles used for the regression line are of darker blue than the quantiles chosen by the user.
 }
 \value{
 List with
 
-\item{Quantiles}{[1:100,1:2] quantiles in y and y}
-\item{Residuals}{Output of\code{residuals.lm(line)}}
-\item{Summary}{Output of\code{summaryline)}}
-\item{Anova}{Output of\code{anova(line)}}
+\item{Quantiles}{[1:NoQuantiles,1:2] quantiles in y and y}
+\item{Residuals}{Output of the Regression with \code{residuals.lm(line)}}
+\item{Summary}{Output of the Regression with \code{summaryline)}}
+\item{Anova}{Output of the Regression with \code{anova(line)}}
 }
 \references{
 Michael, J. R.: The stabilized probability plot, Biometrika, Vol. 70(1), pp. 11-17, 1983.
