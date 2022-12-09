@@ -1,6 +1,7 @@
 useDynLib(DataVisualizations, .registration=TRUE)
 export(ABCbarplot)
 export(BimodalityAmplitude)
+export(CCDFplot)
 export(ClassBoxplot)
 export(ClassPDEplot)
 export(ClassMDplot)
