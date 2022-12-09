@@ -56,7 +56,7 @@ QQplot=function(X,Y,Type=8,NoQuantiles=10000,xlab, ylab,col="red",main='',lwd=3,
    type = Type
  )
  
- line=lm(pct_x~pct_y)
+ line=lm(pct_y~pct_x)
  abline(line, col = col, lwd = lwd)
  Summary=summary(line)
  if(isFALSE(subplot)){
