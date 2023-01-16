@@ -17,9 +17,11 @@ main = "Class Plot", Colors,Size=8,
 
 LineColor = NULL, LineWidth = 1, LineType = NULL,
 
-Showgrid = TRUE, Plotter, pch,SaveIt = FALSE,
+Showgrid = TRUE, Plotter, pch, AnnotateIt = FALSE, 
 
-Nudge_x_Names=0,Nudge_y_Names=0,ggplot_legend,
+SaveIt = FALSE,
+
+Nudge_x_Names=0, Nudge_y_Names=0, Legend,
 
 \dots)
 }
@@ -51,8 +53,11 @@ Optional, string for title of plot
   \item{Colors}{
 Optional, string defining the k colors, one per class
 }
+  \item{AnnotateIt}{
+Optional, in case of \code{Plotter==ggplot} and given \code{Names} annotates each point if TRUE
+}
   \item{Size}{
-Optional, size of points
+Optional, size of points, beware: default is appropriate for  "\code{plotly}", or "\code{native}" but should smaller for "\code{ggplot}"
 }
   \item{LineColor}{
 Optional, name of color, in plotly then all points are connected by a curve, 
@@ -71,9 +76,9 @@ for ggplot2: just set =1 here and then the curve is plotted
 Optional, boolean (plotly only)
 }
   \item{Plotter}{
-Optional, either "\code{ggplot}", "\code{plotly}", or "\code{native}"
+Optional, either "\code{ggplot}" (default if \code{Names} given), "\code{plotly}" (default if no \code{Names} given), or "\code{native}"
 }
-\item{pch}{scalar, symbol to use, for native \code{Plotter} only}
+\item{pch}{ [1:n] numeric vector of k classes defines the symbols to use, for native \code{Plotter} or \code{ggplot}, usally k can be in a range from zero to 25}
   \item{SaveIt}{
 Optional, boolean, if true saves plot as html (plotly) or png (ggplot2)
 }
@@ -83,8 +88,8 @@ Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Na
   \item{Nudge_y_Names}{
 Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Names} are set, moves them consistently respective to y-axis within units of y-axis
 }
-  \item{ggplot_legend}{
-Optional, if argument is not missing, it enables legend in ggplot2 by providing a string as a title of the legend.
+  \item{Legend}{
+Optional, if argument is not missing, character string defining the title of the legend which automatically enables the legend
 }
 
 \item{\dots}{
@@ -111,6 +116,17 @@ Michael Thrun
 \examples{
 data(Lsun3D)
 Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls)
+
+#ggplot 2 with different symbols
+  Classplot(
+    Lsun3D$Data[, 1],
+    Lsun3D$Data[, 2],
+    Lsun3D$Cls,
+    Plotter = "ggplot2",
+    Size = 3,
+    pch = Lsun3D$Cls + 5,
+    Size = 3
+  )
 
 #plotly with line
 data(Lsun3D)

@@ -29,7 +29,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   if (!is.vector(Data)) {
     Data = as.vector(Data)
     if(isFALSE(Silent))
-    warning('Beware: ParetoDensityEstimation: Data set not univariate !')
+    warning('Beware: ParetoDensityEstimation: Data set not univariate! Please provide a vector as Data.')
   }
   if (!is.numeric(Data)) {
     Data = as.numeric(Data)
