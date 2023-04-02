@@ -1,10 +1,12 @@
-Version 1.2.4 (GitHub, 2023-01-12)
+Version 1.2.4 (GitHub, 2023-03-28)
 	o DensityScatter: Reimplemted method for option native. IT now plots densities as well as scatter plot instead of only a density-based contour.
 	o Bugfix Inspectvariable: PDE plot ylim starts now in zero.
 	o Improved InspectVariable() by reducing margins and integrating QQplot()
 	o Integrated lwd and pch optionality in QQ-plot function
 	o Improved QQplot() by using internally the quantile() function instead approx()
     o Added legend to Classplot() for all plotters and symbols in case of native and ggplot2
+    o Created an error bar plot function using ggplot2 for more than one method
+    o Bugfix: Fanplot now accepts the correct amount of colors set by the user. In addition, Fanplot allowes further argument for ploygon
 	
 Version 1.2.3 (CRAN, 2022-05-21)
 	o ParetoDensityEstimation(): If user sets kernels, the function is implemented by using function approximation instead of using these kernels for the internal density estimaton.

@@ -1,4 +1,4 @@
- Fanplot = fanPlot=function(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1){
+ Fanplot = fanPlot=function(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1,lwd=2,...){
 #    fanPlot(Datavector,Names,Labels,main='',col,MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1)
 # 
 #      An better alternative to the pie chart represents amount of values given in data.
@@ -56,7 +56,7 @@ Please install the package which is defined in "Suggests".')
  
   pct[pct==0]=0.004
 
-  plotrix::fan.plot(pct,labels=Labels,col=colors,max.span=pi,align="left",main='',include.sumx=MaxPercentage,shrink=ShrinkPies,label.radius = Rline)
+  plotrix::fan.plot(pct,labels=Labels,col=colors,max.span=pi,align="left",main='',include.sumx=MaxPercentage,shrink=ShrinkPies,label.radius = Rline,lwd=2,...)
    xy <- par("usr")
 
    #text(0, xy[3], main, cex = 1.5, adj = c(0.5, 1))

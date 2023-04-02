@@ -61,8 +61,9 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
     if(length(col)==k)
       colors=col
     else{
-      warning('Length of colors doesnt match found names defined as labels.')
-      colors=DataVisualizations::DefaultColorSequence[1:k]
+      #dont need warning, as number of labels will be reduced later
+      #warning('Length of colors doesnt match found names defined as labels.')
+      colors=c(col,setdiff(DataVisualizations::DefaultColorSequence,col)[1:k])
     }
   }
   

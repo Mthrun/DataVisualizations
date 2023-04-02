@@ -1,35 +1,19 @@
-Pixelmatrix=PlotPixMatrix = function(Data, XNames, LowLim, HiLim, YNames,
-                                     main, FillNotFinite = "WithHighestValue"){
-  # #PixelMatrixPlot = function(Data, XNames=NULL, LowLim=NULL, HiLim=NULL, YNames=NULL,main='')
-  # V = PixelMatrixPlot(Data,XNames,LowLim,HiLim,YNames);
-  # 
-  # DESCRIPTION
-  # Plot data matrix as a pixel colour picture
-  # 
-  # INPUT
-  # Data[1:n,1:d]    Data cases in rows, variables in columns
-  # XNames[1:d,:]    Numeric vector with names of the Data added at x/y -axis ,
-  #                  XNames == NULL means no names
-  # LowLim           Numeric which does xyz
-  # HiLim            Integer which does xyz
-  # YNames           Logical which does xyz (Default: Boolean=TRUE)
-  # main             Character title for plot.
-  # FillNotFinite    Character indicating strategy to fill not finite values.
-  #                  'WithHighestValue' fills value with highest value.
-  #                  (Default: FillNotFinite='WithHighestValue')
-  # 
-  # OUTPUT
-  # List with elements
-  # FirstElement     Element which does xyz
-  # SecondElement    Element which does xyz
-  # 
-  # DETAILS
-  # Nota: Die 4 Verschiebungen muesen fuer einen gut ausehenden Plot
-  #       gegebenenfalls empirisch angepasst werden
-  # 
-  # Authors: Michael Thrun, Felix Pape, Quirin Stier 10/2022
-  
-  ### Define the Heat Color
+Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main,FillNotFiniteWithHighestValue=FALSE) {
+    #PixelMatrixPlot = function(Data, XNames=NULL, LowLim=NULL, HiLim=NULL, YNames=NULL,main='')
+    # PixelMatrixPlot(Data,XNames,LowLim,HiLim,YNames);
+    #  plot Data matrix as a pixel colour picture
+    #
+    #  INPUT
+    #  Data[1:n,1:d]          Data cases in rows, variables in columns
+    #
+    #  OPTIONAL
+    #  XNames[1:d,:]           names of the Data added at x/y -axis , XNames == NULL means no names
+    
+    
+    #  Nota: Die 4 Verschiebungen muesen fuer einen gut ausehenden Plot gegebenenfalls empirisch angepasst werden
+    #  author: Michael Thrun, Felix Pape                                                                                                                                       ?
+    
+    ### Define the Heat Color
   if(missing(main)) main=paste0("Dataset: ",deparse1(substitute(Data)))
   if(!is.matrix(Data)){
     warning('Data is not a matrix. Calling as.matrix()')
@@ -69,78 +53,73 @@ Pixelmatrix=PlotPixMatrix = function(Data, XNames, LowLim, HiLim, YNames,
       HiLim = LowLim + 0.1
   }
     
-  if (is.vector(Data)) {
-    Data <- as.matrix(Data)
-  }
-  if (min(dim(Data)) < 1) {
-    warning('PlotPixMatrix: Datamust be matrix with min 2 columns and 2 rows!')
-  }
-  if(isTRUE(Schalter)){
-    hiind = which(Data >= HiLim)
-    Data[hiind] = HiLim
-    lowind = which(Data <= LowLim)
-    Data[lowind] = LowLim
-  }
-  if(!is.null(FillNotFinite)){
-    if(FillNotFinite == "WithHighestValue"){
+    if (is.vector(Data)) {
+      Data <- as.matrix(Data)
+    }
+    if (min(dim(Data)) < 1) {
+      warning('PlotPixMatrix: Datamust be matrix with min 2 columns and 2 rows!')
+    }
+    if(isTRUE(Schalter)){
+      hiind = which(Data >= HiLim)
+      Data[hiind] = HiLim
+      lowind = which(Data <= LowLim)
+      Data[lowind] = LowLim
+    }
+    if(isTRUE(FillNotFiniteWithHighestValue)){
       if(any(!is.finite(Data))){ # vom Prinzip aus Matlab uebernommen
         Delta = (HiLim - LowLim) / 64
         Value4NaN = HiLim + Delta
         Data[which(Data == HiLim)] = HiLim - Delta
         Data[which(!is.finite(Data))] = Value4NaN
       }
-    }else{
-      warningt("Input value for parameter FillNotFinite is unknown. Leaving that part out")
     }
-  }
-  
-  df <- data.frame(Data)
-  if (!is.null(XNames)) {
-    names(df) <- XNames
-  }
-  
-  df$id <- seq.int(nrow(df))
-  dfm <- reshape2::melt(df, id = 'id')
-  
-  ## Variablen koennen sehr unterschiedliche Ranges haben,
-  ## was zu einer schlechten Heatmap fuehren kann.
-  ## darum transformieren wir jetzt die Daten zunaechst
-  
-  #dfm <- ddply(dfm, .(variable), transform,
-  #             rescale = rescale(value))
-  #aes_string only works if you dont modify your features in ggplot2 (e.g. not logarithmize them)
-  plt <-
-    ggplot(dfm, aes_string(y = 'id', x = 'variable', fill = 'value')) + geom_raster() +
-    scale_fill_gradientn(colours = heatC,na.value = 'black') +
-    theme(
-      panel.background = element_blank(),
-      legend.key = element_blank(),
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      plot.title = element_text(hjust = 0.5,vjust = 0.5)
-    ) +
-    labs(x = "", y = "", title = main)
-  
-  if (!is.null(YNames)&!all(YNames==1:nrow(Data))) {
-    if (length(YNames) != nrow(Data))
-      warning(
-        "Lengths of YNames does not equal number of rows.\n
-        Maybe you want to use:\n
-        \t   PixelMatrixPlot(...) + scale_y_reverse(breaks = c(Position of ticks), labels =YNames)"
-      )
+    df <- data.frame(Data)
+    if (!is.null(XNames)) {
+      names(df) <- XNames
+    }
+    
+    df$id <- seq.int(nrow(df))
+    dfm <- reshape2::melt(df, id = 'id')
+    
+    ## Variablen koennen sehr unterschiedliche Ranges haben,
+    ## was zu einer schlechten Heatmap fuehren kann.
+    ## darum transformieren wir jetzt die Daten zunaechst
+    
+    #dfm <- ddply(dfm, .(variable), transform,
+    #             rescale = rescale(value))
+    #aes_string only works if you dont modify your features in ggplot2 (e.g. not logarithmize them)
     plt <-
-      plt + scale_y_reverse(breaks = 1:length(YNames), labels = YNames)
-  }else{
-    plt <- plt + scale_y_reverse()
-  }
-  if(is.null(XNames)){
-    plt=plt+theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.x=element_blank())
-  }
-  if(is.null(YNames)){
-    plt=plt+theme(axis.title.y=element_blank(),
-                  axis.text.y=element_blank(),
-                  axis.ticks.y=element_blank())
-  }
-  return(plt)
-}
+      ggplot(dfm, aes_string(y = 'id', x = 'variable', fill = 'value')) + geom_raster() +
+      scale_fill_gradientn(colours = heatC,na.value = 'black') +
+      theme(
+        panel.background = element_blank(),
+        legend.key = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5,vjust = 0.5)
+      ) +
+      labs(x = "", y = "", title = main)
+    
+    if (!is.null(YNames)&!all(YNames==1:nrow(Data))) {
+      if (length(YNames) != nrow(Data))
+        warning(
+          "Lengths of YNames does not equal number of rows.\n
+          Maybe you want to use:\n
+          \t   PixelMatrixPlot(...) + scale_y_reverse(breaks = c(Position of ticks), labels =YNames)"
+        )
+      plt <-
+        plt + scale_y_reverse(breaks = 1:length(YNames), labels = YNames)
+    }else{
+      plt <- plt + scale_y_reverse()
+    }
+    if(is.null(XNames)){
+      plt=plt+theme(axis.title.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.ticks.x=element_blank())
+    }
+    if(is.null(YNames)){
+      plt=plt+theme(axis.title.y=element_blank(),
+                    axis.text.y=element_blank(),
+                    axis.ticks.y=element_blank())
+    }
+    plt
+  }   # end function  PixelMatrixPlot

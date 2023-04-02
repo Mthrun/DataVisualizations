@@ -1,17 +1,16 @@
  Heatmap=function(DataOrDistances,Cls,method='euclidean',LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No."){
-# Heatmap(DataOrDistances,Cls,method) 
-# Heatmap: Distances of DataOrDistances sorted by Cls
-# INPUT
-# DataOrDistances                    [1:n,1:d] data cases in rows, variables in columns oder [1:n,1:n] distances
-# OPTIONAL
-# Cls                   numeric vector, [1:n,1]  classified data 
-# Distanz               see DistanceMatrix(...,method):
-#
-# LowLim,HiLim  limits for the color axis as in PlotPixMatrix
-
-# author: MT 08/2016, edited 28.01.2018
-   #2.Editor: MT 06/18
-    #3.Editor: 07/2020 because of reviews in GMD journal
+  # Heatmap(DataOrDistances,Cls,method) 
+  # Heatmap: Distances of DataOrDistances sorted by Cls
+  # INPUT
+  # DataOrDistances                    [1:n,1:d] data cases in rows, variables in columns oder [1:n,1:n] distances
+  # OPTIONAL
+  # Cls                   numeric vector, [1:n,1]  classified data 
+  # Distanz               see DistanceMatrix(...,method):
+  #
+  # LowLim,HiLim  limits for the color axis as in PlotPixMatrix
+  # author: MT 08/2016, edited 28.01.2018
+  #2.Editor: MT 06/18
+  #3.Editor: 07/2020 because of reviews in GMD journal
 
 
    
@@ -27,7 +26,6 @@
    if (missing(Cls))
      Cls = rep(1, AnzData)
    
-   Cls=checkCls(Cls,AnzData)
    #print(Cls)
    #MT: Reihenfolge muss unbedingt fest sein ab hier, sie unten
    SortOrder=FALSE
@@ -95,10 +93,8 @@ Please install the package which is defined in "Suggests". Falling back to dist(
    
    #Xnames has to be null so that this works!
      plt = Pixelmatrix(DataDists,XNames = NULL,LowLim = LowLim, HiLim = HiLim) +
-       ggplot2::ggtitle("Distances Sorted by Clustering seperated by Lines ' | '",subtitle = paste(paste(Clabel, Vunique), collapse = ' | '))+
-        ggplot2::theme(plot.subtitle = ggplot2::element_text(hjust = 0.5,vjust = 0),plot.title = ggplot2::element_text(hjust = 0.5),axis.text.x = ggplot2::element_blank(),axis.text.y = ggplot2::element_blank(),axis.ticks = ggplot2::element_blank())+
-        ylab(paste(paste(Clabel, Vunique[order(Vunique, decreasing = !SortOrder)]), collapse = ' | ')) +
-        xlab(paste(paste(Clabel, Vunique), collapse = ' | '))
+        ylab("") +
+        xlab("")
      
      if (length(Vunique) > 1) {
       plt = plt + ggplot2::geom_hline(yintercept = head(ClassSepLines,cnn-1),color=head(cols,cnn-1),lwd=LineWidth)#+geom_vline(xintercept = ClassSepLines,color=cols,lwd=LineWidth)
@@ -120,6 +116,7 @@ Please install the package which is defined in "Suggests". Falling back to dist(
          #plt=plt+ geom_segment(data = segment_data, mapping = aes(x = x, y = y, xend = xend, yend = yend))#geom_segment(x = clsep, y = 0, xend = clsep, yend = n,lwd=LineWidth,color="black")
       }
      }
+     plt = plt + ggplot2::theme(aspect.ratio = 1)
      print(plt)
    return(invisible(plt))
 }                    

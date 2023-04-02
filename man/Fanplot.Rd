@@ -10,9 +10,9 @@ The better alternative to the pie chart represents amount of values given in dat
 \usage{
 Fanplot(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,
 
-MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1)
+MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1,lwd=2,\dots)
 }
-\arguments{
+\arguments{ 
   \item{Datavector}{
   [1:n] a vector of n non unique values
 }
@@ -36,8 +36,9 @@ MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1)
   \item{ShrinkPies}{
   Optional, distance between biggest and smallest slice of the pie
 }
-  \item{Rline}{Optional, the distance between text and pie is defined here as the length of the line in numerical numbers
-
+  \item{Rline}{Optional, the distance between text and pie is defined here as the length of the line in numerical numbers}
+    \item{lwd}{Optional, The line width, a positive number, defaut is 2}
+    \item{\dots}{Further arguments to \code{\link[plotrix]{fan.plot}} like circumferential positions for the labels \code{labelpos} or additional arguments passed to \code{\link{polygon}}
 }
 }
 \details{
@@ -65,6 +66,10 @@ silent output by calling \code{invisible} of a list with
 }
 \author{
 Michael Thrun
+}
+\seealso{
+\code{\link[plotrix]{fan.plot}}
+\code{\link{Piechart}}
 }
 
 \examples{
