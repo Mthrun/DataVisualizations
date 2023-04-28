@@ -53,15 +53,16 @@ inPSphere2D = function(data,paretoRadius=NULL){
 		yedge = rbind(min(y),yedge)
 	if(max(y)>yedge[length(yedge)])	
 		yedge = rbind(yedge,max(y))
-
+    #KachelInhalte ausrechnen
 	e = hist(x,xedge,plot=FALSE)
+   #xBinNr,yBinNr,Bin Nummern so dass : NrInTiles(yBinNr(i),xBinNr(i)) die  Anzahl des Punktes(i)
 	xBinNr = findInterval(x,e$breaks)
 	
 	e = hist(y,yedge,plot=FALSE)
 	yBinNr = findInterval(y,e$breaks)
-	
-	nrXBins = length(xedge)
-	nrYBins = length(yedge)
+
+	nrXBins = length(xedge)#Anzahl Bins in x-Richtung
+	nrYBins = length(yedge)#Anzahl Bins in y-Richtung
 	
 	nInPsphere = c_inPSphere2D(data, xBinNr, yBinNr, nrXBins, nrYBins, nData, paretoRadius)
   return (nInPsphere) 

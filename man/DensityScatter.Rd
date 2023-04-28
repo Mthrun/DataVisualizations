@@ -5,7 +5,7 @@
 Density estimation (PDE) [Ultsch, 2005] or "SDH" [Eilers/Goeman, 2004] used for a scatter density plot. 
 }
 \usage{
-DensityScatter(X,Y, DensityEstimation="SDH",
+DensityScatter(X,Y, DensityEstimation="SDH", 
 
 SampleSize, na.rm=FALSE,PlotIt=TRUE,
                               
@@ -13,9 +13,9 @@ NrOfContourLines=20,Plotter='native', DrawTopView = TRUE,
                               
 xlab, ylab, main="DensityScatter",
                               
-xlim, ylim, pointSize=1, Legendlab_ggplot="value",
+xlim, ylim, Legendlab_ggplot="value",
 
-AddString2lab="",NoBinsOrPareto=NULL,cls=NULL,\dots)
+AddString2lab="",NoBinsOrPareto=NULL,\dots)
 }
 \details{
 The \code{DensityScatter} function generates the density of the xy data as a z coordinate. Afterwards xyz will be plotted either as a contour plot or a 3d plot. It assumens that the cases of x and y are mapped to each other meaning that a \code{cbind(x,y)} operation is allowed.
@@ -50,12 +50,11 @@ This function plots the Density on top of a scatterplot. Variances of x and y sh
     \item{ylim}{
     see \code{plot()} function
   }
-  \item{pointSize}{Size of data points in case of \code{Plotter="native"}. Default is 1}
-  \item{Legendlab_ggplot}{String, in case of \code{Plotter="ggplot"} label for the legend. Default: "value"}
-  \item{AddString2lab}{adds the same string of information to x and y axis label, e.g. usefull for adding SI units}
-  \item{NoBinsOrPareto}{Density specifc parameters, for \code{PDEscatter(ParetoRadius)} or SDH (nbins)) or kde2d(bins)}
-  \item{cls}{[1:n] numeric vector with classifications for coloring of the data points. Should be used with \code{Plotter="native"} }    
-  \item{\dots}{further plot arguments}
+    \item{Legendlab_ggplot}{String, in case of \code{Plotter="ggplot"} label for the legend. Default: "value"}
+        \item{AddString2lab}{adds the same string of information to x and y axis label, e.g. usefull for adding SI units}
+      \item{NoBinsOrPareto}{Density specifc parameters, for \code{PDEscatter(ParetoRadius)} or SDH (nbins)) or kde2d(bins)}
+      
+      \item{\dots}{further plot arguments}
 }
 \note{
 MT contributed with several adjustments

@@ -10,7 +10,7 @@
 #
 # OPTIONAL
 # nbins             number of bins or []
-#                   for nbins=[], => nbins =200 (default)
+#                   for nbins=[], => nbins =2000 (default)
 #                   nbins= nxy      => the nr of bins in x and y is nxy
 #                   nbins = [nx,ny] => the nr of bins in x is nx and for y is ny
 #
@@ -32,9 +32,9 @@
 if(!requireNamespace("pracma")) stop("pracma package is missing")
 
 if(missing(nbins)){ # default nbins in beiden Richtungen == 200
-    nbins = c(min(length(unique(X)),200) ,min(length(unique(Y)),200) )
+    nbins = c(min(length(unique(X)),2000) ,min(length(unique(Y)),2000) )
 }else if(is.null(nbins)){
-  nbins = c(min(length(unique(X)),200) ,min(length(unique(Y)),200) ) # default nbins in beiden Richtungen == 200
+  nbins = c(min(length(unique(X)),2000) ,min(length(unique(Y)),2000) ) # default nbins in beiden Richtungen == 200
 }else if(length(nbins)==1){  #nbins gilt fuer beide richtungen
   nbins = c(nbins,nbins)
 }else{

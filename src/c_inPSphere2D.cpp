@@ -30,7 +30,7 @@ IntegerVector c_inPSphere2D(NumericMatrix data, IntegerVector xBinNr, IntegerVec
         if(xBinNr(k) == i && yBinNr(k) == j){
           pointsInCenterTileInd.push_back(k);
         } else if((abs(xBinNr(k) - i) < 2) && (abs(yBinNr(k) - j) < 2)) {
-          pointsInSurroundingInd.push_back(k);
+          pointsInSurroundingInd.push_back(k);//Punkte in Umgebung
         }
       }
       int nrInCenterTile = pointsInCenterTileInd.size();
@@ -59,6 +59,7 @@ IntegerVector c_inPSphere2D(NumericMatrix data, IntegerVector xBinNr, IntegerVec
 
         // distanceCenter2All9
         // dists.resize(nrInCenterTile,size(dists)[1]);
+		// DistanceCenter2All9: in den zeilen die Distanzen der Punkte in der zentralen Kachel zu allen Punkten in der 9x9 Kachelung
         arma::mat distanceCenter2All9 = dists.rows(0, nrInCenterTile - 1);
 //         std::cout << std::endl;
 //         distanceCenter2All9.print();
