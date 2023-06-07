@@ -1,14 +1,18 @@
-\name{Errorbar}
-\alias{Errorbar}
+\name{ClassErrorbar}
+\alias{ClassErrorbar}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Errorbar
+ClassErrorbar
 }
 \description{
-Plots error bars at Xvalue positions for one or more than one classes
+Plots ClassErrorbars at Xvalue positions for one or more than one classes with user means and defined whiskers
 }
 \usage{
-Errorbar(Xvalues, Ymatrix, Cls, ClassNames, ClassCols, ClassShape, MeanFun = median, SDfun, JitterPosition = 0.5, main = "Error bar plot", xlab, ylab, WhiskerWidth = 7, Whisker_lwd = 1, BW = TRUE)
+ClassErrorbar(Xvalues, Ymatrix, Cls, ClassNames, ClassCols, ClassShape, 
+
+MeanFun = median, SDfun, JitterPosition = 0.5,
+
+main = "Error bar plot", xlab, ylab, WhiskerWidth = 7, Whisker_lwd = 1, BW = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,7 +35,7 @@ Errorbar(Xvalues, Ymatrix, Cls, ClassNames, ClassCols, ClassShape, MeanFun = med
 }
 \value{
 List with
-\item{ggobj }{The ggplot object of the Errorbar}
+\item{ggobj }{The ggplot object of the ClassErrorbar}
 \item{Statistics }{[1:(d*k)1:4] data frame of statstics per class used for plotting}
 }
 \details{
@@ -58,14 +62,14 @@ Class2Data[which(Cls==2), ] = Data[which(Cls==2), c("TotalAssets", "TotalLiabili
 YMatrix = cbind(Class1Data, 
                 Class2Data)
 
-Errorbar(c("TotalRevenue","GrossProfit"), 
+ClassErrorbar(c("TotalRevenue","GrossProfit"), 
          YMatrix, c(1,1,2,2), 
          ClassNames=c("Class 1", "Class 2"), 
-         main="Errorbar-plot Q1 2018 for total revenue and gross profit",
+         main="ClassErrorbar of Q1 2018 for total revenue and gross profit",
          xlab="GrossProfit/TotalRevenue", 
          ylab="Median +- std", 
          WhiskerWidth = 1)
 }
 
-\keyword{Errorbar}
+\keyword{ClassErrorbar}
 \keyword{Errorbarplot}

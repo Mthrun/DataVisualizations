@@ -42,7 +42,7 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
   
   def.par <-
     par(no.readonly = TRUE) # save default, for resetting...
-  
+  on.exit(par(def.par))
   # Daten bereinigen
   D = Feature[!is.infinite(Feature)]
   
@@ -229,7 +229,7 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
       col = "black"
     )
   
-  par(def.par)
+  #par(def.par)
   #box("outer", col="black")
   
 }

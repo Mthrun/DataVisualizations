@@ -89,12 +89,13 @@ title('Two Features with MTY Capped')
 ## Correlation Analysis
 
 Often it is better to visualize the density of scatter plots before calculating correlation coefficients.
-```{r}
+```{r,message=FALSE,warning=FALSE}
 library(DataVisualizations)
 data(ITS)
 data(MTY)
 Ind2=which(ITS<900&MTY<8000)
-PDEscatter(ITS[Ind2],MTY[Ind2],xlab = 'ITS in EUR',ylab ='MTY in EUR' ,main='Scatter density plot using PDE' )
+if(requireNamespace("ScatterDensity"))
+V=DensityScatter(ITS[Ind2],MTY[Ind2],xlab = 'ITS in EUR',ylab ='MTY in EUR' ,main='Scatter density plot using PDE',Plotter="native",DensityEstimation = "PDE")
 ```
 
 A Shortcut to visualize correlation coefficients,if many features have to be compared against each other:
@@ -142,8 +143,6 @@ If you download the package from GitHub, you can omit the two steps above. Then,
 out=Choroplethmap(c(4,8,5,4),c('49838', '26817', '49838', '26817'),NumberOfBins=2,PlotIt=FALSE)
 out$chorR6obj$render()
 ```
-
-Please see http://www.deepbionics.org/Projects/DataVisualizations.html as an better example with real data.
 
 ## Spatial Visualization - World Map with classification
 

@@ -44,7 +44,7 @@ Typically it is not advisable to set \code{paretoRadius} manually. However in sp
 This the second version of the function prior available in \pkg{AdaptGauss}
 }
 \examples{
-   
+   \donttest{
    #kernels are estimated internally
    data = c(rnorm(1000),rnorm(2000)+2,rnorm(1000)*2-1)
    pdeVal        <- ParetoDensityEstimation(data)
@@ -63,7 +63,11 @@ This the second version of the function prior available in \pkg{AdaptGauss}
    pdeVal        <- ParetoDensityEstimation(data,  kernels=kernels)
    plot(pdeVal$kernels,pdeVal$paretoDensity,type='l',xaxs='i',
    yaxs='i',xlab='Data',ylab='PDE')
-   
+   }
+   \dontshow{
+     data = rnorm(100)
+   pdeVal        <- ParetoDensityEstimation(data)
+   }
 }
 \references{
 Ultsch, A.: Pareto density estimation: A density estimation for knowledge discovery, in Baier, D.; Werrnecke, K. D., (Eds), Innovations in classification, data science, and information systems, Proc Gfkl 2003, pp 91-100, Springer, Berlin, 2005.

@@ -1,5 +1,11 @@
+Version 1.3.0 (GitHub, 2023-06-06)
+	o DensityScatter: subfunctions externalized in addon package DensityScatter which provides an improved visualization of two-dimensional structures
+	o DensityContour: now extracted from former DataVisualizations::DensityScatter function to plot only 2D or 3D contour maps of two-dimensional density estimation
+	
 Version 1.2.5 (GitHub, 2023-04-27)
 	o PlotGraph2D plots verticex and edges based on adjacency matrix and 2D points
+	o ClassErrorbar: Plots errorbars at Xvalue positions for one or more than one classes with user means and defined whiskers
+	o Bugfix Inspectvariable: on.exit() is now used to give bad user predefined plotting parameters
 	
 Version 1.2.4 (GitHub, 2023-03-28)
 	o DensityScatter: Reimplemted method for option native. IT now plots densities as well as scatter plot instead of only a density-based contour.

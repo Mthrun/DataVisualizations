@@ -1,5 +1,5 @@
-Errorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanFun=median,SDfun,JitterPosition=0.5,main="Error bar plot",xlab,ylab,WhiskerWidth=7,Whisker_lwd=1,BW=TRUE){
-## Errorbar(Percentage_Ncases,Yvalues,Cls,ClassNames = Methods,ClassCols = Cols,ClassShape = ClassShape)$ggobj
+ClassErrorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanFun=median,SDfun,JitterPosition=0.5,main="Error bar plot",xlab,ylab,WhiskerWidth=7,Whisker_lwd=1,BW=TRUE){
+## ClassErrorbar(Percentage_Ncases,Yvalues,Cls,ClassNames = Methods,ClassCols = Cols,ClassShape = ClassShape)$ggobj
 # Plots error bars at Xvalues positions for one or more than one classes
 # INPUT
 # Xvalues             numerical vector [1:m] positions of error bars in on x-axis for the d variables
@@ -46,6 +46,29 @@ Errorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanFun=me
   }
   #robust estimation of standard deviation
   stdrobust=function (x, lowInnerPercentile = 25) {
+    prctile= function (x, p) 
+    {
+      if (length(p) == 1) {
+        if (p >= 1) {
+          p = p/100
+        }
+      }
+      if (max(p) >= 1) 
+        p = p/100
+      if (is.matrix(x) && ncol(x) > 1) {
+        cols <- ncol(x)
+        quants <- matrix(0, nrow = length(p), ncol = cols)
+        for (i in 1:cols) {
+          quants[, i] <- quantile(x[, i], probs = p, type = 5, 
+                                  na.rm = TRUE)
+        }
+      }
+      else {
+        quants <- quantile(x, p, type = 5, na.rm = TRUE)
+      }
+      return(quants)
+    }
+    
     if (is.vector(x) || (is.matrix(x) && dim(x)[1] == 1)) 
       dim(x) <- c(length(x), 1)
     lowInnerPercentile <- max(1, min(lowInnerPercentile, 49))
@@ -84,19 +107,23 @@ Errorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanFun=me
     }
   }
 #plotting
-  pd <- position_dodge(JitterPosition) # move them .05 to the left and right
+  df=cbind(df,lower=df$Yvalues-df$sd,upper=df$Yvalues+df$sd)
+  pd <- ggplot2::position_dodge(JitterPosition) # move them .05 to the left and right
   #for geom_errorbar one can set either colour for all the same outside of aes() or color per class inside of aes()
-  ggobj=ggplot(df, aes(x=Xvalues, y=Yvalues, colour=Method, group=Method))+geom_errorbar(data = df,aes(ymin=Yvalues-sd, ymax=Yvalues+sd,colour=Method), lwd=Whisker_lwd,width=WhiskerWidth, position=pd)+
-    geom_point(aes(shape=Method, color=Method, size=Method),position=pd, size=3)+
+  # ggobj=ggplot2::ggplot(df, ggplot2::aes(x="Xvalues", y="Yvalues", colour="Method", group="Method"))+ggplot2::geom_errorbar(data = df,ggplot2::aes(ymin=Yvalues-sd, ymax=Yvalues+sd,colour=Method), lwd=Whisker_lwd,width=WhiskerWidth, position=pd)+
+  #   ggplot2::geom_point(ggplot2::aes(shape="Method", color="Method", size="Method"),position=pd, size=3)+
+  #   ggplot2::scale_shape_manual(values=ClassShape)+
+  #   ggplot2::scale_colour_manual(values =ClassCols)
+  ggobj=ggplot2::ggplot(df, ggplot2::aes_string(x="Xvalues", y="Yvalues", colour="Method", group="Method"))+geom_errorbar(data = df,ggplot2::aes_string(ymin="lower", ymax="upper",colour="Method"), lwd=Whisker_lwd,width=WhiskerWidth, position=pd)+
+    geom_point(ggplot2::aes_string(shape="Method", color="Method", size="Method"),position=pd, size=3)+
     scale_shape_manual(values=ClassShape)+
     scale_colour_manual(values =ClassCols)
-
   #setting labels and centering title
-  ggobj=ggobj+xlab(xlab)+ylab(ylab)+ggtitle(main)+theme(plot.title = element_text(hjust = 0.5))
+  ggobj=ggobj+ggplot2::xlab(xlab)+ggplot2::ylab(ylab )+ggplot2::ggtitle(main)+ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
   
   #setting background,requires centering title again
   if(isTRUE(BW))
-    ggobj=ggobj+theme_bw()+theme(plot.title = element_text(hjust = 0.5))
+    ggobj=ggobj+ggplot2::theme_bw()+ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
   
   return(list(ggobj=ggobj,Statistics=df))
 }

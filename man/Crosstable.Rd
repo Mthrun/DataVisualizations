@@ -5,7 +5,7 @@
 Crosstable plot
 }
 \description{
-Presents a heatmap with values and a cross table of given Data matrix of two features and a bin width or percentualized values. In this approach the bin width is fixes. A more general way to approach this is the kernel density estimation plot of \code{\link{PDEscatter}}.
+Presents a heatmap with values and a cross table of given Data matrix of two features and a bin width or percentualized values. In this approach the bin width is fixes. A more general way to approach this is the kernel density estimation plot of \code{\link[ScatterDensity]{PDEscatter}}.
 }
 \usage{
 Crosstable(Data, xbins = seq(0, 100, 5), ybins = xbins, 
@@ -66,7 +66,7 @@ For non percentiled values the \code{PlotText} part does not seem always to work
 
 
 \seealso{
-\code{\link{table}}, \code{\link{image}}, \code{\link{PDEscatter}}
+\code{\link{table}}, \code{\link{image}}, \code{\link[ScatterDensity]{PDEscatter}}
 }
 \examples{
 data(ITS)

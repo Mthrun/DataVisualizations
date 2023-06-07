@@ -11,23 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// c_inPSphere2D
-IntegerVector c_inPSphere2D(NumericMatrix data, IntegerVector xBinNr, IntegerVector yBinNr, unsigned int nrXBins, unsigned int nrYBins, unsigned int nrData, double paretoRadius);
-RcppExport SEXP _DataVisualizations_c_inPSphere2D(SEXP dataSEXP, SEXP xBinNrSEXP, SEXP yBinNrSEXP, SEXP nrXBinsSEXP, SEXP nrYBinsSEXP, SEXP nrDataSEXP, SEXP paretoRadiusSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type xBinNr(xBinNrSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type yBinNr(yBinNrSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type nrXBins(nrXBinsSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type nrYBins(nrYBinsSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type nrData(nrDataSEXP);
-    Rcpp::traits::input_parameter< double >::type paretoRadius(paretoRadiusSEXP);
-    rcpp_result_gen = Rcpp::wrap(c_inPSphere2D(data, xBinNr, yBinNr, nrXBins, nrYBins, nrData, paretoRadius));
-    return rcpp_result_gen;
-END_RCPP
-}
 // c_pde
 NumericVector c_pde(NumericVector kernels, int nKernels, double paretoRadius, NumericVector DataPlus);
 RcppExport SEXP _DataVisualizations_c_pde(SEXP kernelsSEXP, SEXP nKernelsSEXP, SEXP paretoRadiusSEXP, SEXP DataPlusSEXP) {
@@ -53,4 +36,15 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(c_quantile(x, probs));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_DataVisualizations_c_pde", (DL_FUNC) &_DataVisualizations_c_pde, 4},
+    {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_DataVisualizations(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

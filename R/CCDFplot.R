@@ -80,9 +80,9 @@ if(isTRUE(PlotIt)){
     #grid()
   }else{ # kein log log plot
     if(pch==0){
-      plot(CDFuniqX,CCDFuniqY,type='l',ylim=c(0,1),xlab=xlab,ylab=ylab,main=main,xaxs='i',yaxs='i',las=1,...)
+      plot(CCDFuniqX,CCDFuniqY,type='l',ylim=c(0,1),xlab=xlab,ylab=ylab,main=main,xaxs='i',yaxs='i',las=1,...)
     }else{
-      plot(CDFuniqX,CCDFuniqY,pch=pch,ylim=c(0,1),xlab=xlab,ylab=ylab,main=main,xaxs='i',yaxs='i',las=1,...)
+      plot(CCDFuniqX,CCDFuniqY,pch=pch,ylim=c(0,1),xlab=xlab,ylab=ylab,main=main,xaxs='i',yaxs='i',las=1,...)
     } 
   } # if LogLogPlot==T
 }

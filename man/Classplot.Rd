@@ -9,21 +9,15 @@ Allows to plot one time series or feauture with a classification as a labeled sc
 The colors are the labels defined by the classification.
 }
 \usage{
-Classplot(X, Y, Cls,Names=NULL,
+Classplot(X, Y, Cls, Plotter,Names = NULL, na.rm = FALSE, 
 
-na.rm=FALSE, xlab , ylab ,
+xlab = "X", ylab = "Y", main = "Class Plot", Colors = NULL,
 
-main = "Class Plot", Colors,Size=8,
+Size = 8, LineColor = NULL, LineWidth = 1, LineType  = NULL, 
 
-LineColor = NULL, LineWidth = 1, LineType = NULL,
+Showgrid  = TRUE, pch = 20,  AnnotateIt = FALSE, SaveIt = FALSE, 
 
-Showgrid = TRUE, Plotter, pch, AnnotateIt = FALSE, 
-
-SaveIt = FALSE,
-
-Nudge_x_Names=0, Nudge_y_Names=0, Legend,
-
-\dots)
+Nudge_x_Names = 0, Nudge_y_Names = 0, Legend = "", \dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -124,8 +118,7 @@ Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls)
     Lsun3D$Cls,
     Plotter = "ggplot2",
     Size = 3,
-    pch = Lsun3D$Cls + 5,
-    Size = 3
+    pch = Lsun3D$Cls + 5
   )
 
 #plotly with line

@@ -1,5 +1,5 @@
-\name{ccdfplot}
-\alias{ccdfplot}
+\name{CCDFplot}
+\alias{CCDFplot}
 \title{ plot Complementary Cumulative Distribution Function (CCDF) in Log/Log  uses ecdf, CCDF(x) = 1-cdf(x) }
 \arguments{
 \item{Feature}{Vector of data to be plotted, or a matrix with given probability density function in column 2 and/or a cumulative density function in column 3}

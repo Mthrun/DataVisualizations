@@ -23,4 +23,3 @@ str(ITS)
 \keyword{datasets}
 \keyword{ITS}
 \keyword{Income Tax Share}
-\keyword{FCPS}

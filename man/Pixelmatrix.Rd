@@ -10,7 +10,7 @@
 \usage{
 Pixelmatrix(Data, XNames, LowLim, HiLim,
 
-YNames, main) 
+YNames, main,FillNotFiniteWithHighestValue=FALSE) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,7 +19,8 @@ YNames, main)
   \item{HiLim}{ Optional: limits for the color axis }
   \item{XNames}{ Optional: Vector - names for the X-ticks, NULL: no ticks at all }
   \item{YNames}{ Optional: Vector - names for the Y-ticks, NULL: no ticks at all }
-  \item{main}{Optinal: String - Title of the plot}
+  \item{main}{Optoinal: String - Title of the plot}
+    \item{FillNotFiniteWithHighestValue}{Optional: TRUE: fills not finite values with same color as the highest value}
 }
 \details{
 Low values are shown in blue and green, middle values in yellow and high values in orange and red.

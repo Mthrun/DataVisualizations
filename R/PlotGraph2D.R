@@ -4,15 +4,40 @@ PlotGraph2D <- function(AdjacencyMatrix,Points,Cls,Colors,xlab,ylab,xlim,ylim,Li
   # given the 2D coordinates of the points
   #
   # INPUT
-  # AdjacencyMatrix[1:n, 1:n]  where d is2 or 3 Adjazenzmatrix des Graphen
-  # Points[1:n, 1:d]      where d is2 or 3 coordinates of the vertices
+  # AdjacencyMatrix[1:n, 1:n]  [1:n,1:n] numerical matrix consting of binary values. 1 indicates that two points have an edge, zero that they do not
+
+  # Points[1:n, 1:d]      [1:n,1:2] numeric matrix of two feature
   #OPTIONAL
-  # Cls,Colors            see Classplot
-  # xlab,ylab              labels for x and y axis
-  # xlim,ylim              labels for x and y axis
-  # LineColor                   line color
-  #pch                    type of point
-  #lwd                    width of line
+  # \item{Cls}{
+  #   [1:n] numeric vector of k classes, if not set per default every point is in first class
+  # }
+  # \item{Colors}{
+  #   Optional, string defining the k colors, one per class
+  # }
+  # \item{xlab}{
+  #   Optional, string for xlabel
+  # }
+  # \item{ylab}{
+  #   Optional, string for ylabel
+  # }
+  # \item{xlim}{
+  #   Optional, [1:2] vector of x-axis limits
+  # }
+  # \item{ylim}{
+  #   Optional, [1:2] vector of y-axis limits
+  # }
+  # \item{LineColor}{
+  #   Optional, color of edges
+  # }
+  # \item{pch}{
+  #   Optional, shape of point, usally can be in a range from zero to 25, see pch of plot for details
+  # }
+  # \item{lwd}{
+  #   width of the lines
+  # }
+  
+  # OUTPUT:
+  # native plote
   #Author MCT, 04/2023
   
   if(missing(xlab)) xlab=paste0(deparse1(substitute(Points)),"[,1]")

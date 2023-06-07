@@ -154,9 +154,6 @@ Classplot = function(X, Y, Cls,
       df$Names = Cls
     }
    #    
-    colMat <- grDevices::col2rgb(ColorVec)
-    hex=rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3,]/255)
-
 
     df$Colors=ColorVec
     

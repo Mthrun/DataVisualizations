@@ -44,16 +44,6 @@ Pixelmatrix(Data)
 InspectDistances(as.matrix(dist(Data)))
 }
 
-data("ITS")
-data("MTY")
-Inds=which(ITS<900&MTY<8000)
-plot(ITS[Inds],MTY[Inds],main='Bimodality is not visible in normal scatter plot')
-\donttest{
-PDEscatter(ITS[Inds],MTY[Inds],xlab = 'ITS in EUR',
-
-ylab ='MTY in EUR' ,main='Pareto Density Estimation indicates Bimodality' )
-}
-
 MAlist=MAplot(ITS,MTY)
 
 data("Lsun3D")
