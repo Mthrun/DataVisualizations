@@ -69,11 +69,11 @@ DensityScatter=function(X,Y,DensityEstimation="SDH",Type="DDCAL", Plotter = "nat
     
     if(missing(SampleSize))
       V=ScatterDensity::DensityScatter.DDCAL(X=X, Y=Y, xlab=xlab, ylab=ylab, SDHorPDE = SDHorPDE,
-                                       Plotter = "native",Marginals = Marginals, na.rm = na.rm,Title = main)
+                                       Plotter = "native",Marginals = Marginals, na.rm = na.rm,main = main,...)
     else
       V=ScatterDensity::DensityScatter.DDCAL(X=X, Y=Y, xlab=xlab, ylab=ylab, SDHorPDE = SDHorPDE,
                                              Plotter = "native",Marginals = Marginals,
-                                             PDEsample = SampleSize, na.rm = na.rm,Title = main)
+                                             PDEsample = SampleSize, na.rm = na.rm,main = main,...)
     return(V)
       
   }else{
