@@ -92,8 +92,8 @@ InspectDistances(Lsun3D$Data,method="euclidean")
 
 ![Alt text](images/ClusterAnalysisCollage.png)
 
-<a name="installation"/>
-## 2. Installation
+
+## 2. Installation <a name="installation"/>
 
 
 #### Installation using CRAN
@@ -115,8 +115,8 @@ Please note, that dependecies have to be installed manually.
 
 *Tools -> Install Packages -> Repository (CRAN) -> DataVisualizations*
 
-<a name="additional"/>
-## 3. Additional Resources
+
+## 3. Additional Resources <a name="additional"/>
 
 
 - For further examples see [Vignette](https://cran.r-project.org/web/packages/DataVisualizations/vignettes/DataVisualizations.html)
@@ -135,8 +135,8 @@ https://cran.r-project.org/web/packages/DataVisualizations/vignettes/DataVisuali
 The full manual for users or developers is available here:
 https://cran.r-project.org/web/packages/DataVisualizations/DataVisualizations.pdf
 
-<a name="references"/>
-## 4. References
+
+## 4. References <a name="references"/>
 
 [Thrun, 2018A] Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, https://doi.org/10.1007/978-3-658-20540-9, 2018.
 
