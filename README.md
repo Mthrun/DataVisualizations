@@ -11,8 +11,8 @@
 [4. References](#references)  
 
 
-<a name="introduction"/>
-## 1. Introduction
+
+## 1. Introduction <a name="introduction"/>
 
 
 “Exploratory data analysis is detective work” [Tukey, 1977, p.2]. This package enables the user to use graphical tools to find ‘quantitative indications’ enabling a better understanding of the data at hand. “As all detective stories remind us, many of the circumstances surrounding a crime are accidental or misleading. Equally, many of the indications to be discerned in bodies of data are accidental or misleading [Tukey, 1977, p.3].” The solution is to compare many different graphical tools with the goal to find an agreement or to generate an hypothesis and then to confirm it with statistical methods. This package serves as a starting point.
