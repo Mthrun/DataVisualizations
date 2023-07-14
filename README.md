@@ -11,9 +11,9 @@
 [4. References](#references)  
 
 
-
-## 1. Introduction
 <a name="introduction"/>
+## 1. Introduction
+
 
 “Exploratory data analysis is detective work” [Tukey, 1977, p.2]. This package enables the user to use graphical tools to find ‘quantitative indications’ enabling a better understanding of the data at hand. “As all detective stories remind us, many of the circumstances surrounding a crime are accidental or misleading. Equally, many of the indications to be discerned in bodies of data are accidental or misleading [Tukey, 1977, p.3].” The solution is to compare many different graphical tools with the goal to find an agreement or to generate an hypothesis and then to confirm it with statistical methods. This package serves as a starting point.
 
@@ -92,9 +92,9 @@ InspectDistances(Lsun3D$Data,method="euclidean")
 
 ![Alt text](images/ClusterAnalysisCollage.png)
 
-
-## 2. Installation
 <a name="installation"/>
+## 2. Installation
+
 
 #### Installation using CRAN
 Install automatically with all dependencies via
@@ -115,9 +115,9 @@ Please note, that dependecies have to be installed manually.
 
 *Tools -> Install Packages -> Repository (CRAN) -> DataVisualizations*
 
-
-## 3. Additional Resources
 <a name="additional"/>
+## 3. Additional Resources
+
 
 - For further examples see [Vignette](https://cran.r-project.org/web/packages/DataVisualizations/vignettes/DataVisualizations.html)
 - [Package documentation](https://cran.r-project.org/web/packages/DataVisualizations/DataVisualizations.pdf)
@@ -135,9 +135,9 @@ https://cran.r-project.org/web/packages/DataVisualizations/vignettes/DataVisuali
 The full manual for users or developers is available here:
 https://cran.r-project.org/web/packages/DataVisualizations/DataVisualizations.pdf
 
-
-## 4. References
 <a name="references"/>
+## 4. References
+
 [Thrun, 2018A] Thrun, M. C.: Projection Based Clustering through Self-Organization and Swarm Intelligence, doctoral dissertation 2017, Springer, Heidelberg, ISBN: 978-3-658-20539-3, https://doi.org/10.1007/978-3-658-20540-9, 2018.
 
 [Thrun, 2018B] Thrun, M. C.: Cluster Analysis of Per Capita Gross Domestic Products, Entrepreneurial Business and Economics Review (EBER), Vol. 7(1), pp. 217-231, https://doi.org/10.15678/EBER.2019.070113, 2019.
