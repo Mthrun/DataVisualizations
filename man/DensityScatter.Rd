@@ -5,7 +5,7 @@
 Scatter plot with densities
 }
 \description{
-Density estimation is performed by (PDE) [Ultsch, 2005] or "SDH" [Eilers/Goeman, 2004] and visualized in a  density scatter plot [Brinkman et al., 2004] in which the points are colored by their density.
+Density estimation is performed by (PDE) [Ultsch, 2005] or "SDH" [Eilers/Goeman, 2004] and visualized in a  density scatter plot [Brinkmann et al., 2023] in which the points are colored by their density.
 }
 
 \usage{
@@ -31,10 +31,10 @@ Numeric vector [1:n], second feature (for y axis values)
   (Optional), \code{"SDH"} is very fast but maybe not correct, \code{"PDE"} is slow but proably more correct, third alternativ is the typical R density estimation with \code{"kde2d"} which is sensitive to parameters
 }
   \item{Type}{
-(Optional), \code{"DDCAL"} uses a new density to point color matching by DDCAL algorithm [Brinkman et al., 2004] , \code{"native"} uses a simple density to point color matching
+(Optional), \code{"DDCAL"} uses a new density to point color matching by DDCAL algorithm [Lux/Rinderle-Ma, 2023] , \code{"native"} uses a simple density to point color matching
 }
  \item{Plotter}{
-in case of \code{Type="DDCAL"}, (Optional) String, name of the plotting backend to use. Possible values are: "\code{native}" or "\code{ggplot2}"
+in case of \code{Type="DDCAL"}, (Optional) String, name of the plotting backend to use. Possible values are: "\code{native}","\code{plotly}", or "\code{ggplot2}"
 }
   \item{Marginals}{
 (Optional) Boolean, if TRUE the marginal distributions of X and Y will be plotted together with the 2D density of X and Y. Default is FALSE
@@ -92,8 +92,9 @@ This function plots the Density on top of a scatterplot. Variances of x and y sh
 
 [Eilers/Goeman, 2004]  Eilers, P. H., & Goeman, J. J.: Enhancing scatterplots with smoothed densities, Bioinformatics, Vol. 20(5), pp. 623-628. 2004
 
-[Brinkman et al., 2004]  Brinkman, L., Stier, Q., & Thrun, M. C.: Computing Sensitve Color Transitions for the Identification of Two-Dimensional Structures, Proc. Data Science, Statistics & Visualisation (DSSV) and the European Conference on Data Analysis (ECDA), accepted, Antwerp, Belgium, July 5-7, 2023. 
+[Lux/Rinderle-Ma, 2023]  Lux, M. & Rinderle-Ma, S.: DDCAL: Evenly Distributing Data into Low Variance Clusters Based on Iterative Feature Scaling, Journal of Classification vol. 40, pp. 106-144, 2023.
 
+[Brinkmann et al., 2023]  Brinkmann, L., Stier, Q., & Thrun, M. C.: Computing Sensitive Color Transitions for the Identification of Two-Dimensional Structures, Proc. Data Science, Statistics & Visualisation (DSSV) and the European Conference on Data Analysis (ECDA), p.109, Antwerp, Belgium, July 5-7, 2023. 
 }
 \author{
 Felix Pape

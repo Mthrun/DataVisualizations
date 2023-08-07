@@ -33,7 +33,13 @@ ClassErrorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanF
   if(missing(xlab)) xlab=deparse1(substitute(Xvalues))
   if(missing(ylab)) ylab=paste0("Mean(",deparse1(substitute(Ymatrix)),") +- std per class")
   
-  if(missing(Cls))  Cls=rep(1,ncol(Ymatrix))
+  if(missing(Cls)){
+    Cls=rep(1,ncol(Ymatrix))
+  }else{
+    if(length(Cls)!=ncol(Ymatrix)){
+      warning("ClassErrorbar: length of Cls does not equal number of columns in Ymatrix")
+    }
+  }
   
   u=sort(unique(Cls))
   

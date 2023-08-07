@@ -8,13 +8,9 @@ Draws ein Shepard Diagram (scatterplot of distances) with an two-dimensional PDE
 }
 \usage{
 
-ShepardDensityScatter(InputDists,OutputDists,
-
-Plotter='native',xlab='Input Distances',
-
-ylab='Output Distances',main='ProjectionMethod',
-
- sampleSize=500000)
+ShepardDensityScatter(InputDists, OutputDists, Plotter= "native", Type = "DDCAL",
+DensityEstimation="SDH", Marginals = FALSE, xlab='Input Distances',
+ylab='Output Distances',main='ProjectionMethod', sampleSize=500000)
 }
 \arguments{
   \item{InputDists}{[1:n,1:n] with n cases of data in d variables/features:
@@ -23,14 +19,23 @@ Matrix containing the distances of the inputspace.
   \item{OutputDists}{[1:n,1:n] with n cases of data in d dimensionalites of the projection method variables/features: 
 Matrix containing the distances of the outputspace.
 }
+  \item{Plotter}{
+Optional, either \code{"native"} or \code{"plotly"}
+}
+  \item{Type}{
+Optional, either \code{"DDCAL"} which creates a special hard color transition sensitive to density-based structures or \code{"Standard"} which creates a standard continuous color transition which is proven to be not very sensitive for complex density-based structures.
+}
+  \item{DensityEstimation}{
+Optional, use either \code{"SDH"} or \code{"PDE"} for data density estimation.
+}
+  \item{Marginals}{
+Optional, either TRUE (draw Marginals) or FALSE (do not draw Marginals)
+}
     \item{xlab}{
 Label of the x axis in the resulting Plot.
 }
   \item{ylab}{
 Label of the y axis in the resulting Plot.
-}
-  \item{Plotter}{
-see \code{PDEscatter} for details
 }
   \item{main}{
 Title of the Shepard diagram

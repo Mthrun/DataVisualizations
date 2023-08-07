@@ -1,60 +1,36 @@
 \name{PlotGraph2D}
 \alias{PlotGraph2D}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-PlotGraph2D
-}
+\title{PlotGraph2D}
 \description{
 plots a neighborhood graph in two dimensions given the 2D coordinates of the points
 }
 \usage{
-PlotGraph2D(AdjacencyMatrix, Points, 
-
-Cls, Colors, xlab, ylab, xlim, ylim,
-
-LineColor = "grey", pch = 20, lwd = 0.1)
+PlotGraph2D(AdjacencyMatrix, Points, Cls, Colors, xlab = "X", ylab = "Y", xlim,
+ylim, Plotter = "native", LineColor = "grey", pch = 20, lwd = 0.1, main = "",
+mainSize)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{AdjacencyMatrix}{
-[1:n,1:n] numerical matrix consting of binary values. 1 indicates that two points have an edge, zero that they do not
-}
-  \item{Points}{
-[1:n,1:2] numeric matrix of two feature
-}
-  \item{Cls}{
-[1:n] numeric vector of k classes, if not set per default every point is in first class
-}
-  \item{Colors}{
-Optional, string defining the k colors, one per class
-}
-  \item{xlab}{
-Optional, string for xlabel
-}
-  \item{ylab}{
-Optional, string for ylabel
-}
-  \item{xlim}{
-Optional, [1:2] vector of x-axis limits
-}
-  \item{ylim}{
-Optional, [1:2] vector of y-axis limits
-}
-  \item{LineColor}{
-Optional, color of edges
-}
-  \item{pch}{
-Optional, shape of point, usally can be in a range from zero to 25, see pch of plot for details
-}
-  \item{lwd}{
-width of the lines
-}
+\item{AdjacencyMatrix}{[1:n,1:n] numerical matrix consting of binary values. 1 indicates that two points have an edge, zero that they do not}
+\item{Points}{[1:n,1:2] numeric matrix of two feature}
+\item{Cls}{[1:n] numeric vector of k classes, if not set per default every point is in first class}
+\item{Colors}{Optional, string defining the k colors, one per class}
+\item{xlab}{Optional, string for xlabel}
+\item{ylab}{Optional, string for ylabel}
+\item{xlim}{Optional, [1:2] vector of x-axis limits}
+\item{ylim}{Optional, [1:2] vector of y-axis limits}
+\item{Plotter}{Optional, either \code{"native"} or \code{"plotly"}}
+\item{LineColor}{Optional, color of edges}
+\item{pch}{Optional, shape of point, usally can be in a range from zero to 25, see pch of plot for details}
+\item{lwd}{width of the lines}
+\item{main}{Optional, string for the title of plot}
+\item{mainSize}{Optional, scalar for the size of the title of plot}
 }
 \details{
 The points are the vertices of the graph. the adjacency matrix defines the edges. Via adjacency matrix various graphs, like from deldir package, can be used.
 }
 \value{
-native plot
+native plot or plotly object depending on input argument \code{Plotter}
 }
 \references{
 Lecture of Knowledge Discovery II

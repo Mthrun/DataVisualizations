@@ -53,36 +53,19 @@ export(SignedLog)
 #export(SmoothedDensitiesXY)
 export(Worldmap)
 
-import(Rcpp)
 import(ggplot2)
-	importFrom("stats", "ecdf")
-  importFrom("graphics", "hist", "title")
-  importFrom("stats", "dist", "runif")
-  importFrom("graphics", "filled.contour")
-  importFrom("stats", "median", "quantile")
-    importFrom("graphics", "axis", "barplot", "box", "boxplot", "grid",
-             "mtext", "par", "plot")
-  importFrom("stats", "qqnorm")
-  importFrom("graphics", "rect")
-   importFrom("utils", "data")
-    importFrom("stats", "end")
-     importFrom("graphics", "lines", "text")
-  importFrom("stats", "density")
-     importFrom("stats", "lm", "qnorm")
-  importFrom("graphics", "pairs", "plot.new", "polygon")
-  importFrom("stats", "complete.cases", "na.omit")
-importFrom("utils", "head", "tail")
-   importFrom("graphics", "pie")
-   importFrom('sp','SpatialPolygons')
-   importClassesFrom(sp, SpatialPolygons)
-   importMethodsFrom(sp, plot)
-importFrom("stats", "cor")
-     importFrom("graphics", "legend")
-  importFrom("stats", "dnorm", "sd")
-   importFrom("graphics", "abline")
-  importFrom("stats", "anova", "qqplot", "residuals.lm")
-importFrom("graphics", "image", "layout")
-  importFrom("graphics", "points")
-  importFrom("stats", "pnorm", "rnorm","ks.test")
-  importFrom("grDevices", "rgb", "colorRampPalette")
-  importFrom("stats", "qt")
+import(Rcpp)
+
+importFrom("graphics", "hist", "title", "filled.contour", "axis", "barplot", "box", "boxplot", "grid",
+           "mtext", "par", "plot", "rect", "lines", "text", "pairs", "plot.new", "polygon", "pie",
+           "legend", "abline", "image", "layout", "points")
+importFrom("grDevices", "rgb", "colorRampPalette")
+importFrom("sp", "SpatialPolygons", "plot")
+importFrom("stats", "ecdf", "dist", "runif", "median", "quantile", "qqnorm", "end", "density", "lm",
+           "qnorm", "complete.cases", "na.omit", "cor", "dnorm", "sd", "anova", "qqplot", "residuals.lm",
+           "pnorm", "rnorm","ks.test", "qt")
+importFrom("utils", "data", "head", "tail")
+
+
+
+

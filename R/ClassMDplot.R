@@ -1,7 +1,7 @@
 ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
                          ClassNames = NULL, PlotLegend = TRUE,Ordering = "Columnwise",
                          main = 'MDplot for each Class',
-                         xlab = 'Classes', ylab = 'PDE of Data per Class',
+                         xlab = 'Classes', ylab = 'PDE of Data per Class', Fill = 'darkblue',
                          MinimalAmoutOfData=40,MinimalAmoutOfUniqueData=12,SampleSize=1e+05,...) {
   # PlotHandle = ClassViolinplot(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend);
   # BoxPlot the data for all classes, weight the Plot with 1 (= maximum likelihood)
@@ -126,7 +126,7 @@ ClassMDplot  <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultC
   DataPerClass=as.matrix(do.call(CombineCols,DataPerClassList))
   
   ggobject=MDplot(Data = DataPerClass,Names = names(ClassNames),Ordering = Ordering,
-                  QuantityThreshold = MinimalAmoutOfData,
+                  QuantityThreshold = MinimalAmoutOfData, Fill = Fill,
                   UniqueValuesThreshold = MinimalAmoutOfUniqueData,SampleSize = SampleSize,OnlyPlotOutput = TRUE,...)
   # ClassData = data.frame(cbind(data = Data, class = Cls))
   # ClassData=cbind(ClassData,ClassColors=Colors,ClassNames=ClassNamesVec)#,ClassColorsHex=ClassColorsHex)

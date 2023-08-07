@@ -7,11 +7,12 @@ Classplot = function(X, Y, Cls,
                      main = "Class Plot",
                      Colors = NULL,
                      Size = 8,
+                     PointBorderCol="black",
                      LineColor = NULL,
                      LineWidth = 1,
                      LineType  = NULL,
                      Showgrid  = TRUE,
-                     pch = 20, 
+                     pch, 
                      AnnotateIt = FALSE,
                      SaveIt = FALSE, 
                      Nudge_x_Names = 0,
@@ -30,6 +31,14 @@ Classplot = function(X, Y, Cls,
   
   if(length(X)!=length(Y)) stop('X and Y have to have the same length')
   
+  if(!missing(pch)){
+    if(length(X)!=length(pch)){
+      pch=rep(20,length(X))
+      warning('X and pch have to have the same length. Setting "pch=20"')
+    }
+  }
+ 
+  
   if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
     noNaNInd <- which(is.finite(X)&is.finite(Y))
     X = X[noNaNInd]
@@ -38,6 +47,10 @@ Classplot = function(X, Y, Cls,
     
     if(!is.null(Names)){
       Names=Names[noNaNInd]
+    }
+    
+    if(!missing(pch)){
+      pch=pch[noNaNInd]
     }
   }
   u=unique(Cls)
@@ -49,6 +62,7 @@ Classplot = function(X, Y, Cls,
   }else{
     u_names=as.character(uu)
   }
+  
   if(is.null(Colors)){
     mc=length(uu)
     if(is.null(Names))
@@ -56,6 +70,57 @@ Classplot = function(X, Y, Cls,
     else
       Colors=DataVisualizations::DefaultColorSequence[-2][1:mc] #no yellow
   }
+  
+  ##Make sure that small classes are plot last,i.e.,
+  #if they overlap in areas with bigger classes
+  # they are plottet on the top
+  # therefore still visible
+  cp=table(Cls)
+  indBig2Small=order(cp,decreasing = T)
+
+  uug=as.numeric(names(cp))
+  if(!any(!is.finite(uug))){#all class names are convertivle to numeric
+    #reorder unique colors and unique names
+    Colors=Colors[indBig2Small]
+    if(!is.null(Names)){
+      NamesOrdered=c() 
+      u_names=u_names[indBig2Small]
+    }
+    
+    ClsOrdered=c()
+    Xordered=c()
+    Yordered=c()
+    if(!missing(pch)){
+      pchordered=c()
+    }
+    for(k in 1:length(cp)){#reorder 
+      ind_o=which(Cls==uug[indBig2Small[k]])
+      ClsOrdered=c(ClsOrdered,Cls[ind_o])
+      Yordered=c(Yordered,Y[ind_o])
+      Xordered=c(Xordered,X[ind_o])
+      #reorder vector of names per datapoint if givin
+      if(!is.null(Names)){
+        NamesOrdered=c(NamesOrdered,Names[ind_o]) 
+      }
+      if(!missing(pch)){
+        pchordered=c(pchordered,pch[ind_o])
+      }
+    }
+    X=Xordered
+    Y=Yordered
+    Cls=ClsOrdered
+    if(!is.null(Names)){
+      Names=NamesOrdered
+    }
+    if(!missing(pch)){
+      pch=pchordered
+    }
+    
+    u=unique(Cls)
+    uu=sort(u,decreasing = F)
+  }#otherwise some class was not convertable to numeric
+
+  
   
   ColorVec=Cls*0
   k=1
@@ -104,8 +169,8 @@ Classplot = function(X, Y, Cls,
                               mode = "marker",
                               name = UniqueNames[i],
                               marker = list(size = Size,
-                                            color = Colors[i],
-                                            line = list(color = "black",
+                                            color = unique(ColorVec[DataIdx]),
+                                            line = list(color = PointBorderCol,
                                                         width = 1)))
     }
   }else{
@@ -116,7 +181,7 @@ Classplot = function(X, Y, Cls,
                             mode = "marker",
                             marker = list(size = Size,
                                           color = Colors[Cls],
-                                          line = list(color = "black",
+                                          line = list(color = PointBorderCol,
                                                       width = 1)))
   }
   
@@ -168,7 +233,7 @@ Classplot = function(X, Y, Cls,
       ggplot2::theme_bw()
     
     if(missing(pch)){ #black shape around circular points
-      p=p+ggplot2::geom_point(size = Size)+ggplot2::geom_point(size = Size,pch=21, colour="Black",alpha=0.4)
+      p=p+ggplot2::geom_point(size = Size)+ggplot2::geom_point(size = Size,pch=21, colour=PointBorderCol,alpha=0.4)
     }else{#points have various shapes
       p=p+ggplot2::geom_point(size = Size,shape=pch)
     }
@@ -207,7 +272,9 @@ Classplot = function(X, Y, Cls,
   if(Size==8){
     Size=Size-6 #adapting default size
   }
-  
+  if(missing(pch)){
+    pch=20
+  }
   plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab = ylab,type='p',cex=Size,pch=pch,...)
   if(!missing(Legend)){
     legend("topright",title=Legend,legend=unique(Cls),col=unique(ColorVec),pch=unique(pch),box.lty=0)

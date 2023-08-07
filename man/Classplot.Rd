@@ -13,9 +13,11 @@ Classplot(X, Y, Cls, Plotter,Names = NULL, na.rm = FALSE,
 
 xlab = "X", ylab = "Y", main = "Class Plot", Colors = NULL,
 
-Size = 8, LineColor = NULL, LineWidth = 1, LineType  = NULL, 
+Size = 8,PointBorderCol="black",
 
-Showgrid  = TRUE, pch = 20,  AnnotateIt = FALSE, SaveIt = FALSE, 
+LineColor = NULL, LineWidth = 1, LineType  = NULL, 
+
+Showgrid  = TRUE, pch,  AnnotateIt = FALSE, SaveIt = FALSE, 
 
 Nudge_x_Names = 0, Nudge_y_Names = 0, Legend = "", \dots)
 }
@@ -45,7 +47,7 @@ Optional, string for ylabel
 Optional, string for title of plot
 }
   \item{Colors}{
-Optional, string defining the k colors, one per class
+Optional, [1;k] string defining the k colors, one per class
 }
   \item{AnnotateIt}{
 Optional, in case of \code{Plotter==ggplot} and given \code{Names} annotates each point if TRUE
@@ -53,6 +55,10 @@ Optional, in case of \code{Plotter==ggplot} and given \code{Names} annotates eac
   \item{Size}{
 Optional, size of points, beware: default is appropriate for  "\code{plotly}", or "\code{native}" but should smaller for "\code{ggplot}"
 }
+  \item{PointBorderCol}{
+Optional, string, color of the dot outline for "\code{plotly}" for "\code{ggplot}"
+}
+
   \item{LineColor}{
 Optional, name of color, in plotly then all points are connected by a curve, 
 
@@ -72,7 +78,7 @@ Optional, boolean (plotly only)
   \item{Plotter}{
 Optional, either "\code{ggplot}" (default if \code{Names} given), "\code{plotly}" (default if no \code{Names} given), or "\code{native}"
 }
-\item{pch}{ [1:n] numeric vector of k classes defines the symbols to use, for native \code{Plotter} or \code{ggplot}, usally k can be in a range from zero to 25}
+\item{pch}{ [1:n] numeric vector of length n of the cases of Cls for the k classes. It defines the symbols to use, for native \code{Plotter} or \code{ggplot}, usally k can be in a range from zero to 25}
   \item{SaveIt}{
 Optional, boolean, if true saves plot as html (plotly) or png (ggplot2)
 }
@@ -126,17 +132,19 @@ data(Lsun3D)
 Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
 LineType="-",LineColor = "green")
 \donttest{
-#ggplot2 with line and labels
+#ggplot2 with annotations
 data(Lsun3D)
-Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
-Names = rownames(Lsun3D$Data),Size =2,LineType = 1)
+ind=sample(1:nrow(Lsun3D$Data),20)
+Classplot(Lsun3D$Data[ind,1],Lsun3D$Data[ind,2],Lsun3D$Cls[ind],
+Names = rownames(Lsun3D$Data)[ind],Size =1,
+Plotter = "ggplot2",AnnotateIt = TRUE)
 }
 
 \donttest{
 #ggplot2 with labels and legend per class
 data(Lsun3D)
 Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
-Names = paste0("C",Lsun3D$Cls),Size =2,ggplot_legend ="Classes")
+Names = paste0("C",Lsun3D$Cls),Size =2,Legend ="Classes")
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

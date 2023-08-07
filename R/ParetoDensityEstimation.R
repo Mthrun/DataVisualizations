@@ -252,27 +252,14 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     kernels_internal=NULL
     paretoDensity_internal=NULL
   }
-  if (isTRUE(PlotIt)) {
-    
-    plot(
-      kernels,
-      paretoDensity,
-      type = 'l',
-      main = 'Raw PDE R plot',
-      xaxs = 'i',
-      yaxs = 'i',
-      xlab = xlab,
-      ylab = 'PDE',
-      ylim=c(0,max(paretoDensity)*1.1)
-    )
+  if(isTRUE(PlotIt)){
+    plot(kernels, paretoDensity, type = 'l', main = 'Raw PDE R plot', 
+         xaxs = 'i', yaxs = 'i', xlab = xlab, ylab = 'PDE',
+         ylim=c(0,max(paretoDensity)*1.1))
   }
-  return (list(
-    kernels = kernels,
-    paretoDensity = paretoDensity,
-    paretoRadius = paretoRadius,
-    kernels_internal=kernels,
-    paretoDensity_internal=paretoDensity_internal
-  ))
-  
+  return(list(kernels = kernels,
+              paretoDensity = paretoDensity,
+              paretoRadius = paretoRadius,
+              kernels_internal=kernels,
+              paretoDensity_internal=paretoDensity_internal))
 }
-

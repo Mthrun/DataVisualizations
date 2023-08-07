@@ -16,7 +16,7 @@ main = "Error bar plot", xlab, ylab, WhiskerWidth = 7, Whisker_lwd = 1, BW = TRU
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Xvalues}{[1:m] Numerical vector, positions of error bars in on x-axis for the m variables}
+  \item{Xvalues}{[1:m] Numerical or character vector, positions of error bars (see details) in on x-axis for the m variables}
   \item{Ymatrix}{[1:n,1:d] of n cases and d=m*k variables with for which the error-bar statistics defined by MeanFun and SDfun should be computed}
   \item{Cls}{Optional, [1:d] numerical vector of k classes for the d variables. Each class is one method that will be shown as distinctive set of error bars in the plot}
   \item{ClassNames}{Optional, [1:k] character vector of k methods}
@@ -44,6 +44,9 @@ List with
  Statistics are provided in long table format with the column names Xvalues, Mean, SD and Method. 
  The method column specifies the names of the k classes.
 
+ If \code{Xvalues} is a character vector (see example), ggplot2 automatically sets the position on the x-axis.
+ Otherwise specific numeric positions can be set. This allowes also for plotting a smooth line over the average (see example).
+
 }
 
 
@@ -62,13 +65,42 @@ Class2Data[which(Cls==2), ] = Data[which(Cls==2), c("TotalAssets", "TotalLiabili
 YMatrix = cbind(Class1Data, 
                 Class2Data)
 
+#Option 1: character vector
 ClassErrorbar(c("TotalRevenue","GrossProfit"), 
-         YMatrix, c(1,1,2,2), 
+         YMatrix, c
+		 (1,1,2,2), 
          ClassNames=c("Class 1", "Class 2"), 
          main="ClassErrorbar of Q1 2018 for total revenue and gross profit",
          xlab="GrossProfit/TotalRevenue", 
          ylab="Median +- std", 
          WhiskerWidth = 1)
+		 
+#Option 2: numerical vector
+ClassErrorbar(c(1,2), 
+		 YMatrix,
+		 c(1,1,2,2), 
+         ClassNames=c("Class 1", "Class 2"), 
+         main="ClassErrorbar of Q1 2018 for total revenue and gross profit",
+         xlab="GrossProfit/TotalRevenue", 
+         ylab="Median +- std", 
+         WhiskerWidth = 1)
+
+#Option 3: numerical vector + line
+\dontrun{
+#arbitrary data
+Y_someOtherData=cbind(YMatrix,YMatrix,
+YMatrix,YMatrix)
+some_values=c(2,3,4,5,6,8,9,10)
+ClassErrorbar(some_values, 
+		 Y_someOtherData,
+		 c(1,1,2,2), 
+         ClassNames=c("Class 1", "Class 2"), 
+         main="ClassErrorbar of Q1 2018 for total revenue and gross profit",
+         xlab="GrossProfit/TotalRevenue", 
+         ylab="Median +- std", 
+         WhiskerWidth = 1)$ggobj+
+geom_smooth(method="auto", se=F, fullrange=F, level=0.95)
+}
 }
 
 \keyword{ClassErrorbar}

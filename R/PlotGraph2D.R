@@ -1,4 +1,8 @@
-PlotGraph2D <- function(AdjacencyMatrix,Points,Cls,Colors,xlab,ylab,xlim,ylim,LineColor= 'grey',pch=20,lwd=0.1){
+PlotGraph2D <- function(AdjacencyMatrix, Points, Cls, Colors,
+                        xlab = "X", ylab = "Y", xlim, ylim,
+                        Plotter = "native", LineColor= "grey",
+                        pch=20, lwd=0.1,
+                        main = "", mainSize){
   # PlotGraph2D(AdjacencyMatrix,Points,xlab,ylab,LineColor)
   # plots a graph as in graph theory for an AdjacencyMatrix
   # given the 2D coordinates of the points
@@ -26,6 +30,9 @@ PlotGraph2D <- function(AdjacencyMatrix,Points,Cls,Colors,xlab,ylab,xlim,ylim,Li
   # \item{ylim}{
   #   Optional, [1:2] vector of y-axis limits
   # }
+  # \item{Plotter}{
+  #   Optional, type of plot: native or plotly
+  # }
   # \item{LineColor}{
   #   Optional, color of edges
   # }
@@ -35,13 +42,17 @@ PlotGraph2D <- function(AdjacencyMatrix,Points,Cls,Colors,xlab,ylab,xlim,ylim,Li
   # \item{lwd}{
   #   width of the lines
   # }
+  # \item{main}{
+  #   character: title of plot
+  # }
+  # \item{mainSize}{
+  #   numeric: size of title
+  # }
   
   # OUTPUT:
-  # native plote
-  #Author MCT, 04/2023
+  # Plot
+  # Author MCT, 04/2023, QS 07/2023
   
-  if(missing(xlab)) xlab=paste0(deparse1(substitute(Points)),"[,1]")
-  if(missing(ylab)) ylab=paste0(deparse1(substitute(Points)),"[,2]")
   d = ncol(Points)
   x_vertex = Points[,1] 
   y_vertex = Points[,2] 
@@ -53,14 +64,18 @@ PlotGraph2D <- function(AdjacencyMatrix,Points,Cls,Colors,xlab,ylab,xlim,ylim,Li
     warning("PlotGraph2D: AdjacencyMatrix size does not equal number of points.")
   }
 
-  if(missing(xlim))
+  if(missing(xlim)){
     xlim=c(min(x_vertex),max(x_vertex))
+  }
   
-  if(missing(ylim))
-    ylim=c(min(y_vertex),max(y_vertex))#
+  if(missing(ylim)){
+    ylim=c(min(y_vertex),max(y_vertex))
+  }
 
   if(missing(Cls))
     Cls=rep(1,n)
+  if(missing(mainSize))
+    mainSize=1.2
   
   u = unique(Cls)
   uu = sort(u, decreasing = F)
@@ -73,49 +88,62 @@ PlotGraph2D <- function(AdjacencyMatrix,Points,Cls,Colors,xlab,ylab,xlim,ylim,Li
       Colors = "black"
   }
   
-  ColorVec = Cls * 0
-  k = 1
-  for (i in uu) {
-    ColorVec[Cls == i] = Colors[k]
-    k = k + 1
+  X1 = Y1 = X2 = Y2 = c()
+  for(i in 2:n){
+    for(j in 1:(i-1)){
+      if(AdjacencyMatrix[i, j] > 0) { # kante i-> j zeichnen
+        X1 = c(X1, x_vertex[i])
+        Y1 = c(Y1, y_vertex[i])
+        X2 = c(X2, x_vertex[j])
+        Y2 = c(Y2, y_vertex[j])
+      }
+    }
   }
   
-  plot(
-    x_vertex[1],
-    y_vertex[1],
-    col = 'white',
-    type = 'p',
-    xlim = xlim,
-    ylim = ylim,
-    xlab = xlab,
-    ylab = ylab,
-    pch = pch
-  )  # die knoten
-  for (i in 1:n) {
-    for (j in 1:n) {
-      if (i > j) {
-        #AdjacencyMatrix symmetrisch, diagnole irrelevant
-        if (AdjacencyMatrix[i, j] > 0) {
-          # kante i-> j zeichnen
-          FromToX = c(x_vertex[i], x_vertex[j])
-          FromtoY = c(y_vertex[i], y_vertex[j])
-          #par(new = TRUE)
-          points(
-            FromToX,
-            FromtoY,
-            col = LineColor,
-            type = 'l',
-            lwd = lwd
-          )
-        }# end if verbindung zeichnen
-      }
-    }# end for j
-  }# end for i
-  points(x_vertex,
-         y_vertex,
-         col = ColorVec,
-         type = 'p',
-         pch = pch)
-  
+  if(Plotter == "native"){
+    ColorVec = Cls * 0
+    k = 1
+    for (i in uu) {
+      ColorVec[Cls == i] = Colors[k]
+      k = k + 1
+    }
+    
+    plot(x_vertex[1], y_vertex[1], col = 'white', type = 'p',
+         xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab,
+         pch = pch,main=main,cex.main=mainSize)  # die knoten
+    
+    for(i in 1:length(X1)){
+      points(c(X1, X2), c(Y1, Y2), col = LineColor, type = 'l', lwd = lwd)
+    }
+    #for(i in 2:n){
+    #  for(j in 1:(i-1)){
+    #    if (AdjacencyMatrix[i, j] > 0) { # kante i-> j zeichnen
+    #      FromToX = c(x_vertex[i], x_vertex[j])
+    #      FromtoY = c(y_vertex[i], y_vertex[j])
+    #      #par(new = TRUE)
+    #      points(FromToX, FromtoY, col = LineColor, type = 'l', lwd = lwd)
+    #    }# end if verbindung zeichnen
+    #  }# end for j
+    #}# end for i
+    points(x_vertex, y_vertex, col = ColorVec, type = 'p', pch = pch)
+  }else{
+    if(!requireNamespace("plotly",quietly = TRUE)){
+      stop("DelaunayClassificationError: requires library plotly")
+    }
+    N = dim(Points)[1]
+    plotOut = plotly::plot_ly()
+    plotOut = plotly::add_segments(plotOut, x = X1, y = Y1, xend = X2, yend = Y2, 
+                                   opacity = 1, line = list(color = LineColor, width = lwd),
+                                   inherit = F, showlegend=FALSE)
+    plotOut = plotly::add_markers(p = plotOut, x = Points[,1], y = Points[,2], type = "scatter",
+                                  marker = list(size = pch, color = Colors[Cls]))
+    #plotOut = plotly::hide_colorbar(p = plotOut)
+    #plotOut = plotly::hide_legend(p = plotOut)
+    plotOut = plotly::layout(p = plotOut,
+                             title = list(text = paste0(main),font = list(size=mainSize)),
+                             xaxis = list(title=xlab, range = xlim),
+                             yaxis = list(title=ylab, range = ylim))
+    return(plotOut)
+  }
 } 
 

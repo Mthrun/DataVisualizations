@@ -21,7 +21,7 @@ ClassMDplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
                          
                          xlab = 'Classes', ylab = 'PDE of Data per Class',
                          
-                         MinimalAmoutOfData=40,
+                         Fill = 'darkblue', MinimalAmoutOfData=40,
                          
                          MinimalAmoutOfUniqueData=12,SampleSize=1e+05,\dots)
 }
@@ -46,6 +46,9 @@ ClassMDplot(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence,
   }
   \item{main}{
   Optional: Title of the plot. Default: MDplot for each Class
+  }
+  \item{Fill}{
+  Optional: [1:k] Vector with the colors, the MD's are to be colored with. If only one value is given, all MD's are colored in the same color.
   }
   \item{xlab}{
   Optional: Title of the x axis. Default: "Classes"

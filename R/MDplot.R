@@ -1,9 +1,9 @@
 MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue',
-                                  RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
-                                  BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
-                                  QuantityThreshold=50, UniqueValuesThreshold=12,SampleSize=5e+05,
-                                  SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,main="MD-plot",
-                                  ylab="Range of values in which PDE is estimated",BW=FALSE,ForceNames=FALSE){
+                  RobustGaussian=TRUE,GaussianColor='magenta',Gaussian_lwd=1.5,
+                  BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
+                  QuantityThreshold=50, UniqueValuesThreshold=12,SampleSize=5e+05,
+                  SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,main="MD-plot",
+                  ylab="Range of values in which PDE is estimated",BW=FALSE,ForceNames=FALSE){
   #MDplot(data, Names)
   # Plots a Boxplot like pdfshape for each column of the given data
   #
@@ -62,7 +62,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     mode(Data)='numeric'
   }
   dvariables=ncol(Data)
-
+  
   Ncases=nrow(Data)
   
   Nfinitepervar=apply(Data,MARGIN = 2,function(x) {
@@ -89,7 +89,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
       }
     }
     DataListtemp=mapply(FUN = function(x,y) return(x[y]), as.list(as.data.frame(Data))
-                ,as.list(as.data.frame(indmat)),SIMPLIFY = FALSE)
+                        ,as.list(as.data.frame(indmat)),SIMPLIFY = FALSE)
     
     #addcols=function(...){
     #  return(cbind_fill(...,fill = NaN))
@@ -99,20 +99,20 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     colnames(Data)=nn
     Data=as.matrix(Data)
     #}else{#here alle vectors are sampled
-   #   warning('Package rowr is not installed. Sampling Data without taking finite values only into account.')
+    #   warning('Package rowr is not installed. Sampling Data without taking finite values only into account.')
     #  ind=sample(1:Ncases,size = SampleSize)
     #  Data=Data[ind,,drop=FALSE]
     #}
     Ncases=nrow(Data)
   }
-
+  
   
   Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
   NUniquepervar=apply(Data,MARGIN = 2,function(x) {
     x=x[is.finite(x)]
     return(length(unique(x)))
-    })
-
+  })
+  
   
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
@@ -151,9 +151,9 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     }
   }
   if(is.null(colnames(Data))){ 
-
+    
     colnames(Data)=paste0('C_',1:dvariables)
-
+    
   }
   #bugfix numeric columns names result in some strange behaviour in either reshape2 or ggplot2
   if(isFALSE(ForceNames)){
@@ -166,42 +166,42 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   #     colnames(Data)[i]=paste0('C_',NamesNumeric[i])
   #   }
   # }
-
+  
   ## Data Scaling ----
   switch(Scaling,
-    None={Data=Data},
-    Percentalize={ Data = apply(Data, MARGIN = 2,function(x) return((x-min(x,na.rm = T))/(max(x,na.rm = T) - min(x,na.rm = T)) * 100))},
-    CompleteRobust={
-      requireNamespace('DatabionicSwarm')
-      Data=DatabionicSwarm::RobustNormalization(Data,Centered = T,Capped = T)},
-    Robust={
-      requireNamespace('DatabionicSwarm')
-      Data=DatabionicSwarm::RobustNormalization(Data,Centered = F,Capped = F)},
-    Log={Data=SignedLog(Data,Base="Ten")
+         None={Data=Data},
+         Percentalize={ Data = apply(Data, MARGIN = 2,function(x) return((x-min(x,na.rm = T))/(max(x,na.rm = T) - min(x,na.rm = T)) * 100))},
+         CompleteRobust={
+           requireNamespace('DatabionicSwarm')
+           Data=DatabionicSwarm::RobustNormalization(Data,Centered = T,Capped = T)},
+         Robust={
+           requireNamespace('DatabionicSwarm')
+           Data=DatabionicSwarm::RobustNormalization(Data,Centered = F,Capped = F)},
+         Log={Data=SignedLog(Data,Base="Ten")
          RobustGaussian=FALSE #log with robust gaussian does not work, because mean and variance is not valid description for log normal data
-    },
-    {stop('You can select for Scaling: "None", "Percentalize", "CompleteRobust", "Robust" or "Log"')}
+         },
+         {stop('You can select for Scaling: "None", "Percentalize", "CompleteRobust", "Robust" or "Log"')}
   )
-
+  
   
   ## Roboust Gaussian and Statistics ----
   #Npervar=apply(Data,2,function(x) sum(is.finite(x)))
   #print(Npervar)
-
+  
   #ToDo: split up RobustGAussian and Ordering Parameter for better code readibility
   #MT: robust gaussians only work with statistical testing, disabled some ifs
- if(RobustGaussian==TRUE |Ordering=="Statistics"){
-   if(Ordering=="Statistics"){
-    requireNamespace('moments')
-    requireNamespace('diptest')
-   }
+  if(RobustGaussian==TRUE |Ordering=="Statistics"){
+    if(Ordering=="Statistics"){
+      requireNamespace('moments')
+      requireNamespace('diptest')
+    }
     x=as.matrix(Data)
     #bugfix: statistical testing does not accept infinitive values
     x[x==Inf]=NaN
     x[x==-Inf]=NaN
     if(dvariables!=ncol(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
     if(Ncases!=nrow(x)) warning('Something went wrong. Dimension of Data changed, but should not. Please contact developer.')
-
+    
     if(Ncases<50)  warning('Sample of data maybe to small to calculate dip test and argostina test')
     lowInnerPercentile=25
     hiInnerPercentile = 100 - lowInnerPercentile
@@ -216,9 +216,9 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
       MinMax <- matrix(0, nrow = length(extrema), ncol = cols)
       for (i in 1:cols) {
         quartile[, i] <- quantile(x[, i], probs = p, type = 5, 
-                                na.rm = TRUE)
-        MinMax[, i] <- quantile(x[, i], probs = extrema, type = 5, 
                                   na.rm = TRUE)
+        MinMax[, i] <- quantile(x[, i], probs = extrema, type = 5, 
+                                na.rm = TRUE)
       }
     }else{
       quartile <- quantile(x, p, type = 5, na.rm = TRUE)
@@ -242,19 +242,19 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
       mhat[i] <- mean(x[, i], trim = 0.1, na.rm = TRUE)
       if(Ncases>45000&Npervar[i]>8){#statistical testing does not work with to many cases
         vec=sample(x = x[, i],45000)
-       # if(Ordering=="Statistics"){
+        # if(Ordering=="Statistics"){
         if(NUniquepervar[i]>UniqueValuesThreshold){
           nonunimodal[i]=diptest::dip.test(vec)$p.value
           skewed[i]=moments::agostino.test(vec)$p.value
           #Ties should not be present, however here we only approximate
           isuniformdist[i]=suppressWarnings(ks.test(vec,"punif", MinMax[1, i], MinMax[2, i])$p.value)
           bimodalprob[i]=bimodal(vec)$Bimodal
-         }else{
-           warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
-           nonunimodal[i]=1
-           skewed[i]=1
-           isuniformdist[i]=0
-           bimodalprob[i]=0
+        }else{
+          warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
+          nonunimodal[i]=1
+          skewed[i]=1
+          isuniformdist[i]=0
+          bimodalprob[i]=0
         }
       }else if(Npervar[i]<8){#statistical testing does not work with not enough cases
         warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
@@ -263,39 +263,39 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
         bimodalprob[i]=0
         isuniformdist[i]=0
       }else{
-#        if(Ordering=="Statistics"){
-          if(NUniquepervar[i]>UniqueValuesThreshold){
-            nonunimodal[i]=diptest::dip.test(x[, i])$p.value
-            skewed[i]=moments::agostino.test(x[, i])$p.value
-            isuniformdist[i]=suppressWarnings(ks.test(x[, i],"punif", MinMax[1, i], MinMax[2, i])$p.value)
-            bimodalprob[i]=bimodal(x[, i])$Bimodal
-          }else{#statistical testing requires enough unique values
-            warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
-            nonunimodal[i]=1
-            skewed[i]=1
-            isuniformdist[i]=0
-            bimodalprob[i]=0
-          }
+        #        if(Ordering=="Statistics"){
+        if(NUniquepervar[i]>UniqueValuesThreshold){
+          nonunimodal[i]=diptest::dip.test(x[, i])$p.value
+          skewed[i]=moments::agostino.test(x[, i])$p.value
+          isuniformdist[i]=suppressWarnings(ks.test(x[, i],"punif", MinMax[1, i], MinMax[2, i])$p.value)
+          bimodalprob[i]=bimodal(x[, i])$Bimodal
+        }else{#statistical testing requires enough unique values
+          warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
+          nonunimodal[i]=1
+          skewed[i]=1
+          isuniformdist[i]=0
+          bimodalprob[i]=0
+        }
         # }else{
         #   nonunimodal[i]=1
         #   skewed[i]=1
         # }
-      
+        
       }
-     # if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
-        if(isuniformdist[i]<0.05 & nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>QuantityThreshold & NUniquepervar[i]>UniqueValuesThreshold){
-          normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
-          #trim to range, not exact but close enough
-          normaldist[normaldist[,i]<min(x[, i],na.rm=T),i]=NaN#MinMax[1,i]
-          normaldist[normaldist[,i]>max(x[, i],na.rm=T),i]=NaN#MinMax[2,i]
-        }
-          #else{#bimodal is siginficant and enough data for gaussian estimation
+      # if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
+      if(isuniformdist[i]<0.05 & nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>QuantityThreshold & NUniquepervar[i]>UniqueValuesThreshold){
+        normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
+        #trim to range, not exact but close enough
+        normaldist[normaldist[,i]<min(x[, i],na.rm=T),i]=NaN#MinMax[1,i]
+        normaldist[normaldist[,i]>max(x[, i],na.rm=T),i]=NaN#MinMax[2,i]
+      }
+      #else{#bimodal is siginficant and enough data for gaussian estimation
       #  if(bimodalprob[i]<0.05& Npervar[i]>QuantityThreshold & NUniquepervar[i]>UniqueValuesThreshold)
-     #     normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
-     # }
+      #     normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
+      # }
       
     }
-
+    
     # statsps=data.frame(isuniformdist=isuniformdist,nonunimodal=nonunimodal,bimodalprob=bimodalprob,skewed=skewed)
     # rownames(statsps)=Names
     # return(data.frame(t(statsps)))
@@ -303,8 +303,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     nonunimodal[nonunimodal==0]=0.0000000001
     skewed[skewed==0]=0.0000000001
     Effectstrength=(-10*log(skewed)-10*log(nonunimodal))/2
-   
- }#end if (RobustGaussian==TRUE |Ordering=="Statistics"
+    
+  }#end if (RobustGaussian==TRUE |Ordering=="Statistics"
   
   ## Ordering ----
   dfrang = reshape2::melt(Data)
@@ -332,10 +332,10 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
            }
            
            if(length(unique(bimodalprob))<2 & ncol(x)>1 & isTRUE(RobustGaussian)){
-              Rangfolge=Rangfolge[order(Effectstrength,decreasing = T,na.last = T)]
-              message('Using statistics for ordering instead of default')
+             Rangfolge=Rangfolge[order(Effectstrength,decreasing = T,na.last = T)]
+             message('Using statistics for ordering instead of default')
            }else{
-              Rangfolge=Rangfolge[order(bimodalprob,decreasing = T,na.last = T)]
+             Rangfolge=Rangfolge[order(bimodalprob,decreasing = T,na.last = T)]
            }
          },
          Columnwise={Rangfolge=Rangfolge},
@@ -355,7 +355,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
            average_vals=(med_val+meanval)/2 #weighted average
            average_ind=order(average_vals,na.last = T,decreasing = FALSE)
            Rangfolge=Rangfolge[average_ind]
-           },
+         },
          Variance={
            x=as.matrix(Data)
            iqr_vals=apply(x,2,function(x) {
@@ -382,8 +382,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
              }else{
                return(0)
              }
-             }
-             )
+           }
+           )
            bimodal_ind=order(bimodalitycoef,na.last = T,decreasing = TRUE)
            Rangfolge=Rangfolge[bimodal_ind]
          },
@@ -392,7 +392,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
          },
          {stop('You can select for Ordering: "Default", "Columnwise", "Alphabetical", "Average", "Bimodal", "Variance" or "Statistics"')}
   )
-
+  
   ## Data Reshaping----
   if(any(Npervar<QuantityThreshold)|any(NUniquepervar<UniqueValuesThreshold)){#builds scatter plots in case of not enough information for pdf
     warning(paste('Some columns have less than,',QuantityThreshold,',finite data points or less than ',UniqueValuesThreshold,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
@@ -402,26 +402,26 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     #Transforms pdf estimation to median line drawing of pdf cannot be estimated
     #for(nc in 1:dvariables){
     #  if(Npervar[nc]<QuantityThreshold){
-        #DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
-        
-        #generated values around the median if not enoug non finite values given
-        # this is done to draw a median line
-        # if(mm[nc]!=0){
-        #   DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
-        # }else{
-        #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
-        # }
+    #DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
+    
+    #generated values around the median if not enoug non finite values given
+    # this is done to draw a median line
+    # if(mm[nc]!=0){
+    #   DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+    # }else{
+    #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
+    # }
     #  }
     #  if(NUniquepervar[nc]<UniqueValuesThreshold){
-        #DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
-        
-        #generated values around the median if not enoug unique values given
-        # this is done to draw a median line
-        # if(mm[nc]!=0){
-        #   DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
-        # }else{
-        #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
-        # }
+    #DataDensity[,nc]=JitterUniqueValues(Data[,nc],NULL)
+    
+    #generated values around the median if not enoug unique values given
+    # this is done to draw a median line
+    # if(mm[nc]!=0){
+    #   DataDensity[,nc]=mm[nc]*runif(Ncases, -0.001, 0.001)+mm[nc]
+    # }else{
+    #   DataDensity[,nc]=runif(Ncases, -0.001, 0.001)
+    # }
     #  }
     #}
     #Generates in the cases where pdf cannot be estimated a scatter plot
@@ -445,18 +445,41 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     colnames(dataframe) <- c('ID', 'Variables', 'Values')
   }
   dataframe$Variables=as.character(dataframe$Variables)
-
+  
   
   ## Plotting ----
-  plot =
-    ggplot(data = dataframe,
-           aes_string(x = "Variables", group = "Variables", y = "Values"))+scale_x_discrete(limits=Rangfolge)
+  
+  fillDifferentColors = FALSE
+  if(length(Fill) > 1) {
+    fillDifferentColors = TRUE
+    variableCount = length(unique(dataframe$Variables))
+    if(length(Fill) < variableCount) {
+      Fill = c(Fill, rep("darkblue", variableCount - length(Fill)))
+    } else if(length(Fill) > variableCount) {
+      Fill = Fill[1:variableCount]
+    }
+  }
+  
+  if(fillDifferentColors) {
+    plot =
+      ggplot(data = dataframe,
+             aes_string(x = "Variables", group = "Variables", y = "Values", fill = "Variables"))+scale_x_discrete(limits=Rangfolge) 
+  } else {
+    plot =
+      ggplot(data = dataframe,
+             aes_string(x = "Variables", group = "Variables", y = "Values"))+scale_x_discrete(limits=Rangfolge) 
+  }
   
   if(isTRUE(BW))
     plot=plot+theme_bw()
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
-  plot=plot + geom_violin(stat = "PDEdensity",fill=Fill,scale=MDscaling,size=LineSize,trim = TRUE,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)))#+coord_flip()
+  if(fillDifferentColors) {
+    plot=plot + geom_violin(stat = "PDEdensity",scale=MDscaling,size=LineSize,trim = TRUE,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)), legend.position = "none")
+    plot=plot + scale_fill_manual(values=Fill)#+coord_flip()
+  } else {
+    plot=plot + geom_violin(stat = "PDEdensity",scale=MDscaling,size=LineSize,trim = TRUE,fill=Fill,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)))
+  }
   if(any(Npervar<QuantityThreshold) | any(NUniquepervar<UniqueValuesThreshold)){
     DataJitter[,Rangfolge]
     dataframejitter=reshape2::melt(DataJitter)
@@ -465,13 +488,21 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
       dataframejitter$Variables=rep(colnames(DataJitter),Ncases)
       dataframejitter$Values=dataframejitter$value
     }else{
-    colnames(dataframejitter) <- c('ID', 'Variables', 'Values')
+      colnames(dataframejitter) <- c('ID', 'Variables', 'Values')
     }
-    plot=plot+geom_jitter(colour=Fill,size=SizeOfJitteredPoints,data =dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
-                          height = 0,width=0.15)#no vertical jitter!
+    if(fillDifferentColors) {
+      plot=plot+geom_jitter(size=SizeOfJitteredPoints,data=dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values", colour = "Variables"),
+                            height = 0,width=0.15) + scale_color_manual(values = Fill)
+    } else {
+      plot=plot+geom_jitter(colour=Fill,size=SizeOfJitteredPoints,data=dataframejitter,aes_string(x = "Variables", group = "Variables", y = "Values"),
+                            height = 0,width=0.15)#no vertical jitter!
+    }
+    
+    
+    
     #geom_jitter(position=position_jitter(0.15))
   }
-
+  
   if(isTRUE(RobustGaussian)){
     colnames(normaldist)=colnames(Data)
     normaldist=normaldist[,Rangfolge]
@@ -483,7 +514,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     #bugifix Computation failed in `stat_ydensity()`:replacement has 1 row, data has 0 
     ind_sum=apply(normaldist,2,function(x) sum(!is.finite(x)))
     normaldist=normaldist[,ind_sum!=nrow(normaldist),drop = FALSE]
-   
+    
     if(dim(normaldist)[2]>0){
       DFtemp = reshape2::melt(normaldist)
       colnames(DFtemp) <- c('ID', 'Variables', 'Values')
@@ -499,11 +530,11 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
                             na.rm = TRUE,trim = TRUE, fill = NA,position="identity",width=1)#+guides(fill=FALSE,scale=MDscaling)
     }#otherwise no robust gaussian exist
   }
-
+  
   if(isTRUE(BoxPlot)){
     plot=plot+stat_boxplot(geom = "errorbar", width = 0.5, color=BoxColor)+geom_boxplot(width=1,outlier.colour = NA,alpha=0,fill='#ffffff', color=BoxColor,position="identity")
   }
-
+  
   if(isTRUE(requireNamespace("ggExtra",quietly = TRUE))){
     plot=plot+ggExtra::rotateTextX()
   }else{
@@ -512,7 +543,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   plot=plot+ggtitle(main)+theme(plot.title = element_text(hjust = 0.5))+ylab(ylab)
   
   if(OnlyPlotOutput){
-      return(ggplotObj = plot)
+    return(ggplotObj = plot)
   }else{
     print(plot)
     return(list(Ordering=Rangfolge,DataOrdered=Data[,Rangfolge],ggplotObj = plot))
