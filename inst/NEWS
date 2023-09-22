@@ -1,5 +1,9 @@
 Version 1.3.2 (GitHub, 2023-08-07)
 	o ClassMDplot now allows to set the color if each violin
+	o Fanplot and Piechart: changed color palette
+	o Fanplot: corrected plotrix function so that colors are mapped more consistently 	
+	o InpectVariable: xlim can now be set for optimal histogram and not only for PDEplot	
+	o Moved RobustNormalization and RobustNorm_BackTrafo from DatabionicSwarm package available on CRAN
 	
 Version 1.3.1 (CRAN, 2023-07-18)
 	o Minor adaptations for CRAN

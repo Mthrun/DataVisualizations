@@ -57,7 +57,8 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
     paretoRadius <- quantile(distvec, 18 / 100, type = 8, na.rm = TRUE)
   } else{
     #use faster implementation
-    paretoRadius <- c_quantile(distvec, 18 / 100)
+    partialSortedDistVec = sort(distvec, partial = c(1,(length(distvec)-1)*(18 / 100)+1))
+    paretoRadius <- c_quantile(partialSortedDistVec, 18 / 100, 1)
   }
   if (paretoRadius == 0)
   {

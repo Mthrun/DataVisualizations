@@ -55,18 +55,6 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
 
   k=length(Labels)
   
-  if(missing(col)){
-    colors=DataVisualizations::DefaultColorSequence[1:k]
-  }else{
-    if(length(col)==k)
-      colors=col
-    else{
-      #dont need warning, as number of labels will be reduced later
-      #warning('Length of colors doesnt match found names defined as labels.')
-      colors=c(col,setdiff(DataVisualizations::DefaultColorSequence,col)[1:k])
-    }
-  }
-  
   if(missing(MaxNumberOfSlices)){
     MaxNumberOfSlices=k
   }else{
@@ -155,9 +143,7 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
     
     if(length(abc$Aind)>MaxNumberOfSlices){ #abc gruppe zu gross, reduziere
       pct2=pct[abc$Aind]
-      
-      message('Too many slices in group A of ABCanalysis comparing to MaxNumberOfSlices. Selecting the most frequent subgoup out of group A.')
-      
+      #message('Too many slices in group A of ABCanalysis comparing to MaxNumberOfSlices. Selecting the most frequent subgoup out of group A.')
       pct2=sort(pct2,decreasing = T)
       pct_tmp=sum(pct2[seq(from=MaxNumberOfSlices+1,to=length(pct2),by=1)],na.rm = T)
       pct2=pct2[seq(from=1,to=MaxNumberOfSlices,by=1)]
@@ -181,13 +167,23 @@ internpiechart=function(Datavector,Names,Labels,MaxNumberOfSlices,col){
   inds=which(pct==0)
   Labels[inds]=gsub('0%','<0.01%',Labels[inds])
   
+  if(missing(col)){
+    if(requireNamespace("viridis",quietly = T)&requireNamespace("colorspace",quietly = T)){
+      colors=viridis::viridis(knew,option = "turbo")
+      colors=colorspace::darken(colors,amount = 0.2)
+    }else{
+      colors=DataVisualizations::DefaultColorSequence[1:knew]
+    }
+  }else{
+    colors=col
+  }
+  
   if(knew<=length(colors)){
     colors=colors[1:knew]
   }else{
     colors=c(colors,tail(DataVisualizations::DefaultColorSequence,knew-length(colors)))
-    message('Colors added using the tail of DataVisualizations::DefaultColorSequence because number of colors was smaller than number of labels.')
+    message('Colors added using the tail of DataVisualizations::DefaultColorSequence because number of colors given in the input was smaller than number of different labels.')
   }
     
-
    return(list(Percents=pct,Labels=Labels,Names=LabelsOut,Cols=colors,Count=count))
 }

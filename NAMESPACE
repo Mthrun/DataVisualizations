@@ -26,6 +26,7 @@ export(InspectScatterplots)
 export(InspectStandardization)
 export(InspectCorrelation)
 export(JitterUniqueValues)
+export(multiplot)
 export(MAplot)
 export(MDplot)
 export(MDplot4multiplevectors)
@@ -51,6 +52,8 @@ export(stat_pde_density)
 export(StatPDEdensity)
 export(SignedLog)
 #export(SmoothedDensitiesXY)
+export(RobustNormalization)
+export(RobustNorm_BackTrafo)
 export(Worldmap)
 
 import(ggplot2)
@@ -58,8 +61,8 @@ import(Rcpp)
 
 importFrom("graphics", "hist", "title", "filled.contour", "axis", "barplot", "box", "boxplot", "grid",
            "mtext", "par", "plot", "rect", "lines", "text", "pairs", "plot.new", "polygon", "pie",
-           "legend", "abline", "image", "layout", "points")
-importFrom("grDevices", "rgb", "colorRampPalette")
+           "legend", "abline", "image", "layout", "points", "segments")
+importFrom("grDevices", "rgb", "colorRampPalette","rainbow")
 importFrom("sp", "SpatialPolygons", "plot")
 importFrom("stats", "ecdf", "dist", "runif", "median", "quantile", "qqnorm", "end", "density", "lm",
            "qnorm", "complete.cases", "na.omit", "cor", "dnorm", "sd", "anova", "qqplot", "residuals.lm",

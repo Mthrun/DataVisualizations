@@ -247,9 +247,9 @@ For the paramter \code{Scaling} the following options are possible:
 
 \item{\code{Percentalize}}{Data is scaled between zero and 100.}
 
-\item{\code{CompleteRobust}}{Data is first robustly scaled between zero and 1, then centered to zero and outliers are capped by a robustly formula described in the \pkg{DatabionicSwarm} package. }
+\item{\code{CompleteRobust}}{Data is first robustly scaled between zero and 1, then centered to zero and outliers are capped by a robustly formula described in \link{\code{RobustNormalization}}. }
 
-\item{\code{Robust}}{Data is robustly scaled between zero and 1 by a formula described in the \pkg{DatabionicSwarm} package. }
+\item{\code{Robust}}{Data is robustly scaled between zero and 1 by a formula described in the \link{\code{RobustNormalization}}. }
 
 \item{\code{Log}}{Data is transformed with a sgined log allowing for negative values to be transformed with a logarithm of base 10, please see \code{SignedLog} for details.}
 }

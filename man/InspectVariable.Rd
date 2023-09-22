@@ -10,8 +10,8 @@ InspectVariable(Feature, Name, i = 1, xlim, ylim,
 \item{Feature}{[1:n] Variable/Vector of Data to be plotted}
 \item{Name}{Optional, string, for x label}
 \item{i}{Optional, No. of variable/feature, an integer of the for lope}
-\item{xlim}{[2] Optional, range of x-axis for PDEplot }
-\item{ylim}{[2] Optional, range of y-axis for PDEplot }
+\item{xlim}{[2] Optional, range of x-axis for PDEplot and histogram }
+\item{ylim}{[2] Optional, range of y-axis, only for PDEplot }
 \item{sampleSize}{Optional, default(100000), sample size, if datavector is to big}
 \item{main}{string for the title if other than what is desribed in \code{N}}
 }

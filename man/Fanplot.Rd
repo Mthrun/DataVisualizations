@@ -9,8 +9,7 @@ The better alternative to the pie chart represents amount of values given in dat
 }
 \usage{
 Fanplot(Datavector,Names,Labels,MaxNumberOfSlices,main='',col,
-
-MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1,lwd=2,\dots)
+MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1, lwd=2,LabelCols="black",...)
 }
 \arguments{ 
   \item{Datavector}{
@@ -36,9 +35,10 @@ MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1,lwd=2,\dots)
   \item{ShrinkPies}{
   Optional, distance between biggest and smallest slice of the pie
 }
-  \item{Rline}{Optional, the distance between text and pie is defined here as the length of the line in numerical numbers}
-    \item{lwd}{Optional, The line width, a positive number, defaut is 2}
-    \item{\dots}{Further arguments to \code{\link[plotrix]{fan.plot}} like circumferential positions for the labels \code{labelpos} or additional arguments passed to \code{\link{polygon}}
+\item{Rline}{Optional, the distance between text and pie is defined here as the length of the line in numerical numbers}
+\item{lwd}{Optional, The line width, a positive number, defaut is 2}
+\item{LabelCols}{Color of labels}
+\item{...}{Further arguments to \code{\link[plotrix]{fan.plot}} like circumferential positions for the labels \code{labelpos} or additional arguments passed to \code{\link{polygon}}
 }
 }
 \details{

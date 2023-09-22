@@ -26,21 +26,22 @@ BEGIN_RCPP
 END_RCPP
 }
 // c_quantile
-Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs);
-RcppExport SEXP _DataVisualizations_c_quantile(SEXP xSEXP, SEXP probsSEXP) {
+Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs, int sorted);
+RcppExport SEXP _DataVisualizations_c_quantile(SEXP xSEXP, SEXP probsSEXP, SEXP sortedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type probs(probsSEXP);
-    rcpp_result_gen = Rcpp::wrap(c_quantile(x, probs));
+    Rcpp::traits::input_parameter< int >::type sorted(sortedSEXP);
+    rcpp_result_gen = Rcpp::wrap(c_quantile(x, probs, sorted));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DataVisualizations_c_pde", (DL_FUNC) &_DataVisualizations_c_pde, 4},
-    {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 2},
+    {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 3},
     {NULL, NULL, 0}
 };
 

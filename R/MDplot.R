@@ -19,12 +19,12 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   
   #always required:
   #requireNamespace("reshape2")
-  if (!requireNamespace('DatabionicSwarm',quietly = TRUE)){
-    
-    message('Subordinate package (DatabionicSwarm) is missing. Please install the package which is defined in "Suggests" to select this scaling. Setting scaling to "None".')
-    
-    Scaling="None"
-  }
+  #if (!requireNamespace('DatabionicSwarm',quietly = TRUE)){
+  #  
+  #  message('Subordinate package (DatabionicSwarm) is missing. Please install the package which is defined in "Suggests" to select this scaling. Setting scaling to "None".')
+  #  
+  #  Scaling="None"
+ # }
   
   if (!requireNamespace('moments',quietly = TRUE)){
     
@@ -172,11 +172,9 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
          None={Data=Data},
          Percentalize={ Data = apply(Data, MARGIN = 2,function(x) return((x-min(x,na.rm = T))/(max(x,na.rm = T) - min(x,na.rm = T)) * 100))},
          CompleteRobust={
-           requireNamespace('DatabionicSwarm')
-           Data=DatabionicSwarm::RobustNormalization(Data,Centered = T,Capped = T)},
+           Data=RobustNormalization(Data,Centered = T,Capped = T)},
          Robust={
-           requireNamespace('DatabionicSwarm')
-           Data=DatabionicSwarm::RobustNormalization(Data,Centered = F,Capped = F)},
+           Data=RobustNormalization(Data,Centered = F,Capped = F)},
          Log={Data=SignedLog(Data,Base="Ten")
          RobustGaussian=FALSE #log with robust gaussian does not work, because mean and variance is not valid description for log normal data
          },
@@ -454,9 +452,12 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     fillDifferentColors = TRUE
     variableCount = length(unique(dataframe$Variables))
     if(length(Fill) < variableCount) {
-      Fill = c(Fill, rep("darkblue", variableCount - length(Fill)))
+      Fill = "darkblue"
+      fillDifferentColors = FALSE
+      warning('Number of colors is > 1 but does not match the number of variables. Using default coloring')
     } else if(length(Fill) > variableCount) {
       Fill = Fill[1:variableCount]
+      warning('Number of colors is greater than number of variables k. Using just the first k colors')
     }
   }
   

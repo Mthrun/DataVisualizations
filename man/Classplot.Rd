@@ -56,7 +56,7 @@ Optional, in case of \code{Plotter==ggplot} and given \code{Names} annotates eac
 Optional, size of points, beware: default is appropriate for  "\code{plotly}", or "\code{native}" but should smaller for "\code{ggplot}"
 }
   \item{PointBorderCol}{
-Optional, string, color of the dot outline for "\code{plotly}" for "\code{ggplot}"
+Optional, string, color of the dot outline for "\code{plotly}" for "\code{ggplot}". If \code{FALSE} and \code{Plotter="ggplot"}, no borders for points which is useful if many points overlap.
 }
 
   \item{LineColor}{

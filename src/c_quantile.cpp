@@ -2,7 +2,7 @@
 //https://github.com/RcppCore/Rcpp/issues/967
 //author Dirk Eddelbuettel
 // [[Rcpp::export]]
-Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs) {
+Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs, int sorted = 0) {
 //out=c_quantile(data, 0.5)
 // fast implementation of type 7 quantile of R
 //INPUT
@@ -13,7 +13,10 @@ Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs)
   const size_t n=x.size(), np=probs.size();
   if (n==0) return x;
   if (np==0) return probs;
-  Rcpp::NumericVector index = (n-1.)*probs, y=x.sort(), x_hi(np), qs(np);
+  Rcpp::NumericVector y;
+  if(sorted == 1) y = x;
+  else y = x.sort();
+  Rcpp::NumericVector index = (n-1.)*probs, x_hi(np), qs(np);
   Rcpp::NumericVector lo = Rcpp::floor(index), hi = Rcpp::ceiling(index);
   
   for (size_t i=0; i<np; ++i) {

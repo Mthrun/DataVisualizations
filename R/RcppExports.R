@@ -5,7 +5,7 @@ c_pde <- function(kernels, nKernels, paretoRadius, DataPlus) {
     .Call(`_DataVisualizations_c_pde`, kernels, nKernels, paretoRadius, DataPlus)
 }
 
-c_quantile <- function(x, probs) {
-    .Call(`_DataVisualizations_c_quantile`, x, probs)
+c_quantile <- function(x, probs, sorted = 0L) {
+    .Call(`_DataVisualizations_c_quantile`, x, probs, sorted)
 }
 

@@ -68,8 +68,12 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
  
   optNrOfBins=OptimalNoBins(D)
   optNrOfBins = min(100,optNrOfBins) #
-
-   optBreaks <- seq(MinD, MaxD, abs(MinD-MaxD)/optNrOfBins)
+    
+  if(missing(xlim)){
+    optBreaks <- seq(MinD, MaxD, abs(MinD-MaxD)/optNrOfBins)
+  }
+  else
+    optBreaks <- unique(c(MinD,seq(xlim[1], xlim[2], abs(xlim[1]-xlim[2])/optNrOfBins),MaxD))
   
    # bins haben alle die gleiche groesse
    if(length(optBreaks)>1)
@@ -81,9 +85,61 @@ InspectVariable=function(Feature,Name='Feature',i=1,xlim,ylim,sampleSize=100000,
    y <- temp$counts;
    xlab=Name 
    ylab='Frequency' 
-   plot(x=c(MinD,MaxD), y=c(0, max(temp$counts,na.rm=TRUE)*1.2), type="n", main='',xaxs='i',yaxs='i',axes=FALSE,xlab="", ylab='',xlim=c(MinD,MaxD), ylim=c(0, max(temp$counts,na.rm=TRUE)*1.2))
-   par(mgp=c(2.2,0.6,0)) #Abstand: c(Titel, Label, Achse)
-   rect(Breaks[-nB], 0, Breaks[-1], y, col="blue", border="light blue",xlab="",ylab="",xlim=c(MinD,MaxD), ylim=c(0, max(temp$counts,na.rm=TRUE)*1.2))
+   if (missing(xlim)) {
+     plot(
+       x = c(MinD, MaxD),
+       y = c(0, max(temp$counts, na.rm = TRUE) * 1.2),
+       type = "n",
+       main = '',
+       xaxs = 'i',
+       yaxs = 'i',
+       axes = FALSE,
+       xlab = "",
+       ylab = '',
+       xlim = c(MinD, MaxD),
+       ylim = c(0, max(temp$counts, na.rm = TRUE) * 1.2)
+     )
+     par(mgp = c(2.2, 0.6, 0)) #Abstand: c(Titel, Label, Achse)
+     rect(
+       Breaks[-nB],
+       0,
+       Breaks[-1],
+       y,
+       col = "blue",
+       border = "light blue",
+       xlab = "",
+       ylab = "",
+       xlim = c(MinD, MaxD),
+       ylim = c(0, max(temp$counts, na.rm = TRUE) * 1.2)
+     )
+   } else{
+     plot(
+       x = xlim,
+       y = c(0, max(temp$counts, na.rm = TRUE) * 1.2),
+       type = "n",
+       main = '',
+       xaxs = 'i',
+       yaxs = 'i',
+       axes = FALSE,
+       xlab = "",
+       ylab = '',
+       xlim = xlim,
+       ylim = c(0, max(temp$counts, na.rm = TRUE) * 1.2)
+     )
+     par(mgp = c(2.2, 0.6, 0)) #Abstand: c(Titel, Label, Achse)
+     rect(
+       Breaks[-nB],
+       0,
+       Breaks[-1],
+       y,
+       col = "blue",
+       border = "light blue",
+       xlab = "",
+       ylab = "",
+       xlim = xlim,
+       ylim = c(0, max(temp$counts, na.rm = TRUE) * 1.2)
+     )
+   }
    axis(1,col="black",las=1,xaxs='i') #x-Achse
    axis(2,col="black",las=1,yaxs='i') #y-Achse
    title(ylab=ylab,xlab=xlab)

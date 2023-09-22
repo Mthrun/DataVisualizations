@@ -150,6 +150,11 @@ Classplot = function(X, Y, Cls,
   }
   p <- plotly::plot_ly()
   
+  if(isFALSE(PointBorderCol)){
+    PointBorderCol="black"
+    warning("Classplot: 'PointBorderCol=FALSE' is not implemented for plotly")
+  }
+  
   if(!is.null(LineColor)){
     p <- plotly::add_lines(p, x = ~X, y = ~Y,
                            line = list(color = LineColor,
@@ -233,7 +238,10 @@ Classplot = function(X, Y, Cls,
       ggplot2::theme_bw()
     
     if(missing(pch)){ #black shape around circular points
-      p=p+ggplot2::geom_point(size = Size)+ggplot2::geom_point(size = Size,pch=21, colour=PointBorderCol,alpha=0.4)
+      if(isFALSE(PointBorderCol)) #no borders around points
+        p=p+ggplot2::geom_point(size = Size)+ggplot2::geom_point(size = Size,pch=21, colour="black",alpha=0.4, stroke=NA)
+      else
+        p=p+ggplot2::geom_point(size = Size)+ggplot2::geom_point(size = Size,pch=21, colour=PointBorderCol,alpha=0.4)
     }else{#points have various shapes
       p=p+ggplot2::geom_point(size = Size,shape=pch)
     }
