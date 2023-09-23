@@ -147,12 +147,19 @@ Classplot = function(X, Y, Cls,
             
       return('Subordinate package (plotly) is missing. No computations are performed.
              Please install the package which is defined in "Suggests".')
-  }
+    }
   p <- plotly::plot_ly()
   
   if(isFALSE(PointBorderCol)){
     PointBorderCol="black"
-    warning("Classplot: 'PointBorderCol=FALSE' is not implemented for plotly")
+    borderWidth = 0
+    #warning("Classplot: 'PointBorderCol=FALSE' is not implemented for plotly")
+  } else {
+    # For small points, the border will represent the whole point with width 1
+    borderWidth = 1
+    if(Size <= 1) borderWidth = 0  # Size=1 is to small to see any coloring with border
+    else if(Size <= 2) borderWidth = 0.2
+    else if(Size <= 3) borderWidth = 0.7
   }
   
   if(!is.null(LineColor)){
@@ -174,9 +181,9 @@ Classplot = function(X, Y, Cls,
                               mode = "marker",
                               name = UniqueNames[i],
                               marker = list(size = Size,
-                                            color = unique(ColorVec[DataIdx]),
+                                            color = unique(ColorVec[DataIdx]), #unique(ColorVec[DataIdx])
                                             line = list(color = PointBorderCol,
-                                                        width = 1)))
+                                                        width = borderWidth)))
     }
   }else{
     p = plotly::add_markers(p = p,
