@@ -33,16 +33,16 @@ Michael Thrun
 \code{\link{RobustNormalization}}
 }
 \examples{
-data(Hepta)
-Data = Hepta$Data
+data(Lsun3D)
+Data = Lsun3D$Data
 TransList = RobustNormalization(Data, Centered = TRUE, WithBackTransformation = TRUE)
 
-HeptaData = RobustNorm_BackTrafo(TransList$TransformedData,
+Lsun3DData = RobustNorm_BackTrafo(TransList$TransformedData,
                                  TransList$MinX,
                                  TransList$Denom,
                                  TransList$Center)
 
-sum(HeptaData - Data) #<e-15
+sum(Lsun3DData - Data) #<e-15
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

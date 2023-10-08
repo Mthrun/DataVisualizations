@@ -35,7 +35,7 @@ Further arguments passed on to \code{plot}, see also \code{sp::SpatialPolygons-c
 List of
 \item{Colors}{[1:m] colors used in map, m<=n}
 \item{CountryCodeList}{ [1:m] countries found, m<=n}
-\item{world_country_polygons}{\code{SpatialPolygonsDataFrame} of \code{maptools}}
+\item{world_country_polygons}{\code{SpatialPolygonsDataFrame}}
 }
 \references{
 Used in

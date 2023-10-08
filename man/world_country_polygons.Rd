@@ -20,6 +20,7 @@ Since DataVisualization Version 1.2.1 it stores now a CRS objects with a comment
 Note that the rebuilt CRS object contains
 a revised version of the input Proj4 string as well as the WKT2 string,
 and may be used with both older and newer versions of sp. See maptools package for further details.
+Also note that since sp >= 2.0 maptools and rgdal were deprecated without change to the workflow. See terra for an alternative to maptools.
 }
 \source{
 maptools package
