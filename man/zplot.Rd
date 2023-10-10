@@ -31,10 +31,10 @@ zplot(x, y, z, DrawTopView = TRUE, NrOfContourLines = 20,
     Optional: String indicating which backend to use for plotting. Possible Values: 'ggplot', 'native', 'plotly'
   }
     \item{xlim}{
-  
+  [1:2] scalar vector setting the limits of x-axis
   }
     \item{ylim}{
-  
+   [1:2] scalar vector setting the limits of y-axis
   }
 }
 \value{

@@ -1,19 +1,30 @@
-\name{multiplot}
-\alias{multiplot}
-\title{ Plot multiple ggplots}
-\usage{multiplot(..., plotlist=NULL, file, cols=1, layout=NULL)}
+\name{Multiplot}
+\alias{Multiplot}
+\title{Plot multiple ggplots objects in one panel}
+\usage{Multiplot(..., Plotlist=NULL, ColNo=1, LayoutMat)}
 \arguments{
 \item{...}{ multiple ggplot objects to be plotted}
-\item{plotlist}{Optional: list filled with ggplot objects to be plotted}
-\item{file}{Currently unused}
-\item{cols}{Number of columns in layout}
-\item{layout}{A matrix specifying the layout. If present, 'cols' is ignored.}
+\item{Plotlist}{Optional: list filled with ggplot objects to be plotted}
+\item{ColNo}{Number of columns in layout}
+\item{LayoutMat}{A matrix specifying the layout. If present, 'ColNo' is ignored.}
 }
 \value{List with
+Plotlist
 }
 \description{
   ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)  \cr
-  If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE), then plot 1 will go in the upper left, 2 will go in the upper right, and 3 will go all the way across the bottom.}
+  For example, if the layout is specified as the matrix(c(1,2,3,3), nrow=2, byrow=TRUE), then plot 1 will go in the upper left, 2 will go in the upper right, and 3 will go all the way across the bottom.}
+
+\examples{
+data(Lsun3D)
+Data=Lsun3D$Data
+Cls=Lsun3D$Cls
+obj1=Classplot(Data[,1],Data[,2],Cls=Cls,Plotter="ggplot",Size=3,main="Top plot")
+obj2=Classplot(Data[,2],Data[,3],Cls=Cls,Plotter="ggplot",Size=3,main="Middle plot")
+obj3=Classplot(Data[,1],Data[,3],Cls=Cls,Plotter="ggplot",Size=3,main="Bottom plot")
+V=Multiplot(obj1,obj2,obj3)
+}
+
 \author{
-http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_\%28ggplot2\%29/
+Winston Chang
 }

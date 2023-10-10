@@ -1,46 +1,49 @@
-# Multiple plot function
-#
-# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-# - cols:   Number of columns in layout
-# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
-#
-# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-# then plot 1 will go in the upper left, 2 will go in the upper right, and
-# 3 will go all the way across the bottom.
-#
-#author: http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_%28ggplot2%29/
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-#  library(grid)
-requireNamespace('grid')
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
 
-  numPlots = length(plots)
+Multiplot <- function(..., Plotlist=NULL, ColNo=1, LayoutMat) {
 
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                    ncol = cols, nrow = ceiling(numPlots/cols))
+  if (!requireNamespace('grid', quietly = TRUE)) {
+    message(
+      'Subordinate package (grid) is missing. No computations are performed.
+            Please install the package which is defined in "Suggests".'
+    )
+    return(
+      list(
+        Plotlist = "Subordinate package (grid) is missing.
+                Please install the package which is defined in 'Suggests'."
+      )
+    )
   }
 
- if (numPlots==1) {
-    print(plots[[1]])
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), Plotlist)
 
-  } else {
+  numPlots = length(plots)
+#do nothing special if only one sublpo
+  if (numPlots==1) {
+    print(plots[[1]])
+    return(plots[[1]])
+  } 
+  
+  
+  # If LayoutMat is missing,  define the panel estimating int via ColNo
+  if (missing(LayoutMat)) {
+    LayoutMat <- matrix(seq(1, ColNo * ceiling(numPlots/ColNo)),
+                    ncol = ColNo, nrow = ceiling(numPlots/ColNo))
+  }
+
     # Set up the page
     grid::grid.newpage()
-    grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
+    grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(LayoutMat), ncol(LayoutMat))))
 
     # Make each plot, in the correct location
     for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
+      # identify the i,j matrix positions of the area that contain this subplot
+      matchidx <- as.data.frame(which(LayoutMat == i, arr.ind = TRUE))
+      
       print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
+                                            layout.pos.col = matchidx$col))
+      
     }
-  }
+
+  return(list(Plotlist=plots))
 }
