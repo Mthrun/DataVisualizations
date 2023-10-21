@@ -59,27 +59,6 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   #Normaldist=list()
   Normaldist = matrix(data = 0, nrow = length(Kernels), ncol = NrOfClasses)
   
-  prctile=function (x, p) 
-  {
-    if (length(p) == 1) {
-      if (p > 1) {
-        p = p/100
-      }
-    }
-    if (is.matrix(x) && ncol(x) > 1) {
-      cols <- ncol(x)
-      quants <- matrix(0, nrow = length(p), ncol = cols)
-      for (i in 1:cols) {
-        quants[, i] <- quantile(x[, i], probs = p, type = 5, 
-                                na.rm = TRUE)
-      }
-    }
-    else {
-      quants <- quantile(x, p, type = 5, na.rm = TRUE)
-    }
-    return(quants)
-  }
-
   #ClassParetoDensities = Kernels * matrix(1, length(Kernels), NrOfClasses)#ones(length(Kernels),NrOfClasses)
   ClassParetoDensitiesL=list()
   for(c in 1:NrOfClasses){
@@ -111,30 +90,7 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     } #    if PlotNorm==1
     if(PlotNorm==2){
       M=mean(Data[ClassInd], trim = 0.1, na.rm = TRUE)
-    #M = dbt.Statistics::meanrobust(Data[ClassInd]) # empirical Mean
-      stdrobust = function (x, lowInnerPercentile = 25) 
-      {
-        if (is.vector(x) || (is.matrix(x) && dim(x)[1] == 1)) 
-          dim(x) <- c(length(x), 1)
-        lowInnerPercentile <- max(1, min(lowInnerPercentile, 49))
-        hiInnerPercentile <- 100 - lowInnerPercentile
-        faktor <- sum(abs(qnorm(t(c(lowInnerPercentile, hiInnerPercentile)/100), 
-                                0, 1)))
-        std <- sd(x, na.rm = TRUE)
-        p <- c(lowInnerPercentile, hiInnerPercentile)/100
-        quartile <- prctile(x, p)
-        if (ncol(x) > 1) 
-          iqr <- quartile[2, ] - quartile[1, ]
-        else iqr <- quartile[2] - quartile[1]
-        shat <- c()
-        for (i in 1:ncol(x)) {
-          shat[i] <- min(std[i], iqr[i]/faktor, na.rm = TRUE)
-        }
-        dim(shat) <- c(1, ncol(x))
-        colnames(shat) <- colnames(x)
-        return(shat)
-      }
-    #S = dbt.Statistics::stdrobust(Data[ClassInd])  # empirical Sdev
+
       S=stdrobust(Data[ClassInd])
     Normaldist[,c] = dnorm(Kernels,M,S) # the Gaussian with the empirical parametrers
     #plot(Kernels,Normaldist,PlotSymbolGauss)
