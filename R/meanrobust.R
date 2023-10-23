@@ -1,4 +1,4 @@
-meanrobust <- function(x, p=0.1){
+Meanrobust=meanrobust=function(x, p=0.1){
 
   if(is.matrix(x)){
     mhat<-c()

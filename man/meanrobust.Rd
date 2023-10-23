@@ -1,4 +1,5 @@
-\name{meanrobust}
+\name{Meanrobust}
+\alias{Meanrobust}
 \alias{meanrobust}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Robust Empirical Mean Estimation }
@@ -6,7 +7,7 @@
   If the input is a matrix the mean value will be compute for every column.
 }
 \usage{
-meanrobust(x, p=0.1)
+Meanrobust(x, p=0.1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

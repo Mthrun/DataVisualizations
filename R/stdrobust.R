@@ -1,4 +1,4 @@
-stdrobust <- function(x,lowInnerPercentile=25){
+Stdrobust =stdrobust= function(x,lowInnerPercentile=25){
   prctile=function (x, p) 
   {
     if (length(p) == 1) {

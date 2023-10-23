@@ -1,4 +1,5 @@
-\name{stdrobust}
+\name{Stdrobust}
+\alias{Stdrobust}
 \alias{stdrobust}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Standard Deviation Robust }
@@ -7,7 +8,7 @@
 
 }
 \usage{
-stdrobust(x, LowInnerPercentile=25)
+Stdrobust(x, LowInnerPercentile=25)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,7 +23,9 @@ stdrobust(x, LowInnerPercentile=25)
 }
 \author{ Zornitsa Manolova }
 
-
+\seealso{\code{\link{sd}} 
+\code{\link{quantile}} 
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ std }
