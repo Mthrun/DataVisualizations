@@ -6,6 +6,7 @@ Stdrobust =stdrobust= function(x,lowInnerPercentile=25){
         p = p/100
       }
     }
+  
     if (is.matrix(x) & ncol(x) > 1) {
       cols <- ncol(x)
       quants <- matrix(0, nrow = length(p), ncol = cols)
@@ -20,7 +21,7 @@ Stdrobust =stdrobust= function(x,lowInnerPercentile=25){
     return(quants)
   }
   
-  if(is.vector(x) | (is.matrix(x) & dim(x)[1]==1)) dim(x)<-c(length(x),1)
+  if(is.vector(x) || (is.matrix(x) & dim(x)[1]==1)) dim(x)<-c(length(x),1)
   
   lowInnerPercentile<-max(1,min(lowInnerPercentile,49))
   hiInnerPercentile<- 100 - lowInnerPercentile
@@ -28,7 +29,7 @@ Stdrobust =stdrobust= function(x,lowInnerPercentile=25){
   faktor<-sum(abs(qnorm(c(lowInnerPercentile,hiInnerPercentile)/100,0,1)))
   std<-sd(x,na.rm=TRUE)
  
-  quartile<-prctile(x,c(lowInnerPercentile,hiInnerPercentile))  
+  quartile<-prctile(x,c(lowInnerPercentile,hiInnerPercentile)/100)  
   if (ncol(x)>1)
     iqr<-quartile[2,]-quartile[1,]
   else
