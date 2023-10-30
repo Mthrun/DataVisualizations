@@ -98,7 +98,7 @@ ClassErrorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanF
   sdrobust_hlp=function(x,na.rm){
     if(na.rm) x=x[is.finite(x)]
     
-    stdrobust(x)
+    Stdrobust(x)
   }
   if(missing(SDfun)) SDfun=sdrobust_hlp
   

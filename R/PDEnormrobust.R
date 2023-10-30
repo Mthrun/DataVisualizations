@@ -27,8 +27,8 @@ if(nCol>nRow)	Data <- t(Data)
 		
 
 pdeVal <- ParetoDensityEstimation(Data)
-m <- meanrobust(Data)
-s <- stdrobust(Data)
+m <- Meanrobust(Data)
+s <- Stdrobust(Data)
 
 if(missing(ylab)){
   ylab=paste('bl=PDE, mg=N(',round(m,1),',',round(s,1),')')

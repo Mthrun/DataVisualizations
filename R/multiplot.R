@@ -45,5 +45,5 @@ Multiplot <- function(..., Plotlist=NULL, ColNo=1, LayoutMat) {
       
     }
 
-  return(list(Plotlist=plots))
+  return(invisible(list(Plotlist=plots)))
 }

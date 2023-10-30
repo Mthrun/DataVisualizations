@@ -91,7 +91,7 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     if(PlotNorm==2){
       M=mean(Data[ClassInd], trim = 0.1, na.rm = TRUE)
 
-      S=stdrobust(Data[ClassInd])
+      S=Stdrobust(Data[ClassInd])
     Normaldist[,c] = dnorm(Kernels,M,S) # the Gaussian with the empirical parametrers
     #plot(Kernels,Normaldist,PlotSymbolGauss)
     }#   if PlotNorm==2
