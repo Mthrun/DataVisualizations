@@ -98,6 +98,8 @@ Further arguments for \code{ggplot2::ggplot},or  \code{plotly::plot_ly}, or \cod
 }
 
 \details{
+The mapping of colors to the labels of \code{Cls} is consecutive, i.e., the label with the smallest value in \code{Cls} gets the first color in \code{Colors}. The Colors are plotted in order from label with the highest number of points to the label with the lowest number of points beeing on top.
+
 Default is "\code{plotly}" if \code{Names} are \code{NULL}. However,  ggplot2 is preferable in case that \code{Names} parameter is used because overlapping text labels are avoided. In that case  the default is "\code{ggplot}". Note that ggplot2 options are currently slightly restricted. 
 
 For example, the function is usefull to see if temporal clustering has time dependent variations and for Hidden Markov Models (see Mthrun/RHmm on GitHub).
