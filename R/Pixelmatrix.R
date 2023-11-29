@@ -87,9 +87,9 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main,
     
     #dfm <- ddply(dfm, .(variable), transform,
     #             rescale = rescale(value))
-    #aes_string only works if you dont modify your features in ggplot2 (e.g. not logarithmize them)
+    #aes only works if you dont modify your features in ggplot2 (e.g. not logarithmize them)
     plt <-
-      ggplot(dfm, aes_string(y = 'id', x = 'variable', fill = 'value')) + geom_raster() +
+      ggplot(dfm, aes(y = .data$id, x = .data$variable, fill = .data$value)) + geom_raster() +
       scale_fill_gradientn(colours = heatC,na.value = 'black') +
       theme(
         panel.background = element_blank(),

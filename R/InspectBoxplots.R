@@ -45,7 +45,7 @@ InspectBoxplots=BoxplotData <- function(Data, Names,Means=TRUE){
   if (isTRUE(Means)) {
     plot <-
       ggplot(data = dataframe,
-             aes_string(x = "Variables", group = "Variables", y = "Values")) +
+             aes(x = .data$Variables, group = .data$Variables, y = .data$Values)) +
       geom_boxplot() +
       stat_summary(
         fun.y = 'mean',
@@ -57,7 +57,7 @@ InspectBoxplots=BoxplotData <- function(Data, Names,Means=TRUE){
   } else{
     plot <-
       ggplot(data = dataframe,
-             aes_string(x = "Variables", group = "Variables", y = "Values")) +
+             aes(x = .data$Variables, group = .data$Variables, y = .data$Values)) +
       geom_boxplot()
   }
   return(ggplotObj = plot+ theme(axis.text.x = element_text(angle = 90, hjust = 1)))

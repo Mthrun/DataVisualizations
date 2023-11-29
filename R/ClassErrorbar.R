@@ -120,8 +120,8 @@ ClassErrorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanF
   #   ggplot2::geom_point(ggplot2::aes(shape="Method", color="Method", size="Method"),position=pd, size=3)+
   #   ggplot2::scale_shape_manual(values=ClassShape)+
   #   ggplot2::scale_colour_manual(values =ClassCols)
-  ggobj=ggplot2::ggplot(df, ggplot2::aes_string(x="Xvalues", y="Yvalues", colour="Method", group="Method"))+geom_errorbar(data = df,ggplot2::aes_string(ymin="lower", ymax="upper",colour="Method"), lwd=Whisker_lwd,width=WhiskerWidth, position=pd)+
-    geom_point(ggplot2::aes_string(shape="Method", color="Method", size="Method"),position=pd, size=3)+
+  ggobj=ggplot2::ggplot(df, ggplot2::aes(x=.data$Xvalues, y=.data$Yvalues, colour=.data$Method, group=.data$Method))+geom_errorbar(data = df,ggplot2::aes(ymin=.data$lower, ymax=.data$upper,colour=.data$Method), lwd=Whisker_lwd,width=WhiskerWidth, position=pd)+
+    geom_point(ggplot2::aes(shape=.data$Method, color=.data$Method, size=.data$Method),position=pd, size=3)+
     scale_shape_manual(values=ClassShape)+
     scale_colour_manual(values =ClassCols)
   #setting labels and centering title

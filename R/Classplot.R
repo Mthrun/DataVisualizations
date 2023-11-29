@@ -237,11 +237,11 @@ Classplot = function(X, Y, Cls,
     #colMat <- grDevices::col2rgb(Colors)
     #hex=grDevices::rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3,]/255)
     
-    p <- ggplot2::ggplot(df, ggplot2::aes_string(x = "X",
-                                                 y = "Y",
-                                                 label = "Names",
-                                                 group="Cls",
-                                                 color="Colors"),...)+
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = .data$X,
+                                          y = .data$Y,
+                                          label = Names,
+                                          group = .data$Cls,
+                                          color = .data$Colors),...)+
       ggplot2::theme_bw()
     
     if(missing(pch)){ #black shape around circular points

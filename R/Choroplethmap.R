@@ -139,7 +139,7 @@ Please install the package which is defined in "Suggests".')
   else
     chorR6obj=choroplethr::Choropleth$new(PostalCodesShapes,df2)
   #plot the data
-  chorR6obj$ggplot_polygon = geom_polygon(aes_string(fill = 'value'), color = NAcolor)
+  chorR6obj$ggplot_polygon = geom_polygon(aes(fill = .data$value), color = NAcolor)
   chorR6obj$title = main
   chorR6obj$legend= legend
 

@@ -32,7 +32,7 @@ ShepardScatterPlot =Sheparddiagram=function(InputDists,OutputDists,xlab='Input D
   }
   df = data.frame("InDist" = InputDists[lower.tri(InputDists, diag = FALSE)], "OutDist" = OutputDists[lower.tri(OutputDists, diag = FALSE)],main=factor(main))
   
-  plt1 <- gPlot + geom_point(data = df, aes_string("x = InDist", "y = OutDist")) +
+  plt1 <- gPlot + geom_point(data = df, aes(x = .data$InDist, y = .data$OutDist)) +
     ylab(ylab)+xlab(xlab)+ggtitle(main)#+
     #geom_line(data = df, aes(x = InDist, y = InDist),color='red')
 if(isTRUE(fancy)){

@@ -34,7 +34,7 @@ ColorsVec=c(rep(Colors[1],length(Aind)),rep(Colors[2],length(Bind)),rep(Colors[3
 ABC_classes=c(rep('A',length(Aind)),rep('B',length(Bind)),rep('C',length(Cind)))
 DF=data.frame(X=X/length(SortedData)*100,Y=SortedData,ABC_classes=ABC_classes,ColorsVec=ColorsVec)
 
-ggobject=ggplot(data=DF, aes_string(x='X',y = 'Y',fill='ABC_classes')) + geom_bar(stat="identity")+ 
+ggobject=ggplot(data=DF, aes(x=.data$X, y=.data$Y, fill=.data$ABC_classes)) + geom_bar(stat="identity")+ 
   scale_fill_manual(values = Colors, name = "ABC Analysis")+
   ggtitle(main)+xlab(xlab)+ylab(ylab)
 print(ggobject)

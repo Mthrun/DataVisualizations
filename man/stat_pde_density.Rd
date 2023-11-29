@@ -95,7 +95,7 @@ miris <- reshape2::melt(iris)
 
 ggplot2::ggplot(miris, 
 
-mapping = ggplot2::aes_string(y = 'value', x = 'variable')) +
+mapping = ggplot2::aes(y = .data$value, x = .data$variable)) +
 
 ggplot2::geom_violin(stat = "PDEdensity")
 }

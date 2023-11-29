@@ -10,7 +10,7 @@ PDEnormrobust(Data,xlab='PDE',ylab,main='PDEnormrobust',
 }
 
 \arguments{
-  \item{data}{numeric vector, data to be plotted.}
+  \item{Data}{numeric vector, data to be plotted.}
   \item{xlab}{Optional,see plot}
   \item{ylab}{Optional,see plot}
   \item{main}{Optional,see plot}

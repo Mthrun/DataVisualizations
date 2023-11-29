@@ -127,9 +127,9 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   }
   plt <- ggplot()
   if(PlotNorm>0){
-    plt <- plt + geom_line(data = normsm, mapping = aes_string(x='kernels', y='value', color='variable'), linetype = 1, size = lwd)
+    plt <- plt + geom_line(data = normsm, mapping = aes(x=.data$kernels, y=.data$value, color=.data$variable), linetype = 1, size = lwd)
   }
-  plt <- plt + geom_line(data=cpdm, aes_string(x='kernels', y='PDE', color='variable'),size = lwd)
+  plt <- plt + geom_line(data=cpdm, aes(x=.data$kernels, y=.data$PDE, color=.data$variable),size = lwd)
   plt <- plt + ggtitle(main) +
     theme(plot.title = element_text(lineheight = .8, face="bold"))
   plt <- plt + ylab(ylab) + xlab(xlab)

@@ -81,9 +81,9 @@ PDEplot <- function(Data,paretoRadius=0,weight=1,kernels=NULL,LogPlot=F,PlotIt=T
     plt=ggplot2::ggplot()
   }
   if(isTRUE(xpoints)){
-    plt <- plt + ggplot2::geom_point(data = df, ggplot2::aes_string(x = "kernels", y = "density"), colour = color)
+    plt <- plt + ggplot2::geom_point(data = df, ggplot2::aes(x = .data$kernels, y = .data$density), colour = color)
   }else{
-    plt <- plt + ggplot2::geom_line(data = df, ggplot2::aes_string(x = "kernels", y = "density"), colour = color,size=lwd)  
+    plt <- plt + ggplot2::geom_line(data = df, ggplot2::aes(x = .data$kernels, y = .data$density), colour = color,size=lwd)  
   }
   plt <- plt  + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)+ggplot2::ylim(c(0,1.05*max(df$density)))
 

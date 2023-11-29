@@ -8,12 +8,13 @@
 
 }
 \usage{
-Stdrobust(x, LowInnerPercentile=25)
+Stdrobust(x, lowInnerPercentile=25,na.rm=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{ a numerical matrix }
-  \item{lowInnerPercentile=25}{ optianal; standard deviation aproximated by percentilinterval.}
+  \item{lowInnerPercentile}{optional; default=25; standard deviation aproximated by percentilinterval.}
+      \item{na.rm}{	a boolean evaluating to TRUE or FALSE indicating whether all non finite values should be stripped before the computation proceeds.}
 }
 
 \value{
