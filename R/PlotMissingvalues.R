@@ -81,7 +81,7 @@ PlotMissingvalues = PlotMissingValues = function(Data, Names,
       blank=c(blank,sum(as.vector(as.matrix(Data[,i]))==" ",na.rm = T))
     }
   }
-  if(missing(Names) | is.null(Names)){
+  if(missing(Names) || is.null(Names)){
     if(!is.null(colnames(Data))){
       Names = colnames(Data)
     }else{

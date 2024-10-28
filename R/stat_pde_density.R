@@ -1,6 +1,7 @@
 stat_pde_density <- function(mapping = NULL,
                              data = NULL,
                              geom = "violin",
+                             bounds = bounds,
                              position = "dodge",
                              ...,
                              trim = TRUE, #enden des violins werden korrekt angezeigt und nicht ueber den wertebereich fortgesetzt
@@ -23,6 +24,7 @@ stat_pde_density <- function(mapping = NULL,
       trim = trim,
       scale = scale,
       na.rm = na.rm,
+      bounds = bounds,
       ...
     )
   )

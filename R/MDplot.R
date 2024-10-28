@@ -476,10 +476,15 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
   if(fillDifferentColors) {
-    plot=plot + geom_violin(stat = "PDEdensity",scale=MDscaling,size=LineSize,trim = TRUE,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)), legend.position = "none")
+    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, size = LineSize,
+                            trim = TRUE, colour = LineColor) + 
+      theme(axis.text.x = element_text(size=rel(1.2)), legend.position = "none")
     plot=plot + scale_fill_manual(values=Fill)#+coord_flip()
   } else {
-    plot=plot + geom_violin(stat = "PDEdensity",scale=MDscaling,size=LineSize,trim = TRUE,fill=Fill,colour=LineColor) + theme(axis.text.x = element_text(size=rel(1.2)))
+    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, size = LineSize,
+                            bounds = c(0, 2),
+                            trim = TRUE, fill = Fill, colour = LineColor) +
+      theme(axis.text.x = element_text(size=rel(1.2)))
   }
   if(any(Npervar<QuantityThreshold) | any(NUniquepervar<UniqueValuesThreshold)){
     DataJitter[,Rangfolge]

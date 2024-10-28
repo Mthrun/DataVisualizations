@@ -1,4 +1,4 @@
-Stdrobust =stdrobust= function(x,lowInnerPercentile=25,na.rm=TRUE){
+Stdrobust= function(x,lowInnerPercentile=25,na.rm=TRUE){
   prctile=function (x, p,na.rm=FALSE) 
   {
     if (length(p) == 1) {

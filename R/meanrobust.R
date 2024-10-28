@@ -1,5 +1,7 @@
-Meanrobust=meanrobust=function(x, p=0.1,na.rm=TRUE){
-
+Meanrobust=function(x, p=10,na.rm=TRUE){
+  if(p>=1){
+    p=p/100
+  }
   if(is.matrix(x)){
     mhat<-c()
     for(i in 1:dim(x)[2]){

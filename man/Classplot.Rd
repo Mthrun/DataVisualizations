@@ -19,7 +19,9 @@ LineColor = NULL, LineWidth = 1, LineType  = NULL,
 
 Showgrid  = TRUE, pch,  AnnotateIt = FALSE, SaveIt = FALSE, 
 
-Nudge_x_Names = 0, Nudge_y_Names = 0, Legend = "", \dots)
+Nudge_x_Names = 0, Nudge_y_Names = 0, Legend = "", SmallClassesOnTop = TRUE,
+
+\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -87,6 +89,9 @@ Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Na
 }
   \item{Nudge_y_Names}{
 Optional, numerical scalar, for \code{Plotter} "\code{ggplot}" only, if \code{Names} are set, moves them consistently respective to y-axis within units of y-axis
+}
+  \item{SmallClassesOnTop}{
+Optional, boolean, decide if small classes should be plotted on top for visibility (default setting) or not.
 }
   \item{Legend}{
 Optional, if argument is not missing, character string defining the title of the legend which automatically enables the legend

@@ -1,5 +1,5 @@
 
-Multiplot <- function(..., Plotlist=NULL, ColNo=1, LayoutMat) {
+Multiplot <- function(..., Plotlist=NULL, ColNo=1, LayoutMat,Plotter="native") {
 
   if (!requireNamespace('grid', quietly = TRUE)) {
     message(
@@ -24,7 +24,32 @@ Multiplot <- function(..., Plotlist=NULL, ColNo=1, LayoutMat) {
     return(plots[[1]])
   } 
   
-  
+
+  if(tolower(Plotter)=="ggplot2"){
+    if (!requireNamespace('gridExtra', quietly = TRUE)) {
+      message(
+        'Subordinate package (gridExtra) is missing. No computations are performed.
+            Please install the package which is defined in "Suggests".'
+      )
+      return(
+        list(
+          Plotlist = "Subordinate package (gridExtra) is missing.
+                Please install the package which is defined in 'Suggests'."
+        )
+      )
+    }
+    if(missing(LayoutMat)){
+      p <- do.call(gridExtra::grid.arrange, c(plots, list(ncol = ColNo)))
+    }else{
+      p <- do.call(gridExtra::grid.arrange, c(plots, list(layout_matrix = LayoutMat)))
+    }
+ 
+    #https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html
+    
+    #end for plotte ggplot2
+  }else if(tolower(Plotter)=="native"){
+    
+
   # If LayoutMat is missing,  define the panel estimating int via ColNo
   if (missing(LayoutMat)) {
     LayoutMat <- matrix(seq(1, ColNo * ceiling(numPlots/ColNo)),
@@ -46,4 +71,11 @@ Multiplot <- function(..., Plotlist=NULL, ColNo=1, LayoutMat) {
     }
 
   return(invisible(list(Plotlist=plots)))
+    #end ploter native
+  }else{
+    #do nothing special if only one sublpo
+    warning("Multiplot: Please select either native or ggplot2 as Plotter")
+      return(NULL)
+  } 
+  
 }

@@ -1,4 +1,4 @@
-CombineCols=function(...){
+CombineCols=cbind_fill=function(...,na.rm=FALSE){
   
   buffer <- function(x,
                      length.out = len(x),
@@ -32,7 +32,7 @@ CombineCols=function(...){
     return(object)
   }
   
-  cbind_fill <- function(..., fill = NULL){
+  cbind_fill_internal <- function(..., fill = NULL){
     #author: Craig Varrichio
     inputs <- list(...)
     inputs <- lapply(inputs, vert)
@@ -45,5 +45,8 @@ CombineCols=function(...){
              preserveClass = FALSE)
     return(Reduce(cbind.data.frame, bufferedInputs))
   }
-  return(cbind_fill(...,fill = NaN))
+  if(isFALSE(na.rm))
+    return(cbind_fill_internal(...,fill = NaN))
+  else
+    return(cbind_fill_internal(...,fill = 0))
 }

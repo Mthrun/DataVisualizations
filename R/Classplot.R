@@ -18,6 +18,7 @@ Classplot = function(X, Y, Cls,
                      Nudge_x_Names = 0,
                      Nudge_y_Names = 0,
                      Legend = "",
+                     SmallClassesOnTop = TRUE,
                      ...){
   
   if(missing(Cls)) Cls=rep(1,length(X))
@@ -37,7 +38,6 @@ Classplot = function(X, Y, Cls,
       warning('X and pch have to have the same length. Setting "pch=20"')
     }
   }
- 
   
   if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
     noNaNInd <- which(is.finite(X)&is.finite(Y))
@@ -66,17 +66,21 @@ Classplot = function(X, Y, Cls,
   if(is.null(Colors)){
     mc=length(uu)
     if(is.null(Names))
-    Colors=DataVisualizations::DefaultColorSequence[1:mc]
+      Colors=DataVisualizations::DefaultColorSequence[1:mc]
     else
-      Colors=DataVisualizations::DefaultColorSequence[-2][1:mc] #no yellow
+      Colors=DataVisualizations::DefaultColorSequence[-2][1:mc] #no yellow/gold
   }
   
   ##Make sure that small classes are plot last,i.e.,
   #if they overlap in areas with bigger classes
   # they are plottet on the top
   # therefore still visible
-  cp=table(Cls)
-  indBig2Small=order(cp,decreasing = T)
+  cp = table(Cls)
+  if(isTRUE(SmallClassesOnTop)){
+    indBig2Small = order(cp, decreasing = T)
+  }else{
+    indBig2Small = 1:length(cp)
+  }
 
   uug=as.numeric(names(cp))
   if(!any(!is.finite(uug))){#all class names are convertivle to numeric
@@ -117,14 +121,17 @@ Classplot = function(X, Y, Cls,
     }
     
     u=unique(Cls)
-    uu=sort(u,decreasing = F)
+    #uu=sort(u,decreasing = F)
   }#otherwise some class was not convertable to numeric
 
-  
-  
+  # print(u_names)
+  # print(u)
+  # print(Colors)
+  # print(uu)
+  # 
   ColorVec=Cls*0
   k=1
-  for(i in uu){
+  for(i in u){
     ColorVec[Cls==i]=Colors[k]
     k=k+1
   }
@@ -171,9 +178,9 @@ Classplot = function(X, Y, Cls,
   }
    
   if(!is.null(Names)){
-    UniqueNames = unique(Names)
-    for(i in 1:length(UniqueNames)){
-      DataIdx = which(Names == UniqueNames[i])
+    UniqueNames = u_names
+    for(i in 1:length(u)){
+      DataIdx = which(Cls == u[i])
       p = plotly::add_markers(p = p,
                               x = X[DataIdx],
                               y = Y[DataIdx],
@@ -230,7 +237,7 @@ Classplot = function(X, Y, Cls,
     if(is.null(Names)){
       df$Names = Cls
     }
-   #    
+    #
 
     df$Colors=ColorVec
     
@@ -292,7 +299,12 @@ Classplot = function(X, Y, Cls,
   }
   plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab = ylab,type='p',cex=Size,pch=pch,...)
   if(!missing(Legend)){
-    legend("topright",title=Legend,legend=unique(Cls),col=unique(ColorVec),pch=unique(pch),box.lty=0)
+    if(is.null(Names)){
+      legend("topright",title=Legend,legend=unique(Cls),col=unique(ColorVec),pch=unique(pch),box.lty=0)
+    }else{
+      legend("topright",title=Legend,legend=u_names,col=unique(ColorVec),pch=unique(pch),box.lty=0)
+    }
+
   }
 }
 
