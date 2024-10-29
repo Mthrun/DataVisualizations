@@ -1,4 +1,4 @@
-ClassBarPlot = function(Values, Class, Deviation, Names,
+ClassBarPlot = function(Values, Cls, Deviation, Names,
                         ylab = "Values", xlab = "Instances", PlotIt = TRUE){
   # Classbarplot(Values, Class)
   # Classbarplot(Values, Class, Deviation, Names)
@@ -11,7 +11,7 @@ ClassBarPlot = function(Values, Class, Deviation, Names,
   # INPUT
   # Values[1:n]        Numeric vector with values (y-axis) in matching order to 
   #                    Class, Deviation and Names
-  # Class[1:n]         Numeric vector of classes in matching order to Values
+  # Cls[1:n]           Numeric vector of classes in matching order to Values
   #                    and Deviation and Names
   # 
   # OPTIONAL
@@ -31,19 +31,25 @@ ClassBarPlot = function(Values, Class, Deviation, Names,
   # Author: QMS October 2024
   # 
   
-  if(length(Values) != length(Class)){
-    stop("Classbarplot.R: Length of vectors Values and Class must equal.")
+  if(!requireNamespace("dplyr")){
+    stop("Classbarplot.R: Please install dplyr in order to use Classbarplot.")
   }
   
-  tmpDF   = as.data.frame(cbind(Values, Class))
-  tmpVar1 = as.vector(tmpDF %>% group_by(Class) %>% summarise(total_count=n()))
+  if(length(Values) != length(Cls)){
+    stop("Classbarplot.R: Length of vectors Values and Cls must equal.")
+  }
+  
+  `%>%` <- dplyr::`%>%`
+  
+  tmpDF   = as.data.frame(cbind(Values, Cls))
+  tmpVar1 = as.vector(tmpDF %>% dplyr::group_by(Cls) %>% dplyr::summarise(total_count = dplyr::n()))
   tmpVar2 = tmpVar1$total_count
   
   if(!all(tmpVar2 == tmpVar2[1])){
     stop("Classbarplot.R: Provide values for each class and each instance on the x-axis.")
   }
   
-  UCls      = unique(Class)
+  UCls      = unique(Cls)
   NumCls    = length(UCls)
   ColNaming = c("Values", "NamesX", "Names", "Class")
   

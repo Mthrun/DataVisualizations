@@ -26,10 +26,8 @@ PDEnormrobust <- function(Data,xlab='PDE',ylab,main='PDEnormrobust',
 # ParetoDensity      the PDE(x)
 # ParetoRadius       the ParetoRadius used for the plot
 # Pars               Named vector of robustly estimatated mean, standard deviation, 1.96*SD and 2.576*SD
-Data <- as.matrix(Data);	nRow <- nrow(Data); nCol <- ncol(Data)
-if(nCol>nRow)	Data <- t(Data)
-		
 
+		
 pdeVal <- ParetoDensityEstimation(Data)
 m <- Meanrobust(Data,p = p_mean/100)
 s <- Stdrobust(Data,lowInnerPercentile = p_sd)
@@ -53,11 +51,18 @@ normaldist <- dnorm(pdeVal$kernels,m,s) #the Gaussian with the empirical paramet
 		}
 	}
 
-Pars=c(m,s,s*1.96,s*2.576)
-names(Pars)=c("Mean","SD","Sgima2","Sigma3")
+
+ind_sigma2=which(pdeVal$kernels<=m+1.96*s &pdeVal$kernels>=m-1.96*s)
+area_sigma2 <- pracma::trapz(pdeVal$kernels[ind_sigma2], pdeVal$paretoDensity[ind_sigma2])
+
+ind_sigma3=which(pdeVal$kernels<=m+2.576*s &pdeVal$kernels>=m-2.576*s)
+area_sigma3 <- pracma::trapz(pdeVal$kernels[ind_sigma3], pdeVal$paretoDensity[ind_sigma3])
+
+Pars=c(m,s,s*1.96,s*2.576,area_sigma2*100,area_sigma3*100)
+names(Pars)=c("Mean","SD","Sgima2","Sigma3","EstPercData_Sigma2","EstPercData_Sigma3")
 
 invisible(list(Kernels=pdeVal$kernels,ParetoDensity=pdeVal$paretoDensity,
                ParetoRadius=pdeVal$paretoRadius,Normaldist=normaldist,Pars=Pars)) 
 
- }# end function pdenormrobust
+}# end function pdenormrobust
 

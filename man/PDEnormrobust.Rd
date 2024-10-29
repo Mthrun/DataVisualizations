@@ -27,13 +27,25 @@ PDEnormrobust(Data,xlab='PDE',ylab,main='PDEnormrobust',
 	  \item{\dots}{Further arguments for plot}
 	  
 }
+\details{
+Within \code{Mark2Sigma} 95 percent of data should be contained if distribution is Gaussian
 
+Within \code{Mark3Sigma} 99 percent of data should be contained if distribution is Gaussian
+   
+The 3sgima rule is usually defined as M+-3SD containing 99.7 percent of data but to simplify, the input parameter name is called \code{Mark3Sigma} instead \code{Mark2comma576Sigma}, the same reason applies to the output parameter \code{Sigma3}.
+
+}
 \value{
   \item{Kernels }{numeric vector. The x points of the PDE function.}
   \item{ParetoDensity }{estimated pdf of data, numeric vector,  the PDE(x).}
   \item{ParetoRadius }{numeric value, the Pareto Radius used for the plot.}
   \item{Normaldist }{pdf based on rubstly estimated parameters}
-  \item{Pars }{  Named vector of robustly estimatated \code{Mean}, standard deviation \code{SD}, \code{Sigma2}=1.96*SD and \code{Sigma3}=2.576*SD}
+  \item{Pars }{  Named vector of robustly estimatated \code{Mean}, standard deviation \code{SD}, \code{Sigma2}=1.96*SD and \code{Sigma3}=2.576*SD, \code{EstPercData_Sigma2}, \code{EstPercData_Sigma3}}
 
+}
+
+\examples{
+data(MTY)
+PDEnormrobust(unname(MTY))
 }
 \author{Michael Thrun}

@@ -7,6 +7,7 @@ export(ClassPDEplot)
 export(ClassMDplot)
 export(ClassErrorbar)
 export(Classplot)
+export(ClassBarPlot)
 export(ClassPDEplotMaxLikeli)
 export(Crosstable)
 export(Choroplethmap)
@@ -74,6 +75,8 @@ importFrom("stats", "ecdf", "dist", "runif", "median", "quantile", "qqnorm", "en
            "qnorm", "complete.cases", "na.omit", "cor", "dnorm", "sd", "anova", "qqplot", "residuals.lm",
            "pnorm", "rnorm","ks.test", "qt")
 importFrom("utils", "data", "head", "tail")
+
+
 
 
 
