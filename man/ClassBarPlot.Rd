@@ -19,6 +19,8 @@ Deviation and Names.}
 and Cls and Names.}
 \item{Names}{[1:n] Character or numeric vector of instances (x-axis) in matching
 order to Values and Cls and Deviation.}
+\item{ClassColors}{Character vector of color names stating either the colors
+for each class or defining colors matching the class vector cls.}
 \item{ylab}{Character stating y label.}
 \item{xlab}{Character stating x label.}
 \item{PlotIt}{Logical value indicating visual output TRUE => create visual

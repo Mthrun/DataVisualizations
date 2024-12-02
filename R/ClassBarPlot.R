@@ -1,4 +1,4 @@
-ClassBarPlot = function(Values, Cls, Deviation, Names,
+ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
                         ylab = "Values", xlab = "Instances", PlotIt = TRUE){
   # Classbarplot(Values, Class)
   # Classbarplot(Values, Class, Deviation, Names)
@@ -51,19 +51,41 @@ ClassBarPlot = function(Values, Cls, Deviation, Names,
   
   UCls      = unique(Cls)
   NumCls    = length(UCls)
-  ColNaming = c("Values", "NamesX", "Names", "Class")
+  ColNaming = c("Values", "NamesX", "Names", "Class", "ClassColors")
   
   if(!missing(Names)){
-    if(length(Names) != length(Values)){
+    if(length(Names) != table(Cls)[1]){
       stop("Classbarplot.R: Length of vectors Values and Names must equal.")
     }
     NamesX = rep(1:tmpVar2[1], NumCls)
+    tmpM = max(nchar(NamesX))
+    
+    NamesX = as.numeric(sapply(NamesX, function(x, tmpM){
+      if(nchar(x) < tmpM){
+        x = paste0(rep("0", tmpM - nchar(x)), x)
+      }
+      x = paste0("1", x)
+    }, tmpM))
+    
   }else{
     Names  = rep(1:tmpVar2[1], NumCls)
     NamesX = Names
   }
   
-  MatCBP = cbind(Values, NamesX, Names, Class)
+  if(!missing(ClassColors)){
+    if((length(ClassColors) != length(Cls)) & (length(ClassColors) != NumCls)){
+      stop("asdf: Parameter ClassColors must either define the colors for each
+           class or match the colors for each class in the Cls vector.")
+    }
+    if(length(ClassColors) == NumCls){
+      ClassColors = ClassColors[Cls]
+    }
+  }else{
+    Colors      = DefaultColorSequence[1:NumCls]
+    ClassColors = Colors[Cls]
+  }
+  
+  MatCBP = cbind(Values, NamesX, Names, Cls, ClassColors)
   
   if(!missing(Deviation)){
     MatCBP    = cbind(MatCBP, Deviation)
@@ -73,12 +95,20 @@ ClassBarPlot = function(Values, Cls, Deviation, Names,
   # DataFrame:
   # as.data.frame(cbind(Values, Class))
   dfCBP            = as.data.frame(MatCBP)
+
   colnames(dfCBP)  = ColNaming
   row.names(dfCBP) = NULL
   XTicks           = Names[1:tmpVar2[1]]
-  XAxis            = 1:tmpVar2[1]
+  XAxis            = NamesX[1:tmpVar2[1]] # 1:tmpVar2[1]
   
-  p = ggplot(dfCBP, aes(x = NamesX, y = Values, group = Class, fill = Class)) +
+  dfCBP$Values = as.numeric(dfCBP$Values)
+  if(!is.null(dfCBP$Deviation)){
+    dfCBP$Deviation = as.numeric(dfCBP$Values)
+  }
+  
+  #print(colnames(dfCBP))
+  
+  p = ggplot(dfCBP, aes(x = NamesX, y = Values, group = Class, fill = ClassColors)) +
     geom_bar(stat = 'identity', position = 'dodge', alpha = 0.5)
   
   if(!missing(Deviation)){
@@ -92,7 +122,7 @@ ClassBarPlot = function(Values, Cls, Deviation, Names,
                                      size = 8, angle = 0),
           axis.text.y = element_text(face = "bold", color = "black", 
                                      size = 14, angle = 0)) +
-    scale_x_continuous(breaks = XAxis, labels = XTicks) +
+    scale_x_discrete(breaks = XAxis, labels = XTicks) +
     ylab(ylab) + xlab(xlab)
   
   if(isTRUE(PlotIt)){

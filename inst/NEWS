@@ -1,7 +1,10 @@
-Version 1.3.3 (GitHub, 2023-10-28)
+Version 1.3.3 (GitHub, 2023-12-02)
 	o Classplot plots now small classes on top, if boolean SmallClassesOnTop is set true
 	o Meanrobust and Stdrobust accept now both trim parameters in percent
 	o PDEnormrobust input parameters extended to set two and three sigma environment 
+	o ParetoDensityEstimation warnings corrected if data exists outside of user set kernels
+
+
 
 Version 1.3.2 (CRAN, 2023-10-10)
 	o ClassMDplot now allows to set the color if each violin
