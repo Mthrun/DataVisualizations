@@ -47,6 +47,8 @@ The 3sgima rule is usually defined as M+-3SD containing 99.7 percent of data but
 
 \examples{
 data(MTY)
+\donttest{
 PDEnormrobust(unname(MTY))
+}
 }
 \author{Michael Thrun}
