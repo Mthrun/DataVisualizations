@@ -2,7 +2,7 @@
 \alias{ROC}
 \title{ROC plot}
 \description{
-ROC
+Receiver operating characteristic curve
 }
 \usage{
 ROC(Data, Cls, Names, Colors)
@@ -20,9 +20,9 @@ ROC.}
 }
 \author{Quirin Stier}
 \examples{
-\donttest{
+
 Data = runif(1000,0,1)
 Cls  = sample(c(0,1), 1000, replace = TRUE)
 ROC(Data, Cls)
-}
+
 }

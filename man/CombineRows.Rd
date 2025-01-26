@@ -1,6 +1,6 @@
 \name{CombineRows}
 \alias{CombineRows}
-\alias{cbind_fill}
+\alias{rbind_fill}
 \title{
 Combine matrices of various lengths
 }

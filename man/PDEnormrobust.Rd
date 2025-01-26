@@ -19,6 +19,7 @@ PDEnormrobust(Data,xlab='PDE',ylab,main='PDEnormrobust',
   \item{main}{Optional,see plot}
   \item{PlotSymbolPDE}{line color pdf}
 	\item{PlotSymbolGauss}{line color robust gauss}
+	\item{PlotIt}{TRUE: shows plot}
 	\item{Mark2Sigma}{ TRUE: sets to vertical lines marking data outside M+-1.96SD } 
 	\item{Mark3Sigma}{TRUE: sets to vertical lines marking data outside M+-2.576SD} 
 	\item{p_mean}{scalar between 1-99, percent of the top- and bottomcut from x} 

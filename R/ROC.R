@@ -9,6 +9,10 @@ ROC = function(Data, Cls, Names = NULL, Colors = NULL){
   # OUTPUT a list of
   # plot               plotly object
   #
+  if(!requireNamespace("ROCit")){
+    warning("ROC.R: Please install ROCit in order to use ROC().")
+    return("ROC.R: Please install ROCit in order to use ROC().")
+  }
   
   if(is.null(Data)){
     stop("Data is not given.")

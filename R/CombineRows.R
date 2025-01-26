@@ -52,7 +52,10 @@ CombineRows=rbind_fill=function(...,na.rm=FALSE){
 
     fill_up = fill_up[, order(colnames(fill_up), decreasing = F)]
     PatternMatrix = PatternMatrix[, order(colnames(PatternMatrix), decreasing = F)]
-    
+
+    if(is.vector(fill_up))
+      fill_up=t(as.matrix(fill_up))
+
     PatternMatrix = rbind(PatternMatrix, fill_up[,1:ncol(PatternMatrix)])
   }
   

@@ -1,11 +1,11 @@
-Version 1.3.3 (GitHub, 2023-12-02)
+Version 1.3.3 (CRAN, 2025-01-26)
 	o Classplot plots now small classes on top, if boolean SmallClassesOnTop is set true
 	o Meanrobust and Stdrobust accept now both trim parameters in percent
 	o PDEnormrobust input parameters extended to set two and three sigma environment 
 	o ParetoDensityEstimation warnings corrected if data exists outside of user set kernels
-
-
-
+	o ClassBarPlot function plots values for each class and instance as bar plot with optional error deviation
+	o ROC function plots the receiver operating characteristic curve in plotly
+	
 Version 1.3.2 (CRAN, 2023-10-10)
 	o ClassMDplot now allows to set the color if each violin
 	o Fanplot and Piechart: changed color palette

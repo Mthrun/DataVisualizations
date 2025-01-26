@@ -42,10 +42,11 @@ If the plotting backend does support it, this will return a handle for the gener
 }
 \examples{
 
-\dontshow{
+\dontrun{
 data("Lsun3D")
 Data=Lsun3D$Data
-zplot(Data[,1],Data[,2],Data[,3])
+if(exists("zplot", where = asNamespace("DataVisualizations")))
+      DataVisualizations:::zplot(Data[,1],Data[,2],Data[,3])
 }
 }
 \author{

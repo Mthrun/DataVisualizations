@@ -1,12 +1,16 @@
 \name{Multiplot}
 \alias{Multiplot}
 \title{Plot multiple ggplots objects in one panel}
-\usage{Multiplot(..., Plotlist=NULL, ColNo=1, LayoutMat)}
+\usage{Multiplot(..., Plotlist=NULL, ColNo=1, LayoutMat,Plotter =
+                    "native")}
 \arguments{
 \item{...}{ multiple ggplot objects to be plotted}
 \item{Plotlist}{Optional: list filled with ggplot objects to be plotted}
 \item{ColNo}{Number of columns in layout}
 \item{LayoutMat}{A matrix specifying the layout. If present, 'ColNo' is ignored.}
+  \item{Plotter}{
+Optional, either "\code{ggplot}", or "\code{native}"
+}
 }
 \value{List with
 Plotlist

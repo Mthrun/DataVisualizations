@@ -36,7 +36,7 @@ export(MDplot)
 export(MDplot4multiplevectors)
 export(Multiplot)
 export(OptimalNoBins)
-export(OpposingViolinBiclassPlot)
+
 export(Pixelmatrix)
 export(ParetoDensityEstimation)
 export(ParetoRadius)
@@ -61,7 +61,6 @@ export(Stdrobust)
 export(RobustNormalization)
 export(RobustNorm_BackTrafo)
 export(Worldmap)
-export(zplot)
 
 import(ggplot2)
 import(Rcpp)
@@ -75,7 +74,7 @@ importFrom("stats", "ecdf", "dist", "runif", "median", "quantile", "qqnorm", "en
            "qnorm", "complete.cases", "na.omit", "cor", "dnorm", "sd", "anova", "qqplot", "residuals.lm",
            "pnorm", "rnorm","ks.test", "qt")
 importFrom("utils", "data", "head", "tail")
-
+importFrom("stats", "aggregate")
 
 
 

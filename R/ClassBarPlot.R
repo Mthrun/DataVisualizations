@@ -31,20 +31,20 @@ ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
   # Author: QMS October 2024
   # 
   
-  if(!requireNamespace("dplyr")){
-    stop("Classbarplot.R: Please install dplyr in order to use Classbarplot.")
-  }
-  
+
   if(length(Values) != length(Cls)){
     stop("Classbarplot.R: Length of vectors Values and Cls must equal.")
   }
+  Class=sort(unique(Cls))
   
-  `%>%` <- dplyr::`%>%`
+  # Combine Values and Cls into a data frame
+  tmpDF <- data.frame(Values, Cls)
   
-  tmpDF   = as.data.frame(cbind(Values, Cls))
-  tmpVar1 = as.vector(tmpDF %>% dplyr::group_by(Cls) %>% dplyr::summarise(total_count = dplyr::n()))
-  tmpVar2 = tmpVar1$total_count
+  # Group by Cls and calculate total count
+  tmpVar1 <- aggregate(. ~ Cls, data = tmpDF, FUN = function(x) length(x))
   
+  # Extract total counts
+  tmpVar2 <- tmpVar1$Values
   if(!all(tmpVar2 == tmpVar2[1])){
     stop("Classbarplot.R: Provide values for each class and each instance on the x-axis.")
   }
@@ -81,7 +81,7 @@ ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
       ClassColors = ClassColors[Cls]
     }
   }else{
-    Colors      = DefaultColorSequence[1:NumCls]
+    Colors      = DataVisualizations::DefaultColorSequence[1:NumCls]
     ClassColors = Colors[Cls]
   }
   

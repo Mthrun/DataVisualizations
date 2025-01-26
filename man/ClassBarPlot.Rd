@@ -7,8 +7,9 @@ deviation, e.g., mean values of features depending on class with standard
 deviation.
 }
 \usage{
-ClassBarPlot(Values, Cls, Deviation, Names, ylab = "Values",
-xlab = "Instances", PlotIt = TRUE)
+ClassBarPlot(Values, Cls, Deviation, Names, ClassColors,
+
+            ylab = "Values", xlab = "Instances", PlotIt = TRUE)
 }
 \arguments{
 \item{Values}{[1:n] Numeric vector with values (y-axis) in matching order to 
@@ -33,29 +34,32 @@ ggplot2 object
 Quirin Stier
 }
 \examples{
+# Compute means and counts
+tmpVar1 <- aggregate(Sepal.Length ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
+tmpVar2 <- aggregate(Sepal.Width ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
+tmpVar3 <- aggregate(Petal.Length ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
+tmpVar4 <- aggregate(Petal.Width ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
 
-library(ggplot2)
+# Extract mean and count
+tmpVar1_mean <- tmpVar1$Sepal.Length[, "mean"]
+tmpVar2_mean <- tmpVar2$Sepal.Width[, "mean"]
+tmpVar3_mean <- tmpVar3$Petal.Length[, "mean"]
+tmpVar4_mean <- tmpVar4$Petal.Width[, "mean"]
 
-if(require(dplyr)){
-  tmpVar1 = iris %>% group_by(Species) %>% summarise(mean = mean(.data[["Sepal.Length"]]), n = n())
-  tmpVar2 = iris %>% group_by(Species) %>% summarise(mean = mean(.data[["Sepal.Width"]]), n = n())
-  tmpVar3 = iris %>% group_by(Species) %>% summarise(mean = mean(.data[["Petal.Length"]]), n = n())
-  tmpVar4 = iris %>% group_by(Species) %>% summarise(mean = mean(.data[["Petal.Width"]]), n = n())
-  
-  tmpVar5 = iris %>% group_by(Species) %>% summarise(sd = sd(.data[["Sepal.Length"]]), n = n())
-  tmpVar6 = iris %>% group_by(Species) %>% summarise(sd = sd(.data[["Sepal.Width"]]), n = n())
-  tmpVar7 = iris %>% group_by(Species) %>% summarise(sd = sd(.data[["Petal.Length"]]), n = n())
-  tmpVar8 = iris %>% group_by(Species) %>% summarise(sd = sd(.data[["Petal.Width"]]), n = n())
-  
-  Values    = c(tmpVar1$mean, tmpVar2$mean, tmpVar3$mean, tmpVar4$mean)
-  Class     = rep(1:3, 4)
-  Deviation = c(tmpVar5$sd, tmpVar6$sd, tmpVar7$sd, tmpVar8$sd)
+# Compute standard deviations
+tmpVar5 <- aggregate(Sepal.Length ~ Species, data = iris, FUN = sd)
+tmpVar6 <- aggregate(Sepal.Width ~ Species, data = iris, FUN = sd)
+tmpVar7 <- aggregate(Petal.Length ~ Species, data = iris, FUN = sd)
+tmpVar8 <- aggregate(Petal.Width ~ Species, data = iris, FUN = sd)
+
+# Combine results
+Values <- c(tmpVar1_mean, tmpVar2_mean, tmpVar3_mean, tmpVar4_mean)
+Class <- rep(1:3, 4)
+Deviation <- c(tmpVar5$Sepal.Length, tmpVar6$Sepal.Width, tmpVar7$Petal.Length, tmpVar8$Petal.Width)
   
   if(length(Values) == length(Class)){
     ClassBarPlot(Values = Values, Cls = Class, Deviation = Deviation)
   }
   
-}
-
 }
 \keyword{ClassBarPlot}% use one of  RShowDoc("KEYWORDS")
