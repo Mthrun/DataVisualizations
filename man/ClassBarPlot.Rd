@@ -35,10 +35,14 @@ Quirin Stier
 }
 \examples{
 # Compute means and counts
-tmpVar1 <- aggregate(Sepal.Length ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
-tmpVar2 <- aggregate(Sepal.Width ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
-tmpVar3 <- aggregate(Petal.Length ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
-tmpVar4 <- aggregate(Petal.Width ~ Species, data = iris, FUN = function(x) c(mean = mean(x), n = length(x)))
+tmpVar1 <- aggregate(Sepal.Length ~ Species, data = iris,
+FUN = function(x) c(mean = mean(x), n = length(x)))
+tmpVar2 <- aggregate(Sepal.Width ~ Species, data = iris,
+FUN = function(x) c(mean = mean(x), n = length(x)))
+tmpVar3 <- aggregate(Petal.Length ~ Species, data = iris,
+FUN = function(x) c(mean = mean(x), n = length(x)))
+tmpVar4 <- aggregate(Petal.Width ~ Species, data = iris,
+FUN = function(x) c(mean = mean(x), n = length(x)))
 
 # Extract mean and count
 tmpVar1_mean <- tmpVar1$Sepal.Length[, "mean"]
@@ -55,7 +59,8 @@ tmpVar8 <- aggregate(Petal.Width ~ Species, data = iris, FUN = sd)
 # Combine results
 Values <- c(tmpVar1_mean, tmpVar2_mean, tmpVar3_mean, tmpVar4_mean)
 Class <- rep(1:3, 4)
-Deviation <- c(tmpVar5$Sepal.Length, tmpVar6$Sepal.Width, tmpVar7$Petal.Length, tmpVar8$Petal.Width)
+Deviation <- c(tmpVar5$Sepal.Length, tmpVar6$Sepal.Width, tmpVar7$Petal.Length,
+tmpVar8$Petal.Width)
   
   if(length(Values) == length(Class)){
     ClassBarPlot(Values = Values, Cls = Class, Deviation = Deviation)

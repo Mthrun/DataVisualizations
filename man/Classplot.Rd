@@ -9,7 +9,7 @@ Allows to plot one time series or feauture with a classification as a labeled sc
 The colors are the labels defined by the classification.
 }
 \usage{
-Classplot(X, Y, Cls, Plotter,Names = NULL, na.rm = FALSE, 
+Classplot(X, Y, Cls, Plotter,Names = NULL, Subsample=TRUE, na.rm = FALSE, 
 
 xlab = "X", ylab = "Y", main = "Class Plot", Colors = NULL,
 
@@ -37,6 +37,10 @@ Nudge_x_Names = 0, Nudge_y_Names = 0, Legend = "", SmallClassesOnTop = TRUE,
   \item{Names}{
 [1:n] character vector of k classes, if not set per default Cls is used, if set, names the legend and the points
 }
+  \item{Subsample}{Boolean, default TRUE,if TRUE and n>5000 takes optimal subsample for the visualization so that not too much points overlap}
+  
+  
+
   \item{na.rm}{Function may not work with non finite values. If these cases should be automatically removed, set parameter TRUE}
   
   \item{xlab}{

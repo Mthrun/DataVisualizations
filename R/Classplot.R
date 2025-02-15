@@ -1,6 +1,7 @@
 Classplot = function(X, Y, Cls,
                      Plotter,
                      Names = NULL,
+                     Subsample=TRUE,
                      na.rm = FALSE,
                      xlab = "X",
                      ylab = "Y",
@@ -28,8 +29,7 @@ Classplot = function(X, Y, Cls,
   X=checkFeature(X,varname='X',Funname="Classplot")
   Y=checkFeature(Y,varname='Y',Funname="Classplot")
   Cls=checkCls(Cls,length(Y))
-  
-  
+
   if(length(X)!=length(Y)) stop('X and Y have to have the same length')
   
   if(!missing(pch)){
@@ -53,6 +53,27 @@ Classplot = function(X, Y, Cls,
       pch=pch[noNaNInd]
     }
   }
+  #erst missing werte bereinigen dann sample ziehen
+  if(isTRUE(Subsample)){
+    if(length(X)>5000){
+      indsub=ScatterDensity::SampleScatter(X,Y,PlotIt = F)
+    }else{
+      Subsample=FALSE
+    }
+  }
+  if(isTRUE(Subsample)){
+    X=X[indsub]
+    Y=Y[indsub]
+    Cls=Cls[indsub]
+    
+    if(!is.null(Names)){
+      Names=Names[indsub]
+    }
+    if(!missing(pch)){
+      pch=pch[indsub]
+    }
+  }
+  
   u=unique(Cls)
   uu=sort(u,decreasing = F)
   

@@ -1,4 +1,5 @@
 useDynLib(DataVisualizations, .registration=TRUE)
+
 export(ABCbarplot)
 export(BimodalityAmplitude)
 export(CCDFplot)
@@ -61,9 +62,12 @@ export(Stdrobust)
 export(RobustNormalization)
 export(RobustNorm_BackTrafo)
 export(Worldmap)
+export(zplot) #wichtig fuer densityscatter package
+
 
 import(ggplot2)
 import(Rcpp)
+import(RcppParallel)
 
 importFrom("graphics", "hist", "title", "filled.contour", "axis", "barplot", "box", "boxplot", "grid",
            "mtext", "par", "plot", "rect", "lines", "text", "pairs", "plot.new", "polygon", "pie",

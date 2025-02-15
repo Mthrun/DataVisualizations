@@ -11,6 +11,21 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// PDE_Kernel
+NumericVector PDE_Kernel(NumericVector DataVector, NumericVector DomainX, double PR, int NSeq, int NData);
+RcppExport SEXP _DataVisualizations_PDE_Kernel(SEXP DataVectorSEXP, SEXP DomainXSEXP, SEXP PRSEXP, SEXP NSeqSEXP, SEXP NDataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type DataVector(DataVectorSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type DomainX(DomainXSEXP);
+    Rcpp::traits::input_parameter< double >::type PR(PRSEXP);
+    Rcpp::traits::input_parameter< int >::type NSeq(NSeqSEXP);
+    Rcpp::traits::input_parameter< int >::type NData(NDataSEXP);
+    rcpp_result_gen = Rcpp::wrap(PDE_Kernel(DataVector, DomainX, PR, NSeq, NData));
+    return rcpp_result_gen;
+END_RCPP
+}
 // c_pde
 NumericVector c_pde(NumericVector kernels, int nKernels, double paretoRadius, NumericVector DataPlus);
 RcppExport SEXP _DataVisualizations_c_pde(SEXP kernelsSEXP, SEXP nKernelsSEXP, SEXP paretoRadiusSEXP, SEXP DataPlusSEXP) {
@@ -40,6 +55,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_DataVisualizations_PDE_Kernel", (DL_FUNC) &_DataVisualizations_PDE_Kernel, 5},
     {"_DataVisualizations_c_pde", (DL_FUNC) &_DataVisualizations_c_pde, 4},
     {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 3},
     {NULL, NULL, 0}
