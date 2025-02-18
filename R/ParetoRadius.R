@@ -1,4 +1,4 @@
-ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles = FALSE){
+ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles = FALSE,Compute="Cpp"){
   # MT: in Matlab als ParetoRadiusfuerGMM.m benannt
   # ParetoRadius <- ParetoRadius(Data)
   # function calculates the paretoRadius for passed gauss mixture modell
@@ -51,14 +51,19 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
   }
   # selection of ParetoRadius
   #paretoRadius=quantile(distvec,probs = 18/100,na.rm = T,type=8)#minimal unrealized potential (->Ultsch2005)
+  Compute=tolower(Compute)
   
   if (nData < 4000) {
-    #use more precise implelemtation
+    #use more precise implementation
     paretoRadius <- quantile(distvec, 18 / 100, type = 8, na.rm = TRUE)
   } else{
-    #use faster implementation
-    partialSortedDistVec = sort(distvec, partial = c(1,(length(distvec)-1)*(18 / 100)+1))
-    paretoRadius <- c_quantile(partialSortedDistVec, 18 / 100, 1)
+    if(Compute=="cpp"){
+      #use faster implementation
+      partialSortedDistVec = sort(distvec, partial = c(1,(length(distvec)-1)*(18 / 100)+1))
+      paretoRadius <- c_quantile(partialSortedDistVec, 18 / 100, 1)
+    }else{
+      paretoRadius <- quantile4LargeVectors(distvec, 18 / 100)
+    }
   }
   if (paretoRadius == 0)
   {
@@ -71,7 +76,11 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
       )
     } else{
       #use faster implementation
-      pzt = c_quantile(distvec, probs = c(1:100) / 100)
+      if(Compute=="cpp"){
+        pzt = c_quantile(distvec, probs = c(1:100) / 100)
+      }else{
+        pzt = quantile4LargeVectors(distvec, probs = c(1:100) / 100)
+      }
     }
     paretoRadius <-
       min(pzt[pzt > 0], na.rm = T) # take the smallest nonzero

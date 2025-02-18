@@ -40,6 +40,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// c_pde_fast
+NumericVector c_pde_fast(NumericVector kernels, int nKernels, double paretoRadius, NumericVector DataPlus);
+RcppExport SEXP _DataVisualizations_c_pde_fast(SEXP kernelsSEXP, SEXP nKernelsSEXP, SEXP paretoRadiusSEXP, SEXP DataPlusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type kernels(kernelsSEXP);
+    Rcpp::traits::input_parameter< int >::type nKernels(nKernelsSEXP);
+    Rcpp::traits::input_parameter< double >::type paretoRadius(paretoRadiusSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type DataPlus(DataPlusSEXP);
+    rcpp_result_gen = Rcpp::wrap(c_pde_fast(kernels, nKernels, paretoRadius, DataPlus));
+    return rcpp_result_gen;
+END_RCPP
+}
 // c_quantile
 Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs, int sorted);
 RcppExport SEXP _DataVisualizations_c_quantile(SEXP xSEXP, SEXP probsSEXP, SEXP sortedSEXP) {
@@ -53,11 +67,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// quantile4LargeVectors
+NumericVector quantile4LargeVectors(NumericVector x, NumericVector probs);
+RcppExport SEXP _DataVisualizations_quantile4LargeVectors(SEXP xSEXP, SEXP probsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type probs(probsSEXP);
+    rcpp_result_gen = Rcpp::wrap(quantile4LargeVectors(x, probs));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DataVisualizations_PDE_Kernel", (DL_FUNC) &_DataVisualizations_PDE_Kernel, 5},
     {"_DataVisualizations_c_pde", (DL_FUNC) &_DataVisualizations_c_pde, 4},
+    {"_DataVisualizations_c_pde_fast", (DL_FUNC) &_DataVisualizations_c_pde_fast, 4},
     {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 3},
+    {"_DataVisualizations_quantile4LargeVectors", (DL_FUNC) &_DataVisualizations_quantile4LargeVectors, 2},
     {NULL, NULL, 0}
 };
 

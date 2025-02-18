@@ -28,7 +28,8 @@ Classplot = function(X, Y, Cls,
  
   X=checkFeature(X,varname='X',Funname="Classplot")
   Y=checkFeature(Y,varname='Y',Funname="Classplot")
-  Cls=checkCls(Cls,length(Y))
+  
+  Cls=checkCls(Cls,length(Y),Normalize=FALSE)#true is highly computive intensive
 
   if(length(X)!=length(Y)) stop('X and Y have to have the same length')
   
@@ -36,6 +37,12 @@ Classplot = function(X, Y, Cls,
     if(length(X)!=length(pch)){
       pch=rep(20,length(X))
       warning('X and pch have to have the same length. Setting "pch=20"')
+    }
+  }
+  if(!is.null(Names)){
+    if(length(X)!=length(Names)){
+      Names=Names[1:length(X)]
+      warning('X and Names have to have the same length. Shortening Names to length of X"')
     }
   }
   

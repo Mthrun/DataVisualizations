@@ -1,4 +1,4 @@
-ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE,Silent=FALSE){
+ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=100,PlotIt=FALSE,Compute="Cpp",Silent=FALSE){
 #  V = ParetoDensityEstimation(Data,ParetoRadius,Kernels)
 #  V = ParetoDensityEstimation(Data)
 #  ParetoDensity=V$paretoDensity
@@ -25,6 +25,9 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
 
 ###############################################
 ###############################################
+  
+  Compute=tolower(Compute)
+  
  xlab=deparse1(substitute(Data))
   if (!is.vector(Data)) {
     Data = as.vector(Data)
@@ -121,16 +124,30 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       #ToNothing because radius is given by user
     }
   }else{#big data
-    if (missing(paretoRadius)) {#multiple small samples are taken
-      paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
-    } else if (is.null(paretoRadius)) {
-      paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
-    } else if (is.na(paretoRadius)) {
-      paretoRadius = ParetoRadius(Data)
-    } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
-      paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
-    } else{
-      #ToNothing because radius is given by user
+    if(Compute=="cpp"){
+      if (missing(paretoRadius)) {#multiple small samples are taken
+        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+      } else if (is.null(paretoRadius)) {
+        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+      } else if (is.na(paretoRadius)) {
+        paretoRadius = ParetoRadius(Data)
+      } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
+        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+      } else{
+        #ToNothing because radius is given by user
+      }
+    }else{
+      if (missing(paretoRadius)) {#10% or bigger sample is taken
+        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+      } else if (is.null(paretoRadius)) {
+        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+      } else if (is.na(paretoRadius)) {
+        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+      } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
+        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+      } else{
+        #ToNothing because radius is given by user
+      }
     }
   }
   minData = min(Data, na.rm = TRUE)
@@ -191,28 +208,27 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   #extend data by mirrowing
   DataPlus = as.matrix(c(Data, lowR, upR), 1)
   paretoDensity=rep(0, nKernels)
-  Fast=TRUE# only for debugging =FALSE
-  if(isTRUE(Fast)){
-    paretoDensity=c_pde(kernels_internal, nKernels, paretoRadius,  DataPlus)
-  }else{
-    for (i in 1:nKernels) {
-       lb = kernels_internal[i] - paretoRadius
-       ub = kernels_internal[i] + paretoRadius
-       isInParetoSphere = (DataPlus >= lb) & (DataPlus <= ub)
-       paretoDensity[i] = sum(isInParetoSphere)
-    }
-  }
 
-  #paretoDensity=c_pde_parallel(kernels_internal, nKernels, paretoRadius,  DataPlus)
+  switch (Compute,
+    r = {
+      for (i in 1:nKernels) {
+        lb = kernels_internal[i] - paretoRadius
+        ub = kernels_internal[i] + paretoRadius
+        isInParetoSphere = (DataPlus >= lb) & (DataPlus <= ub)
+        paretoDensity[i] = sum(isInParetoSphere)
+      }
+    },
+    cpp={
+      paretoDensity=c_pde(kernels_internal, nKernels, paretoRadius,  DataPlus)
+    },
+    cpp_exp={
+      paretoDensity=c_pde_fast(kernels_internal, nKernels, paretoRadius,  DataPlus)
+    },
+    {#default
+      paretoDensity=c_pde(kernels_internal, nKernels, paretoRadius,  DataPlus)
+    }
+  )
   
-  # for (i in 1:nKernels) {
-  #   lb = kernels_internal[i] - paretoRadius
-  #   ub = kernels_internal[i] + paretoRadius
-  #   isInParetoSphere = (DataPlus >= lb) & (DataPlus <= ub)
-  #   paretoDensity[i] = sum(isInParetoSphere)
-  # }
-  # print(paretoDensity-paretoDensity2)
-  # 
   if(requireNamespace('pracma',quietly = TRUE)){ #fuer trapz
 		area <- pracma::trapz(kernels_internal, paretoDensity)
   }else{

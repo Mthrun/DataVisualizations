@@ -61,7 +61,7 @@ compute_pdedensity <- function(x) {
     Flag <- TRUE
   }
   
-  dens <- ParetoDensityEstimation(Data = x)
+  dens <- ParetoDensityEstimation(Data = x,Compute = "Cpp_exp")
   
   # Density cannot be estiamted, set density to value equal 1
   if (Flag) {
