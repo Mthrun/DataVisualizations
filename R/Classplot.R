@@ -81,12 +81,12 @@ Classplot = function(X, Y, Cls,
     }
   }
   
-  u=unique(Cls)
-  uu=sort(u,decreasing = F)
+  uniqueLabels=unique(Cls)
+  uu=sort(uniqueLabels,decreasing = F)
   
   if(!is.null(Names)){
     #for legend
-    u_names=unique(Names)[order(u,decreasing = F)]
+    u_names=unique(Names)[order(uniqueLabels,decreasing = F)]
   }else{
     u_names=as.character(uu)
   }
@@ -113,7 +113,16 @@ Classplot = function(X, Y, Cls,
   uug=as.numeric(names(cp))
   if(!any(!is.finite(uug))){#all class names are convertivle to numeric
     #reorder unique colors and unique names
-    Colors=Colors[indBig2Small]
+    n_color=length(Colors)
+    if(length(indBig2Small)==n_color){
+      Colors=Colors[c(indBig2Small)]
+    }#typical case
+    if(length(indBig2Small)<n_color){
+    #special case under the assumptuion that colors are named
+      #then more colors than classes are allowed
+      #in that case just the first colors are reordered
+      Colors=Colors[c(indBig2Small,setdiff(1:n_color,indBig2Small))]
+    }
     if(!is.null(Names)){
       NamesOrdered=c() 
       u_names=u_names[indBig2Small]
@@ -148,12 +157,12 @@ Classplot = function(X, Y, Cls,
       pch=pchordered
     }
     
-    u=unique(Cls)
-    #uu=sort(u,decreasing = F)
+    uniqueLabels=unique(Cls)
+    #uu=sort(uniqueLabels,decreasing = F)
   }#otherwise some class was not convertable to numeric
 
   # print(u_names)
-  # print(u)
+  # print(uniqueLabels)
   # print(Colors)
   # print(uu)
   # 
@@ -161,28 +170,31 @@ Classplot = function(X, Y, Cls,
   k=1
   
   if(is.null(names(Colors))){#default color vec is not named
-    for(i in u){
+    for(i in uniqueLabels){
       ColorVec[Cls==i]=Colors[k]
       k=k+1
     }
   }else{#user named color vec
     class_color=as.numeric(names(Colors))
-    if(sum(is.finite(class_color))>=length(u)){#for multipleplots there could be more colors defined
-      if(sum(u %in% class_color)==length(u)){
+    # print(class_color)
+    # print(uniqueLabels)
+    # print(uniqueLabels %in% class_color)
+    if(sum(is.finite(class_color))>=length(uniqueLabels)){#for multipleplots there could be more colors defined
+      if(sum(uniqueLabels %in% class_color)==length(uniqueLabels)){
         for(i in class_color){
           ColorVec[Cls==i]=Colors[k]
           k=k+1
         }
       }else{
         warning("Classplot: Names of 'Colors' do not contain all digit labels of 'Cls'. Falling back to default 1:k color sequence.")
-        for(i in u){
+        for(i in uniqueLabels){
           ColorVec[Cls==i]=Colors[k]
           k=k+1
         }
       }
     }else{
       warning("Classplot: Names of 'Colors' have to be digits that can be finitely conversed to numeric")
-      for(i in u){
+      for(i in uniqueLabels){
         ColorVec[Cls==i]=Colors[k]
         k=k+1
       }
@@ -232,8 +244,8 @@ Classplot = function(X, Y, Cls,
    
   if(!is.null(Names)){
     UniqueNames = u_names
-    for(i in 1:length(u)){
-      DataIdx = which(Cls == u[i])
+    for(i in 1:length(uniqueLabels)){
+      DataIdx = which(Cls == uniqueLabels[i])
       p = plotly::add_markers(p = p,
                               x = X[DataIdx],
                               y = Y[DataIdx],
