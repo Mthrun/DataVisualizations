@@ -1,6 +1,7 @@
 Version 1.3.4 (GitHub, 2025-02-14)
 	o Classplot takes not sample for visualization if more than 5000 points are used. Sample plottet is optimal regarding visualization.
-	
+	o Classplot accepts now named Colors parameter for non ordered user specific colors for each label of Cls
+
 Version 1.3.3 (CRAN, 2025-01-26)
 	o Classplot plots now small classes on top, if boolean SmallClassesOnTop is set true
 	o Meanrobust and Stdrobust accept now both trim parameters in percent

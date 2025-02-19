@@ -159,11 +159,36 @@ Classplot = function(X, Y, Cls,
   # 
   ColorVec=Cls*0
   k=1
-  for(i in u){
-    ColorVec[Cls==i]=Colors[k]
-    k=k+1
-  }
   
+  if(is.null(names(Colors))){#default color vec is not named
+    for(i in u){
+      ColorVec[Cls==i]=Colors[k]
+      k=k+1
+    }
+  }else{#user named color vec
+    class_color=as.numeric(names(Colors))
+    if(sum(is.finite(class_color))==length(u)){
+      if(sum(u %in% class_color)==length(u)){
+        for(i in class_color){
+          ColorVec[Cls==i]=Colors[k]
+          k=k+1
+        }
+      }else{
+        warning("Classplot: Names of 'Colors' do not contain digit labels of 'Cls'. Falling back to default 1:k color sequence.")
+        for(i in u){
+          ColorVec[Cls==i]=Colors[k]
+          k=k+1
+        }
+      }
+    }else{
+      warning("Classplot: Names of 'Colors' have to be digits that can be finitely conversed to numeric")
+      for(i in u){
+        ColorVec[Cls==i]=Colors[k]
+        k=k+1
+      }
+    }
+
+  }
   if(missing(Plotter)){
     if(is.null(Names)){
       Plotter="plotly"

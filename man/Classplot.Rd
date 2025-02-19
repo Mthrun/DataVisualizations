@@ -53,7 +53,7 @@ Optional, string for ylabel
 Optional, string for title of plot
 }
   \item{Colors}{
-Optional, [1;k] string defining the k colors, one per class
+Optional, [1:k] string defining the k colors, one per class, Vector can be named by class labels than colors are matched to specific labels instead of 1:k ordering
 }
   \item{AnnotateIt}{
 Optional, in case of \code{Plotter==ggplot} and given \code{Names} annotates each point if TRUE
@@ -149,6 +149,15 @@ ind=sample(1:nrow(Lsun3D$Data),20)
 Classplot(Lsun3D$Data[ind,1],Lsun3D$Data[ind,2],Lsun3D$Cls[ind],
 Names = rownames(Lsun3D$Data)[ind],Size =1,
 Plotter = "ggplot2",AnnotateIt = TRUE)
+
+#non 1:k ordered sequence
+#of user specific colors
+Colors=c("blue","green","red")
+names(Colors)=c(3,2,1)
+
+Classplot(Lsun3D$Data[ind,1],Lsun3D$Data[ind,2],Lsun3D$Cls[ind],
+Names = rownames(Lsun3D$Data)[ind],Size =1,
+Plotter = "ggplot2",AnnotateIt = TRUE,Colors=Colors)
 }
 
 \donttest{
@@ -162,3 +171,4 @@ Names = paste0("C",Lsun3D$Cls),Size =2,Legend ="Classes")
 % R documentation directory.
 \keyword{Classplot}% use one of  RShowDoc("KEYWORDS")
 \keyword{dotplot}% use one of  RShowDoc("KEYWORDS")
+\concept{Scatter plot}% use one of  RShowDoc("KEYWORDS")
