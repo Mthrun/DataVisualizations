@@ -167,14 +167,14 @@ Classplot = function(X, Y, Cls,
     }
   }else{#user named color vec
     class_color=as.numeric(names(Colors))
-    if(sum(is.finite(class_color))==length(u)){
+    if(sum(is.finite(class_color))>=length(u)){#for multipleplots there could be more colors defined
       if(sum(u %in% class_color)==length(u)){
         for(i in class_color){
           ColorVec[Cls==i]=Colors[k]
           k=k+1
         }
       }else{
-        warning("Classplot: Names of 'Colors' do not contain digit labels of 'Cls'. Falling back to default 1:k color sequence.")
+        warning("Classplot: Names of 'Colors' do not contain all digit labels of 'Cls'. Falling back to default 1:k color sequence.")
         for(i in u){
           ColorVec[Cls==i]=Colors[k]
           k=k+1

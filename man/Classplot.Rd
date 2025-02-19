@@ -153,7 +153,18 @@ Plotter = "ggplot2",AnnotateIt = TRUE)
 #non 1:k ordered sequence
 #of user specific colors
 Colors=c("blue","green","red")
-names(Colors)=c(3,2,1)
+names(Colors)=c(3,2,1) #non 1:k ordering
+
+Classplot(Lsun3D$Data[ind,1],Lsun3D$Data[ind,2],Lsun3D$Cls[ind],
+Names = rownames(Lsun3D$Data)[ind],Size =1,
+Plotter = "ggplot2",AnnotateIt = TRUE,Colors=Colors)
+
+#if named vector is used, user is 
+#allowed to define more colors than labels
+#given for current plot in case of
+#multiple plots with standardized labels
+Colors=c("blue","green","red","yellow")
+names(Colors)=c(1,2,3,4) #1:(k+1) ordering
 
 Classplot(Lsun3D$Data[ind,1],Lsun3D$Data[ind,2],Lsun3D$Cls[ind],
 Names = rownames(Lsun3D$Data)[ind],Size =1,
