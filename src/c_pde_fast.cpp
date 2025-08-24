@@ -3,16 +3,16 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector c_pde_fast(NumericVector kernels, int nKernels, 
+Rcpp::NumericVector c_pde_fast(Rcpp::NumericVector kernels, int nKernels, 
                          double paretoRadius, NumericVector DataPlus) {
   
   //Trick through prior sorting voids the repeated full-vector scans (which are O(n) per kernel) and instead does O(log(n)) work per kernel.
   
   // Clone and sort DataPlus once
-  NumericVector sortedData = clone(DataPlus);
+  Rcpp::NumericVector sortedData = clone(DataPlus);
   std::sort(sortedData.begin(), sortedData.end());
   
-  NumericVector paretoDensity(nKernels);
+  Rcpp::NumericVector paretoDensity(nKernels);
   
   for (int i = 0; i < nKernels; i++) {
     double lb = kernels[i] - paretoRadius;

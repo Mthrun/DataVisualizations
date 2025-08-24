@@ -1,6 +1,11 @@
+## Preprocessor flags (for -D defines etc.)
+PKG_CPPFLAGS += -DRCPP_PARALLEL_USE_TBB=1
 
-PKG_CXXFLAGS += -DRCPP_PARALLEL_USE_TBB=1
-PKG_CXXFLAGS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "RcppParallel::CxxFlags()")
-PKG_LIBS += $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" \
-              -e "RcppParallel::RcppParallelLibs()")
+## C++ compile flags
+PKG_CXXFLAGS += $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "RcppParallel::RcppParallelCxxFlags()")
+
+## Linker flags
+PKG_LIBS     += $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) \
+                $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "RcppParallel::RcppParallelLibs()")
+
 

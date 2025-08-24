@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List get_edges(NumericMatrix AdjacencyMatrix, NumericVector x_vertex, NumericVector y_vertex) {
+List get_edges(Rcpp::NumericMatrix AdjacencyMatrix, Rcpp::NumericVector x_vertex, Rcpp::NumericVector y_vertex) {
   int n = AdjacencyMatrix.nrow();
   
   std::vector<double> X1, Y1, X2, Y2;

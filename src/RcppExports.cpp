@@ -27,26 +27,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // c_pde
-NumericVector c_pde(NumericVector kernels, int nKernels, double paretoRadius, NumericVector DataPlus);
+Rcpp::NumericVector c_pde(Rcpp::NumericVector kernels, int nKernels, double paretoRadius, Rcpp::NumericVector DataPlus);
 RcppExport SEXP _DataVisualizations_c_pde(SEXP kernelsSEXP, SEXP nKernelsSEXP, SEXP paretoRadiusSEXP, SEXP DataPlusSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type kernels(kernelsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type kernels(kernelsSEXP);
     Rcpp::traits::input_parameter< int >::type nKernels(nKernelsSEXP);
     Rcpp::traits::input_parameter< double >::type paretoRadius(paretoRadiusSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type DataPlus(DataPlusSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type DataPlus(DataPlusSEXP);
     rcpp_result_gen = Rcpp::wrap(c_pde(kernels, nKernels, paretoRadius, DataPlus));
     return rcpp_result_gen;
 END_RCPP
 }
 // c_pde_fast
-NumericVector c_pde_fast(NumericVector kernels, int nKernels, double paretoRadius, NumericVector DataPlus);
+Rcpp::NumericVector c_pde_fast(Rcpp::NumericVector kernels, int nKernels, double paretoRadius, NumericVector DataPlus);
 RcppExport SEXP _DataVisualizations_c_pde_fast(SEXP kernelsSEXP, SEXP nKernelsSEXP, SEXP paretoRadiusSEXP, SEXP DataPlusSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type kernels(kernelsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type kernels(kernelsSEXP);
     Rcpp::traits::input_parameter< int >::type nKernels(nKernelsSEXP);
     Rcpp::traits::input_parameter< double >::type paretoRadius(paretoRadiusSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type DataPlus(DataPlusSEXP);
@@ -68,26 +68,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_edges
-List get_edges(NumericMatrix AdjacencyMatrix, NumericVector x_vertex, NumericVector y_vertex);
+List get_edges(Rcpp::NumericMatrix AdjacencyMatrix, Rcpp::NumericVector x_vertex, Rcpp::NumericVector y_vertex);
 RcppExport SEXP _DataVisualizations_get_edges(SEXP AdjacencyMatrixSEXP, SEXP x_vertexSEXP, SEXP y_vertexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type AdjacencyMatrix(AdjacencyMatrixSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type x_vertex(x_vertexSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y_vertex(y_vertexSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type AdjacencyMatrix(AdjacencyMatrixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x_vertex(x_vertexSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type y_vertex(y_vertexSEXP);
     rcpp_result_gen = Rcpp::wrap(get_edges(AdjacencyMatrix, x_vertex, y_vertex));
     return rcpp_result_gen;
 END_RCPP
 }
 // quantile4LargeVectors
-NumericVector quantile4LargeVectors(NumericVector x, NumericVector probs);
+Rcpp::NumericVector quantile4LargeVectors(Rcpp::NumericVector x, Rcpp::NumericVector probs);
 RcppExport SEXP _DataVisualizations_quantile4LargeVectors(SEXP xSEXP, SEXP probsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type probs(probsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type probs(probsSEXP);
     rcpp_result_gen = Rcpp::wrap(quantile4LargeVectors(x, probs));
     return rcpp_result_gen;
 END_RCPP

@@ -24,7 +24,7 @@ The DataVisualizations package offers various visualization methods and graphica
 - **Visual analysis of Clusters, Correlation, Distances and Projections:** Visual analysis of clusters such as Silhouette plots, or visual projection analysis with the Shepard diagrams.
 - **Other visualizations:** For example ABC-Barplots, Errorplots and more.
 
-![Alt text](images/DataVisCollage.png)
+![Alt text](inst/extdata/images/DataVisCollage.png)
 
 
 ### Examples of synoptic visualizations:
@@ -47,7 +47,7 @@ diag(cc)=0
 Pixelmatrix(cc,YNames = Header,XNames = Header,main = 'Spearman Coeffs')
 ```
 
-![Alt text](images/SynopticCollage.png)
+![Alt text](inst/extdata/images/SynopticCollage.png)
 
 
 ### Examples of distribution analysis:
@@ -70,7 +70,7 @@ Create density scatter plots in 2D:
 DensityScatter(ITS, MTY, xlab = 'ITS in EUR', ylab ='MTY in EUR', xlim = c(0,1200), ylim = c(0,15000), main='Pareto Density Estimation indicates Bimodality')
 ```
 
-![Alt text](images/DistributionAnalysisCollage.png)
+![Alt text](inst/extdata/images/DistributionAnalysisCollage.png)
                       
 ### Examples of visual cluster analysis:
 
@@ -90,7 +90,7 @@ InputDistances shows the most important plots of the distribution of distances o
 InspectDistances(Lsun3D$Data,method="euclidean")
 ```
 
-![Alt text](images/ClusterAnalysisCollage.png)
+![Alt text](inst/extdata/images/ClusterAnalysisCollage.png)
 
 
 ## 2. Installation <a name="installation"/>

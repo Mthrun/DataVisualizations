@@ -43,6 +43,5 @@ NumericVector PDE_Kernel(NumericVector DataVector, NumericVector DomainX, double
   NumericVector MyPDEDensity(NSeq);
   PDEKernel PDEdensity(DataVector, DomainX, PR, NSeq, NData, MyPDEDensity);
   parallelFor(0, NSeq, PDEdensity);
-  //DataBotsPos = internal_PDE_kernel(DistanceMatrix, MyPDEDensity, PR, NSeq, NData);
   return MyPDEDensity;
 }

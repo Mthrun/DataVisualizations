@@ -4,21 +4,21 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector quantile4LargeVectors(NumericVector x, NumericVector probs) {
+Rcpp::NumericVector quantile4LargeVectors(Rcpp::NumericVector x, Rcpp::NumericVector probs) {
   int n = x.size();
   int np = probs.size();
-  NumericVector out(np);
+  Rcpp::NumericVector out(np);
   
   // For a single quantile, use nth_element (average O(n))
   if(np == 1) {
     double p = probs[0];
     int idx = std::min(n - 1, std::max(0, static_cast<int>(std::floor(n * (p - 1e-9)))));
-    NumericVector y = clone(x); // clone because nth_element modifies in place
+    Rcpp::NumericVector y = clone(x); // clone because nth_element modifies in place
     std::nth_element(y.begin(), y.begin() + idx, y.end());
     out[0] = y[idx];
   } else {
     // If multiple quantiles, sort the vector once (O(n log n))
-    NumericVector y = clone(x);
+    Rcpp::NumericVector y = clone(x);
     std::sort(y.begin(), y.end());
     for(int i = 0; i < np; i++){
       int idx = std::min(n - 1, std::max(0, static_cast<int>(std::floor(n * (probs[i] - 1e-9)))));

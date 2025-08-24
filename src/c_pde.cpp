@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector c_pde(NumericVector kernels,int nKernels,double paretoRadius, NumericVector DataPlus) {
+Rcpp::NumericVector c_pde(Rcpp::NumericVector kernels,int nKernels,double paretoRadius, Rcpp::NumericVector DataPlus) {
 // c_pde(kernels, nKernels,paretoRadius,DataPlus)
 // counts data in pareto radius around kernels
 //INPUT
@@ -18,7 +18,7 @@ NumericVector c_pde(NumericVector kernels,int nKernels,double paretoRadius, Nume
   //NumericVector isInParetoSphere(n);
   //double isInParetoSphere;
   
-  NumericVector paretoDensity(nKernels);
+  Rcpp::NumericVector paretoDensity(nKernels);
   double lb;
   double ub;
   for(int i=0;i<nKernels;i++){
