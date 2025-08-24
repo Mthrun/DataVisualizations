@@ -36,7 +36,7 @@ data("Lsun3D")
 Pixelmatrix(Lsun3D$Data)
 ```
 
-The Pixelmatrix can be used as a shortcut in visualizing Correlations between many variables
+The Pixelmatrix can be used as a shortcut in visualizing correlations between many variables
 
 ```{}
 n=nrow(Lsun3D$Data)
@@ -118,23 +118,18 @@ Please note, that dependecies have to be installed manually.
 
 ## 3. Additional Resources <a name="additional"/>
 
-
-- For further examples see [Vignette](https://cran.r-project.org/web/packages/DataVisualizations/vignettes/DataVisualizations.html)
-- [Package documentation](https://cran.r-project.org/web/packages/DataVisualizations/DataVisualizations.pdf)
-- View package on [CRAN](https://cran.r-project.org/web/packages/DataVisualizations/index.html)
+- View package on [CRAN](https://CRAN.R-project.org/package=DataVisualizations)
 
 ### Tutorial Examples
 
 The tutorial with several examples can be found on in the vignette on CRAN:
 
-https://cran.r-project.org/web/packages/DataVisualizations/vignettes/DataVisualizations.html
-
+[Vignette](https://CRAN.R-project.org/package=DataVisualizations/vignettes/DataVisualizations.html)
 
 ### Manual
 
 The full manual for users or developers is available here:
-https://cran.r-project.org/web/packages/DataVisualizations/DataVisualizations.pdf
-
+[Package documentation](https://CRAN.R-project.org/package=DataVisualizations/DataVisualizations.pdf)
 
 ## 4. References <a name="references"/>
 
