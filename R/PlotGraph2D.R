@@ -1,8 +1,8 @@
 PlotGraph2D <- function(AdjacencyMatrix, Points, Cls, Colors,
                         xlab = "X", ylab = "Y", xlim, ylim,
                         Plotter = "native", LineColor= "grey",
-                        pch=20, lwd=0.1,
-                        main = "", mainSize){
+                        pch, lwd,
+                        main = "", mainSize,SampleSize=NULL){
   # PlotGraph2D(AdjacencyMatrix,Points,xlab,ylab,LineColor)
   # plots a graph as in graph theory for an AdjacencyMatrix
   # given the 2D coordinates of the points
@@ -52,7 +52,23 @@ PlotGraph2D <- function(AdjacencyMatrix, Points, Cls, Colors,
   # OUTPUT:
   # Plot
   # Author MCT, 04/2023, QS 07/2023
-  
+  Plotter=tolower(Plotter)
+  if(Plotter=="native"){
+    if(missing(pch)){
+      pch=20
+    }
+    if(missing(lwd)){
+      lwd=0.1
+    }
+  }
+  if(Plotter=="plotly"){
+    if(missing(pch)){
+      pch=10
+    }
+    if(missing(lwd)){
+      lwd=0.5
+    }
+  }
   d = ncol(Points)
   x_vertex = Points[,1] 
   y_vertex = Points[,2] 
@@ -89,17 +105,30 @@ PlotGraph2D <- function(AdjacencyMatrix, Points, Cls, Colors,
   }
   
   X1 = Y1 = X2 = Y2 = c()
-  for(i in 2:n){
-    for(j in 1:(i-1)){
-      if(AdjacencyMatrix[i, j] > 0) { # kante i-> j zeichnen
-        X1 = c(X1, x_vertex[i])
-        Y1 = c(Y1, y_vertex[i])
-        X2 = c(X2, x_vertex[j])
-        Y2 = c(Y2, y_vertex[j])
-      }
-    }
-  }
+  #too slow
+  # for(i in 2:n){
+  #   for(j in 1:(i-1)){
+  #     if(AdjacencyMatrix[i, j] > 0) { # kante i-> j zeichnen
+  #       X1 = c(X1, x_vertex[i])
+  #       Y1 = c(Y1, y_vertex[i])
+  #       X2 = c(X2, x_vertex[j])
+  #       Y2 = c(Y2, y_vertex[j])
+  #     }
+  #   }
+  # }
+  List=get_edges(AdjacencyMatrix,x_vertex,y_vertex)
+  X1=List$X1
+  X2=List$X2
+  Y1=List$Y1
+  Y2=List$Y2
   
+  if(!is.null(SampleSize)){
+    ind=sample(1:length(X1),min(SampleSize,length(X1)))
+    X1 = X1[ind]
+    Y1 = Y1[ind]
+    X2 = X2[ind]
+    Y2 = Y2[ind]
+  }
   if(Plotter == "native"){
     ColorVec = Cls * 0
     k = 1
@@ -107,13 +136,13 @@ PlotGraph2D <- function(AdjacencyMatrix, Points, Cls, Colors,
       ColorVec[Cls == i] = Colors[k]
       k = k + 1
     }
-    
+
     plot(x_vertex[1], y_vertex[1], col = 'white', type = 'p',
          xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab,
          pch = pch,main=main,cex.main=mainSize)  # die knoten
     
     for(i in 1:length(X1)){
-      points(c(X1, X2), c(Y1, Y2), col = LineColor, type = 'l', lwd = lwd)
+      points(c(X1[i], X2[i]), c(Y1[i], Y2[i]), col = LineColor, type = 'l', lwd = lwd)
     }
     #for(i in 2:n){
     #  for(j in 1:(i-1)){

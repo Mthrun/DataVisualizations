@@ -1,7 +1,14 @@
+Version 1.3.5 (GitHub, 2025-08-21)
+	o Bugfix in Classplot for plotly. Now points are colored if no names are given and legend can be disabled
+	o Multiplot can now have a title via main argument
+	o ParetoRadius_fast function implemented using the same algorithm as ParetoRadius, but slightly more fast although sometime maybe not so stable
+	
 Version 1.3.4 (GitHub, 2025-02-14)
-	o Classplot takes not sample for visualization if more than 5000 points are used. Sample plottet is optimal regarding visualization.
+	o Classplot takes now sample for visualization if more than 5000 points are used. Sample plottet is optimal regarding visualization.
 	o Classplot accepts now named Colors parameter for non ordered user specific colors for each label of Cls
-
+	o bugfix in CombineRows
+	o PlotGraph2D is now faster by transfering code to cpp
+	
 Version 1.3.3 (CRAN, 2025-01-26)
 	o Classplot plots now small classes on top, if boolean SmallClassesOnTop is set true
 	o Meanrobust and Stdrobust accept now both trim parameters in percent

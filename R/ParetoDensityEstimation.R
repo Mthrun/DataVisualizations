@@ -41,7 +41,9 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   }
   
   if (length(Data) != sum(is.finite(Data))) {
+    if(isFALSE(Silent))
     message('Not all values are finite. Please check of infinite or missing values.')
+    Data = Data[is.finite(Data)]
   }
   Data = Data[is.finite(Data)]
   values = unique(Data)

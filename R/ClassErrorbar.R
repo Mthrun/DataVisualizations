@@ -89,5 +89,7 @@ ClassErrorbar=function(Xvalues,Ymatrix,Cls,ClassNames,ClassCols,ClassShape,MeanF
   if(isTRUE(BW))
     ggobj=ggobj+ggplot2::theme_bw()+ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
   
+  ggobj = ggobj + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
   return(list(ggobj=ggobj,Statistics=df))
 }

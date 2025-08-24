@@ -54,7 +54,7 @@ ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
   ColNaming = c("Values", "NamesX", "Names", "Class", "ClassColors")
   
   if(!missing(Names)){
-    if(length(Names) != table(Cls)[1]){
+    if(length(Names) != length(Cls)[1]){
       stop("Classbarplot.R: Length of vectors Values and Names must equal.")
     }
     NamesX = rep(1:tmpVar2[1], NumCls)
@@ -74,7 +74,7 @@ ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
   
   if(!missing(ClassColors)){
     if((length(ClassColors) != length(Cls)) & (length(ClassColors) != NumCls)){
-      stop("asdf: Parameter ClassColors must either define the colors for each
+      stop("Classbarplot.R: Parameter ClassColors must either define the colors for each
            class or match the colors for each class in the Cls vector.")
     }
     if(length(ClassColors) == NumCls){

@@ -23,6 +23,19 @@ CombineRows=rbind_fill=function(...,na.rm=FALSE){
     if (is.null(colnames(CurrentMatrixToAdd))) {
       colnames(CurrentMatrixToAdd) = colnames(PatternMatrix)[1:ncol(CurrentMatrixToAdd)]
     }
+    
+    new_cols <- setdiff(colnames(CurrentMatrixToAdd), colnames(PatternMatrix))
+    if (length(new_cols) > 0) {
+      if (!na.rm) {
+        add_mat <- matrix(NaN, nrow = nrow(PatternMatrix), ncol = length(new_cols))
+      } else {
+        add_mat <- matrix(0,   nrow = nrow(PatternMatrix), ncol = length(new_cols))
+      }
+      colnames(add_mat) <- new_cols
+      PatternMatrix <- cbind(PatternMatrix, add_mat)
+      ind_store <- colnames(PatternMatrix)
+    }
+    
     n_tofill=ncol(PatternMatrix) - ncol(CurrentMatrixToAdd)
     if(n_tofill>0){
       if (isFALSE(na.rm)) {
@@ -46,6 +59,7 @@ CombineRows=rbind_fill=function(...,na.rm=FALSE){
       colnames(extra_cols) = colnames(PatternMatrix)[which(match( colnames(PatternMatrix),
                                                                   colnames(CurrentMatrixToAdd),nomatch = 0 ) == 0)]
       fill_up = cbind(extra_cols, as.matrix(CurrentMatrixToAdd))
+
     } else{
       fill_up = as.matrix(CurrentMatrixToAdd)
     }
@@ -59,7 +73,7 @@ CombineRows=rbind_fill=function(...,na.rm=FALSE){
     PatternMatrix = rbind(PatternMatrix, fill_up[,1:ncol(PatternMatrix)])
   }
   
-  PatternMatrixExtended = PatternMatrix[, match(colnames(PatternMatrix), ind_store)]
+  #PatternMatrixExtended = PatternMatrix[, match(colnames(PatternMatrix), ind_store)]
   
-  return(PatternMatrixExtended)
+  return(PatternMatrix)
 }

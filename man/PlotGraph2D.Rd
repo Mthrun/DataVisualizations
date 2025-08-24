@@ -6,8 +6,8 @@ plots a neighborhood graph in two dimensions given the 2D coordinates of the poi
 }
 \usage{
 PlotGraph2D(AdjacencyMatrix, Points, Cls, Colors, xlab = "X", ylab = "Y", xlim,
-ylim, Plotter = "native", LineColor = "grey", pch = 20, lwd = 0.1, main = "",
-mainSize)
+ylim, Plotter = "native", LineColor = "grey", pch, lwd, main = "",
+mainSize,SampleSize=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,13 +21,16 @@ mainSize)
 \item{ylim}{Optional, [1:2] vector of y-axis limits}
 \item{Plotter}{Optional, either \code{"native"} or \code{"plotly"}}
 \item{LineColor}{Optional, color of edges}
-\item{pch}{Optional, shape of point, usally can be in a range from zero to 25, see pch of plot for details}
+\item{pch}{Optional, for \code{Plotter="native"} shape of point, usally can be in a range from zero to 25, see pch of plot for details; for \code{Plotter="Plotly"} the size of point}
 \item{lwd}{width of the lines}
 \item{main}{Optional, string for the title of plot}
 \item{mainSize}{Optional, scalar for the size of the title of plot}
+\item{SampleSize}{Optional, scalar for the size of sample of vertices that will be plotted}
 }
 \details{
 The points are the vertices of the graph. the adjacency matrix defines the edges. Via adjacency matrix various graphs, like from deldir package, can be used.
+
+Sometimes the amount of vertices is high in which take plotting take very long. For such a case use \code{SampleSize}.
 }
 \value{
 native plot or plotly object depending on input argument \code{Plotter}

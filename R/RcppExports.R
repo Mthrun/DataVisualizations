@@ -17,6 +17,10 @@ c_quantile <- function(x, probs, sorted = 0L) {
     .Call(`_DataVisualizations_c_quantile`, x, probs, sorted)
 }
 
+get_edges <- function(AdjacencyMatrix, x_vertex, y_vertex) {
+    .Call(`_DataVisualizations_get_edges`, AdjacencyMatrix, x_vertex, y_vertex)
+}
+
 quantile4LargeVectors <- function(x, probs) {
     .Call(`_DataVisualizations_quantile4LargeVectors`, x, probs)
 }

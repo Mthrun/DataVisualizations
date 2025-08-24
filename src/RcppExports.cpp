@@ -67,6 +67,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_edges
+List get_edges(NumericMatrix AdjacencyMatrix, NumericVector x_vertex, NumericVector y_vertex);
+RcppExport SEXP _DataVisualizations_get_edges(SEXP AdjacencyMatrixSEXP, SEXP x_vertexSEXP, SEXP y_vertexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type AdjacencyMatrix(AdjacencyMatrixSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x_vertex(x_vertexSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_vertex(y_vertexSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_edges(AdjacencyMatrix, x_vertex, y_vertex));
+    return rcpp_result_gen;
+END_RCPP
+}
 // quantile4LargeVectors
 NumericVector quantile4LargeVectors(NumericVector x, NumericVector probs);
 RcppExport SEXP _DataVisualizations_quantile4LargeVectors(SEXP xSEXP, SEXP probsSEXP) {
@@ -85,6 +98,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DataVisualizations_c_pde", (DL_FUNC) &_DataVisualizations_c_pde, 4},
     {"_DataVisualizations_c_pde_fast", (DL_FUNC) &_DataVisualizations_c_pde_fast, 4},
     {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 3},
+    {"_DataVisualizations_get_edges", (DL_FUNC) &_DataVisualizations_get_edges, 3},
     {"_DataVisualizations_quantile4LargeVectors", (DL_FUNC) &_DataVisualizations_quantile4LargeVectors, 2},
     {NULL, NULL, 0}
 };

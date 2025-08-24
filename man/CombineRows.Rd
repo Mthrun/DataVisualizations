@@ -13,7 +13,7 @@ CombineRows(\dots,na.rm=FALSE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 \item{\dots}{
-First argument is a matrix usually with named columns, thereafter either matrices or d vectors of arbitrary lengths, see example
+First argument is a matrix usually with d named columns, thereafter either matrices or d vectors of arbitrary lengths, see example
 }
 \item{na.rm}{
 boolean: FALSE: fills with NaN
@@ -24,7 +24,9 @@ TRUE: filles with zeros
 Robust alternative to \code{\link{rbind}} that fills missing values with #NaN, tries to match given column names
 if matrices are inserted otherwise fills up the missing columns at the end.
 
-The first argument has to be a matrix. It is assumed that this matrix has to be filled up and other arguments or not of bigger size than d columns. Otherwiese the further elements stored in columns >d are ignored.
+The first argument has to be a [1:n,1:d] matrix. It is assumed that this matrix has to be filled up and other arguments are not of greater size than d columns. 
+
+Otherwise, the further elements stored in columns >d are ignored.
 }
 \value{
 matrix of dimensionality of n x d with n beeing the number of rows of the first argument and d the number columns of the first argument given as input
@@ -36,7 +38,7 @@ Michael Thrun
 
 
 \seealso{
-\code{CombineRows}
+\code{CombineCols}
 }
 
 \examples{

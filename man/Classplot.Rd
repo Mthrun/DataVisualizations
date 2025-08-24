@@ -35,7 +35,7 @@ Nudge_x_Names = 0, Nudge_y_Names = 0, Legend = "", SmallClassesOnTop = TRUE,
 [1:n] numeric vector of k classes, if not set per default every point is in first class
 }
   \item{Names}{
-[1:n] character vector of k classes, if not set per default Cls is used, if set, names the legend and the points
+Either [1:n] character vector of k classes, or [1:k] character vector defining the k names, one per class, vector has to be named by class labels. If not set, per default Cls is used, if set, names the legend and the points.
 }
   \item{Subsample}{Boolean, default TRUE,if TRUE and n>5000 takes optimal subsample for the visualization so that not too much points overlap}
   

@@ -41,8 +41,10 @@ Classplot = function(X, Y, Cls,
   }
   if(!is.null(Names)){
     if(length(X)!=length(Names)){
-      Names=Names[1:length(X)]
-      warning('X and Names have to have the same length. Shortening Names to length of X"')
+      if(is.null(names(Names))){
+        Names=Names[1:length(X)]
+        warning('X and Names have to have the same length. Shortening Names to length of X"')
+      }
     }
   }
   
@@ -258,17 +260,33 @@ Classplot = function(X, Y, Cls,
                                                         width = borderWidth)))
     }
   }else{
-    p = plotly::add_markers(p = p,
-                            x = X,
-                            y = Y,
-                            type = "scatter",
-                            mode = "marker",
-                            marker = list(size = Size,
-                                          color = Colors[Cls],
-                                          line = list(color = PointBorderCol,
-                                                      width = 1)))
+    if(is.null(Colors)){
+      p = plotly::add_markers(p = p,
+                              x = X,
+                              y = Y,
+                              type = "scatter",
+                              mode = "marker",
+                              marker = list(size = Size,
+                                            color = Colors[Cls],
+                                            line = list(color = PointBorderCol,
+                                                        width = 1)))
+    }else{
+      for(i in 1:length(uniqueLabels)){
+        DataIdx = which(Cls == uniqueLabels[i])
+        p = plotly::add_markers(p = p,
+                                x = X[DataIdx],
+                                y = Y[DataIdx],
+                                type = "scatter",
+                                mode = "marker",
+                                marker = list(size = Size,
+                                              color = unique(ColorVec[DataIdx]), #unique(ColorVec[DataIdx])
+                                              line = list(color = PointBorderCol,
+                                                          width = borderWidth)))
+      }
+    }
+
   }
-  
+  if(Legend != ""){
   p <- plotly::layout(p,
                       legend = list(title = list(text = Legend)),
                       title = main,
@@ -283,6 +301,23 @@ Classplot = function(X, Y, Cls,
                                    linewidth = 1,
                                    zeroline  = FALSE,
                                    mirror    = TRUE))
+  }else{
+    
+    p <- plotly::layout(p,
+                        title = main,
+                        showlegend = FALSE,
+                        margin = list(l = 20, r = 0, b = 0, t = 70, pad = 10),
+                        xaxis = list(title     = xlab,
+                                     showgrid  = Showgrid,
+                                     linewidth = 1,
+                                     zeroline  = FALSE,
+                                     mirror    = TRUE),
+                        yaxis = list(title     = ylab,
+                                     showgrid  = Showgrid,
+                                     linewidth = 1,
+                                     zeroline  = FALSE,
+                                     mirror    = TRUE))
+  }
 
   p
 
