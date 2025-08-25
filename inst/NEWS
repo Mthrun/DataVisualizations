@@ -1,4 +1,6 @@
-Version 1.3.5 (GitHub, 2025-08-21)
+Version 1.3.6 (GitHub, 2025-08-26)
+
+Version 1.3.5 (CRAN, 2025-08-24)
 	o Bugfix in Classplot for plotly. Now points are colored if no names are given and legend can be disabled
 	o Multiplot can now have a title via main argument
 	o ParetoRadius_fast function implemented using the same algorithm as ParetoRadius, but slightly more fast although sometime maybe not so stable
