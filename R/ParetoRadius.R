@@ -38,50 +38,15 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
   }
   
   # calculate distances
-  if(  requireNamespace('parallelDist',quietly = TRUE))
-	  distvec = as.vector(parallelDist::parallelDist(
-		as.matrix(sampleData),
-		method = 'euclidean',
-		upper = F,
-		diag = F
-	  ))
-  else{
-   temp=dist(as.matrix(sampleData),method = 'euclidean')
-   distvec = as.vector(temp[lower.tri(temp,diag=FALSE)])
-  }
+  distvec = dist1d(sampleData)
+  
   # selection of ParetoRadius
   #paretoRadius=quantile(distvec,probs = 18/100,na.rm = T,type=8)#minimal unrealized potential (->Ultsch2005)
   Compute=tolower(Compute)
-  
-  if (nData < 4000) {
-    #use more precise implementation
-    paretoRadius <- quantile(distvec, 18 / 100, type = 8, na.rm = TRUE)
-  } else{
-    if(Compute=="cpp"){
-      #use faster implementation
-      partialSortedDistVec = sort(distvec, partial = c(1,(length(distvec)-1)*(18 / 100)+1))
-      paretoRadius <- c_quantile(partialSortedDistVec, 18 / 100, 1)
-    }else{
-      paretoRadius <- quantile4LargeVectors(distvec, 18 / 100)
-    }
-  }
-  if (paretoRadius == 0)
-  {
-    if (nData < 4000) {
-      pzt = quantile(
-        distvec,
-        probs = c(1:100) / 100,
-        na.rm = T,
-        type = 8
-      )
-    } else{
-      #use faster implementation
-      if(Compute=="cpp"){
-        pzt = c_quantile(distvec, probs = c(1:100) / 100)
-      }else{
-        pzt = quantile4LargeVectors(distvec, probs = c(1:100) / 100)
-      }
-    }
+  paretoRadius <- quantile4LargeVectors(distvec, 18 / 100)
+
+  if (paretoRadius == 0){
+      pzt = quantile4LargeVectors(distvec, probs = c(1:100) / 100)
     paretoRadius <-
       min(pzt[pzt > 0], na.rm = T) # take the smallest nonzero
   }
@@ -98,25 +63,48 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
   #    plot of distance distribution
   
   if (plotDistancePercentiles) {
+    #prior solution
+    distvec2 = as.vector(parallelDist::parallelDist(
+      as.matrix(sampleData),
+      method = 'euclidean',
+      upper = F,
+      diag = F
+    ))
     pzt = quantile(
-      distvec,
+      distvec2,
       probs = c(1:100) / 100,
       na.rm = T,
       type = 8
+    )
+    #curent solution
+    pzt2 = quantile4LargeVectors(
+      distvec,
+      probs = c(1:100) / 100
     )
     plot(
       1:100,
       pzt,
       type = 'l',
-      col = 'blue',
-      main = 'red = ParetoRatius',
+      col = 'orange',
+      main = 'purple = ParetoRatius, orange= R quantile, steelblue = Cpp quantile',
       xlab = 'Percentiles',
-      ylab = 'Distances'
+      ylab = 'Distances',lwd=2
+    )
+    points(
+      1:100,
+      pzt2,
+      type = 'l',
+      col = 'steelblue',lty="dashed",lwd=2
     )
     lines(
-      x = c(pzt[18], pzt[18]),
-      y = c(0, paretoRadius),
-      col = 'red'
+      x = c(18, 18),
+      y = c(0, pzt[18]),
+      col = 'purple',lwd=3
+    )
+    lines(
+      x = c(0, 18),
+      y = c(pzt[18],pzt[18]),
+      col = 'purple'
     )
   }
   #MT:

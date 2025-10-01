@@ -53,16 +53,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// c_quantile
-Rcpp::NumericVector c_quantile(Rcpp::NumericVector x, Rcpp::NumericVector probs, int sorted);
-RcppExport SEXP _DataVisualizations_c_quantile(SEXP xSEXP, SEXP probsSEXP, SEXP sortedSEXP) {
+// dist1d
+Rcpp::NumericVector dist1d(Rcpp::NumericVector x);
+RcppExport SEXP _DataVisualizations_dist1d(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type probs(probsSEXP);
-    Rcpp::traits::input_parameter< int >::type sorted(sortedSEXP);
-    rcpp_result_gen = Rcpp::wrap(c_quantile(x, probs, sorted));
+    rcpp_result_gen = Rcpp::wrap(dist1d(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -91,14 +89,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// quantileDist1d
+double quantileDist1d(NumericVector x, double p);
+RcppExport SEXP _DataVisualizations_quantileDist1d(SEXP xSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(quantileDist1d(x, p));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DataVisualizations_PDE_Kernel", (DL_FUNC) &_DataVisualizations_PDE_Kernel, 5},
     {"_DataVisualizations_c_pde", (DL_FUNC) &_DataVisualizations_c_pde, 4},
     {"_DataVisualizations_c_pde_fast", (DL_FUNC) &_DataVisualizations_c_pde_fast, 4},
-    {"_DataVisualizations_c_quantile", (DL_FUNC) &_DataVisualizations_c_quantile, 3},
+    {"_DataVisualizations_dist1d", (DL_FUNC) &_DataVisualizations_dist1d, 1},
     {"_DataVisualizations_get_edges", (DL_FUNC) &_DataVisualizations_get_edges, 3},
     {"_DataVisualizations_quantile4LargeVectors", (DL_FUNC) &_DataVisualizations_quantile4LargeVectors, 2},
+    {"_DataVisualizations_quantileDist1d", (DL_FUNC) &_DataVisualizations_quantileDist1d, 2},
     {NULL, NULL, 0}
 };
 

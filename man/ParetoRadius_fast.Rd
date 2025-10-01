@@ -3,15 +3,13 @@
 \alias{ParetoRadius_fast}
 \title{Fast ParetoRadius for distributions}
 \usage{
-ParetoRadius_fast(Data, maximumNrSamples = 10000,
-  plotDistancePercentiles = FALSE,na.rm=TRUE)
+ParetoRadius_fast(Data, maximumNrSamples = 10000,na.rm=TRUE)
 }
 \arguments{
 \item{Data}{numeric data vector}
 
 \item{maximumNrSamples}{Optional, numeric. Maximum number for which the distance calculation can be done. 1000 by default.}
 
-\item{plotDistancePercentiles}{Optional, logical. If TRUE, a plot of the percentiles of distances is produced. FALSE by default.}
 \item{na.rm}{(Optional: Default=TRUE). Remove na.}
 }
 \value{

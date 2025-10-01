@@ -112,8 +112,8 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     if(isFALSE(Silent))
     warning('Less than 10 datapoints given, ParetoRadius potientially cannot be calcualted.')
   }
-  
-  if(length(Data)<10e4){#smaller data
+  #published method in thrun et al 2020
+  if(length(Data)<5*10^3 | Compute=="r"){#smaller data
     if (missing(paretoRadius)) {#10% or bigger sample is taken
       paretoRadius = ParetoRadius(Data)
     } else if (is.null(paretoRadius)) {
@@ -126,27 +126,27 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       #ToNothing because radius is given by user
     }
   }else{#big data
-    if(Compute=="cpp"){
+    if(length(Data)>10^5){#vaeriant 1 is approximation
       if (missing(paretoRadius)) {#multiple small samples are taken
-        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples = 10000))),na.rm=TRUE)
       } else if (is.null(paretoRadius)) {
-        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples = 10000))),na.rm=TRUE)
       } else if (is.na(paretoRadius)) {
         paretoRadius = ParetoRadius(Data)
       } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
-        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius(Data,maximumNrSamples = 1000))),na.rm=TRUE)
+        paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples = 10000))),na.rm=TRUE)
       } else{
         #ToNothing because radius is given by user
       }
-    }else{
+    }else{#variant to is taken N=10000 sample with with fast estimation
       if (missing(paretoRadius)) {#10% or bigger sample is taken
-        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+        paretoRadius = ParetoRadius_fast(Data)
       } else if (is.null(paretoRadius)) {
-        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+        paretoRadius = ParetoRadius_fast(Data)
       } else if (is.na(paretoRadius)) {
-        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+        paretoRadius = ParetoRadius_fast(Data)
       } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
-        paretoRadius = ParetoRadius(Data, Compute = "Cpp_exp")
+        paretoRadius = ParetoRadius_fast(Data)
       } else{
         #ToNothing because radius is given by user
       }

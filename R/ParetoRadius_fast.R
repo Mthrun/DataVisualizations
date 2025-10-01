@@ -1,4 +1,4 @@
-ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles = FALSE,na.rm=TRUE){
+ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000,na.rm=TRUE){
   # MT: in Matlab als ParetoRadiusfuerGMM.m benannt
   # ParetoRadius <- ParetoRadius(Data)
   # function calculates the paretoRadius for passed gauss mixture modell
@@ -40,26 +40,11 @@ ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000, plotDistancePercen
   }
   
   # calculate distances
-  if(  requireNamespace('parallelDist',quietly = TRUE))
-	  distvec = as.vector(parallelDist::parallelDist(
-		as.matrix(sampleData),
-		method = 'euclidean',
-		upper = F,
-		diag = F
-	  ))
-  else{
-   temp=dist(as.matrix(sampleData),method = 'euclidean')
-   distvec = as.vector(temp[lower.tri(temp,diag=FALSE)])
-  }
- 
-  # selection of ParetoRadius
-  #paretoRadius=quantile(distvec,probs = 18/100,na.rm = T,type=8)#minimal unrealized potential (->Ultsch2005)
-  paretoRadius <- quantile4LargeVectors(distvec, 18 / 100)
-  
-  if (paretoRadius == 0)
-  {
 
-  pzt = quantile4LargeVectors(distvec, probs = c(1:100) / 100)
+  paretoRadius=quantileDist1d(sampleData)
+  
+  if (paretoRadius == 0){
+    pzt = quantile4LargeVectors(dist1d(sampleData), probs = c(1:100) / 100)
     paretoRadius <-
       min(pzt[pzt > 0], na.rm = T) # take the smallest nonzero
   }
@@ -81,31 +66,6 @@ ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000, plotDistancePercen
     return(NaN)
   }
 
-  
-  #    plot of distance distribution
-  
-  if (plotDistancePercentiles) {
-    pzt = quantile(
-      distvec,
-      probs = c(1:100) / 100,
-      na.rm = T,
-      type = 8
-    )
-    plot(
-      1:100,
-      pzt,
-      type = 'l',
-      col = 'blue',
-      main = 'red = ParetoRatius',
-      xlab = 'Percentiles',
-      ylab = 'Distances'
-    )
-    lines(
-      x = c(pzt[18], pzt[18]),
-      y = c(0, paretoRadius),
-      col = 'red'
-    )
-  }
   #MT:
   #ALUs heuristik, in matlab in PDEplot, hier in dieser Funktion, damit martlabs AdaptGauss
   # die selbe Darstellung benutzt

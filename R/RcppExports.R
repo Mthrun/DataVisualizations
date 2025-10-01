@@ -13,8 +13,8 @@ c_pde_fast <- function(kernels, nKernels, paretoRadius, DataPlus) {
     .Call(`_DataVisualizations_c_pde_fast`, kernels, nKernels, paretoRadius, DataPlus)
 }
 
-c_quantile <- function(x, probs, sorted = 0L) {
-    .Call(`_DataVisualizations_c_quantile`, x, probs, sorted)
+dist1d <- function(x) {
+    .Call(`_DataVisualizations_dist1d`, x)
 }
 
 get_edges <- function(AdjacencyMatrix, x_vertex, y_vertex) {
@@ -23,5 +23,9 @@ get_edges <- function(AdjacencyMatrix, x_vertex, y_vertex) {
 
 quantile4LargeVectors <- function(x, probs) {
     .Call(`_DataVisualizations_quantile4LargeVectors`, x, probs)
+}
+
+quantileDist1d <- function(x, p = 0.18) {
+    .Call(`_DataVisualizations_quantileDist1d`, x, p)
 }
 
