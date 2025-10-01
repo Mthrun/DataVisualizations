@@ -45,8 +45,9 @@ BW=FALSE,ForceNames=FALSE)
   }
     \item{RobustGaussian}{
     Optional: If TRUE: each MDplot of a variable is overlayed with a roubustly estimated unimodal Gaussian distribution in the range of this variable,
-	if statistical testing does not yield a significant p.value. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.
-  }
+	  if statistical testing does not yield a significant p.value. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.
+	  Beware, that internally the 'R's \code{quantile} function is used, which is slow for big data or many variables. 
+    }
       \item{GaussianColor}{
     Optional: string, color of robustly estimated gaussian, only for \code{RobustGaussian=TRUE}.
   }
@@ -238,7 +239,7 @@ For the paramter \code{Ordering} the following options are possible:
 
 \item{\code{Variance}}{Ordering of plots by the order of columns of \code{Data} sorted in order of increasing inter-quartile range}
 
-\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required.}
+\item{\code{Statistics}}{Ordering of plots depending on the logarithm of the p-vlaues of statistical testing. In this case the packages \pkg{moments}, \pkg{diptest} and \pkg{signal} are required. Beware, that internally the 'R's \code{quantile} function is used, which is slow for big data or many variables. }
 }
 
 For the paramter \code{Scaling} the following options are possible:

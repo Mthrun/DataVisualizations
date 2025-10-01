@@ -5,16 +5,51 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
                   SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,main="MD-plot",
                   ylab="Range of values in which PDE is estimated",BW=FALSE,ForceNames=FALSE){
   #MDplot(data, Names)
-  # Plots a Boxplot like pdfshape for each column of the given data
-  #
+  # Plots a Mirrore-density plot  for each column of the given data, introduced in Thrun et al. (2020).
+  # A complete guide: https://md-plot.readthedocs.io/en/latest/index.html
+  
   # Input
-  # data          Matrix containing data. Each column is one variable.
-  # Names         Optional: Names of the variables. If missing the columnnames of data are used.
-  # Means          TRUE: with mean, FALSE: Only median
+  # Data                  [n x d] numeric matrix with n cases of d variables.
+  #                       Each column is one variable. Data frames are coerced to a numeric matrix.
+  # Names                 Optional [1:d] character vector with variable names. If missing,
+  #                       column names of Data are used. Can be combined with ForceNames.
+  # Ordering              Optional: "Default", "Columnwise"/"AsIs", "Alphabetical",
+  #                       "Average", "Bimodal", "Variance", "Statistics".
+  # Scaling               Optional: "None", "Percentalize", "CompleteRobust", "Robust", "Log".
+  # Fill                  Color (string) or vector of colors to fill MDs.
+  # RobustGaussian        If TRUE, overlay a robustly estimated unimodal Gaussian
+  #                       when statistical tests indicate (requires moments, diptest, signal).
+  # GaussianColor         Color of the robust Gaussian overlay (if RobustGaussian=TRUE).
+  # Gaussian_lwd          Line width of the robust Gaussian overlay.
+  # BoxPlot               If TRUE, overlay a Box–Whisker diagram.
+  # BoxColor              Color of the Box–Whisker overlay (if BoxPlot=TRUE).
+  # MDscaling             "area": equal area; "count": area ∝ #observations; "width" (default): equal max width.
+  # LineColor             Color of outline around the mirrored densities (NA disables).
+  # LineSize              Line width of the outline around the mirrored densities.
+  # QuantityThreshold     Minimal number of finite values required to estimate a density.
+  # UniqueValuesThreshold Minimal number of unique values required to estimate a density
+  #                       and to run statistical tests.
+  # SampleSize            If n > SampleSize, finite cases are uniformly sampled for speed.
+  #                       Set SampleSize=nrow(Data) to skip sampling.
+  # SizeOfJitteredPoints  Point size used when falling back to a jittered 1D scatter (too few values/unique values).
+  # OnlyPlotOutput        TRUE: return only ggplot object; FALSE: also return scaled data and ordering (list).
+  # main                  Plot title (centered).
+  # ylab                  Y-axis label; PDE = Pareto Density Estimation.
+  # BW                    FALSE: default ggplot2 style (good for screens).
+  #                       TRUE: theme_bw() (good for publications).
+  # ForceNames            FALSE: clean/standardize column names for plotting.
+  #                       TRUE: use column names as provided (may cause plotting issues).
   #
   # Output
-  # ggplotObj     The ggplot object of the boxplots
+  # If OnlyPlotOutput==TRUE:
+  #   ggplotObj           The ggplot object of the MD-plot.
+  # If OnlyPlotOutput==FALSE: a list with
+  #   ggplotObj           The ggplot object.
+  #   Ordering            The applied ordering of variables.
+  #   DataOrdered         [n x d] ordered and (if selected) scaled data matrix.
+  # Note: ggExtra (if available) is used to rotate labels automatically.
   #
+  
   # Author MT 2018: used general idea of FP to apply ggplot2 frameworks 
   
   #always required:
@@ -106,13 +141,11 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     Ncases=nrow(Data)
   }
   
-  
   Npervar=apply(Data,MARGIN = 2,function(x) sum(is.finite(x)))
   NUniquepervar=apply(Data,MARGIN = 2,function(x) {
     x=x[is.finite(x)]
     return(length(unique(x)))
   })
-  
   
   if (missing(Names)) {
     if (!is.null(colnames(Data))) {
@@ -182,15 +215,12 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   )
   
   
-  ## Roboust Gaussian and Statistics ----
+  ## Robust Gaussian and Statistics ----
 
-  #ToDo: split up RobustGAussian and Ordering Parameter for better code readibility
-  #MT: robust gaussians only work with statistical testing, disabled some ifs
+  #these line of code compute statistical properties required for RobustGaussian or Ordering Statistics:
+  #iqr, shat,MinMax
   if(RobustGaussian==TRUE |Ordering=="Statistics"){
-    if(Ordering=="Statistics"){
-      requireNamespace('moments')
-      requireNamespace('diptest')
-    }
+
     x=as.matrix(Data)
     #bugfix: statistical testing does not accept infinitive values
     x[x==Inf]=NaN
@@ -222,81 +252,45 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     }
     if (dvariables > 1){
       iqr <- quartile[2, ] - quartile[1, ]
-    }else{ iqr <- quartile[2] - quartile[1]
-    }
+    }else{
+      iqr <- quartile[2] - quartile[1]
+      }
+  } # end if(RobustGaussian==TRUE |Ordering=="Statistics")
+
+  ### Ordering ----
+
+  RangfolgeV=order_features_hlp(Data, Ordering,iqr,faktor,std,MinMax,dvariables,Ncases,Npervar,NUniquepervar,UniqueValuesThreshold,RobustGaussian)  
+  Rangfolge=RangfolgeV$Rangfolge
+  #MT: robust Gaussian only works with statistical testing computed for odering in order_features_hlp
+  isuniformdist=RangfolgeV$isuniformdist
+  nonunimodal=RangfolgeV$nonunimodal
+  skewed=RangfolgeV$skewed
+  bimodalprob=RangfolgeV$bimodalprob
+  
+  ### RobustGaussian ----
+  if(RobustGaussian==TRUE){
     shat <- c()
     mhat <- c()
-    nonunimodal=c()
-    skewed=c()
-    bimodalprob=c()
-    isuniformdist=c()
     Nsample=max(c(10000,Ncases))
     #kernels=matrix(NaN,nrow=Nsample,ncol = dvariables)
     normaldist=matrix(NaN,nrow=Nsample,ncol = dvariables)
     for (i in 1:dvariables) {
-      shat[i] <- min(std[i], iqr[i]/faktor, na.rm = TRUE)
-      mhat[i] <- mean(x[, i], trim = 0.1, na.rm = TRUE)
-      if(Ncases>45000&Npervar[i]>8){#statistical testing does not work with to many cases
-        vec=sample(x = x[, i],45000)
-        # if(Ordering=="Statistics"){
-        if(NUniquepervar[i]>UniqueValuesThreshold){
-          nonunimodal[i]=diptest::dip.test(vec)$p.value
-          skewed[i]=moments::agostino.test(vec)$p.value
-          #Ties should not be present, however here we only approximate
-          isuniformdist[i]=suppressWarnings(ks.test(vec,"punif", MinMax[1, i], MinMax[2, i])$p.value)
-          bimodalprob[i]=bimodal(vec)$Bimodal
-        }else{
-          warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
-          nonunimodal[i]=1
-          skewed[i]=1
-          isuniformdist[i]=0
-          bimodalprob[i]=0
-        }
-      }else if(Npervar[i]<8){#statistical testing does not work with not enough cases
-        warning(paste('Sample of finite values to small to calculate agostino.test or dip.test. for row',i,colnames(x)[i]))
-        nonunimodal[i]=1
-        skewed[i]=1
-        bimodalprob[i]=0
-        isuniformdist[i]=0
-      }else{
-        #        if(Ordering=="Statistics"){
-        if(NUniquepervar[i]>UniqueValuesThreshold){
-          nonunimodal[i]=diptest::dip.test(x[, i])$p.value
-          skewed[i]=moments::agostino.test(x[, i])$p.value
-          isuniformdist[i]=suppressWarnings(ks.test(x[, i],"punif", MinMax[1, i], MinMax[2, i])$p.value)
-          bimodalprob[i]=bimodal(x[, i])$Bimodal
-        }else{#statistical testing requires enough unique values
-          warning('Not enough unique values for statistical testing, thus output of testing is ignored.')
-          nonunimodal[i]=1
-          skewed[i]=1
-          isuniformdist[i]=0
-          bimodalprob[i]=0
-        }
-        # }else{
-        #   nonunimodal[i]=1
-        #   skewed[i]=1
-        # }
-        
-      }
-      # if(Ordering=="Statistics"){#everything is siginficant and enough data for gaussian estimation
-      if(isuniformdist[i]<0.05 & nonunimodal[i]>0.05&skewed[i]>0.05&bimodalprob[i]<0.05& Npervar[i]>QuantityThreshold & NUniquepervar[i]>UniqueValuesThreshold){
-        normaldist[,i] <- rnorm(Nsample, mhat[i], shat[i])
-        #trim to range, not exact but close enough
-        normaldist[normaldist[,i]<min(x[, i],na.rm=T),i]=NaN#MinMax[1,i]
-        normaldist[normaldist[,i]>max(x[, i],na.rm=T),i]=NaN#MinMax[2,i]
-      }
-    }
+      shat[i] <- min(std[i], iqr[i]/faktor, na.rm = TRUE) #std amd iqr are defined above from Data in if(RobustGaussian==TRUE |Ordering=="Statistics")
+      mhat[i] <- mean(x[, i], trim = 0.1, na.rm = TRUE) #x is defined above from Data in if(RobustGaussian==TRUE |Ordering=="Statistics")
     
-    #raw estimation, page 115, projection based clustering book
-    nonunimodal[nonunimodal==0]=0.0000000001
-    skewed[skewed==0]=0.0000000001
-    Effectstrength=(-10*log(skewed)-10*log(nonunimodal))/2
-    
-  }#end if (RobustGaussian==TRUE |Ordering=="Statistics"
-  
-  ## Ordering ----
-  RangfolgeV=order_features_hlp(Data, Ordering,dvariables,Ncases,Npervar,RobustGaussian)  
-  Rangfolge=RangfolgeV$Rangfolge
+      if(isuniformdist[i]<0.05 & #defined in order_features_hlp for RobustGaussian==TRUE |Ordering=="Statistics"
+         nonunimodal[i]>0.05 &   #defined in order_features_hlp for RobustGaussian==TRUE |Ordering=="Statistics"
+         skewed[i]>0.05 &        #defined in order_features_hlp for RobustGaussian==TRUE |Ordering=="Statistics"
+         bimodalprob[i]<0.05 &   #defined in order_features_hlp for RobustGaussian==TRUE |Ordering=="Statistics"
+         Npervar[i]>QuantityThreshold & NUniquepervar[i]>UniqueValuesThreshold)
+        {
+          normaldist[,i] = rnorm(Nsample, mhat[i], shat[i])
+          #trim to range, not exact but close enough
+          normaldist[normaldist[,i]<min(x[, i],na.rm=T),i]=NaN#MinMax[1,i]
+          normaldist[normaldist[,i]>max(x[, i],na.rm=T),i]=NaN#MinMax[2,i]
+        }#end complex if
+    }#end 1:d
+  }
   ## Data Reshaping----
   if(any(Npervar<QuantityThreshold)|any(NUniquepervar<UniqueValuesThreshold)){#builds scatter plots in case of not enough information for pdf
     warning(paste('Some columns have less than,',QuantityThreshold,',finite data points or less than ',UniqueValuesThreshold,' unique values. Changing from MD-plot to Jitter-Plot for these columns.'))
@@ -388,7 +382,6 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
     plot=plot + scale_fill_manual(values=Fill)#+coord_flip()
   } else {
     plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, size = LineSize,
-                            bounds = c(0, 2),
                             trim = TRUE, fill = Fill, colour = LineColor) +
       theme(axis.text.x = element_text(size=rel(1.2)))
   }

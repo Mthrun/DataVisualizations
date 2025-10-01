@@ -8,7 +8,7 @@ stat_pde_density <- function(mapping = NULL,
                              na.rm = FALSE,
                              show.legend = NA,
                              inherit.aes = TRUE) {
-  
+  #geom_violin(stat = "PDEdensity", scale = MDscaling, size = LineSize, trim = TRUE, fill = Fill, colour = LineColor)
   scale <- match.arg(scale, c("area", "count", "width"))
   
   ggplot2::layer(
