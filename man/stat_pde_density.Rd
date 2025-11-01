@@ -9,7 +9,7 @@ It is used for the PDE-Optimized violin plot published in [Thrun et al, 2018].
 }
 \usage{
 stat_pde_density(mapping = NULL, data = NULL,
-geom = "violin", bounds = bounds, 
+geom = "violin",
 position = "dodge", ..., 
                     trim = TRUE, scale =
                     "area", na.rm = FALSE, 
@@ -37,8 +37,6 @@ the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data.}
 
 \item{geom}{The geometric object to use display the data}
-
-\item{bounds}{bounds}
 
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}

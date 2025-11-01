@@ -238,7 +238,7 @@ MDstrips = function(Data, Ordering='Default',Scaling="None",QuantityThreshold=50
                                levels = Rangfolge,
                                ordered = TRUE)
 
-  obj=ggplot2::ggplot(df_strips, ggplot2::aes(x = Variable, y = x, fill = PDE,height=height)) +
+  obj=ggplot2::ggplot(df_strips, ggplot2::aes_string(x = "Variable", y = "x", fill = "PDE",height="height")) +
     ggplot2::geom_tile(width = 1) +
     ggplot2::scale_fill_gradientn(colors = palette) +
     ggplot2::ylab(ylab) + ggplot2::xlab("Variables")+
@@ -254,7 +254,7 @@ MDstrips = function(Data, Ordering='Default',Scaling="None",QuantityThreshold=50
     obj <- obj +
       ggplot2::geom_jitter(
         data = df_jitter,
-        mapping = ggplot2::aes(x = Variables, y = Values, group = Variables),
+        mapping = ggplot2::aes_string(x = "Variables", y = "Values", group = "Variables"),
         colour = "black", size = SizeOfJitteredPoints,
         height = 0, width = 0.15,
         inherit.aes = FALSE

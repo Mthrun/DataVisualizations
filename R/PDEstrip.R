@@ -2,7 +2,7 @@ PDEstrip = function(Feature,
                           palette = c("blue","green","yellow","orange","red")) {
 #PDEstrip(Feature)
   # PDEstrip: 1D density strip based on Pareto Density Estimation (PDE)
-  # Renders a single variable’s probability density as a horizontal “heat strip”
+  # Renders a single variable's probability density as a horizontal "heat strip"
   # where color encodes local density (blue/green = low, yellow = medium,
   # orange/red = high). Useful as a compact alternative to a violin/box plot for
   # one feature.
@@ -10,7 +10,7 @@ PDEstrip = function(Feature,
   # Input
   # Feature              Numeric vector. Finite values are used for Pareto Density
   #                      Estimation (PDE). Non-finite values are ignored.
-  # palette              Character vector of colors defining the low→high density
+  # palette              Character vector of colors defining the low to high density
   #                      gradient (passed to ggplot2::scale_fill_gradientn()).
   #
   # Output
@@ -18,13 +18,13 @@ PDEstrip = function(Feature,
   #
   # Details
   # - Density is estimated via Pareto Density Estimation (PDE), which is robust
-  #   and adaptive (Ultsch, 2005). The returned PDE values are min–max normalized
+  #   and adaptive (Ultsch, 2005). The returned PDE values are min-max normalized
   #   to [0,1] and mapped to colors along the strip.
   # - The strip is drawn with geom_tile() at y = 1 to form a single band.
   # - The feature name in the x-axis label is captured from the call if possible.
   #
   # Notes
-  # - To match multi-variable “strip” plots visually, you can adjust theme and
+  #  To match multi-variable "strip" plots visually, you can adjust theme and
   #   color palette for consistency.
   #
   # Author
@@ -43,7 +43,7 @@ PDEstrip = function(Feature,
                   ypos = 1)
   
   # Plot as 1D heat strip
-  dense_strip=ggplot2::ggplot(d, ggplot2::aes(x = x, y = ypos, fill = y_scaled)) +
+  dense_strip=ggplot2::ggplot(d, ggplot2::aes_string(x = "x", y = "ypos", fill = "y_scaled")) +
     ggplot2::geom_tile(height = 0.9) +
     ggplot2::scale_fill_gradientn(colors = palette) +
     ggplot2::theme_minimal() +

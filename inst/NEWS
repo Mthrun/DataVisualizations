@@ -4,6 +4,7 @@ Version 1.4.0 (GitHub, 2025-10-01)
 	o Streemlining ParetoDensityEstimation to work better with ParetoRadius_fast and ParetoRadius
 	o Provided MDstrips function for high-dimensional data (d>100) in case single violings are not visible in MDplot
 	o MDplot: Due to the changes in ParetoRadius_fast, ParetoRadius and ParetoDensityEstimation, the MDplot is now 5 times faster, externelized code in helper function
+	o Choroplethmap() function is depricated as it yields errors for simple examples
 	
 Version 1.3.5 (CRAN, 2025-08-24)
 	o Bugfix in Classplot for plotly. Now points are colored if no names are given and legend can be disabled

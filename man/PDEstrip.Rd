@@ -4,7 +4,7 @@
 1D Density Strip based on Pareto Density Estimation (PDE)
 }
 \description{
-This function renders a single variable’s probability density as a horizontal “heat strip”, 
+This function renders a single variable's probability density as a horizontal "heat strip", 
 where color encodes local density values. Low-density regions are shown in blue/green, 
 medium-density regions in yellow, and high-density regions in orange/red. 
 It provides a compact alternative to violin or box plots for visualizing the distribution 
@@ -28,7 +28,7 @@ A \code{ggplot} object showing a 1D density strip for the given feature.
 \details{
 Density is estimated via Pareto Density Estimation (PDE), a robust and adaptive 
 approach to probability density estimation [Ultsch, 2005]. The returned 
-density values are min–max normalized to [0,1] and mapped to the user-specified 
+density values are min-max normalized to [0,1] and mapped to the user-specified 
 color gradient. The strip is drawn with \code{geom_tile()} at a fixed y=1, so that 
 each feature is visualized as a single horizontal band. The feature name is 
 automatically captured from the input expression and used as the x-axis label.

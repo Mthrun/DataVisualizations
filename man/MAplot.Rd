@@ -66,7 +66,7 @@ In case of \code{densityplot=FALSE}, the function \code{ \link{Classplot}} is al
 \references{
 [Altman/Bland, 1983]  Altman D.G., Bland J.M.: Measurement in medicine: the analysis of method comparison studies, The Statistician, Vol. 32, p. 307-317, doi:10.2307/2987937, 1983.
 
-\url{https://www.medcalc.org/manual/bland-altman-plot.php}
+\url{https://www.medcalc.org/en/manual/bland-altman-plot.php}
 
 [Stockl et al., 2004]  Stockl, D., Rodriguez Cabaleiro, D., Van Uytfanghe, K., & Thienpont, L. M.: Interpreting method comparison studies by use of the Bland-Altman plot: reflecting the importance of sample size by incorporating confidence limits and predefined error limits in the graphic, Clinical chemistry, Vol. 50(11), pp. 2216-2218. 2004.
 }

@@ -21,9 +21,9 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   #                       when statistical tests indicate (requires moments, diptest, signal).
   # GaussianColor         Color of the robust Gaussian overlay (if RobustGaussian=TRUE).
   # Gaussian_lwd          Line width of the robust Gaussian overlay.
-  # BoxPlot               If TRUE, overlay a Box–Whisker diagram.
-  # BoxColor              Color of the Box–Whisker overlay (if BoxPlot=TRUE).
-  # MDscaling             "area": equal area; "count": area ∝ #observations; "width" (default): equal max width.
+  # BoxPlot               If TRUE, overlay a Box-Whisker diagram.
+  # BoxColor              Color of the Box-Whisker overlay (if BoxPlot=TRUE).
+  # MDscaling             "area": equal area; "count": area prop to observations; "width" (default): equal max width.
   # LineColor             Color of outline around the mirrored densities (NA disables).
   # LineSize              Line width of the outline around the mirrored densities.
   # QuantityThreshold     Minimal number of finite values required to estimate a density.
@@ -376,13 +376,13 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
   if(fillDifferentColors) {
-    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, size = LineSize,
-                            trim = TRUE, colour = LineColor) + 
+    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, linewidth = LineSize,
+                            trim = TRUE,colour = LineColor) + 
       theme(axis.text.x = element_text(size=rel(1.2)), legend.position = "none")
     plot=plot + scale_fill_manual(values=Fill)#+coord_flip()
   } else {
-    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, size = LineSize,
-                            trim = TRUE, fill = Fill, colour = LineColor) +
+    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, linewidth = LineSize,
+                            trim = TRUE, fill = Fill,colour = LineColor) +
       theme(axis.text.x = element_text(size=rel(1.2)))
   }
   if(any(Npervar<QuantityThreshold) | any(NUniquepervar<UniqueValuesThreshold)){
@@ -431,7 +431,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
       
       
       plot=plot+geom_violin(data = DFtemp,mapping = aes(x = .data$Variables, group = .data$Variables, y = .data$Values),
-                            colour=GaussianColor,alpha=0,scale=MDscaling,size=Gaussian_lwd,
+                            colour=GaussianColor,alpha=0,scale=MDscaling,linewidth=Gaussian_lwd,
                             na.rm = TRUE,trim = TRUE, fill = NA,position="identity",width=1)#+guides(fill=FALSE,scale=MDscaling)
     }#otherwise no robust gaussian exist
   }
