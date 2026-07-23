@@ -29,105 +29,84 @@ ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
   # ggplot2 object for saving or further manipulation.
   # 
   # Author: QMS October 2024
-  # 
+  # 1. Editor: MCT, 2026 (several logical bug fixes)
   
 
-  if(length(Values) != length(Cls)){
-    stop("Classbarplot.R: Length of vectors Values and Cls must equal.")
-  }
-  Class=sort(unique(Cls))
-  
-  # Combine Values and Cls into a data frame
-  tmpDF <- data.frame(Values, Cls)
-  
-  # Group by Cls and calculate total count
-  tmpVar1 <- aggregate(. ~ Cls, data = tmpDF, FUN = function(x) length(x))
-  
-  # Extract total counts
-  tmpVar2 <- tmpVar1$Values
-  if(!all(tmpVar2 == tmpVar2[1])){
-    stop("Classbarplot.R: Provide values for each class and each instance on the x-axis.")
+  if (length(Values) != length(Cls)) {
+    stop("Length of vectors Values and Cls must equal.")
   }
   
-  UCls      = unique(Cls)
-  NumCls    = length(UCls)
-  ColNaming = c("Values", "NamesX", "Names", "Class", "ClassColors")
+  if (!is.null(Deviation) && length(Deviation) != length(Values)) {
+    stop("Length of vectors Values and Deviation must equal.")
+  }
   
-  if(!missing(Names)){
-    if(length(Names) != length(Cls)[1]){
-      stop("Classbarplot.R: Length of vectors Values and Names must equal.")
+  NumCls <- length(unique(Cls))
+  
+  # same number of values per class required
+  tmpDF <- data.frame(Values = Values, Cls = Cls)
+  n_per_class <- aggregate(Values ~ Cls, data = tmpDF, FUN = length)$Values
+  
+  if (!all(n_per_class == n_per_class[1])) {
+    stop("Provide values for each class and each instance on the x-axis.")
+  }
+  
+  # If Names are given, use them directly for the x-axis.
+  # That avoids the ordering bug completely.
+  if (is.null(Names)) {
+    Names <- rep(seq_len(n_per_class[1]), each = NumCls)
+  } else {
+    if (length(Names) != length(Values)) {
+      stop("Length of vectors Values and Names must equal.")
     }
-    NamesX = rep(1:tmpVar2[1], NumCls)
-    tmpM = max(nchar(NamesX))
-    
-    NamesX = as.numeric(sapply(NamesX, function(x, tmpM){
-      if(nchar(x) < tmpM){
-        x = paste0(rep("0", tmpM - nchar(x)), x)
-      }
-      x = paste0("1", x)
-    }, tmpM))
-    
-  }else{
-    Names  = rep(1:tmpVar2[1], NumCls)
-    NamesX = Names
   }
   
-  if(!missing(ClassColors)){
-    if((length(ClassColors) != length(Cls)) & (length(ClassColors) != NumCls)){
-      stop("Classbarplot.R: Parameter ClassColors must either define the colors for each
-           class or match the colors for each class in the Cls vector.")
-    }
-    if(length(ClassColors) == NumCls){
-      ClassColors = ClassColors[Cls]
-    }
-  }else{
-    Colors      = DataVisualizations::DefaultColorSequence[1:NumCls]
-    ClassColors = Colors[Cls]
+  dfCBP <- data.frame(
+    Values = as.numeric(Values),
+    Names  = factor(Names, levels = unique(Names)),
+    Class  = factor(Cls, levels = unique(Cls))
+  )
+  
+  if (!is.null(Deviation)) {
+    dfCBP$Deviation <- as.numeric(Deviation)
   }
   
-  MatCBP = cbind(Values, NamesX, Names, Cls, ClassColors)
-  
-  if(!missing(Deviation)){
-    MatCBP    = cbind(MatCBP, Deviation)
-    ColNaming = c(ColNaming, "Deviation")
+  if (is.null(ClassColors)) {
+    ClassColors <- DataVisualizations::DefaultColorSequence[seq_len(nlevels(dfCBP$Class))]
   }
   
-  # DataFrame:
-  # as.data.frame(cbind(Values, Class))
-  dfCBP            = as.data.frame(MatCBP)
-
-  colnames(dfCBP)  = ColNaming
-  row.names(dfCBP) = NULL
-  XTicks           = Names[1:tmpVar2[1]]
-  XAxis            = NamesX[1:tmpVar2[1]] # 1:tmpVar2[1]
-  
-  dfCBP$Values = as.numeric(dfCBP$Values)
-  if(!is.null(dfCBP$Deviation)){
-    dfCBP$Deviation = as.numeric(dfCBP$Values)
+  if (length(ClassColors) != nlevels(dfCBP$Class)) {
+    stop("ClassColors must have one color per class.")
   }
   
-  #print(colnames(dfCBP))
-  
-  p = ggplot(dfCBP, aes(x = NamesX, y = Values, group = Class, fill = ClassColors)) +
-    geom_bar(stat = 'identity', position = 'dodge', alpha = 0.5)
-  
-  if(!missing(Deviation)){
-    p = p + geom_errorbar(aes(ymin = Values - Deviation, ymax = Values + Deviation),
-                          position=position_dodge(0.9), color = "black", width=.2)
+  if (is.null(names(ClassColors))) {
+    names(ClassColors) <- levels(dfCBP$Class)
   }
   
-  p = p + theme_bw() +
-    theme(legend.position = "none", axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
-    theme(axis.text.x = element_text(face = "bold", color = "black", 
-                                     size = 8, angle = 0),
-          axis.text.y = element_text(face = "bold", color = "black", 
-                                     size = 14, angle = 0)) +
-    scale_x_discrete(breaks = XAxis, labels = XTicks) +
+  p <- ggplot(dfCBP, aes(x = Names, y = Values, fill = Class)) +
+    geom_col(position = position_dodge(width = 0.9), alpha = 0.5)
+  
+  if (!is.null(Deviation)) {
+    p <- p + geom_errorbar(
+      aes(ymin = Values - Deviation, ymax = Values + Deviation),
+      position = position_dodge(width = 0.9),
+      color = "black",
+      width = 0.2
+    )
+  }
+  
+  p <- p +
+    scale_fill_manual(values = ClassColors) +
+    theme_bw() +
+    theme(
+      legend.position = "right",
+      axis.text.x = element_text(face = "bold", color = "black", size = 8, angle = 0),
+      axis.text.y = element_text(face = "bold", color = "black", size = 14, angle = 0)
+    ) +
     ylab(ylab) + xlab(xlab)
   
-  if(isTRUE(PlotIt)){
+  if (isTRUE(PlotIt)) {
     print(p)
   }
   
-  return(list("ggplot2Object" = p))
+  return(list(ggplot2Object = p))
 }

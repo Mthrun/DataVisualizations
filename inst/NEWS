@@ -1,4 +1,8 @@
-Version 1.4.0 (GitHub, 2025-10-01)
+Version 1.4.1 (GitHub, 2026-10-01)
+	o Added xlab for MDplot
+	o failsave impemented for ParetoDensityEstimation() in the case of a large data sample with one very sharp peak in which density is zero
+	
+Version 1.4.0 (CRAN, 2025-10-31)
 	o Reimplementing ParetoRadius_fast for  up to 10 times speed up
 	o Simplifying ParetoRadius so that only one set of Cpp functions is used, all others are disregarded
 	o Streemlining ParetoDensityEstimation to work better with ParetoRadius_fast and ParetoRadius
@@ -214,28 +218,28 @@ Version 1.1.1 (CRAN 2018-06-30)
 	o Improved visualization of MD-plot.
 	
 Version 1.1.0 (GitHub)
-    o Vignette generated.
+  o Vignette generated.
 	o Bugfix: authors stated in Description regarding functions which were used in other dbt packages instead of this package.
 	
 Version 1.0.9 (GitHub)
-    o ClassViolinPlot build on top of stat_pde_density for Data with Clustering.
-    o Bugfix in stat_pde_density for special case of one value.
+  o ClassViolinPlot build on top of stat_pde_density for Data with Clustering.
+  o Bugfix in stat_pde_density for special case of one value.
 	o parallelDist integrated for faster distance computations.
 	
 Version 1.0.8 (GitHub)
-    o Bugfix in stat_pde_density for special case of one value.
+  o Bugfix in stat_pde_density for special case of one value.
 	o Minor bugfix in PDEscatter.
 	
 Version 1.0.7 (GitHub)
-    o MD-plot: stat_pde_density added in order to integrate concept with ggplot2.
+  o MD-plot: stat_pde_density added in order to integrate concept with ggplot2.
 
 Version 1.0.1-1.0.6 (GitHub)
-    o ClassBoxPlot function added for Data with Clustering.
+  o ClassBoxPlot function added for Data with Clustering.
 	o ClassPDEplot function added for Data with Clustering.
 	o ClassPDEplotMaxLikeli function added for Data with Clustering.
 	o Minor bugfix in InspectVariable function.
 	o Bugfix in internpiechart.
 
 Version 1.0.0 (CRAN, 2018-05-06)
-    o Complete package generated.
+  o Complete package generated.
 

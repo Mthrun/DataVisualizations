@@ -113,14 +113,19 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     warning('Less than 10 datapoints given, ParetoRadius potientially cannot be calcualted.')
   }
   #published method in thrun et al 2020
+  paretoRadiusNotMissing=TRUE
   if(length(Data)<5*10^3 | Compute=="r"){#smaller data
     if (missing(paretoRadius)) {#10% or bigger sample is taken
+      paretoRadiusNotMissing=FALSE
       paretoRadius = ParetoRadius(Data)
     } else if (is.null(paretoRadius)) {
       paretoRadius = ParetoRadius(Data)
+      paretoRadiusNotMissing=FALSE
     } else if (is.na(paretoRadius)) {
       paretoRadius = ParetoRadius(Data)
+      paretoRadiusNotMissing=FALSE
     } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
+      paretoRadiusNotMissing=FALSE
       paretoRadius = ParetoRadius(Data)
     } else{
       #ToNothing because radius is given by user
@@ -128,30 +133,39 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   }else{#big data
     if(length(Data)>10^5){#vaeriant 1 is approximation
       if (missing(paretoRadius)) {#multiple small samples are taken
+        paretoRadiusNotMissing=FALSE
         paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples = 10000))),na.rm=TRUE)
       } else if (is.null(paretoRadius)) {
+        paretoRadiusNotMissing=FALSE
         paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples = 10000))),na.rm=TRUE)
       } else if (is.na(paretoRadius)) {
+        paretoRadiusNotMissing=FALSE
         paretoRadius = ParetoRadius(Data)
       } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
+        paretoRadiusNotMissing=FALSE
         paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples = 10000))),na.rm=TRUE)
       } else{
         #ToNothing because radius is given by user
       }
     }else{#variant to is taken N=10000 sample with with fast estimation
       if (missing(paretoRadius)) {#10% or bigger sample is taken
+        paretoRadiusNotMissing=FALSE
         paretoRadius = ParetoRadius_fast(Data)
       } else if (is.null(paretoRadius)) {
         paretoRadius = ParetoRadius_fast(Data)
+        paretoRadiusNotMissing=FALSE
       } else if (is.na(paretoRadius)) {
         paretoRadius = ParetoRadius_fast(Data)
+        paretoRadiusNotMissing=FALSE
       } else if (paretoRadius == 0 || length(paretoRadius) == 0) {
         paretoRadius = ParetoRadius_fast(Data)
+        paretoRadiusNotMissing=FALSE
       } else{
         #ToNothing because radius is given by user
       }
     }
   }
+
   minData = min(Data, na.rm = TRUE)
   maxData = max(Data, na.rm = TRUE)
   #Update 2022, Mai ----
@@ -173,20 +187,37 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
           nBins = nBins * 3 + 1
         }
       }
-      breaks = pretty(c(minData, maxData), n = nBins, min.n = 1)
-      nB = length(breaks)
-      mids = 0.5 * (breaks[-1L] + breaks[-nB])
-      kernels_internal = mids
+
+      #failsave: 06.06.2026
+      internalcounter=0
+      repeat{
+        breaks = pretty(c(minData, maxData), n = nBins, min.n = 1)
+        nB = length(breaks)
+        mids = 0.5 * (breaks[-1L] + breaks[-nB])
+        kernels_internal = mids
+        if (mean(diff(kernels_internal)) > paretoRadius){ 
+          nBins=nBins+10
+          if(nBins>1000){
+            if(internalcounter==0){#do only once
+              warning("ParetoDensityEstimation: failsave activated to measure density, computing pareto radius on full data sample.")
+              paretoRadius = ParetoRadius_fast(Data,maximumNrSamples = length(Data),failsave=TRUE)
+            }
+            internalcounter=internalcounter+1
+          }
+        }else{
+         break;
+        }
+      }
       #FLAG_kernels_manualSet=FALSE
   #  }
   #}
   #bugfix: MT 2020
   #sicherstellen das alle daten auch in einer ParetoKugel enthalten sind
   #if(isFALSE(FLAG_kernels_manualSet)){
-    if((kernels_internal[1]-paretoRadius)!=minData){
+    if((kernels_internal[1]-paretoRadius)>minData){
       kernels_internal=c(minData,kernels_internal)
     } 
-    if((tail(kernels_internal,1)+paretoRadius)!=maxData){
+    if((tail(kernels_internal,1)+paretoRadius)<maxData){
       kernels_internal=c(kernels_internal,maxData)
     }
   # }else{#design choice: user entscheidung geht vor
@@ -230,7 +261,26 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       paretoDensity=c_pde(kernels_internal, nKernels, paretoRadius,  DataPlus)
     }
   )
-  
+  # print(paretoDensity)
+  # if(sum(paretoDensity,na.rm = T)==0&isFALSE(failsave)){
+  #   if(isTRUE(paretoRadiusNotMissing)){
+  #     
+  #     if(length(Data)>10^5){
+  #       warning("ParetoDensityEstimation: failsave activated to measure density, computing pareto radius on large data sample.")
+  #       paretoRadius = mean(sapply(1:100, function(x) return(DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples = 25000,failsave=TRUE))),na.rm=TRUE)
+  #     }else{
+  #       warning("ParetoDensityEstimation: failsave activated to measure density, computing pareto radius on full data without taking a sample.")
+  #       paretoRadius = DataVisualizations::ParetoRadius_fast(Data,maximumNrSamples=length(Data),failsave=TRUE)
+  #     }
+  #     
+  #     #do only once
+  #     V=ParetoDensityEstimation(Data=Data,paretoRadius=paretoRadius,kernels=kernels_internal,PlotIt=PlotIt,Compute=Compute,Silent=Silent,failsave=TRUE)
+  #     paretoDensity=V$paretoDensity_internal
+  #     paretoRadius=V$paretoRadius
+  #     
+  #   }
+  # }
+ 
   if(requireNamespace('pracma',quietly = TRUE)){ #fuer trapz
 		area <- pracma::trapz(kernels_internal, paretoDensity)
   }else{

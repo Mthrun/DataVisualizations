@@ -68,3 +68,4 @@ src/*.dll
 /.Rproj.user/shared/notebooks/paths
 /R/.Rhistory
 /inst/extdata/ClassifiedMap_Small.jpg
+.positai

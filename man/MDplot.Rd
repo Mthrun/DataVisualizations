@@ -24,7 +24,7 @@ SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,
 
 main="MD-plot",ylab="Range of values in which PDE is estimated",
 
-BW=FALSE,ForceNames=FALSE)
+xlab="Variables",BW=FALSE,ForceNames=FALSE)
 }
 
 \arguments{
@@ -90,6 +90,9 @@ BW=FALSE,ForceNames=FALSE)
      }
      \item{ylab}{
      string defining the y label, PDE= pareto density estimation (see [Ultsch, 2005])
+     }
+          \item{xlab}{
+     string defining the x label)
      }
       \item{BW}{
       FALSE: usual ggplot2 background and style which is good for screen visualizations

@@ -3,7 +3,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
                   BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
                   QuantityThreshold=50, UniqueValuesThreshold=12,SampleSize=5e+05,
                   SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,main="MD-plot",
-                  ylab="Range of values in which PDE is estimated",BW=FALSE,ForceNames=FALSE){
+                  ylab="Range of values in which PDE is estimated",xlab="Variables",BW=FALSE,ForceNames=FALSE){
   #MDplot(data, Names)
   # Plots a Mirrore-density plot  for each column of the given data, introduced in Thrun et al. (2020).
   # A complete guide: https://md-plot.readthedocs.io/en/latest/index.html
@@ -35,6 +35,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   # OnlyPlotOutput        TRUE: return only ggplot object; FALSE: also return scaled data and ordering (list).
   # main                  Plot title (centered).
   # ylab                  Y-axis label; PDE = Pareto Density Estimation.
+  # xlab                  X-axis label; default "Variables"
   # BW                    FALSE: default ggplot2 style (good for screens).
   #                       TRUE: theme_bw() (good for publications).
   # ForceNames            FALSE: clean/standardize column names for plotting.
@@ -445,7 +446,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   }else{
     warning('Package ggExtra is not installed. Labels of Variablenames are not rotated.')
   }
-  plot=plot+ggtitle(main)+theme(plot.title = element_text(hjust = 0.5))+ylab(ylab)
+  plot=plot+ggtitle(main)+theme(plot.title = element_text(hjust = 0.5))+ylab(ylab)+xlab(xlab)
   
   if(OnlyPlotOutput){
     return(ggplotObj = plot)

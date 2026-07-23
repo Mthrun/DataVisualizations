@@ -4,7 +4,9 @@
 \title{ParetoRadius for distributions}
 \usage{
 ParetoRadius(Data, maximumNrSamples = 10000,
-  plotDistancePercentiles = FALSE,Compute="Cpp")
+  plotDistancePercentiles = FALSE,Compute="Cpp",
+  
+  failsave=FALSE)
 }
 \arguments{
 \item{Data}{numeric data vector}
@@ -13,6 +15,7 @@ ParetoRadius(Data, maximumNrSamples = 10000,
 
 \item{plotDistancePercentiles}{Optional, logical. If TRUE, a plot of the percentiles of distances is produced. FALSE by default.}
 \item{Compute}{Either Cpp or Cpp_exp defines which subalgorithms are used to compute pareto radus. Cpp_exp is faster but not verified yet. }
+\item{failsave}{internal boolean}
 }
 \value{
 numeric value, the Pareto radius.

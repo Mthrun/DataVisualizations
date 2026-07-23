@@ -49,8 +49,8 @@ Please install the package which is defined in "Suggests".')
   #corrected and adapted plotrix function
    fan_plot_intern=function (x, edges = 200, radius = 1, col = NULL, align.at = NULL, 
                              max.span = NULL, labels = NULL, labelpos = NULL, label.radius = 1.2, 
-                             align = "left", shrink = 0.02, main = "", ticks = NULL,LabelCol="black", include.sumx = FALSE, 
-                             ...) 
+                             align = "left", shrink = 0.02, main = "", ticks = NULL,LabelCol="black", include.sumx = FALSE,
+                             BottomPadding = 0.35,  MinlabelSpacing = 0.3,...) 
    {
      if (!is.numeric(x) || any(is.na(x) | x <= 0)) 
        stop("fan.plot: x values must be positive numbers.")
@@ -83,10 +83,19 @@ Please install the package which is defined in "Suggests".')
      else lowpoint <- min(sin(align.at + x))
      if (lowpoint > 0) 
        lowpoint <- 0
-     par(mar = c(5, 2, 1, 2), xpd = TRUE)
+     #par(mar = c(5, 2, 1, 2), xpd = TRUE)
+     par(mar = c(7, 2, 2, 2), xpd = TRUE)
      xspan <- max(label.radius + 0.012 * max(nchar(labels)))
-     plot(0, xlim = c(-xspan, xspan), ylim = c(lowpoint, xspan), 
-          xlab = "", ylab = "", type = "n", axes = FALSE)
+     # plot(0, xlim = c(-xspan, xspan), ylim = c(lowpoint, xspan), 
+     #      xlab = "", ylab = "", type = "n", axes = FALSE)
+   
+     plot(0,
+          xlim = c(-xspan, xspan),
+          ylim = c(lowpoint - BottomPadding, xspan + 0.25),
+          xlab = "",
+          ylab = "",
+          type = "n",
+          axes = FALSE)
      xy <- par("usr")
      pinxy <- par("pin")
      ymult <- (xy[4] - xy[3])/(xy[2] - xy[1]) * (pinxy[1]/pinxy[2])
@@ -147,13 +156,19 @@ Please install the package which is defined in "Suggests".')
        if (is.null(labelpos)) {
          labelpos <- lpos
          ldiff <- abs(diff(labelpos))
-         squeezers <- which(ldiff < 0.15)
+         #squeezers <- which(ldiff < 0.15)
+         squeezers <- which(ldiff < MinlabelSpacing)
          if (length(squeezers)) {
            for (squeeze in squeezers) {
-             labelpos[1:squeeze] <- labelpos[1:squeeze] + 
+             # labelpos[1:squeeze] <- labelpos[1:squeeze] + 
+             #   (MinlabelSpacing - ldiff[squeeze]) * labelside[1:squeeze]
+             # 
+             # labelpos[(squeeze + 1):nx] <- labelpos[(squeeze + 1):nx] - 
+             #   (MinlabelSpacing - ldiff[squeeze]) * labelside[(squeeze + 1):nx]
+             labelpos[1:squeeze] <- labelpos[1:squeeze] +
                (0.15 - ldiff[squeeze]) * labelside[1:squeeze]
-             labelpos[(squeeze + 1):nx] <- labelpos[(squeeze + 
-                                                       1):nx] - (0.15 - ldiff[squeeze]) * labelside[(squeeze + 
+             labelpos[(squeeze + 1):nx] <- labelpos[(squeeze +
+                                                       1):nx] - (0.15 - ldiff[squeeze]) * labelside[(squeeze +
                                                                                                        1):nx]
            }
          }
@@ -189,7 +204,9 @@ Please install the package which is defined in "Suggests".')
  
   pct[pct==0]=0.004
 
-  fan_plot_intern(pct,labels=Labels,col=colors,max.span=pi,align="left",main='',include.sumx=MaxPercentage,shrink=ShrinkPies,label.radius = Rline,lwd=2,LabelCol = colors,...)
+  fan_plot_intern(pct,labels=Labels,col=colors,max.span=pi,align="left",main='',
+                  include.sumx=MaxPercentage,shrink=ShrinkPies,
+                  label.radius = Rline,lwd=2,LabelCol = colors,...)
    xy <- par("usr")
 
    #text(0, xy[3], main, cex = 1.5, adj = c(0.5, 1))

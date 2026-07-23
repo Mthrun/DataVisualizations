@@ -134,7 +134,7 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     theme(plot.title = element_text(lineheight = .8, face="bold"))
   plt <- plt + ylab(ylab) + xlab(xlab)
   plt <- plt + labs(colour = "Classes")
-  plt <- plt + coord_fixed(ratio = xlength/ylength)
+  #plt <- plt + coord_fixed(ratio = xlength/ylength)
   plt <- plt + scale_color_manual(values = ColorSequence)
 
   if(!is.null(xlim))

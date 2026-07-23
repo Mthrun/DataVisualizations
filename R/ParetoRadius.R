@@ -1,4 +1,4 @@
-ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles = FALSE,Compute="Cpp"){
+ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles = FALSE,Compute="Cpp",failsave=FALSE){
   # MT: in Matlab als ParetoRadiusfuerGMM.m benannt
   # ParetoRadius <- ParetoRadius(Data)
   # function calculates the paretoRadius for passed gauss mixture modell
@@ -32,9 +32,13 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
     sampleData <- Data
   } else{
     #  sample with uniform distribution MaximumNrSamples
-    sampleInd <-
-      ceiling(runif(maximumNrSamples, min = 0, max = nData)) # floor(nData*c(runif(maximumNrSamples))+1)
-    sampleData <- Data[sampleInd]
+    # if(isFALSE(failsave)){
+      sampleInd <-
+        ceiling(runif(maximumNrSamples, min = 0, max = nData)) # floor(nData*c(runif(maximumNrSamples))+1)
+      sampleData <- Data[sampleInd]
+    # }else{
+    #   warning("ParetoRadius: failsave activated to measure density, computing pareto radius on full data without taking a sample.")
+    # }
   }
   
   # calculate distances
@@ -42,13 +46,15 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
   
   # selection of ParetoRadius
   #paretoRadius=quantile(distvec,probs = 18/100,na.rm = T,type=8)#minimal unrealized potential (->Ultsch2005)
-  Compute=tolower(Compute)
+  #Compute=tolower(Compute)
   paretoRadius <- quantile4LargeVectors(distvec, 18 / 100)
 
   if (paretoRadius == 0){
-      pzt = quantile4LargeVectors(distvec, probs = c(1:100) / 100)
+      pzt = quantile4LargeVectors(distvec, probs = c(18:100) / 100)
     paretoRadius <-
       min(pzt[pzt > 0], na.rm = T) # take the smallest nonzero
+      # ind=head(which(pzt>0),1)
+      # paretoRadius=mean(pzt[ind:(ind+1)])
   }
   
   if (is.nan(paretoRadius))
@@ -110,9 +116,10 @@ ParetoRadius <- function(Data ,maximumNrSamples = 10000, plotDistancePercentiles
   #MT:
   #ALUs heuristik, in matlab in PDEplot, hier in dieser Funktion, damit martlabs AdaptGauss
   # die selbe Darstellung benutzt
-  if (nData > 1024) {
+  if (nData > 1024&isFALSE(failsave)) {
     paretoRadius = paretoRadius * 4 / (nData ^ 0.2)
-    
+
   }
+
   return(paretoRadius)
 }

@@ -38,7 +38,18 @@ MaxPercentage=FALSE,ShrinkPies=0.05,Rline=1.1, lwd=2,LabelCols="black",...)
 \item{Rline}{Optional, the distance between text and pie is defined here as the length of the line in numerical numbers}
 \item{lwd}{Optional, The line width, a positive number, defaut is 2}
 \item{LabelCols}{Color of labels}
-\item{...}{Further arguments to \code{\link[plotrix]{fan.plot}} like circumferential positions for the labels \code{labelpos} or additional arguments passed to \code{\link{polygon}}
+\item{...}{
+
+\code{BottomPadding}:
+  Numerical value controlling the amount of additional space below the plot.
+  Increase this value if labels are clipped or hidden at the bottom of the figure.
+
+\code{MinlabelSpacing}:
+  Numerical value specifying the minimum spacing between adjacent labels.
+  Larger values reduce label overlap but may spread the labels farther apart.
+  Default is 0.35.
+
+Further arguments to \code{\link[plotrix]{fan.plot}} like circumferential positions for the labels \code{labelpos} or additional arguments passed to \code{\link{polygon}}
 }
 }
 \details{

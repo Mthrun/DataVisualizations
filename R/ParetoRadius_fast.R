@@ -1,4 +1,4 @@
-ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000,na.rm=TRUE){
+ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000,na.rm=TRUE,epsilon=1e-9,failsave=FALSE){
   # MT: in Matlab als ParetoRadiusfuerGMM.m benannt
   # ParetoRadius <- ParetoRadius(Data)
   # function calculates the paretoRadius for passed gauss mixture modell
@@ -34,19 +34,27 @@ ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000,na.rm=TRUE){
     sampleData <- Data
   } else{
     #  sample with uniform distribution MaximumNrSamples
-    sampleInd <-
-      ceiling(runif(maximumNrSamples, min = 0, max = nData)) # floor(nData*c(runif(maximumNrSamples))+1)
-    sampleData <- Data[sampleInd]
+    # if(isFALSE(failsave)){
+      sampleInd <-
+        ceiling(runif(maximumNrSamples, min = 0, max = nData)) # floor(nData*c(runif(maximumNrSamples))+1)
+      sampleData <- Data[sampleInd]
+    # }else{
+    #   warning("ParetoRadius: failsave activated to measure density, computing pareto radius on full data without taking a sample.")
+    # }
   }
   
   # calculate distances
 
   paretoRadius=quantileDist1d(sampleData)
   
-  if (paretoRadius == 0){
-    pzt = quantile4LargeVectors(dist1d(sampleData), probs = c(1:100) / 100)
+  if (paretoRadius < epsilon){
+    probs=seq(from=18,to=100,by=1)/100
+    pzt = quantile4LargeVectors(dist1d(sampleData), probs = probs)
+
     paretoRadius <-
       min(pzt[pzt > 0], na.rm = T) # take the smallest nonzero
+    #    ind=head(which(pzt>0),1)
+    # paretoRadius=mean(pzt[ind:(ind+1)])
   }
   
   if (is.nan(paretoRadius)){
@@ -69,9 +77,8 @@ ParetoRadius_fast <- function(Data ,maximumNrSamples = 10000,na.rm=TRUE){
   #MT:
   #ALUs heuristik, in matlab in PDEplot, hier in dieser Funktion, damit martlabs AdaptGauss
   # die selbe Darstellung benutzt
-  if (nData > 1024) {
+  if (nData > 1024 &isFALSE(failsave)) {
     paretoRadius = paretoRadius * 4 / (nData ^ 0.2)
-    
   }
   return(as.numeric(unlist(paretoRadius)))
 }

@@ -3,14 +3,19 @@
 \alias{ParetoRadius_fast}
 \title{Fast ParetoRadius for distributions}
 \usage{
-ParetoRadius_fast(Data, maximumNrSamples = 10000,na.rm=TRUE)
+ParetoRadius_fast(Data, maximumNrSamples = 10000,na.rm=TRUE,epsilon=1e-9,
+
+failsave=FALSE)
 }
 \arguments{
 \item{Data}{numeric data vector}
 
 \item{maximumNrSamples}{Optional, numeric. Maximum number for which the distance calculation can be done. 1000 by default.}
 
-\item{na.rm}{(Optional: Default=TRUE). Remove na.}
+\item{na.rm}{Optional: Default=TRUE. Remove na.}
+\item{epsilon}{Optional: smallest allowed pareto radius has to be higher than this, otherwise quantiles may not be numerical stable.}
+
+\item{failsave}{internal boolean}
 }
 \value{
 numeric value, the Pareto radius.
