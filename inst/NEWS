@@ -1,6 +1,10 @@
-Version 1.4.1 (GitHub, 2026-10-01)
+Version 1.5.0 (GitHub, 2026-08-01)
+	o Major revision of ParetoDensityEstimation(): Simplifying and hardening input, radius, and grid handling; added normalized numerical Dirac representations for one or two unique values; and introduced EvaluationMode with "strict_2026" for direct evaluation on user kernels and "compatible_2020" for interpolation from the internal grid.
+	
+Version 1.4.1 (GitHub, 2026-06-30)
 	o Added xlab for MDplot
-	o failsave impemented for ParetoDensityEstimation() in the case of a large data sample with one very sharp peak in which density is zero
+	o failsave implemented for ParetoDensityEstimation() in the case of a large data sample with one very sharp peak in which density is zero
+	o Fanplot: substantially improved label rendering, including configurable padding, adjustable label spacing, and automatic suppression of scientific notation for numeric labels.
 	
 Version 1.4.0 (CRAN, 2025-10-31)
 	o Reimplementing ParetoRadius_fast for  up to 10 times speed up
