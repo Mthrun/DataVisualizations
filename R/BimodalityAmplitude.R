@@ -1,55 +1,201 @@
-BimodalityAmplitude = function(x,PlotIt=FALSE){
+BimodalityAmplitude = function(
+    x,
+    PlotIt = FALSE,    SampleSize = Inf,
+    SampleSeed = NULL,
+    na.rm = FALSE,...){
+  # BimodalityAmplitude(x, PlotIt)
+  #
+  # Computes the bimodality amplitude after Zhang et al. (2003). The public
+  # function retains its historical name and first two arguments.
+  #
+  # Historical implementation notes retained here:
+  # dens = density(x) # crude but fast estimation
+  # If no turning point can be identified, zero is returned. For every
+  # antimode, the nearest lower-index and higher-index maxima are compared.
+  #
+  # Density estimation remains in stats::density(), while the search for
+  # adjacent peaks, antimodes, and the maximum amplitude is implemented in
+  # C++. Optional reproducible subsampling bounds runtime for large vectors.
 
-  dens<-density(x)#crude but fast estimation
-  dd<-data.frame(dens$x,dens$y)
-  
-  maxima.ind = which(diff(sign(diff(dd[,2])))==-2)+1
-  if(length(maxima.ind)==0){#Wendepunkt nicht auffindbar
+#later to be mabye added
+
+
+  BimodalityAmplitudeCpp(
+    x = x,
+    PlotIt = PlotIt,
+    SampleSize = SampleSize,
+    SampleSeed = SampleSeed,
+    na.rm = na.rm,
+    ...
+  )
+}
+
+BimodalityAmplitudeCpp = function(
+    x,
+    PlotIt = FALSE,
+    SampleSize = Inf,
+    SampleSeed = NULL,
+    na.rm = FALSE,
+    ...){
+  if(!is.numeric(x) || is.complex(x) || !is.null(dim(x))){
+    stop("'x' must be one numeric vector.", call. = FALSE)
+  }
+  x = as.numeric(x)
+
+  if(!is.logical(PlotIt) || length(PlotIt) != 1L || is.na(PlotIt)){
+    stop("'PlotIt' must be TRUE or FALSE.", call. = FALSE)
+  }
+  if(!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm)){
+    stop("'na.rm' must be TRUE or FALSE.", call. = FALSE)
+  }
+  if(!is.numeric(SampleSize) || is.complex(SampleSize) ||
+     length(SampleSize) != 1L || is.na(SampleSize) ||
+     (!is.finite(SampleSize) &&
+      !identical(as.numeric(SampleSize), Inf)) ||
+     (is.finite(SampleSize) &&
+      (SampleSize < 3 || SampleSize != floor(SampleSize) ||
+       SampleSize > .Machine$integer.max))){
+    stop(
+      "'SampleSize' must be one integer of at least three or Inf.",
+      call. = FALSE
+    )
+  }
+  if(!is.null(SampleSeed)){
+    if(!is.numeric(SampleSeed) || is.complex(SampleSeed) ||
+       length(SampleSeed) != 1L || is.na(SampleSeed) ||
+       !is.finite(SampleSeed) || SampleSeed < 0 ||
+       SampleSeed != floor(SampleSeed) ||
+       SampleSeed > .Machine$integer.max){
+      stop(
+        "'SampleSeed' must be NULL or one non-negative integer.",
+        call. = FALSE
+      )
+    }
+    SampleSeed = as.integer(SampleSeed)
+  }
+
+  if(isTRUE(na.rm)){
+    x = x[is.finite(x)]
+  }else if(any(!is.finite(x))){
+    stop("'x' contains non-finite values.", call. = FALSE)
+  }
+
+  if(length(x) < 3L || length(unique(x)) < 2L){
     return(0)
   }
-  minima.ind_tmp = which(diff(sign(diff(dd[,2])))==2)+1
-  if(length(minima.ind_tmp)==0){#Wendepunkt nicht auffindbar
-    return(0)
-  } 
-  
-  minima.ind=minima.ind_tmp[which(minima.ind_tmp>maxima.ind[1]&minima.ind_tmp<tail(maxima.ind,1))]
-  
-  maxima=matrix(NaN,nrow = length(minima.ind),ncol = 2)
-  minima=rep(NaN,length(minima.ind))
-  min.maxima=rep(NaN,length(minima.ind))
-  antinode=rep(NaN,length(minima.ind))
-  B=rep(NaN,length(minima.ind))
-  for(i in 1:length(minima.ind)){
-    min_ind=minima.ind[i]
-    max1=maxima.ind[sort(which(maxima.ind<min_ind),decreasing = T)[1]] #hoehster kleiner als
-    max2=maxima.ind[sort(which(maxima.ind>min_ind),decreasing = F)[1]] #hoehster er groeser ist
 
-    maxima[i,] = dd[,1][c(max1,max2)]
-    minima[i] = dd[,1][min_ind]
-    
-    min.maxima[i] = min(dd[,2][c(max1,max2)])
-    antinode[i] = dd[,2][min_ind]
-    
-    B[i]=(min.maxima[i]-antinode[i])/min.maxima[i]
+  if(is.finite(SampleSize) && length(x) > SampleSize){
+    x = .BimodalityAmplitudeLocalSeed(
+      SampleSeed,
+      function(){
+        sample(
+          x,
+          size = as.integer(SampleSize),
+          replace = FALSE
+        )
+      }
+    )
   }
-  select=which.max(B)
-  B=B[select]
-  maxima=maxima[select,]
-  minima=minima[select]
-  
-  if (isTRUE(PlotIt)){
-    mm=min(dd[,1])
-    if(abs(mm)<1e-2) mm=-0.02
-    
-    xlim=c(mm,max(dd[,1])*1.02)
-    plot(dd[,1],dd[,2],type='l', main="Pareto Density plot with Peaks and Antimodes 'A'",ylim =c(0, max(dd[,2])*1.1),xlim=xlim,xlab='Kernels',ylab='Density')
-    abline(v=maxima[1],col="blue", lwd=2)
-    abline(v=maxima[2],col="blue", lwd=2)
-    abline(v=minima,col="darkgreen", lwd=2)
-    text((max(maxima)+.06*diff(range(dd[,1]))),1.009*max(range(dd[,2])), "Max 1", col = "red") 
-    text((min(maxima)-.06*diff(range(dd[,1]))),1.009*max(range(dd[,2])), "Max 2", col = "red") 
-    text((minima+.06*diff(range(dd[,1]))),0, "A", col = "red") 
+  if(length(x) < 3L || length(unique(x)) < 2L){
+    return(0)
   }
-  
-  return(B)	
+
+  dens = stats::density(x, ...)
+  Result = BimodalityAmplitudeCoreCpp(
+    DensityX = dens$x,
+    DensityY = dens$y
+  )
+
+  B = as.numeric(Result$Amplitude)
+  if(length(B) != 1L || !is.finite(B) || B <= 0){
+    return(0)
+  }
+  B = max(0, min(1, B))
+
+  if(isTRUE(PlotIt) &&
+     length(Result$MaximumIndices) == 2L &&
+     length(Result$AntimodeIndex) == 1L &&
+     !is.na(Result$AntimodeIndex)){
+    maxima = dens$x[Result$MaximumIndices]
+    minima = dens$x[Result$AntimodeIndex]
+
+    mm = min(dens$x)
+    if(abs(mm) < 1e-2) mm = -0.02
+
+    xMaximum = max(dens$x) * 1.02
+    if(!is.finite(xMaximum) || xMaximum <= mm){
+      Width = diff(range(dens$x))
+      if(!is.finite(Width) || Width <= 0) Width = 1
+      xMaximum = max(dens$x) + 0.02 * Width
+    }
+
+    graphics::plot(
+      dens$x,
+      dens$y,
+      type = 'l',
+      main = "Pareto Density plot with Peaks and Antimodes 'A'",
+      ylim = c(0, max(dens$y) * 1.1),
+      xlim = c(mm, xMaximum),
+      xlab = 'Kernels',
+      ylab = 'Density'
+    )
+    graphics::abline(v = maxima[1], col = 'blue', lwd = 2)
+    graphics::abline(v = maxima[2], col = 'blue', lwd = 2)
+    graphics::abline(v = minima, col = 'darkgreen', lwd = 2)
+    graphics::text(
+      max(maxima) + 0.06 * diff(range(dens$x)),
+      1.009 * max(range(dens$y)),
+      'Max 1',
+      col = 'red'
+    )
+    graphics::text(
+      min(maxima) - 0.06 * diff(range(dens$x)),
+      1.009 * max(range(dens$y)),
+      'Max 2',
+      col = 'red'
+    )
+    graphics::text(
+      minima + 0.06 * diff(range(dens$x)),
+      0,
+      'A',
+      col = 'red'
+    )
+  }
+
+  return(B)
+}
+
+.BimodalityAmplitudeLocalSeed = function(Seed, FUN){
+  if(is.null(Seed)) return(FUN())
+
+  HadSeed = exists(
+    '.Random.seed',
+    envir = .GlobalEnv,
+    inherits = FALSE
+  )
+  if(HadSeed){
+    OldSeed = get(
+      '.Random.seed',
+      envir = .GlobalEnv,
+      inherits = FALSE
+    )
+  }
+  on.exit({
+    if(HadSeed){
+      assign(
+        '.Random.seed',
+        OldSeed,
+        envir = .GlobalEnv
+      )
+    }else if(exists(
+      '.Random.seed',
+      envir = .GlobalEnv,
+      inherits = FALSE
+    )){
+      rm('.Random.seed', envir = .GlobalEnv)
+    }
+  }, add = TRUE)
+
+  set.seed(Seed)
+  FUN()
 }

@@ -10,6 +10,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// BimodalityAmplitudeCoreCpp
+Rcpp::List BimodalityAmplitudeCoreCpp(const Rcpp::NumericVector& DensityX, const Rcpp::NumericVector& DensityY);
+RcppExport SEXP _DataVisualizations_BimodalityAmplitudeCoreCpp(SEXP DensityXSEXP, SEXP DensityYSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type DensityX(DensityXSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type DensityY(DensityYSEXP);
+    rcpp_result_gen = Rcpp::wrap(BimodalityAmplitudeCoreCpp(DensityX, DensityY));
+    return rcpp_result_gen;
+END_RCPP
+}
 // PDE_Kernel
 NumericVector PDE_Kernel(NumericVector DataVector, NumericVector DomainX, double PR, int NSeq, int NData);
 RcppExport SEXP _DataVisualizations_PDE_Kernel(SEXP DataVectorSEXP, SEXP DomainXSEXP, SEXP PRSEXP, SEXP NSeqSEXP, SEXP NDataSEXP) {
@@ -103,6 +115,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_DataVisualizations_BimodalityAmplitudeCoreCpp", (DL_FUNC) &_DataVisualizations_BimodalityAmplitudeCoreCpp, 2},
     {"_DataVisualizations_PDE_Kernel", (DL_FUNC) &_DataVisualizations_PDE_Kernel, 5},
     {"_DataVisualizations_c_pde", (DL_FUNC) &_DataVisualizations_c_pde, 4},
     {"_DataVisualizations_c_pde_fast", (DL_FUNC) &_DataVisualizations_c_pde_fast, 4},
