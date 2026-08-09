@@ -12,7 +12,8 @@ Here the dendrogram has to be shown separately and only the heatmap itself is di
 \usage{
 Heatmap(DataOrDistances,Cls,method='euclidean',
 
-LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No.")
+LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No."  YAxis = c("auto", "none"),
+                  PlotIt = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,6 +36,10 @@ if \code{DataOrDistances} is a [1:n,1:d] not symmetric numerical matrix, please
   \item{HiLim}{ Optional: limits for the color axis }
     \item{LineWidth}{Width of lines seperating the clusters in the heatmap}
     \item{Clabel}{Default "\code{Cluster No.}", for large number of clusters abbrevations can be used like "\code{Cls No.}" or "\code{C}" in order to fit as the x and y axis labels}
+      \item{YAxis}{"auto": a few automatically selected numeric ticks on y axis, "none": no ticks
+   }
+         \item{PlotIt}{Boolean, FALSE disables showing the plot.
+   }
 }
 \details{
 "Cluster heatmaps are commonly used in biology and related fields to reveal hierarchical clusters in data matrices. Heatmaps visualize a data matrix by drawing a rectangular grid corresponding to rows and columns in the matrix and coloring the cells by their values in the data matrix. In their most basic form, heatmaps have been used for over a century [Wilkinson, 2012]. In addition to coloring cells, cluster heatmaps reorder the rows and/or columns of the matrix based on the results of hierarchical clustering. (...) . Cluster heatmaps have high data density, allowing them to compact large amounts of information into a small space [Weinstein, 2008]", [Engle, 2017].

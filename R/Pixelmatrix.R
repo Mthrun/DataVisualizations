@@ -73,14 +73,35 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main,
         Data[which(!is.finite(Data))] = Value4NaN
       }
     }
-    df <- data.frame(Data)
-    if (!is.null(XNames)) {
-      names(df) <- XNames
+    #langsame variante
+    # df <- data.frame(Data)
+    # if (!is.null(XNames)) {
+    #   names(df) <- XNames
+    # }
+    # 
+    # df$id <- seq.int(nrow(df))
+    # dfm <- reshape2::melt(df, id = 'id')
+  #schnellere variante
+    nr <- nrow(Data)
+    nc <- ncol(Data)
+    
+    VariableNames <- if (is.null(XNames)) {
+      as.character(seq_len(nc))
+    } else {
+      as.character(XNames)
     }
     
-    df$id <- seq.int(nrow(df))
-    dfm <- reshape2::melt(df, id = 'id')
-    
+    dfm <- data.frame(
+      id = rep.int(seq_len(nr), nc),
+      
+      variable = factor(
+        rep(seq_len(nc), each = nr),
+        levels = seq_len(nc),
+        labels = VariableNames
+      ),
+      
+      value = as.vector(Data)
+    )
     ## Variablen koennen sehr unterschiedliche Ranges haben,
     ## was zu einer schlechten Heatmap fuehren kann.
     ## darum transformieren wir jetzt die Daten zunaechst
@@ -89,7 +110,7 @@ Pixelmatrix=PlotPixMatrix =  function(Data, XNames, LowLim, HiLim, YNames, main,
     #             rescale = rescale(value))
     #aes only works if you dont modify your features in ggplot2 (e.g. not logarithmize them)
     plt <-
-      ggplot(dfm, aes(y = .data$id, x = .data$variable, fill = .data$value)) + geom_raster() +
+      ggplot(dfm, aes(y = .data$id, x = .data$variable, fill = .data$value)) + geom_raster(interpolate = FALSE) +
       scale_fill_gradientn(colours = heatC,na.value = 'black') +
       theme(
         panel.background = element_blank(),

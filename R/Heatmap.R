@@ -1,4 +1,6 @@
- Heatmap=function(DataOrDistances,Cls,method='euclidean',LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No."){
+ Heatmap=function(DataOrDistances,Cls,method='euclidean',LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No.",
+                  YAxis = c("auto", "none"),
+                  PlotIt = TRUE){
   # Heatmap(DataOrDistances,Cls,method) 
   # Heatmap: Distances of DataOrDistances sorted by Cls
   # INPUT
@@ -11,112 +13,156 @@
   # author: MT 08/2016, edited 28.01.2018
   #2.Editor: MT 06/18
   #3.Editor: 07/2020 because of reviews in GMD journal
-
-
+  #4. editor; MT 08:2026
    
-   if(!is.matrix(DataOrDistances)){
-     message('DataOrDistances is not a matrix. Calling as.matrix()')
-     DataOrDistances=as.matrix(DataOrDistances)
-   }
-   if(!mode(DataOrDistances)=='numeric'){
-     warning('Data is not a numeric matrix. Calling mode(DataOrDistances)="numeric"')
-     mode(DataOrDistances)='numeric'
-   }
-   AnzData = nrow(DataOrDistances)
-   if (missing(Cls))
-     Cls = rep(1, AnzData)
+   YAxis = match.arg(YAxis)
    
-   #print(Cls)
-   #MT: Reihenfolge muss unbedingt fest sein ab hier, sie unten
-   SortOrder=FALSE
-   ind = order(Cls,decreasing = SortOrder,na.last = T)
+   # ------------------------------------------------------------
+   # Eingaben prüfen
+   # ------------------------------------------------------------
    
-   if (isSymmetric(unname(DataOrDistances))) {
-     # nach Cls sortieren
-     DataOrDistances = DataOrDistances[ind, ]
-     DataOrDistances = DataOrDistances[, ind]
-     AnzVar = ncol(DataOrDistances)
-     DataDists = DataOrDistances
+   if (!is.matrix(DataOrDistances)) {
+     message("DataOrDistances ist keine Matrix. as.matrix() wird verwendet.")
+     DataOrDistances = as.matrix(DataOrDistances)
    }
-   else{
-      message('Distances are not in a symmetric matrix, Datamatrix is assumed and parallelDist::parDist is called')
+   
+   if (!is.numeric(DataOrDistances)) {
+     warning(
+       "DataOrDistances ist nicht numerisch. ",
+       "storage.mode(DataOrDistances) = 'double' wird verwendet."
+     )
+     storage.mode(DataOrDistances) = "double"
+   }
+   
+   n = nrow(DataOrDistances)
+   
+   if (missing(Cls)) {
+     Cls = rep.int(1L, n)
+   }
+   
+   if (length(Cls) != n) {
+     stop("length(Cls) muss gleich nrow(DataOrDistances) sein.")
+   }
+   
+   # Nach Cluster sortieren
+   ord = order(Cls, decreasing = FALSE, na.last = TRUE)
+   
+   # check.attributes = FALSE verhindert, dass unterschiedliche
+   # Zeilen- und Spaltennamen eine symmetrische Matrix fälschlich
+   # als nicht symmetrisch klassifizieren.
+   isDistanceMatrix =
+     ncol(DataOrDistances) == n &&
+     isTRUE(isSymmetric(DataOrDistances, check.attributes = FALSE))
+   
+   # ------------------------------------------------------------
+   # Distanzmatrix erzeugen beziehungsweise sortieren
+   # ------------------------------------------------------------
+   
+   if (isDistanceMatrix) {
+     DataDists = DataOrDistances[ord, ord, drop = FALSE]
      
-     AnzVar = ncol(DataOrDistances)
+   } else {
+     message("Datenmatrix erkannt; paarweise Distanzen werden berechnet.")
      
-     # nach Cls sortieren
-     DataOrDistances = DataOrDistances[ind, ]
-     #DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
-     if (!requireNamespace('parallelDist',quietly = TRUE)){
-        message('Subordinate package (parallelDist) is missing. No computations are performed.
-Please install the package which is defined in "Suggests". Falling back to dist().')
-        DataDists = as.matrix(dist(DataOrDistances, method = method, diag =TRUE))
-     }else{
-         DataDists=as.matrix(parallelDist::parDist(DataOrDistances[ind, ],method = method))
+     # Nur einmal sortieren
+     SortedData = DataOrDistances[ord, , drop = FALSE]
+     
+     if (requireNamespace("parallelDist", quietly = TRUE)) {
+       DataDists = as.matrix(parallelDist::parDist(SortedData, method = method))
+       
+     } else {
+       message("Paket 'parallelDist' ist nicht installiert; ",
+               "stats::dist() wird verwendet.")
+       
+       DataDists = as.matrix(stats::dist(SortedData, method = method, diag = TRUE))
      }
-     #DataDists = DistanceMatrix(DataOrDistances, method = method)
    }
    
-   if (missing(HiLim)){}
-     HiLim = max(DataDists,na.rm=T)
-     
-  isnumber=function(x) return(is.numeric(x)&length(x)==1)  
-   if(!isnumber(HiLim))
-     stop('"HiLim" is not a numeric number of length 1. Please change Input.')
+   # ------------------------------------------------------------
+   # Farbgrenzen prüfen
+   # ------------------------------------------------------------
    
-   if(!isnumber(LowLim))
-     stop('"LowLim" is not a numeric number of length 1. Please change Input.')
-   # Zeichnen
-   #MT: sollte in der selbenreihenfolge sein wie anordnung der cls welche daten anordnet
-   Vunique = sort(unique(Cls),decreasing = SortOrder,na.last = T)
+   if (missing(HiLim)) {
+     HiLim = max(DataDists, na.rm = TRUE)
+   }
    
-
-   # Klassen Unterteilungslinien anbringen
-   if (length(Vunique) > 1) {
-       countPerClass <- rep(0, length(Vunique))
-    for (i in 1:length(Vunique)) {
-        inClassI <- sum(Cls == Vunique[i])
-        countPerClass[i] = inClassI
-    }
-     ClassSepLines = cumsum(countPerClass) + 0.5
-
-     #does not look good to change the color of the seperating lines of the clusters
-     # and it is not applicable to color labels with multiple colors
-    #  cols=c('black','coral','gray41','lightpink1','darksalmon','magenta','rosybrown2','thistle','wheat4','mistyrose1')
-      cnn=length(ClassSepLines)
-    #  if(cnn<=length(cols)){
-    #   cols=cols[1:cnn]
-    # }else{
-    #    cols=rep('black',cnn)
-    # }
-      cols=rep('black',cnn)
-   } 
+   isScalarNumber = function(x) {
+     is.numeric(x) &&
+       length(x) == 1L &&
+       is.finite(x)
+   }
    
-   #Xnames has to be null so that this works!
-     plt = Pixelmatrix(DataDists,XNames = NULL,LowLim = LowLim, HiLim = HiLim) +
-        ylab("") +
-        xlab("")
-     
-     if (length(Vunique) > 1) {
-      plt = plt + ggplot2::geom_hline(yintercept = head(ClassSepLines,cnn-1),color=head(cols,cnn-1),lwd=LineWidth)#+geom_vline(xintercept = ClassSepLines,color=cols,lwd=LineWidth)
-
-     
-      #this works only for one segment
-       #plt=plt+ geom_segment(aes(x = ClassSepLines[3], y = 0, xend = ClassSepLines[3], yend = n),lwd=LineWidth,color="black")
-      
-      n=dim(DataDists)[1]
-      for(i in 1:(cnn-1)){
-         clsep=ClassSepLines[i]
-         plt = plt + ggplot2::geom_segment(x = clsep, y = -n, xend = clsep, yend = 0,lwd=LineWidth,color="black")
-         # segment_data = data.frame(
-         #    x = ClassSepLines,
-         #    xend = ClassSepLines, 
-         #    y = rep(0,cnn),
-         #    yend = rep(n,cnn)
-         # )
-         #plt=plt+ geom_segment(data = segment_data, mapping = aes(x = x, y = y, xend = xend, yend = yend))#geom_segment(x = clsep, y = 0, xend = clsep, yend = n,lwd=LineWidth,color="black")
-      }
-     }
-     plt = plt + ggplot2::theme(aspect.ratio = 1)
+   if (!isScalarNumber(HiLim)) {
+     stop("'HiLim' muss eine einzelne endliche numerische Zahl sein.")
+   }
+   
+   if (!isScalarNumber(LowLim)) {
+     stop("'LowLim' muss eine einzelne endliche numerische Zahl sein.")
+   }
+   
+   if (HiLim <= LowLim) {
+     warning("HiLim muss größer als LowLim sein; ",
+             "HiLim wird auf LowLim + 0.1 gesetzt.")
+     HiLim = LowLim + 0.1
+   }
+   
+   # ------------------------------------------------------------
+   # Clustergrenzen bestimmen
+   # ------------------------------------------------------------
+   
+   SortedCls = Cls[ord]
+   ClusterLevels = unique(SortedCls)
+   
+   # Schneller als eine Schleife mit sum(Cls == ...)
+   ClusterCounts = tabulate(match(SortedCls, ClusterLevels), nbins = length(ClusterLevels))
+   
+   if (length(ClusterCounts) > 1L) {
+     Separators = head(cumsum(ClusterCounts) + 0.5, -1L)
+   } else {
+     Separators = numeric(0)
+   }
+   
+   # ------------------------------------------------------------
+   # Achsenverhalten
+   # ------------------------------------------------------------
+   
+   if (YAxis == "none") {
+     YNamesArgument = NULL
+   } else {
+     # Verhindert, dass vorhandene rownames vollständig angezeigt
+     # werden; ggplot2 wählt stattdessen wenige automatische Ticks.
+     YNamesArgument = seq_len(n)
+   }
+   
+   # ------------------------------------------------------------
+   # Plot
+   # ------------------------------------------------------------
+   
+   plt = DataVisualizations::Pixelmatrix(
+     DataDists,
+     XNames = NULL,
+     YNames = YNamesArgument,
+     LowLim = LowLim,
+     HiLim = HiLim,
+     main = ""
+   ) +
+     ggplot2::labs(x = NULL, y = NULL) +
+     ggplot2::theme(aspect.ratio = 1)
+   
+   if (length(Separators) > 0L) {
+     # Nur zwei Layer, unabhängig von der Clusterzahl
+     plt = plt +
+       ggplot2::geom_hline(yintercept = Separators,
+                           colour = "black",
+                           linewidth = LineWidth) +
+       ggplot2::geom_vline(xintercept = Separators,
+                           colour = "black",
+                           linewidth = LineWidth)
+   }
+   
+   if (isTRUE(PlotIt)) {
      print(plt)
+   }
+   
    return(invisible(plt))
-}                    
+ }
