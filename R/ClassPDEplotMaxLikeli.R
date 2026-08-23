@@ -1,11 +1,11 @@
-# function [Kernels,ClassParetoDensities] = ClassPDEplotMaxLikeli(Data,Cls,ColorSequence,ColorSymbSequence,PlotLegend,MinAnzKernels,PlotNorm);
-ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend=TRUE, MinAnzKernels=0,PlotNorm=0,main='Pareto Density Estimation (PDE)', xlab='Data',ylab='ParetoDensity', xlim = NULL, ylim = NULL, lwd=1,...){
+ClassPDEplotMaxLikeli = function(Data, Cls, ColorSequence = DataVisualizations::DefaultColorSequence, ClassNames = NULL, PlotLegend=TRUE, MinAnzKernels=0,PlotNorm=0,main='Pareto Density Estimation (PDE)', xlab='Data',ylab='ParetoDensity', xlim = NULL, ylim = NULL, lwd=1,...){
 # res=ClassPDEplotMaxLikeli(Data, Cls)
-# PDEplot the data for allclasses, weight the Plot with 1 (= maximum likelihood)
+# Plot unweighted class-conditional PDEs p(x | C); class priors are not applied.
+# Comparing curve heights is maximum likelihood and equals MAP only for equal priors.
 # INPUT
 # Data                 the Data to be plotted
-# Cls                  vector of class identifiers can be integers or
-#                     NaN's, need not be consecutive nor positive
+# Cls                  vector of non-missing class identifiers; values
+#                     need not be consecutive nor positive
 # OPTIONAL
 # ColorSequence        the sequence of colors used, if ==0 r not given: DefaultColorSequence
 # ClassNames           Vector of classnames to show correct legend
@@ -22,36 +22,48 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
 #  library(ggplot2)
 # author: Felix Pape
   #1.Editor: MT 2018
+  #2.editor 08/26 MT, diverse bugfixes
   if(!is.vector(Data)){
-    warning('Data is expected to me a vector. Calling as.vector().')
+    warning('Data is expected to be a vector. Calling as.vector().')
     Data=as.vector(Data)
   }
+  # Coerce Data to numeric before finite-value filtering.
+  if(!is.numeric(Data)){
+    warning('Data is expected to be numeric. Calling as.numeric().')
+    Data=as.numeric(Data)
+  }
   
-  requireNamespace('reshape2')
+  # Check the dependency and validate PlotNorm.
+  if(!requireNamespace('reshape2',quietly=TRUE))
+    stop("Package 'reshape2' is required.")
   if(MinAnzKernels <= 0) MinAnzKernels=100
+  if(!(PlotNorm %in% c(0,1,2))) stop('PlotNorm must be 0, 1, or 2.')
 
-  Out = Data
-  NoNanInd <- which(!is.nan(Data))
-  Data <- Data[NoNanInd]
-  Cls <- Cls[NoNanInd]
+  # Reject missing classes, validate Cls, and remove non-finite data.
+  if(anyNA(Cls)) stop('Cls must not contain missing values.')
+  Cls=checkCls(Cls,length(Data))
+  if(anyNA(Cls)) stop('Cls must remain non-missing after validation.')
+  NoNanInd = which(is.finite(Data))
+  Data = Data[NoNanInd]
+  Cls = Cls[NoNanInd]
+  if(length(Data) == 0) stop('Data must contain at least one finite value.')
   
   AnzData = length(Data)
   Cls=checkCls(Cls,AnzData)
-  #ClCou <- ClassCount(Cls)
   UniqueClasses = sort(unique(Cls),decreasing = F,na.last = T)#ClCou$UniqueClasses
-  #CountPerClass = #ClCou$CountPerClass
     NrOfClasses = length(UniqueClasses)#ClCou$NumberOfClasses
   
-  CountPerClass <- rep(0, NrOfClasses)
+  # Correct the class-percentage vector (retained for compatibility).
+  CountPerClass = rep(0, NrOfClasses)
+  ClassPercentages = rep(0, NrOfClasses)
   for (i in 1:NrOfClasses) {
-    inClassI <- sum(Cls == UniqueClasses[i])
+    inClassI = sum(Cls == UniqueClasses[i])
     CountPerClass[i] = inClassI
-    ClassPercentages=inClassI/length(Cls) * 100
+    ClassPercentages[i]=inClassI/length(Cls) * 100
   }
-  
-  #ClassPercentages = ClCou$ClassPercentages # KlassenZaehlen 
 
-  PDEP = ParetoDensityEstimation(Data=Data,paretoRadius=0,kernels=0,MinAnzKernels)
+  #  Name MinAnzKernels explicitly.
+  PDEP = ParetoDensityEstimation(Data=Data,paretoRadius=0,kernels=0,MinAnzKernels=MinAnzKernels)
   Kernels = PDEP$kernels
   ParetoDensity = PDEP$paretoDensity
   ParetoRadiusGesamt = PDEP$paretoRadius
@@ -65,10 +77,12 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
     Class = UniqueClasses[c]
     ClassInd = which(Cls==Class)
 
-    pdeVal <- ParetoDensityEstimation(Data[ClassInd], paretoRadius=ParetoRadiusGesamt, kernels=Kernels)
+    pdeVal = ParetoDensityEstimation(Data[ClassInd], paretoRadius=ParetoRadiusGesamt, kernels=Kernels)
 
-    Kernels = pdeVal$kernels
+    # Keep the pooled common grid and align exceptional results to it.
     ParetoDensity = pdeVal$paretoDensity
+    if(length(ParetoDensity) != length(Kernels) || !isTRUE(all.equal(pdeVal$kernels,Kernels)))
+      ParetoDensity = stats::approx(pdeVal$kernels,ParetoDensity,xout=Kernels,yleft=0,yright=0)$y
 
     #if(is.null(dim(ClassParetoDensities))){
      # ClassParetoDensities = ParetoDensity
@@ -77,22 +91,27 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
       ClassParetoDensitiesL[[c]]=ParetoDensity
     #}
   }
-  ClassParetoDensities=do.call(CombineCols,ClassParetoDensitiesL)
+  # Combine equal-grid columns with base cbind and retain matrix shape.
+  ClassParetoDensities=do.call(cbind,ClassParetoDensitiesL)
   
-  ClassParetoDensities=ClassParetoDensities[1:length(Kernels),]
+  ClassParetoDensities=ClassParetoDensities[1:length(Kernels),,drop=FALSE]
   ClassParetoDensities[is.na(ClassParetoDensities)]=0
     for(c in 1:NrOfClasses){
+    # Recompute each class index and avoid invalid zero-scale normals.
+    ClassInd = which(Cls==UniqueClasses[c])
     if(PlotNorm==1){
     M = mean(Data[ClassInd],na.rm=T) #% empirical Mean
     S = sd(Data[ClassInd],na.rm=T)  # empirical Sdev
-    Normaldist[,c] = dnorm(Kernels,M,S) # the Gaussian with the empirical parametrers
+    if(is.finite(S) && S > 0)
+      Normaldist[,c] = dnorm(Kernels,M,S) # the Gaussian with the empirical parameters
    # plot(Kernels,Normaldist,PlotSymbolGauss)
     } #    if PlotNorm==1
     if(PlotNorm==2){
       M=mean(Data[ClassInd], trim = 0.1, na.rm = TRUE)
 
       S=Stdrobust(Data[ClassInd])
-    Normaldist[,c] = dnorm(Kernels,M,S) # the Gaussian with the empirical parametrers
+    if(is.finite(S) && S > 0)
+      Normaldist[,c] = dnorm(Kernels,M,S) # the Gaussian with the empirical parameters
     #plot(Kernels,Normaldist,PlotSymbolGauss)
     }#   if PlotNorm==2
   }
@@ -104,19 +123,21 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
 
   xlength = abs(min(Kernels,na.rm=TRUE) - max(Kernels,na.rm=TRUE))
   ylength = max(ClassParetoDensities)
+  # Use class identifiers by default and validate custom names.
   if(is.null(ClassNames)){
-    ClassNames = c(1:NrOfClasses)
-    ClassNames <- paste("C", ClassNames, sep = "")
+    ClassNames = as.character(UniqueClasses)
   }
+  if(length(ClassNames) != NrOfClasses)
+    stop('ClassNames must contain exactly one name per class.')
   if(PlotNorm>0){
     #fuege als dataframe zusammen
     norms = data.frame(Normaldist)
-    colnames(norms) <- ClassNames
+    colnames(norms) = ClassNames
     norms$kernels = Kernels
     normsm = reshape2::melt(norms, id='kernels')
   }
   cpd = data.frame(ClassParetoDensities)
-  colnames(cpd) <- ClassNames
+  colnames(cpd) = ClassNames
   cpd$kernels = Kernels
   cpdm = reshape2::melt(cpd, id="kernels")
   ind=which(colnames(cpdm)=="value")
@@ -125,22 +146,26 @@ ClassPDEplotMaxLikeli <- function(Data, Cls, ColorSequence = DataVisualizations:
   else{
     warning('Could not find y values for ggplot')
   }
-  plt <- ggplot()
+  plt = ggplot()
   if(PlotNorm>0){
-    plt <- plt + geom_line(data = normsm, mapping = aes(x=.data$kernels, y=.data$value, color=.data$variable), linetype = 1, size = lwd)
+    plt = plt + geom_line(data = normsm, mapping = aes(x=.data$kernels, y=.data$value, color=.data$variable), linetype = 1, linewidth = lwd)
   }
-  plt <- plt + geom_line(data=cpdm, aes(x=.data$kernels, y=.data$PDE, color=.data$variable),size = lwd)
-  plt <- plt + ggtitle(main) +
+  # Use linewidth and pass ... to the class-density layer.
+  plt = plt + geom_line(data=cpdm, aes(x=.data$kernels, y=.data$PDE, color=.data$variable),linewidth = lwd,...)
+  plt = plt + ggtitle(main) +
     theme(plot.title = element_text(lineheight = .8, face="bold"))
-  plt <- plt + ylab(ylab) + xlab(xlab)
-  plt <- plt + labs(colour = "Classes")
-  #plt <- plt + coord_fixed(ratio = xlength/ylength)
-  plt <- plt + scale_color_manual(values = ColorSequence)
+  plt = plt + ylab(ylab) + xlab(xlab)
+  plt = plt + labs(colour = "Classes")
+  #plt = plt + coord_fixed(ratio = xlength/ylength)
+  plt = plt + scale_color_manual(values = ColorSequence)
 
   if(!is.null(xlim))
-    plt <- plt + scale_x_continuous(limits = xlim) 
+    plt = plt + scale_x_continuous(limits = xlim) 
   if(!is.null(ylim))
-    plt <- plt + scale_y_continuous(limits = ylim)
+    plt = plt + scale_y_continuous(limits = ylim)
+  # ∂Make PlotLegend functional.
+  if(!isTRUE(as.logical(PlotLegend)))
+    plt = plt + theme(legend.position = 'none')
   plt
 
   invisible(list(Kernels=Kernels, ClassParetoDensities=ClassParetoDensities, ggobject=plt,Dataframe=cpdm))

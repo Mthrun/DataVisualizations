@@ -14,7 +14,7 @@ CombineRows=rbind_fill=function(...,na.rm=FALSE){
   }
   ind_store = colnames(PatternMatrix)
   
-  for (i in 2:length(inputs)) {
+  for (i in seq_along(inputs)[-1L]){
     if (is.vector(inputs[[i]])) {
       CurrentMatrixToAdd = matrix(inputs[[i]], nrow = 1)
     } else{
@@ -64,13 +64,11 @@ CombineRows=rbind_fill=function(...,na.rm=FALSE){
       fill_up = as.matrix(CurrentMatrixToAdd)
     }
 
-    fill_up = fill_up[, order(colnames(fill_up), decreasing = F)]
-    PatternMatrix = PatternMatrix[, order(colnames(PatternMatrix), decreasing = F)]
-
-    if(is.vector(fill_up))
-      fill_up=t(as.matrix(fill_up))
-
-    PatternMatrix = rbind(PatternMatrix, fill_up[,1:ncol(PatternMatrix)])
+    fill_up = fill_up[, order(colnames(fill_up), decreasing = FALSE),drop = FALSE ]
+    
+    PatternMatrix <- PatternMatrix[ ,  order(colnames(PatternMatrix), decreasing = FALSE), drop = FALSE ]
+    
+    PatternMatrix <- rbind( PatternMatrix, fill_up[   , seq_len(ncol(PatternMatrix)), drop = FALSE ] )
   }
   
   #PatternMatrixExtended = PatternMatrix[, match(colnames(PatternMatrix), ind_store)]

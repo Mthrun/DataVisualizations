@@ -133,14 +133,17 @@ BimodalityAmplitudeCpp = function(
       dens$x,
       dens$y,
       type = 'l',
-      main = "Pareto Density plot with Peaks and Antimodes 'A'",
+      main = "Kernel density estimate with modes and antimode 'A'",
       ylim = c(0, max(dens$y) * 1.1),
       xlim = c(mm, xMaximum),
-      xlab = 'Kernels',
-      ylab = 'Density'
+      xlab = 'Observed values',
+      ylab = 'Estimated density'
     )
+	#Left mode
     graphics::abline(v = maxima[1], col = 'blue', lwd = 2)
+	#Right mode
     graphics::abline(v = maxima[2], col = 'blue', lwd = 2)
+	#Antimode
     graphics::abline(v = minima, col = 'darkgreen', lwd = 2)
     graphics::text(
       max(maxima) + 0.06 * diff(range(dens$x)),

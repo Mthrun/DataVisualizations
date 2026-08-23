@@ -1,71 +1,99 @@
-Classplot = function(X, Y, Cls,
-                     Plotter,
-                     Names = NULL,
-                     Subsample=TRUE,
-                     na.rm = FALSE,
-                     xlab = "X",
-                     ylab = "Y",
-                     main = "Class Plot",
-                     Colors = NULL,
-                     Size = 8,
-                     PointBorderCol="black",
-                     LineColor = NULL,
-                     LineWidth = 1,
-                     LineType  = NULL,
-                     Showgrid  = TRUE,
-                     pch, 
-                     AnnotateIt = FALSE,
-                     SaveIt = FALSE, 
-                     Nudge_x_Names = 0,
-                     Nudge_y_Names = 0,
-                     Legend = "",
-                     SmallClassesOnTop = TRUE,
-                     ...){
+Classplot = function(X, Y, Cls, Plotter, Names = NULL, Subsample = TRUE, 
+                     na.rm = FALSE, xlab = "X", ylab = "Y", main = "Class Plot",
+                     Colors = NULL, Size = 8, PointBorderCol, LineColor = NULL, 
+                     LineWidth = 1, LineType = NULL, Showgrid = TRUE, pch, AnnotateIt = FALSE, 
+                     SaveIt = FALSE, Nudge_x_Names = 0, Nudge_y_Names = 0, Legend = "",
+                     SmallClassesOnTop = TRUE, ...){
   
   if(missing(Cls)) Cls=rep(1,length(X))
   if(missing(xlab)) xlab=deparse1(substitute(X))
   if(missing(ylab)) ylab=deparse1(substitute(Y))
- 
-  X=checkFeature(X,varname='X',Funname="Classplot")
-  Y=checkFeature(Y,varname='Y',Funname="Classplot")
   
-  Cls=checkCls(Cls,length(Y),Normalize=FALSE)#true is highly computive intensive
-
-  if(length(X)!=length(Y)) stop('X and Y have to have the same length')
+  if(missing(PointBorderCol)&&missing(pch)){
+    PointBorderRequested=TRUE
+    PointBorderCol="black"
+  }else if(missing(PointBorderCol)&&!missing(pch)&&all(pch %in% 21:25)){
+    PointBorderRequested=TRUE
+    PointBorderCol="black"
+  }else if(missing(PointBorderCol)&&!missing(pch)&&any(!pch %in% 21:25)){
+    PointBorderRequested=FALSE
+  }else if(!missing(PointBorderCol)){
+    if(is.null(PointBorderCol)){
+      PointBorderRequested=FALSE
+    }else if(length(PointBorderCol)!=1){
+        warning("PointBorderCol must contain exactly one color. Ignoring input.")
+        PointBorderRequested=FALSE
+    }else if(isFALSE(PointBorderCol)){
+      PointBorderRequested=FALSE
+    }else if(is.na(PointBorderCol)){
+      PointBorderRequested=FALSE
+    }else{
+      PointBorderRequested=TRUE
+    }
+  }else{
+    PointBorderRequested=FALSE
+  }
+  
+  # Keep the attached validation helpers, but validate X/Y length and empty input before adapting Cls.
+  X=checkFeature(X,varname="X",Funname="Classplot")
+  Y=checkFeature(Y,varname="Y",Funname="Classplot")
+  if(length(X)!=length(Y)) stop("X and Y have to have the same length")
+  if(length(X)==0) stop("X and Y must contain at least one value")
+  Cls=checkCls(Cls,length(Y),Normalize=FALSE)
+  
+  # Validate scalar numeric controls before they are used in plotting calls or if checks.
+  if(length(Size)!=1||!is.numeric(Size)||!is.finite(Size)||Size<=0) stop("Size must be one finite numeric value greater than zero")
+  if(length(LineWidth)!=1||!is.numeric(LineWidth)||!is.finite(LineWidth)||LineWidth<0) stop("LineWidth must be one finite non-negative numeric value")
   
   if(!missing(pch)){
-    if(length(X)!=length(pch)){
+    if(length(pch)==1){
+      pch=rep(pch,length(X))
+    }else if(length(X)!=length(pch)){
       pch=rep(20,length(X))
-      warning('X and pch have to have the same length. Setting "pch=20"')
-    }
-  }
-  if(!is.null(Names)){
-    if(length(X)!=length(Names)){
-      if(is.null(names(Names))){
-        Names=Names[1:length(X)]
-        warning('X and Names have to have the same length. Shortening Names to length of X"')
-      }
+      warning("X and pch have to have the same length. Setting pch=20")
     }
   }
   
-  if(isTRUE(na.rm)){ #achtung irgendwas stimmt hier nicht
-    noNaNInd <- which(is.finite(X)&is.finite(Y))
-    X = X[noNaNInd]
-    Y = Y[noNaNInd]
+  # Names is one value per observation; shorten excess values, but reject too few values instead of silently padding with NA.
+  if(!is.null(Names)){
+    Names=as.character(Names)
+    if(length(Names)<length(X)) stop("Names must contain one value for every observation in X")
+    if(length(Names)>length(X)){
+      Names=Names[seq_len(length(X))]
+      warning("Names was longer than X and was shortened to the length of X")
+    }
+  }
+  
+  # Make Legend checks safe for NULL, NA, non-character, or non-scalar values.
+  ShowLegend=is.character(Legend)&&length(Legend)==1&&!is.na(Legend)&&nzchar(Legend)
+  
+  #  Remove non-finite X, Y, and Cls together; otherwise stop before plotting or subsampling can misalign observations.
+  noNaNInd=which(is.finite(X)&is.finite(Y)&is.finite(Cls))
+  if(isTRUE(na.rm)){
+    X=X[noNaNInd]
+    Y=Y[noNaNInd]
     Cls=Cls[noNaNInd]
-    
     if(!is.null(Names)){
       Names=Names[noNaNInd]
     }
-    
     if(!missing(pch)){
       pch=pch[noNaNInd]
     }
+  }else if(length(noNaNInd)!=length(X)){
+    stop("X, Y, and Cls must contain only finite values when na.rm=FALSE")
   }
-  #erst missing werte bereinigen dann sample ziehen
+  if(length(X)==0) stop("No finite observations remain after removing non-finite values")
+  
+  # Check ScatterDensity explicitly and keep SampleScatter indices aligned by disabling its internal NA filtering.
   if(isTRUE(Subsample)){
     if(length(X)>5000){
-      indsub=ScatterDensity::SampleScatter(X,Y,PlotIt = F)
+      if(!requireNamespace("ScatterDensity",quietly=TRUE)){
+        warning("Subordinate package ScatterDensity is required when Subsample=TRUE and more than 5000 observations are supplied. Fallback to uniform sample.")
+        indsub=sample(1:length(X),5000)
+      }else{
+        indsub=ScatterDensity::SampleScatter(X,Y,na.rm=FALSE,PlotIt=FALSE)
+      } 
+      if(length(indsub)==0||any(!is.finite(indsub))||any(indsub<1)||any(indsub>length(X))) stop("SampleScatter returned invalid observation indices")
     }else{
       Subsample=FALSE
     }
@@ -83,328 +111,356 @@ Classplot = function(X, Y, Cls,
     }
   }
   
-  uniqueLabels=unique(Cls)
-  uu=sort(uniqueLabels,decreasing = F)
+  # Preserve observation order for the Plotly line before marker-order changes are applied.
+  LineX=X
+  LineY=Y
   
+  # Use sorted class labels for deterministic color/name mapping and derive one legend name from each class.
+  uniqueLabels=sort(unique(Cls),decreasing=FALSE)
+  uu=uniqueLabels
   if(!is.null(Names)){
-    #for legend
-    u_names=unique(Names)[order(uniqueLabels,decreasing = F)]
+    u_names=character(length(uu))
+    for(i in seq_along(uu)){
+      CurrentClass=uu[i]
+      CurrentNames=unique(Names[Cls==CurrentClass])
+      CurrentNames=CurrentNames[!is.na(CurrentNames)]
+      if(length(CurrentNames)==0){
+        u_names[i]=as.character(CurrentClass)
+      }else{
+        u_names[i]=as.character(CurrentNames[1])
+      }
+    }
   }else{
     u_names=as.character(uu)
-  }
-  
+  }  
+  # Restrict Colors to exactly one valid color per present class, support extra named colors safely, and reject too few colors.
+  mc=length(uu)
   if(is.null(Colors)){
-    mc=length(uu)
-    if(is.null(Names))
-      Colors=DataVisualizations::DefaultColorSequence[1:mc]
-    else
-      Colors=DataVisualizations::DefaultColorSequence[-2][1:mc] #no yellow/gold
-  }
-  
-  ##Make sure that small classes are plot last,i.e.,
-  #if they overlap in areas with bigger classes
-  # they are plottet on the top
-  # therefore still visible
-  cp = table(Cls)
-  if(isTRUE(SmallClassesOnTop)){
-    indBig2Small = order(cp, decreasing = T)
+    if(is.null(Names)) 
+		DefaultColors=DataVisualizations::DefaultColorSequence 
+    else 
+		DefaultColors=DataVisualizations::DefaultColorSequence[-2]
+    if(length(DefaultColors)<mc) 
+      stop("The default color sequence is shorter than the number of classes; supply Colors explicitly")
+    Colors=DefaultColors[seq_len(mc)]
   }else{
-    indBig2Small = 1:length(cp)
+    ColorNames=names(Colors)
+    Colors=as.character(Colors)
+    names(Colors)=ColorNames
+    if(is.null(names(Colors))){
+      if(length(Colors)<mc) stop("Colors must contain at least one color for every class")
+      Colors=unname(Colors[seq_len(mc)])
+    }else{
+      class_color=suppressWarnings(as.numeric(names(Colors)))
+      if(any(!is.finite(class_color))||!all(uu%in%class_color)){
+        warning("Classplot: Names of Colors do not contain all finite numeric labels of Cls. Falling back to positional color mapping.")
+        if(length(Colors)<mc) stop("Colors must contain at least one color for every class")
+        Colors=unname(Colors[seq_len(mc)])
+      }else{
+        Colors=unname(Colors[match(uu,class_color)])
+      }
+    }
   }
-
-  uug=as.numeric(names(cp))
-  if(!any(!is.finite(uug))){#all class names are convertivle to numeric
-    #reorder unique colors and unique names
-    n_color=length(Colors)
-    if(length(indBig2Small)==n_color){
-      Colors=Colors[c(indBig2Small)]
-    }#typical case
-    if(length(indBig2Small)<n_color){
-    #special case under the assumptuion that colors are named
-      #then more colors than classes are allowed
-      #in that case just the first colors are reordered
-      Colors=Colors[c(indBig2Small,setdiff(1:n_color,indBig2Small))]
-    }
-    if(!is.null(Names)){
-      NamesOrdered=c() 
-      u_names=u_names[indBig2Small]
-    }
-    
-    ClsOrdered=c()
-    Xordered=c()
-    Yordered=c()
-    if(!missing(pch)){
-      pchordered=c()
-    }
-    for(k in 1:length(cp)){#reorder 
+  tryCatch(grDevices::col2rgb(Colors),error=function(e) stop("Colors contains at least one invalid R color value"))
+  
+  ## Make sure that small classes are plotted last and remain visible.
+  cp=table(Cls)
+  if(isTRUE(SmallClassesOnTop)) 
+    indBig2Small=order(cp,decreasing=TRUE) 
+  else 
+	indBig2Small=seq_along(cp)
+  
+  # Reorder markers only when requested, keep class names/colors synchronized, and use seq_along for zero-safe iteration.
+  if(isTRUE(SmallClassesOnTop)){
+    uug=as.numeric(names(cp))
+    Colors=Colors[indBig2Small]
+    u_names=u_names[indBig2Small]
+    if(!is.null(Names)) 
+      NamesOrdered=character(0)
+    ClsOrdered=numeric(0)
+    Xordered=numeric(0)
+    Yordered=numeric(0)
+    if(!missing(pch)) pchordered=numeric(0)
+    for(k in seq_along(cp)){
       ind_o=which(Cls==uug[indBig2Small[k]])
       ClsOrdered=c(ClsOrdered,Cls[ind_o])
       Yordered=c(Yordered,Y[ind_o])
       Xordered=c(Xordered,X[ind_o])
-      #reorder vector of names per datapoint if givin
-      if(!is.null(Names)){
-        NamesOrdered=c(NamesOrdered,Names[ind_o]) 
-      }
-      if(!missing(pch)){
+      if(!is.null(Names)) 
+        NamesOrdered=c(NamesOrdered,Names[ind_o])
+      if(!missing(pch)) 
         pchordered=c(pchordered,pch[ind_o])
-      }
     }
     X=Xordered
     Y=Yordered
     Cls=ClsOrdered
-    if(!is.null(Names)){
+    if(!is.null(Names)) 
       Names=NamesOrdered
-    }
-    if(!missing(pch)){
+    if(!missing(pch)) 
       pch=pchordered
-    }
-    
     uniqueLabels=unique(Cls)
-    #uu=sort(uniqueLabels,decreasing = F)
-  }#otherwise some class was not convertable to numeric
-
-  # print(u_names)
-  # print(uniqueLabels)
-  # print(Colors)
-  # print(uu)
-  # 
-  ColorVec=Cls*0
-  k=1
-  
-  if(is.null(names(Colors))){#default color vec is not named
-    for(i in uniqueLabels){
-      ColorVec[Cls==i]=Colors[k]
-      k=k+1
-    }
-  }else{#user named color vec
-    class_color=as.numeric(names(Colors))
-    # print(class_color)
-    # print(uniqueLabels)
-    # print(uniqueLabels %in% class_color)
-    if(sum(is.finite(class_color))>=length(uniqueLabels)){#for multipleplots there could be more colors defined
-      if(sum(uniqueLabels %in% class_color)==length(uniqueLabels)){
-        for(i in class_color){
-          ColorVec[Cls==i]=Colors[k]
-          k=k+1
-        }
-      }else{
-        warning("Classplot: Names of 'Colors' do not contain all digit labels of 'Cls'. Falling back to default 1:k color sequence.")
-        for(i in uniqueLabels){
-          ColorVec[Cls==i]=Colors[k]
-          k=k+1
-        }
-      }
-    }else{
-      warning("Classplot: Names of 'Colors' have to be digits that can be finitely conversed to numeric")
-      for(i in uniqueLabels){
-        ColorVec[Cls==i]=Colors[k]
-        k=k+1
-      }
-    }
-
   }
+  
+  # Build colors from the already validated class-color order; remove the invalid named-color loop and NA assignments.
+  ColorVec=rep(NA_character_,length(Cls))
+  for(k in seq_along(uniqueLabels)) 
+    ColorVec[Cls==uniqueLabels[k]]=Colors[k]
+  
   if(missing(Plotter)){
-    if(is.null(Names)){
-      Plotter="plotly"
-    }else{
-      Plotter="ggplot"
-    }
+    if(is.null(Names)) Plotter="plotly" else Plotter="ggplot"
+  }else{
+    if(length(Plotter)!=1||is.na(Plotter)) stop("Plotter must be one non-missing value")
+    Plotter=as.character(Plotter)
   }
   if(Plotter=="ggplot2") Plotter="ggplot"
   
-  
   if(Plotter=="plotly"){
-    if(!requireNamespace('plotly',quietly = TRUE)){
+    if(!requireNamespace("plotly",quietly=TRUE)){
+      message("Subordinate package plotly is missing. No computations are performed. Please install the package defined in Suggests.")
+      return("Subordinate package plotly is missing. No computations are performed. Please install the package defined in Suggests.")
+    }
     
-      message('Subordinate package (plotly) is missing. No computations are performed.
-              Please install the package which is defined in "Suggests".')
-            
-      return('Subordinate package (plotly) is missing. No computations are performed.
-             Please install the package which is defined in "Suggests".')
-    }
-  p <- plotly::plot_ly()
-  
-  if(isFALSE(PointBorderCol)){
-    PointBorderCol="black"
-    borderWidth = 0
-    #warning("Classplot: 'PointBorderCol=FALSE' is not implemented for plotly")
-  } else {
-    # For small points, the border will represent the whole point with width 1
-    borderWidth = 1
-    if(Size <= 1) borderWidth = 0  # Size=1 is to small to see any coloring with border
-    else if(Size <= 2) borderWidth = 0.2
-    else if(Size <= 3) borderWidth = 0.7
-  }
-  
-  if(!is.null(LineColor)){
-    p <- plotly::add_lines(p, x = ~X, y = ~Y,
-                           line = list(color = LineColor,
-                                       width = LineWidth,
-                                       dash  = LineType),
-                           name = 'Line')
-  }
-   
-  if(!is.null(Names)){
-    UniqueNames = u_names
-    for(i in 1:length(uniqueLabels)){
-      DataIdx = which(Cls == uniqueLabels[i])
-      p = plotly::add_markers(p = p,
-                              x = X[DataIdx],
-                              y = Y[DataIdx],
-                              type = "scatter",
-                              mode = "marker",
-                              name = UniqueNames[i],
-                              marker = list(size = Size,
-                                            color = unique(ColorVec[DataIdx]), #unique(ColorVec[DataIdx])
-                                            line = list(color = PointBorderCol,
-                                                        width = borderWidth)))
-    }
-  }else{
-    if(is.null(Colors)){
-      p = plotly::add_markers(p = p,
-                              x = X,
-                              y = Y,
-                              type = "scatter",
-                              mode = "marker",
-                              marker = list(size = Size,
-                                            color = Colors[Cls],
-                                            line = list(color = PointBorderCol,
-                                                        width = 1)))
+    # Forward ... to plotly::plot_ly and use only = assignments.
+    p=plotly::plot_ly(...)
+    
+    if(isFALSE(PointBorderRequested)){
+      borderWidth=0
     }else{
-      for(i in 1:length(uniqueLabels)){
-        DataIdx = which(Cls == uniqueLabels[i])
-        p = plotly::add_markers(p = p,
-                                x = X[DataIdx],
-                                y = Y[DataIdx],
-                                type = "scatter",
-                                mode = "marker",
-                                marker = list(size = Size,
-                                              color = unique(ColorVec[DataIdx]), #unique(ColorVec[DataIdx])
-                                              line = list(color = PointBorderCol,
-                                                          width = borderWidth)))
-      }
+      borderWidth=1
+      if(Size<=1) 
+        borderWidth=0 
+      else if(Size<=2) 
+        borderWidth=0.2 
+      else if(Size<=3) 
+        borderWidth=0.7
     }
-
-  }
-  if(Legend != ""){
-  p <- plotly::layout(p,
-                      legend = list(title = list(text = Legend)),
-                      title = main,
-                      margin = list(l = 20, r = 0, b = 0, t = 70, pad = 10),
-                      xaxis = list(title     = xlab,
-                                   showgrid  = Showgrid,
-                                   linewidth = 1,
-                                   zeroline  = FALSE,
-                                   mirror    = TRUE), 
-                      yaxis = list(title     = ylab,
-                                   showgrid  = Showgrid,
-                                   linewidth = 1,
-                                   zeroline  = FALSE,
-                                   mirror    = TRUE))
-  }else{
     
-    p <- plotly::layout(p,
-                        title = main,
-                        showlegend = FALSE,
-                        margin = list(l = 20, r = 0, b = 0, t = 70, pad = 10),
-                        xaxis = list(title     = xlab,
-                                     showgrid  = Showgrid,
-                                     linewidth = 1,
-                                     zeroline  = FALSE,
-                                     mirror    = TRUE),
-                        yaxis = list(title     = ylab,
-                                     showgrid  = Showgrid,
-                                     linewidth = 1,
-                                     zeroline  = FALSE,
-                                     mirror    = TRUE))
-  }
+    # Draw Plotly lines in original/subsampled observation order rather than class-reordered marker order.
+    if (!is.null(LineColor))
+      p = plotly::add_lines(
+        p,
+        x = LineX,
+        y = LineY,
+        line = list(
+          color = LineColor,
+          width = LineWidth,
+          dash = LineType
+        ),
+        name = "Line"
+      )
+    
+    # Remove the unreachable Colors=NULL branch, use valid mode="markers", add class trace names, and expose point Names as hover text.
+    for (i in seq_along(uniqueLabels)) {
+      DataIdx = which(Cls == uniqueLabels[i])
+      if (is.null(Names))
+        HoverText=NULL
+      else
+        HoverText=Names[DataIdx]
+      if (is.null(Names))
+        HoverInfo = "x+y+name"
+      else
+        HoverInfo ="text+x+y+name"
+      
+      if(PointBorderRequested){
+        p = plotly::add_markers(
+          p = p,
+          x = X[DataIdx],
+          y = Y[DataIdx],
+          type = "scatter",
+          mode = "markers",
+          name = u_names[i],
+          text = HoverText,
+          hoverinfo = HoverInfo,
+          marker = list(
+            size = Size,
+            color = unique(ColorVec[DataIdx]),
+            line = list(color = PointBorderCol, width = borderWidth)
+          )
+        )
+      }else{
+        p = plotly::add_markers(
+          p = p,
+          x = X[DataIdx],
+          y = Y[DataIdx],
+          type = "scatter",
+          mode = "markers",
+          name = u_names[i],
+          text = HoverText,
+          hoverinfo = HoverInfo,
+          marker = list(
+            size = Size,
+            color = unique(ColorVec[DataIdx]),
+            line = list(width = borderWidth)
+          )
+        )
+      }
 
-  p
-
+    }
+    
+    # Use the safe scalar ShowLegend check and keep each layout call on one line.
+    if (ShowLegend)
+      p = plotly::layout(
+        p,
+        legend = list(title = list(text = Legend)),
+        title = main,
+        margin = list(
+          l = 20,
+          r = 0,
+          b = 0,
+          t = 70,
+          pad = 10
+        ),
+        xaxis = list(
+          title = xlab,
+          showgrid = Showgrid,
+          linewidth = 1,
+          zeroline = FALSE,
+          mirror = TRUE
+        ),
+        yaxis = list(
+          title = ylab,
+          showgrid = Showgrid,
+          linewidth = 1,
+          zeroline = FALSE,
+          mirror = TRUE
+        )
+      )
+    else
+      p = plotly::layout(
+        p,
+        title = main,
+        showlegend = FALSE,
+        margin = list(
+          l = 20,
+          r = 0,
+          b = 0,
+          t = 70,
+          pad = 10
+        ),
+        xaxis = list(
+          title = xlab,
+          showgrid = Showgrid,
+          linewidth = 1,
+          zeroline = FALSE,
+          mirror = TRUE
+        ),
+        yaxis = list(
+          title = ylab,
+          showgrid = Showgrid,
+          linewidth = 1,
+          zeroline = FALSE,
+          mirror = TRUE
+        )
+      )
+    
+    # Check htmlwidgets before saving instead of ignoring requireNamespace's result.
     if(isTRUE(SaveIt)){
-      requireNamespace("htmlwidgets")
-      htmlwidgets::saveWidget(p, file = "Classplot.html")
+      if(!requireNamespace("htmlwidgets",quietly=TRUE)){
+        warning("Subordinate package htmlwidgets is required when SaveIt=TRUE for Plotly output")
+      }else{
+        htmlwidgets::saveWidget(p,file="Classplot.html")
+      } 
     }
     return(p)
   }
   
   if(Plotter=="ggplot"){
-    
+    # Check ggplot2 explicitly, use the Names vector itself, and reference all aesthetics through .data.
+    if(!requireNamespace("ggplot2",quietly=TRUE)) 
+      stop("Subordinate package ggplot2 is required for Plotter=ggplot")
     df=data.frame(X=X,Y=Y,Cls=Cls)
-    if(!is.null(Names))
-      df$Names = rownames(Names)
-
-    if(is.null(Names)){
-      df$Names = Cls
-    }
-    #
-
+    if(!is.null(Names)) 
+      df$Names=Names 
+    else 
+      df$Names=as.character(Cls)
     df$Colors=ColorVec
+    if(!missing(pch)) 
+      df$Shape=pch
+    p = ggplot2::ggplot(
+      df,
+      ggplot2::aes(
+        x = .data$X,
+        y = .data$Y,
+        label = .data$Names,
+        group = .data$Cls,
+        color = .data$Colors
+      )
+    ) + ggplot2::theme_bw()
     
-    #colMat <- grDevices::col2rgb(Colors)
-    #hex=grDevices::rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3,]/255)
-    
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = .data$X,
-                                          y = .data$Y,
-                                          label = Names,
-                                          group = .data$Cls,
-                                          color = .data$Colors),...)+
-      ggplot2::theme_bw()
-    
-    if(missing(pch)){ #black shape around circular points
-      if(isFALSE(PointBorderCol)) #no borders around points
-        p=p+ggplot2::geom_point(size = Size)+ggplot2::geom_point(size = Size,pch=21, colour="black",alpha=0.4, stroke=NA)
-      else
-        p=p+ggplot2::geom_point(size = Size)+ggplot2::geom_point(size = Size,pch=21, colour=PointBorderCol,alpha=0.4)
-    }else{#points have various shapes
-      p=p+ggplot2::geom_point(size = Size,shape=pch)
+    UseFillScale=missing(pch)||all(pch%in%21:25)
+    if(PointBorderRequested&&!missing(pch)&&any(!(pch %in% 21:25))){
+      warning("PointBorderCol can only define a separate ggplot border for pch values 21 to 25. PointBorderCol is ignored for this pch vector.")
+      PointBorderRequested=FALSE
+      UseFillScale=FALSE
     }
-    
-    if(Legend != ""){
-      #overlay the with specific colors filled out points with black points that are empty inside
-      #=> points now get a black border
-      p = p + ggplot2::scale_color_identity(name=Legend,breaks=Colors,labels=u_names,guide="legend")
+    if(PointBorderRequested){
+      if(missing(pch)){
+        p=p+ggplot2::geom_point(ggplot2::aes(fill=.data$Colors),size=Size,shape=21,colour=PointBorderCol,...)
+      }else{
+        p=p+ggplot2::geom_point(ggplot2::aes(fill=.data$Colors,shape=.data$Shape),size=Size,colour=PointBorderCol,...)
+      }
     }else{
-      p = p + ggplot2::scale_color_identity()
+      if(missing(pch)){
+        p=p+ggplot2::geom_point(ggplot2::aes(fill=.data$Colors),size=Size,shape=21,...)
+      }else{
+        p=p+ggplot2::geom_point(ggplot2::aes(fill=.data$Colors,shape=.data$Shape),size=Size,...)
+      }
     }
-    if(!is.null(LineType))
-      p = p + geom_line(aes_string(group = "Cls"))
+    if(!missing(pch)) 
+      p=p+ggplot2::scale_shape_identity(guide="none")
     
-    if(!is.null(Names) & (AnnotateIt == TRUE))
-      p <- p + ggrepel::geom_text_repel(nudge_y=Nudge_y_Names,nudge_x=Nudge_x_Names) 
-
-    
-    p = p + ggplot2::ggtitle(label =  main) +
-      ggplot2::xlab(xlab) +
-      ggplot2::ylab(ylab) +
-      theme(plot.title = element_text(hjust = 0.5))
-    p
-    
-    
-    if (isTRUE(SaveIt)) {
-      ggplot2::ggsave(filename ="Classplot.png" ,plot=p,device = "png")
-   
+    # Keep legend breaks and labels synchronized and use fill legends for shapes that support independent borders.
+    if(UseFillScale){
+      if(ShowLegend){
+        p=p+ggplot2::scale_fill_identity(name=Legend,breaks=Colors,labels=u_names,guide="legend")+ggplot2::scale_color_identity()
+      }else{
+        p=p+ggplot2::scale_fill_identity()+ggplot2::scale_color_identity()
+      }
+    }else{
+      if(ShowLegend){
+        p=p+ggplot2::scale_color_identity(name=Legend,breaks=Colors,labels=u_names,guide="legend")+ggplot2::scale_fill_identity()
+      }else{
+        p=p+ggplot2::scale_color_identity()+ggplot2::scale_fill_identity()
+      }
     }
     
+    # Namespace ggplot functions and keep class-colored lines in class order without changing Plotly line order.
+    if(!is.null(LineType)) p=p+ggplot2::geom_line(show.legend=FALSE)
+    
+    # Check ggrepel before annotation and use isTRUE for a safe scalar condition.
+    if(!is.null(Names)&&isTRUE(AnnotateIt)){
+      if(!requireNamespace("ggrepel",quietly=TRUE)){
+        warning("Subordinate package ggrepel is required when AnnotateIt=TRUE")
+      }else{
+        p=p+ggrepel::geom_text_repel(nudge_y=Nudge_y_Names,nudge_x=Nudge_x_Names,show.legend=FALSE)
+      } 
+    }
+    
+    #  Namespace theme and element_text to make the function safe when ggplot2 is not attached.
+    p = p + ggplot2::ggtitle(label = main) + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) +
+      ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+    if(isTRUE(SaveIt)) 
+      ggplot2::ggsave(filename="Classplot.png",plot=p,device="png")
     return(p)
   }
-  if(Plotter!="native")
-    message('Incorrect plotter selected, performing simple native plot')
   
-  if(Size==8){
-    Size=Size-6 #adapting default size
-  }
-  if(missing(pch)){
+  if(Plotter!="native") 
+    message("Incorrect plotter selected, performing simple native plot")
+  if(Size==8) 
+    Size=Size-6
+  if(missing(pch)) 
     pch=20
-  }
-  plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab = ylab,type='p',cex=Size,pch=pch,...)
-  if(!missing(Legend)){
-    if(is.null(Names)){
-      legend("topright",title=Legend,legend=unique(Cls),col=unique(ColorVec),pch=unique(pch),box.lty=0)
-    }else{
-      legend("topright",title=Legend,legend=u_names,col=unique(ColorVec),pch=unique(pch),box.lty=0)
-    }
-
+  
+  graphics::plot(X,Y,col=ColorVec,main=main,xlab=xlab,ylab=ylab,type="p",cex=Size,pch=pch,...)
+  
+  # Use the safe Legend flag and map native legend colors/shapes directly by class instead of relying on unrelated unique() orders.
+  if(ShowLegend){
+    if(length(pch)==1)
+      LegendPch=rep(pch, length(uniqueLabels))
+    else
+      LegendPch=as.numeric(vapply(uniqueLabels, function(CurrentClass)
+        pch[which(Cls == CurrentClass)[1]], numeric(1)))
+    graphics::legend("topright",title=Legend,legend=u_names,col=Colors,pch=LegendPch,box.lty=0)
   }
 }
 

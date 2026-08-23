@@ -13,7 +13,7 @@ Classplot(X, Y, Cls, Plotter,Names = NULL, Subsample=TRUE, na.rm = FALSE,
 
 xlab = "X", ylab = "Y", main = "Class Plot", Colors = NULL,
 
-Size = 8,PointBorderCol="black",
+Size = 8,PointBorderCol,
 
 LineColor = NULL, LineWidth = 1, LineType  = NULL, 
 
@@ -62,7 +62,11 @@ Optional, in case of \code{Plotter==ggplot} and given \code{Names} annotates eac
 Optional, size of points, beware: default is appropriate for  "\code{plotly}", or "\code{native}" but should smaller for "\code{ggplot}"
 }
   \item{PointBorderCol}{
-Optional, string, color of the dot outline for "\code{plotly}" for "\code{ggplot}". If \code{FALSE} and \code{Plotter="ggplot"} or \code{Plotter="plotly"}, no borders for points which is useful if many points overlap.
+Optional, string, color of the dot outline for "\code{plotly}" and "\code{ggplot}". Default is "black" if "\code{pch}" is missing. 
+
+For "\code{ggplot}" it can only define a separate ggplot border for pch values 21 to 25; other supplied shapes retain their class color.
+
+If \code{FALSE} and \code{Plotter="ggplot"} or \code{Plotter="plotly"}, no borders for points which is useful if many points overlap.
 }
 
   \item{LineColor}{
@@ -145,7 +149,7 @@ LineType="-",LineColor = "green")
 \donttest{
 #ggplot2 with annotations
 data(Lsun3D)
-ind=sample(1:nrow(Lsun3D$Data),20)
+ind=sample(which(Lsun3D$Cls<4),20)
 Classplot(Lsun3D$Data[ind,1],Lsun3D$Data[ind,2],Lsun3D$Cls[ind],
 Names = rownames(Lsun3D$Data)[ind],Size =1,
 Plotter = "ggplot2",AnnotateIt = TRUE)
@@ -172,10 +176,17 @@ Plotter = "ggplot2",AnnotateIt = TRUE,Colors=Colors)
 }
 
 \donttest{
-#ggplot2 with labels and legend per class
+#ggplot2 with labels and legend per class, black point borders (default)
 data(Lsun3D)
 Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
 Names = paste0("C",Lsun3D$Cls),Size =2,Legend ="Classes")
+}
+
+\donttest{
+#ggplot2 with labels and legend per class, no point borders
+data(Lsun3D)
+Classplot(Lsun3D$Data[,1],Lsun3D$Data[,2],Lsun3D$Cls,
+Names = paste0("C",Lsun3D$Cls),Size =2,Legend ="Classes",PointBorderCol=FALSE)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
