@@ -10,7 +10,6 @@ ParetoDensityEstimation(
   PlotIt = FALSE,
   Compute = "Cpp",
   Silent = FALSE,
-  EvaluationMode = c("strict_2026", "compatible_2020")
 )
 }
 \arguments{
@@ -62,22 +61,6 @@ ParetoDensityEstimation(
     by this function are suppressed. Errors are never suppressed.
   }
 
-  \item{EvaluationMode}{
-    Character scalar controlling how user-supplied kernels are handled.
-
-    \describe{
-      \item{\code{"strict_2026"}}{
-        In case of user.defined kernels, these are used strictly and no interpolation is performed as used in [Stier et al., 2026]. \code{min(Data)} and/or \code{max(Data)} may have been added to the kernels.
-      }
-      \item{\code{"compatible_2020"}}{
-        Counts are evaluated and normalized on the established automatically
-        generated internal grid. The normalized internal Pareto density is then
-        linearly interpolated to the user-supplied kernels as used in [Thrun et al., 2020].
-      }
-    }
-
-    If kernels are generated automatically, this argument has no effect.
-  }
 }
 \value{
 A list with the following components:
@@ -190,21 +173,6 @@ plot(
   yaxs = "i",
   xlab = "Data",
   ylab = "PDE"
-)
-
-# Direct evaluation at user-supplied kernels
-requested <- seq(-3, 3, by = 0.01)
-pde_strict <- ParetoDensityEstimation(
-  Data,
-  kernels = requested,
-  EvaluationMode = "strict_2026"
-)
-
-# Compatibility mode: evaluate internally and interpolate
-pde_compatible <- ParetoDensityEstimation(
-  Data,
-  kernels = requested,
-  EvaluationMode = "compatible_2020"
 )
 
 # One distinct value produces a numerical Dirac representation
