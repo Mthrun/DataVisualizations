@@ -18,15 +18,16 @@ stat_pde_density <- function(mapping = NULL,
   # visually compressed density components. This is not a switch between two
   # density estimators or a replacement of the violin by spikes.
   #
-  # DECISION A: SPARSE-GRID ELIGIBILITY (compute_pdedensity)
-  # The plotting-only pde_sparse flag is TRUE when !Flag and either:
+  # DECISION A: TICK ELIGIBILITY (compute_pdedensity)
+  # The plotting-only pde_tick_eligible flag is TRUE when !Flag.
+  # The pde_sparse flag is kept as grid metadata: TRUE when !Flag and either:
   #   - dens$paretoRadius == 0, or
   #   - any consecutive kernel gap exceeds 4 * dens$paretoRadius.
   # Flag is the existing single-unique-value workaround; it excludes that
   # result from the additional ticks. 
   #
   # DECISION B: DISPLAYED COMPONENT SIZE (GeomPDEviolin$draw_group)
-  # The ordinary violin is returned without ticks if pde_sparse is not TRUE,
+  # The ordinary violin is returned without ticks if pde_tick_eligible is not TRUE,
   # spike_linewidth <= 0, or the coordinate system is nonlinear.
   # Otherwise, consecutive finite positive-density rows form components.
   # For each component, its extent includes the bordering zero-density rows,
@@ -124,10 +125,11 @@ compute_pdedensity <- function(x) {
     density = dens$paretoDensity,
     scaled =  dens$paretoDensity / max(dens$paretoDensity, na.rm = TRUE),
     count =   dens$paretoDensity * nx,
-    # Decision A: grid-spacing eligibility only; see stat_pde_density above.
+    # Grid-spacing metadata only; it does not determine tick eligibility.
     # GeomPDEviolin still checks each component's displayed size before drawing.
     pde_sparse = !Flag && (isTRUE(dens$paretoRadius == 0) ||
       isTRUE(any(diff(dens$kernels) > 4 * dens$paretoRadius))),
+    pde_tick_eligible = !Flag,
     n = nx
   )
   
@@ -192,7 +194,7 @@ StatPDEdensity <- ggproto("StatPDEdensity",
   
 )
 
-# Keep the normal violin and add visible ticks only to compressed sparse peaks.
+# Keep the normal violin and add visible ticks only to compressed eligible peaks.
 # Neither the estimated density nor its scaled horizontal width is changed.
 GeomPDEviolin <- ggplot2::ggproto("GeomPDEviolin", ggplot2::GeomViolin,
   parameters = function(self, extra = FALSE) {
@@ -203,7 +205,7 @@ GeomPDEviolin <- ggplot2::ggproto("GeomPDEviolin", ggplot2::GeomViolin,
                         spike_linewidth = 0.4, spike_fraction = 0.001) {
     violin <- ggplot2::GeomViolin$draw_group(data, panel_params, coord, ...)
     # Decision B: preserve the standard violin when extra marks are ineligible.
-    if (!isTRUE(data$pde_sparse[1L]) || spike_linewidth <= 0 ||
+    if (!isTRUE(data$pde_tick_eligible[1L]) || spike_linewidth <= 0 ||
         !coord$is_linear()) return(violin)
 
     data <- data[order(data$y), , drop = FALSE]
@@ -240,6 +242,6 @@ GeomPDEviolin <- ggplot2::ggproto("GeomPDEviolin", ggplot2::GeomViolin,
     segments <- ggplot2::GeomSegment$draw_panel(ticks, panel_params, coord,
                                                 lineend = "butt")
     segments$name <- "pde_spike_ticks"
-    grid::grobTree(violin, segments, name = "geom_pde_violin")
+    grid::grobTree(violin, segments)
   }
 )
