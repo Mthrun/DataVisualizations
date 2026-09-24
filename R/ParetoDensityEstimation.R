@@ -217,27 +217,63 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
         }
       }
 
-      #failsave: 06.06.2026
-      internalcounter=0
+      # A grid problem must not change an already positive Pareto radius.
+      if (paretoRadius == 0) {
+        if(isFALSE(Silent))
+          warning("ParetoDensityEstimation: retrying the zero Pareto radius on the full data sample.")
+        paretoRadius = ParetoRadius_fast(Data, maximumNrSamples = length(Data), failsave = TRUE)
+        if (length(paretoRadius) != 1 || !is.finite(paretoRadius) || paretoRadius <= 0)
+          stop("ParetoDensityEstimation: a positive finite paretoRadius could not be determined.")
+      }
+      maximumUniformBins = max(1E4, nBins)
       repeat{
+        if ((maxData - minData) / paretoRadius > maximumUniformBins || nBins > maximumUniformBins) {
+          # Sparse fallback: count-change locations, not a grid across empty gaps.
+          gridValues = sort(unique(Data))
+          gaps = diff(gridValues)
+          isolated = c(TRUE, gaps > 4 * paretoRadius) & c(gaps > 4 * paretoRadius, TRUE)
+          diracValues = gridValues[isolated]
+          denseValues = gridValues[!isolated]
+
+          # Include the change locations contributed by the existing boundary reflections.
+          denseValues = c(denseValues,
+                         2 * minData - denseValues[denseValues < minData + paretoRadius],
+                         2 * maxData - denseValues[denseValues > maxData - paretoRadius])
+          countEdges = c(denseValues - paretoRadius, denseValues + paretoRadius)
+          edgePadding = 8 * .Machine$double.eps * pmax(abs(countEdges), paretoRadius)
+          if (any(!is.finite(countEdges)) ||
+              any(edgePadding >= paretoRadius / 4) ||
+              any(!is.finite(diracValues - 2 * paretoRadius)) ||
+              any(!is.finite(diracValues + 2 * paretoRadius)) ||
+              any(diracValues - 2 * paretoRadius >= diracValues) ||
+              any(diracValues + 2 * paretoRadius <= diracValues))
+            warning("ParetoDensityEstimation: the radius cannot be resolved at this numerical data scale, please provide kernels manually.")
+
+          # An isolated count m gets a triangle of half-width 2*r: raw area 2*r*m.
+          # At a global boundary, mirroring doubles m and only half the triangle remains.
+          # This matches the integrated count of a width-2*r Pareto window.
+          # Dense parts use points on both sides of every count change; outside-support
+          # points have zero counts, so interpolation cannot bridge a large empty gap.
+          kernels_internal = sort(unique(c(minData, maxData,
+                                            diracValues - 2 * paretoRadius, diracValues,
+                                            diracValues + 2 * paretoRadius,
+                                            denseValues, countEdges - edgePadding,
+                                            countEdges + edgePadding)))
+          kernels_internal = kernels_internal[kernels_internal >= minData & kernels_internal <= maxData]
+          if (length(kernels_internal) < 2 || any(!is.finite(kernels_internal)))
+            warning("ParetoDensityEstimation: a finite sparse grid could not be constructed, please provide kernels manually.")
+          if(isFALSE(Silent))
+            warning("ParetoDensityEstimation: using a gap-aware internal grid; paretoRadius is unchanged.")
+          break
+        }
         breaks = pretty(c(minData, maxData), n = nBins, min.n = 1)
         nB = length(breaks)
         mids = 0.5 * (breaks[-1L] + breaks[-nB])
         kernels_internal = mids
-        if (mean(diff(kernels_internal)) > paretoRadius){ 
+        if (mean(diff(kernels_internal)) > paretoRadius){
           nBins=nBins+10
-          if(nBins>1000){
-            if(internalcounter==0 && isFALSE(paretoRadiusNotMissing)){#do only once; keep a supplied radius
-              if(isFALSE(Silent))
-                warning("ParetoDensityEstimation: failsave activated to measure density, computing pareto radius on full data sample.")
-              paretoRadius = ParetoRadius_fast(Data,maximumNrSamples = length(Data),failsave=TRUE)
-              if (length(paretoRadius) != 1 || !is.finite(paretoRadius) || paretoRadius <= 0)
-                stop("ParetoDensityEstimation: a positive finite paretoRadius could not be determined.")
-            }
-            internalcounter=internalcounter+1
-          }
         }else{
-         break;
+          break
         }
       }
       #FLAG_kernels_manualSet=FALSE
@@ -358,8 +394,8 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   }
   if(isTRUE(PlotIt)){
     plot(kernels, paretoDensity, type = 'l', main = 'Raw PDE R plot', 
-         xaxs = 'i', yaxs = 'i', xlab = xlab, ylab = 'PDE',
-         ylim=c(0,max(paretoDensity)*1.1))
+         yaxs = 'i', xlab = xlab, ylab = 'PDE',
+         ylim=c(0,max(paretoDensity)*1.1),lwd=2)
   }
   Fit = list(
     Data = Data,
