@@ -1,5 +1,5 @@
 Version 1.5.0 (GitHub, 2026-08-23)
-	o Major revision of ParetoDensityEstimation(): Simplifying and hardening input, radius, and grid handling; added normalized numerical Dirac representations for one or two unique values
+	o Revision of ParetoDensityEstimation(): Simplifying and hardening input, radius, and grid handling; added normalized numerical Dirac representations for one or two unique values
 	o BimodalityAmplitude is now implemented in C++
 	o Heatmap function is no significantly faster and y-label ticks can be disabled
 	o Pixelmatrix is a little faster by omitting melt()
@@ -7,6 +7,7 @@ Version 1.5.0 (GitHub, 2026-08-23)
 	o bugfixes ClassPDEplotMaxLikeli and ClassPDEplot, documentaton now elaborates the difference clearly
 	o bugfixes in Classplot, especially for combinations of names and colors with SmallClassesOnTop, as well as PointBorderCol
 	o Multiplot now works also with plotly and automatically detects plotter (Native, ggplot2 or plotly)
+	o Added SpikeLineSize to MDplot() to make sparse PDE components spanning at most 0.1 percent of the displayed value axis better visible
 	
 Version 1.4.1 (GitHub, 2026-06-30)
 	o Added xlab for MDplot

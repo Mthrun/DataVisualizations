@@ -24,7 +24,7 @@ SampleSize=5e+05,SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,
 
 main="MD-plot",ylab="Range of values in which PDE is estimated",
 
-xlab="Variables",BW=FALSE,ForceNames=FALSE)
+xlab="Variables",BW=FALSE,ForceNames=FALSE,SpikeLineSize=0.4)
 }
 
 \arguments{
@@ -69,6 +69,13 @@ xlab="Variables",BW=FALSE,ForceNames=FALSE)
     \item{LineSize}{
     Optional: numerical, linewidth of line around the mirrored densities.
   }
+    \item{SpikeLineSize}{
+    Minimum linewidth of visibility ticks added to sparse PDE components spanning
+    at most 0.1 percent of the displayed value axis. The tick spans the original
+    violin width at the component maximum; no density values or positions are
+    changed. The ordinary outline still uses \code{LineSize}. Set to zero to
+    disable. Ticks use \code{LineColor}, or the fill when \code{LineColor=NA}.
+    }
     \item{QuantityThreshold}{
     Optional: numeric value defining the threshold of the minimal amount of values in data. Below this threshold no density estimation is performed and a 1D scatter plot with jittered points is drawn. Only Data Science experts should change this value after they understand  how the density is estimated (see [Ultsch, 2005]).
   }

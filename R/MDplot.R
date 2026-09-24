@@ -3,7 +3,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
                   BoxPlot=FALSE,BoxColor='darkred',MDscaling='width',LineColor='black',LineSize=0.01,
                   QuantityThreshold=50, UniqueValuesThreshold=12,SampleSize=5e+05,
                   SizeOfJitteredPoints=1,OnlyPlotOutput=TRUE,main="MD-plot",
-                  ylab="Range of values in which PDE is estimated",xlab="Variables",BW=FALSE,ForceNames=FALSE){
+                  ylab="Range of values in which PDE is estimated",xlab="Variables",BW=FALSE,ForceNames=FALSE,SpikeLineSize=0.4){
   #MDplot(data, Names)
   # Plots a Mirrore-density plot  for each column of the given data, introduced in Thrun et al. (2020).
   # A complete guide: https://md-plot.readthedocs.io/en/latest/index.html
@@ -26,6 +26,8 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   # MDscaling             "area": equal area; "count": area prop to observations; "width" (default): equal max width.
   # LineColor             Color of outline around the mirrored densities (NA disables).
   # LineSize              Line width of the outline around the mirrored densities.
+  # SpikeLineSize         Minimum tick linewidth for visually compressed sparse PDE peaks.
+  #                       Set to 0 to disable; ordinary violin outlines are unchanged.
   # QuantityThreshold     Minimal number of finite values required to estimate a density.
   # UniqueValuesThreshold Minimal number of unique values required to estimate a density
   #                       and to run statistical tests.
@@ -347,6 +349,9 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   
   
   ## Plotting ----
+  if (!is.numeric(SpikeLineSize) || is.complex(SpikeLineSize) || length(SpikeLineSize) != 1L ||
+      !is.finite(SpikeLineSize) || SpikeLineSize < 0)
+    stop("MDplot: SpikeLineSize must be a single finite non-negative number.")
   
   fillDifferentColors = FALSE
   if(length(Fill) > 1) {
@@ -377,12 +382,14 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   # trim = TRUE: tails of the violins are trimmed
   # Currently catched in PDEdensity anyways but one should be prepared for future ggplot2 changes :-)
   if(fillDifferentColors) {
-    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, linewidth = LineSize,
+    plot=plot + stat_pde_density(geom = GeomPDEviolin, scale = MDscaling, linewidth = LineSize,
+                            spike_linewidth = SpikeLineSize,
                             trim = TRUE,colour = LineColor) + 
       theme(axis.text.x = element_text(size=rel(1.2)), legend.position = "none")
     plot=plot + scale_fill_manual(values=Fill)#+coord_flip()
   } else {
-    plot=plot + geom_violin(stat = "PDEdensity", scale = MDscaling, linewidth = LineSize,
+    plot=plot + stat_pde_density(geom = GeomPDEviolin, scale = MDscaling, linewidth = LineSize,
+                            spike_linewidth = SpikeLineSize,
                             trim = TRUE, fill = Fill,colour = LineColor) +
       theme(axis.text.x = element_text(size=rel(1.2)))
   }
