@@ -22,7 +22,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
 #  paretoRadius            der Pareto Radius
 #  Fit                     Data (without reflections), raw paretoCounts, countingKernels, interpolationUsed
 #                          countingKernels is NULL when counts belong to the returned kernels.
-#                          Fit is NULL for the 1/2-value Dirac display.
+#                          Fit is NULL for the normalized 1/2-value Dirac representation.
 # 
 #  Author: MT 2019
 
@@ -61,7 +61,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   if (length(values) < 3) {
     if(isFALSE(Silent))
     warning(
-      '1 or 2 unique values for density estimation. Dirac Delta distribution(s) is(are) assumed. Input of "kernels", "paretoRadius" and "MinAnzKernels" or ignored!'
+      '1 or 2 unique values for density estimation. Normalized numerical Dirac representation(s) is(are) returned. Input of "kernels", "paretoRadius" and "MinAnzKernels" are ignored!'
     )
     
     if (values[1] != 0)
@@ -73,10 +73,8 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
                     to = values[1] + 0.1,
                     by = 0.0001)
     
-    paretoDensity = rep(0, length(kernels))
     spikeIndex = which.min(abs(kernels - values[1]))
     kernels[spikeIndex] = values[1] # avoid losing the spike through rounding
-    paretoDensity[spikeIndex] = 1
     
     if (length(values) == 2) {
       if (values[2] != 0)
@@ -89,17 +87,23 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
                        by = 0.0001)
       
       
-      paretoDensity2 = rep(0, length(kernels2))
       spikeIndex = which.min(abs(kernels2 - values[2]))
       kernels2[spikeIndex] = values[2]
-      paretoDensity2[spikeIndex] = 1
       
-      paretoDensity = c(paretoDensity, paretoDensity2)
-      kernels = c(kernels, kernels2)
+      # Add a zero between the spikes when a midpoint is representable.
+      kernels = c(kernels, kernels2, values[1] / 2 + values[2] / 2)
     }
-    kernelOrder = order(kernels)
-    kernels = kernels[kernelOrder]
-    paretoDensity = paretoDensity[kernelOrder]
+    kernels = sort(unique(kernels))
+    spikeIndex = match(values, kernels)
+    # Normalize each impulse on the final grid, including overlapping grids.
+    # A unit-height spike has trapezoidal area (right - left) / 2.
+    spikeArea = (kernels[spikeIndex + 1] - kernels[spikeIndex - 1]) / 2
+    probabilities = tabulate(match(Data, values), nbins = length(values)) / length(Data)
+    spikeHeight = probabilities / spikeArea
+    if (any(!is.finite(spikeHeight)) || any(spikeHeight <= 0))
+      stop("ParetoDensityEstimation: numerical Dirac heights cannot be represented on this grid.")
+    paretoDensity = rep(0, length(kernels))
+    paretoDensity[spikeIndex] = spikeHeight
     if (isTRUE(PlotIt)) {
       plot(
         kernels,
