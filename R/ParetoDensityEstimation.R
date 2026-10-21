@@ -11,6 +11,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
 #
 #  OPTIONAL
 #  paretoRadius            der Pareto Radius, wenn nicht angegeben, wird er berechnet
+#                          A positive supplied radius is also used for one/two distinct values.
 #  kernels                 Data values at which ParetoDensity is measured , use plot(Kernels,ParetoDensity) for display
 #                          wird bestimmt, wenn nicht angegeben oder Kernels ==0
 #  MinAnzKernels           Minimale Anzahl Kernls, wenn nicht angegeben oder MinAnzKernelss ==0 =>  MinAnzKernels==100	
@@ -22,7 +23,8 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
 #  paretoRadius            der Pareto Radius
 #  Fit                     Data (without reflections), raw paretoCounts, countingKernels, interpolationUsed
 #                          countingKernels is NULL when counts belong to the returned kernels.
-#                          Fit is NULL for the normalized 1/2-value Dirac representation.
+#                          Fit is NULL for the 1/2-value Dirac representation without a positive radius.
+#                          boundaryReflection is FALSE only for full-support special cases.
 # 
 #  Author: MT 2019
 
@@ -52,13 +54,25 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   if (length(Data) == 0)
     warning("ParetoDensityEstimation: Data contains no finite observations.")
   values = unique(Data)
+  if (!missing(paretoRadius)) {
+    if (length(paretoRadius) == 0) {
+      paretoRadius = NULL
+    } else if (length(paretoRadius) != 1 || is.complex(paretoRadius)) {
+      stop("paretoRadius must be a single real number, NULL or NA.")
+    } else if (!is.na(paretoRadius) &&
+               (!is.numeric(paretoRadius) || !is.finite(paretoRadius) || paretoRadius < 0)) {
+      stop("ParetoDensityEstimation: paretoRadius must be finite and positive.")
+    }
+  }
+  paretoRadiusGiven = !missing(paretoRadius) && !is.null(paretoRadius) &&
+    is.numeric(paretoRadius) && is.finite(paretoRadius) && paretoRadius > 0
   
   if (length(values) > 2 & length(values) < 5) {
     if(isFALSE(Silent))
     warning('Less than 5 unqiue values for density estimation. Function may not work')
   }
   #FLAG_kernels_manualSet=TRUE
-  if (length(values) < 3) {
+  if (length(values) < 3 && !paretoRadiusGiven) {
     if(isFALSE(Silent))
     warning(
       '1 or 2 unique values for density estimation. Normalized numerical Dirac representation(s) is(are) returned. Input of "kernels", "paretoRadius" and "MinAnzKernels" are ignored!'
@@ -101,7 +115,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     probabilities = tabulate(match(Data, values), nbins = length(values)) / length(Data)
     spikeHeight = probabilities / spikeArea
     if (any(!is.finite(spikeHeight)) || any(spikeHeight <= 0))
-      stop("ParetoDensityEstimation: numerical Dirac heights cannot be represented on this grid.")
+      warning("ParetoDensityEstimation: numerical Dirac heights cannot be represented on this grid.")
     paretoDensity = rep(0, length(kernels))
     paretoDensity[spikeIndex] = spikeHeight
     if (isTRUE(PlotIt)) {
@@ -128,13 +142,6 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   if (length(Data) < 10) {
     if(isFALSE(Silent))
     warning('Less than 10 datapoints given, ParetoRadius potientially cannot be calcualted.')
-  }
-  if (!missing(paretoRadius)) {
-    if (length(paretoRadius) == 0) {
-      paretoRadius = NULL
-    } else if (length(paretoRadius) != 1 || is.complex(paretoRadius)) {
-      stop("paretoRadius must be a single real number, NULL or NA.")
-    }
   }
   #published method in thrun et al 2020
   paretoRadiusNotMissing=TRUE
@@ -201,7 +208,10 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   #if (length(kernels) <= 1) { #kernels wurden vom user nicht gesetzt
   #  if (length(kernels) == 0 || (length(kernels) == 1 & kernels == 0)) {
       #MT: Korrektur: statt kernels==0 und im Input Kernels=0
-      nBins = OptimalNoBins(Data)
+      # Avoid data-driven bin widths for degenerate/narrow samples with a given resolution.
+      nBins = if (length(values) < 3 ||
+                  (paretoRadius > 0 && (maxData - minData) / paretoRadius < 2))
+        MinAnzKernels else OptimalNoBins(Data)
       #MT: MinAnzKernels fehlte
       if (isTRUE(MinAnzKernels == 0)) MinAnzKernels = 100
       nBins = max(MinAnzKernels , nBins)
@@ -226,43 +236,36 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
           stop("ParetoDensityEstimation: a positive finite paretoRadius could not be determined.")
       }
       maximumUniformBins = max(1E4, nBins)
+      # One/two-value and sub-kernel-width samples use the full Pareto windows,
+      # not coincident/near-coincident empirical boundaries as reflecting walls.
+      boundaryReflection = length(values) > 2 && (maxData - minData) / paretoRadius >= 2
       repeat{
-        if ((maxData - minData) / paretoRadius > maximumUniformBins || nBins > maximumUniformBins) {
-          # Sparse fallback: count-change locations, not a grid across empty gaps.
+        if (!boundaryReflection || (maxData - minData) / paretoRadius > maximumUniformBins || nBins > maximumUniformBins) {
+          # Count-change grid: also isolated values retain their rectangular Pareto windows.
           gridValues = sort(unique(Data))
-          gaps = diff(gridValues)
-          isolated = c(TRUE, gaps > 4 * paretoRadius) & c(gaps > 4 * paretoRadius, TRUE)
-          diracValues = gridValues[isolated]
-          denseValues = gridValues[!isolated]
-
-          # Include the change locations contributed by the existing boundary reflections.
-          denseValues = c(denseValues,
-                         2 * minData - denseValues[denseValues < minData + paretoRadius],
-                         2 * maxData - denseValues[denseValues > maxData - paretoRadius])
-          countEdges = c(denseValues - paretoRadius, denseValues + paretoRadius)
+          if (boundaryReflection) {
+            gridValues = c(gridValues,
+                           2 * minData - gridValues[gridValues < minData + paretoRadius],
+                           2 * maxData - gridValues[gridValues > maxData - paretoRadius])
+          }
+          countEdges = c(gridValues - paretoRadius, gridValues + paretoRadius)
           edgePadding = 8 * .Machine$double.eps * pmax(abs(countEdges), paretoRadius)
-          if (any(!is.finite(countEdges)) ||
+          if (any(!is.finite(countEdges)) || any(!is.finite(edgePadding)) ||
               any(edgePadding >= paretoRadius / 4) ||
-              any(!is.finite(diracValues - 2 * paretoRadius)) ||
-              any(!is.finite(diracValues + 2 * paretoRadius)) ||
-              any(diracValues - 2 * paretoRadius >= diracValues) ||
-              any(diracValues + 2 * paretoRadius <= diracValues))
-            warning("ParetoDensityEstimation: the radius cannot be resolved at this numerical data scale, please provide kernels manually.")
+              any(!is.finite(countEdges - edgePadding)) || any(!is.finite(countEdges + edgePadding)) ||
+              any(countEdges - edgePadding >= countEdges) || any(countEdges + edgePadding <= countEdges))
+            warning("ParetoDensityEstimation: the radius cannot be resolved at this numerical data scale.")
 
-          # An isolated count m gets a triangle of half-width 2*r: raw area 2*r*m.
-          # At a global boundary, mirroring doubles m and only half the triangle remains.
-          # This matches the integrated count of a width-2*r Pareto window.
-          # Dense parts use points on both sides of every count change; outside-support
-          # points have zero counts, so interpolation cannot bridge a large empty gap.
-          kernels_internal = sort(unique(c(minData, maxData,
-                                            diracValues - 2 * paretoRadius, diracValues,
-                                            diracValues + 2 * paretoRadius,
-                                            denseValues, countEdges - edgePadding,
+          # Resolve both sides of every count change; do not bridge empty gaps.
+          # Without reflections retain the complete support, including zero-count endpoints.
+          kernels_internal = sort(unique(c(minData, maxData, gridValues,
+                                            countEdges - edgePadding, countEdges,
                                             countEdges + edgePadding)))
-          kernels_internal = kernels_internal[kernels_internal >= minData & kernels_internal <= maxData]
+          if (boundaryReflection)
+            kernels_internal = kernels_internal[kernels_internal >= minData & kernels_internal <= maxData]
           if (length(kernels_internal) < 2 || any(!is.finite(kernels_internal)))
-            warning("ParetoDensityEstimation: a finite sparse grid could not be constructed, please provide kernels manually.")
-          if(isFALSE(Silent))
+            warning("ParetoDensityEstimation: a finite sparse grid could not be constructed.")
+          if(boundaryReflection && isFALSE(Silent))
             warning("ParetoDensityEstimation: using a gap-aware internal grid; paretoRadius is unchanged.")
           break
         }
@@ -301,10 +304,10 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   nKernels = length(kernels_internal)
   #Randapproximierung
   #  diese Daten liegen am unteren Rand
-  lowBInd =  (Data < (minData + paretoRadius))
+  lowBInd = boundaryReflection & (Data < (minData + paretoRadius))
   lowR = as.matrix(2 * minData - Data[lowBInd], ncol = 1)
   # diese Daten liegen am obere Rand
-  upBInd =  (Data > (maxData - paretoRadius))
+  upBInd = boundaryReflection & (Data > (maxData - paretoRadius))
   upR <- as.matrix(2 * maxData - Data[upBInd], ncol = 1)
   #extend data by mirrowing
   DataPlus = as.matrix(c(Data, lowR, upR), 1)
@@ -363,6 +366,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   #Fall kernel==0 => area==NAN muss abgefangen werden, passiert vermutlich nur bei unique values <2
   if (!is.finite(area) || area <= 0) {
     paretoDensity <- rep(0, nKernels)
+    warning("ParetoDensityEstimation: the Pareto density could not be normalized on the selected grid.")
   } else{
     paretoDensity <- paretoDensity / area
   }
@@ -403,6 +407,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     countingKernels = countingKernels,
     interpolationUsed = interpolationUsed
   )
+  if (!boundaryReflection) Fit$boundaryReflection = FALSE
   return(list(kernels = kernels,
               paretoDensity = paretoDensity,
               paretoRadius = paretoRadius,
