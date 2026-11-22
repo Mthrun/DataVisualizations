@@ -3,3 +3,8 @@
 ^.*\.images$
 ^\.positai$
 ^\.claude$
+^data/GermanPostalCodesShapes\.rda$
+^data/ChoroplethPostalCodesAndAGS_Germany\.rda$
+^data/IncomeTaxMunicipalities2010\.rda$
+^data-raw$
+^data/GermanPostalCodesShapesWeb\.rda$

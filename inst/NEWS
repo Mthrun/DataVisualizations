@@ -1,4 +1,8 @@
 Version 1.5.0 (GitHub, 2026-08-23)
+	o The ClassBarPlot example now supplies matching feature Names and ClassColors = NULL.
+	o Choroplethmap() and plotChoroplethMap() now use sf and ggplot2. Both function names are exported.
+	  Optional Leaflet maps provide pointer labels, popups, and zoom. Static maps and browser maps use the same colors. Class labels and colors can have names. Conflicting duplicate measurements require an explicit numeric aggregation function.
+	  Bins include values outside the supplied boundaries. Geometry reduction protects separate polygon parts and holes.
 	o Revision of ParetoDensityEstimation(): Simplifying and hardening input, radius, and grid handling; added normalized numerical Dirac representations for one or two unique values
 	o BimodalityAmplitude is now implemented in C++
 	o Heatmap function is no significantly faster and y-label ticks can be disabled

@@ -4,10 +4,15 @@
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Plots the Choropleth Map
+Static and Interactive Choropleth Maps
 }
 \description{
-A thematic map with areas colored in proportion to the measurement of the statistical variable being displayed on the map. A political map geneated by this function was used in the conference talk of the publication [Thrun/Ultsch, 2018].}
+The function connects measurements or classes to polygon regions by postal code.
+It returns a static map. It can also return an interactive Leaflet map.
+The interactive map shows labels when you move the pointer over a region.
+Click a region to show its information.
+The function does not download data or map tiles.
+}
 \usage{
 Choroplethmap(Counts, PostalCodes, NumberOfBins = 0,
 
@@ -21,71 +26,157 @@ Choroplethmap(Counts, PostalCodes, NumberOfBins = 0,
 
  ReferenceMap = FALSE, main = "Political Map of Germany",
 
- legend = "Range of values", Silent = TRUE)
+ legend = "Range of values", Silent = TRUE, Interactive = FALSE,
+
+ Categorical = is.factor(Counts) || is.character(Counts),
+
+ ClassLabels = NULL, Aggregate = NULL, Labels = NULL,
+
+ ShapeCRS = 4326, SimplifyKeep = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{Counts}{
-vector [1:m], statistical variable being displayed
+A vector of measurements. To use class codes, set \code{Categorical = TRUE}.
+The function keeps missing values.
 }
   \item{PostalCodes}{
-vector[1:n], currently german postal codes (zip codes), if \code{PostalCodesShapes} is not changed manually, does not need to be unique
+A vector with one postal code for each element of \code{Counts}.
+The function keeps leading zeros.
+It adds leading zeros to numeric codes and digit strings with fewer than five digits.
+It keeps other character identifiers unchanged.
 }
   \item{NumberOfBins}{
-Default: 1; 1 or below continously changes the color as defined by the   package \code{choroplethr}.
-A Number between 2 and 9 sets equally sized bins. Higher numbers are not allowed
+A non-negative integer. Values of zero or one select a continuous color scale.
+Larger values set the maximum number of automatic bins.
+The function does not use this argument for classes.
 }
   \item{Breaks4Intervals}{
-If NumberOfBins>1 you can set here the intervals of the bins manually
+Optional numeric boundaries for bins.
+The boundaries must be finite and strictly increasing.
+Each interval includes its lower boundary and excludes its upper boundary.
+The function includes values below the first boundary and above the last boundary.
+Thus, k boundaries give k+1 bins.
 }
   \item{percentiles}{
-If NumberOfBins>1 and Breaks4Intervals not set, then the percentiles of min and max bin can be set here. See also \code{quantile}.
+Two probabilities between zero and one. The first must not exceed the second.
+The function uses these probabilities to calculate the automatic boundaries.
+It removes duplicate boundaries.
+Constant data or data with only missing values use one bin.
 }
   \item{digits}{
-number of digits for \code{round}
+The number of decimal places in bin labels.
+This argument does not change the interval boundaries.
 }
   \item{PostalCodesShapes}{
-Specially prepared shape file with postal codes and geographic boundaries.
-If you set this object, then you can use non german zip codes.
-You can see the required structure in map.df,  github trulia choroplethr blob master r chloropleth. 
+An \pkg{sf} polygon object with a \code{region} column and a coordinate reference system (CRS).
+You can also supply the historical table with columns \code{long, lat, order, hole, id, group, region}.
+The function keeps separate polygon parts and holes.
+If you omit this argument, the function uses the installed GermanPostalCodesShapes data, if available.
+Otherwise, the function stops with an error.
 The German PostalCodesShapes can be downloaded from \url{https://github.com/Mthrun/DataVisualizations/tree/master/data}.
 }
   \item{PlotIt}{
-Either Plot the map directly or change the object manually before plotting it
+Set to TRUE to show the static map or the interactive map.
 }
   \item{DiscreteColors}{
-Set the discrete colors manually if NumberOfBins>1, else it is ignored
+One color for each class or bin, including empty classes or bins.
+For a named vector, the names must match the class codes or bin labels.
 }
   \item{HighColorContinuous}{
-if NumberOfBins<=1: color of highest continuous value, else it is ignored
+The color for the highest value on a continuous scale.
 }
   \item{LowColorContinuous}{
-if NumberOfBins<=1: color of lowest continuous value, else it is ignored
+The color for the lowest value on a continuous scale.
 }
   \item{NAcolor}{
-Color of NA values in the map (postal codes without any counts)
+The color for regions with missing values.
 }
   \item{ReferenceMap}{
-TRUE: With Google map, FALSE: without Google map
+Keep FALSE. The old Google interface is no longer available.
+If TRUE, the function stops with an error.
+You can add a reference layer to the returned Leaflet Widget.
 }
   \item{main}{
-title of plot
+The plot title.
 }
   \item{legend}{
-title of legend
+The legend title.
 }
   \item{Silent}{
-TRUE: disable warnings of \code{choroplethr} package
-FALSE: enable  warnings of \code{choroplethr} package
+This argument remains available for older calls.
+It does not suppress warnings about invalid data.
+}
+  \item{Interactive}{
+Set to TRUE to create a Leaflet map.
+This option requires \pkg{leaflet} and \pkg{htmltools}.
+}
+  \item{Categorical}{
+Set to TRUE to use class codes without numeric bins.
+The default is TRUE for factors and character vectors.
+}
+  \item{ClassLabels}{
+An optional named character vector.
+The names are class codes. The values are unique labels.
+The vector order sets the legend order, including classes that are absent from the data.
+}
+  \item{Aggregate}{
+An optional function that combines numeric values for the same postal code.
+For example, use \code{min} to select the smallest value.
+The default accepts identical values but stops if values differ.
+A missing value and an observed value count as different values.
+The function does not combine class codes.
+}
+  \item{Labels}{
+An optional character vector with one label for each postal code.
+The function adds these labels to the interactive map.
+It converts special characters to safe HTML text.
+Duplicate postal codes must have identical labels.
+}
+  \item{ShapeCRS}{
+The CRS of the historical coordinate table.
+The default is EPSG:4326 for the supplied German data.
+For an sf object, the function uses the CRS of that object.
+}
+  \item{SimplifyKeep}{
+The fraction of vertices to keep. Use a value greater than zero and no greater than one.
+Values below one require \pkg{rmapshaper}.
+The function simplifies shared boundaries together and protects separate polygon parts and holes.
+It stops if the result has invalid geometry or different part or ring counts.
+If this occurs, increase SimplifyKeep. The default value of one keeps all vertices.
 }
 }
 \details{
-This wrapper for the \pkg{choroplethr} enables to visualize a political map easily in the case of german zip codes based on given counts and postal codes. Other postal codes are in principle usable.
+The function uses \pkg{sf} and \pkg{ggplot2}.
+The interactive map also uses \pkg{leaflet}.
+The function no longer uses the internal \pkg{choroplethr} interfaces.
+It repairs invalid planar geometry with \code{sf::st_make_valid} and gives a warning.
+It does not change global sf/s2 settings.
+
+The large German data files are separate files in the GitHub repository.
+They are excluded from CRAN builds and other package builds.
+Download the files from \url{https://github.com/Mthrun/DataVisualizations/tree/master/data}.
+Load the files into a separate environment. Supply the objects to the function.
+Installation from GitHub does not install these data files.
+
+For the income-tax example, use \code{Categorical = TRUE} and named colors.
+The classes are 0 = not classified, 1 = low quota, and 2 = high quota.
+Class 3 is promoted (red). Class 4 is sponsors (magenta).
+Historical postal areas approximate municipality areas.
 }
 \value{
-List of
-\item{chorR6obj}{An R6 object of the package \code{choroplethr}}
-\item{DataFrame}{Transformed PostalCodes and Counts in a way that they can be used in the package \code{choroplethr}.}
+An invisible list with:
+\item{chorR6obj}{An environment for older calls.
+Its \code{$render()} function returns Plot.
+It is not a choroplethr R6 object.
+Other historical R6 methods are not available.
+The \code{$render_with_reference_map()} function stops with an error.}
+\item{DataFrame}{One input row for each postal code after aggregation.
+For classes and bins, valueReal contains the original values.}
+\item{Plot}{A ggplot object.}
+\item{Widget}{A Leaflet htmlwidget, or NULL.}
+\item{MapData}{An sf object with one row for each region, its values, and optional labels.
+Use \code{sf::st_write} to save this object.}
 }
 \references{
 [Thrun/Ultsch, 2018] Thrun, M. C., & Ultsch, A. : Effects of the payout system of income taxes to municipalities in Germany, in Papiez, M. & Smiech,, S. (eds.), Proc. 12th Professor Aleksander Zelias International Conference on Modelling and Forecasting of Socio-Economic Phenomena, pp. 533-542, Cracow: Foundation of the Cracow University of Economics, Cracow, Poland, 2018. 
@@ -94,51 +185,28 @@ List of
 Michael Thrun
 }
 \note{
-You could read \url{https://www.r-bloggers.com/2016/05/case-study-mapping-german-zip-codes-in-r/}, if you want to change the map (\code{PostalCodesShapes} shape object).
+Since version 1.5.1, conflicting duplicate values require an explicit Aggregate function.
+Use \code{Aggregate = min} for the previous minimum rule.
+Classes use a separate mode. Bins include values outside the supplied boundaries.
+The legend includes empty classes and bins.
+Choroplethmap and plotChoroplethMap are aliases for the same function.
 }
 
 \seealso{
-Google \code{choroplethr} package.
+\code{\link{Worldmap}}
 }
 \examples{
-#Many postal codes are required to see a structure
-#Exemplary two postal codes in the upper left corner of the map
-out=Choroplethmap(c(4,8,5,4),
-
-c('49838', '26817', '49838', '26817'),
-
-NumberOfBins=2,PlotIt=FALSE)
-\donttest{
-out$chorR6obj$render()
-}
-#bins are only presented in the map if the have values within
-out=Choroplethmap(c(4,8,5,4),c('49838', '26817',
-
- '49838', '26817'),NumberOfBins=5,
- 
- Breaks4Intervals=c(1,2,3,5,10),PlotIt=FALSE)
-
-\donttest{
-out$chorR6obj$render()
-}
-# Result of [Thrun/Ultsch, 2018]
-\donttest{
-data('ChoroplethPostalCodesAndAGS_Germany')
-res=Choroplethmap(as.numeric(ChoroplethPostalCodesAndAGS_Germany$Cls)+1,
-
-ChoroplethPostalCodesAndAGS_Germany$PLZ,NumberOfBins = 2,
-
-Breaks4Intervals = c(0,1,2,3,4,5,6),digits = 1,ReferenceMap = F,
-
-DiscreteColors = c('white','green','blue','red','magenta'),
-
-main = 'Classification of German Postal Codes based on Income Tax Share and Yield',
-
-legend = 'ITS vs MTY Classification in 2010',NAcolor = 'black',PlotIt=FALSE)
-
-
-#takes time to process
-res$chorR6obj$render()
+if (requireNamespace("sf", quietly = TRUE)) {
+  # Use two small polygons. This example does not need external data.
+  square <- function(x) sf::st_polygon(list(matrix(
+    c(x,0, x+1,0, x+1,1, x,1, x,0), ncol=2, byrow=TRUE)))
+  shapes <- sf::st_sf(region=c("01067", "01069"),
+    geometry=sf::st_sfc(square(0), square(1), crs=4326))
+  out <- Choroplethmap(c(3,4), shapes$region,
+    PostalCodesShapes=shapes, Categorical=TRUE,
+    ClassLabels=c("3"="Promoted", "4"="Sponsors"),
+    DiscreteColors=c("3"="red", "4"="magenta"), PlotIt=FALSE)
+  out$chorR6obj$render()
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -3,6 +3,7 @@ useDynLib(DataVisualizations, .registration=TRUE)
 export(ABCbarplot)
 export(BimodalityAmplitude)
 export(CCDFplot)
+export(ECDFplot)
 export(ClassBoxplot)
 export(ClassPDEplot)
 export(ClassMDplot)
@@ -11,7 +12,8 @@ export(Classplot)
 export(ClassBarPlot)
 export(ClassPDEplotMaxLikeli)
 export(Crosstable)
-#export(Choroplethmap)
+export(Choroplethmap)
+export(plotChoroplethMap)
 export(CombineCols)
 export(CombineRows)
 export(cbind_fill)
@@ -88,3 +90,5 @@ importFrom("stats", "aggregate")
 
 
 
+
+importFrom(rlang, .data)

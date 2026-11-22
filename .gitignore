@@ -69,3 +69,6 @@ src/*.dll
 /R/.Rhistory
 /inst/extdata/ClassifiedMap_Small.jpg
 .positai
+
+# Dashboard preparation is internal and must not enter this repository.
+/data-raw/

@@ -59,11 +59,14 @@ tmpVar8 <- aggregate(Petal.Width ~ Species, data = iris, FUN = sd)
 # Combine results
 Values <- c(tmpVar1_mean, tmpVar2_mean, tmpVar3_mean, tmpVar4_mean)
 Class <- rep(1:3, 4)
+Names <- rep(c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"),
+             each = nlevels(iris$Species))
 Deviation <- c(tmpVar5$Sepal.Length, tmpVar6$Sepal.Width, tmpVar7$Petal.Length,
 tmpVar8$Petal.Width)
   
   if(length(Values) == length(Class)){
-    ClassBarPlot(Values = Values, Cls = Class, Deviation = Deviation)
+    ClassBarPlot(Values = Values, Cls = Class, Deviation = Deviation,
+                 Names = Names, ClassColors = NULL)
   }
   
 }
