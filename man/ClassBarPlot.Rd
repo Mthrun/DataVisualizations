@@ -7,7 +7,7 @@ deviation, e.g., mean values of features depending on class with standard
 deviation.
 }
 \usage{
-ClassBarPlot(Values, Cls, Deviation, Names, ClassColors,
+ClassBarPlot(Values, Cls, Deviation = NULL, Names = NULL, ClassColors = NULL,
 
             ylab = "Values", xlab = "Instances", PlotIt = TRUE)
 }
@@ -17,11 +17,12 @@ Cls, Deviation and Names.}
 \item{Cls}{[1:n] Numeric vector of classes in matching order to Values and
 Deviation and Names.}
 \item{Deviation}{[1:n] Numeric vector with deviation in matching order to Values
-and Cls and Names.}
+and Cls and Names. Optional; \code{NULL} omits error bars.}
 \item{Names}{[1:n] Character or numeric vector of instances (x-axis) in matching
-order to Values and Cls and Deviation.}
+order to Values and Cls and Deviation. Optional; \code{NULL} generates consecutive instance numbers.}
 \item{ClassColors}{Character vector of color names stating either the colors
-for each class or defining colors matching the class vector cls.}
+for each class or defining colors matching the class vector cls. Optional;
+\code{NULL} uses \code{DefaultColorSequence}.}
 \item{ylab}{Character stating y label.}
 \item{xlab}{Character stating x label.}
 \item{PlotIt}{Logical value indicating visual output TRUE => create visual

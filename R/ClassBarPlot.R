@@ -1,4 +1,4 @@
-ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
+ClassBarPlot = function(Values, Cls, Deviation = NULL, Names = NULL, ClassColors = NULL,
                         ylab = "Values", xlab = "Instances", PlotIt = TRUE){
   # Classbarplot(Values, Class)
   # Classbarplot(Values, Class, Deviation, Names)
@@ -16,9 +16,11 @@ ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
   # 
   # OPTIONAL
   # Deviation[1:n]     Numeric vector with deviation in matching order to Values
-  #                    and Class and Names
+  #                    and Class and Names; NULL omits error bars.
   # Names[1:n]         Character or numeric vector of instances (x-axis) in
-  #                    matching order to Values and Class and Deviation
+  #                    matching order to Values and Class and Deviation.
+  #                    NULL generates consecutive instance numbers.
+  # ClassColors       Colors for the classes; NULL uses DefaultColorSequence.
   # ylab               Character stating y label.
   # xlab               Character stating x label.
   # PlotIt             Logical value indicating visual output
@@ -82,7 +84,7 @@ ClassBarPlot = function(Values, Cls, Deviation, Names, ClassColors,
     names(ClassColors) <- levels(dfCBP$Class)
   }
   
-  p <- ggplot(dfCBP, aes(x = Names, y = Values, fill = Class)) +
+  p <- ggplot(dfCBP, aes(x = Names, y = Values, fill = .data[["Class"]])) +
     geom_col(position = position_dodge(width = 0.9), alpha = 0.5)
   
   if (!is.null(Deviation)) {

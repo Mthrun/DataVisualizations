@@ -21,13 +21,14 @@ Otherwise, this column contains the historical mapping name.}
 This value is NA if that AGS does not match a 2010 municipality.}
     \item{\code{ClassSource}}{The source of the displayed class:
 source_2010, manual_low_quota, or manual_high_quota.}
-    \item{\code{HistoricalCls, HistoricalName}}{The previous class and name.
-These columns retain the historical evidence.}
+    \item{\code{HistoricalCls}}{The previous class, retained as historical evidence.}
+    \item{\code{HistoricalName}}{The previous name, retained as historical evidence.}
     \item{\code{MappingStatus}}{The key status:
 matched_2010_key, missing_ags, or ags_not_in_2010.}
     \item{\code{ClassChanged}}{TRUE for the 54 differences between the historical class and the 2010 class for the stored AGS.}
-    \item{\code{ITS, MTY, Ratio}}{Municipality values in EUR per taxpayer,
-and 100*ITS/MTY in percent. Missing values remain NA.}
+    \item{\code{ITS}}{Municipality income-tax share in EUR per taxpayer. Missing values remain NA.}
+    \item{\code{MTY}}{Municipality income-tax yield in EUR per taxpayer. Missing values remain NA.}
+    \item{\code{Ratio}}{100*ITS/MTY in percent. Missing values remain NA.}
     \item{\code{Year}}{2010.}
     \item{\code{Geography}}{historical_postal_code_approximation.}
   }

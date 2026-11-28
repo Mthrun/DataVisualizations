@@ -1,17 +1,42 @@
-Version 1.5.0 (GitHub, 2026-08-23)
-	o The ClassBarPlot example now supplies matching feature Names and ClassColors = NULL.
+Version 1.5.0 (CRAN, 2026-11-28)
+	o ClassBarPlot() now preserves supplied instance names, uses the supplied
+	  deviations for error bars, and maps colors by class. Deviation, Names, and
+	  ClassColors are optional and default to NULL. The example supplies matching
+	  feature names.
+	o Added ECDFplot() to compare empirical cumulative distributions for vectors,
+	  lists, matrices, and data frames. Curves use their own finite sample sizes;
+	  counts of omitted non-finite observations and the computed curves are returned.
 	o Choroplethmap() and plotChoroplethMap() now use sf and ggplot2. Both function names are exported.
 	  Optional Leaflet maps provide pointer labels, popups, and zoom. Static maps and browser maps use the same colors. Class labels and colors can have names. Conflicting duplicate measurements require an explicit numeric aggregation function.
 	  Bins include values outside the supplied boundaries. Geometry reduction protects separate polygon parts and holes.
-	o Revision of ParetoDensityEstimation(): Simplifying and hardening input, radius, and grid handling; added normalized numerical Dirac representations for one or two unique values
-	o BimodalityAmplitude is now implemented in C++
-	o Heatmap function is no significantly faster and y-label ticks can be disabled
+	o Revision of ParetoDensityEstimation(): Simplifying and hardening input,
+	  radius, and grid handling; added normalized numerical Dirac representations
+	  for one or two unique values. These preserve empirical atom probabilities
+	  and use equal nominal widths for two support values. A supplied positive
+	  radius instead produces ordinary Pareto-window estimates.
+	o ParetoDensityEstimation() now returns a Fit component with the original
+	  finite observations, unnormalized counts, and the grid/interpolation context
+	  needed to reuse a fit. Fit is NULL for numerical Dirac representations.
+	o BimodalityAmplitude() uses C++ for the mode/antimode search and amplitude
+	  calculation; density estimation remains in stats::density(). Added optional
+	  SampleSize, SampleSeed, na.rm, and density arguments through ... .
+	o Reworked Heatmap distance ordering and cluster-boundary drawing; y-axis
+	  ticks can be disabled. Heatmap() uses Clabel for both axis titles;
+	  Clabel = "" hides the titles. YAxis controls y-axis ticks independently,
+	  and PlotIt = FALSE suppresses printing while returning the plot invisibly.
 	o Pixelmatrix is a little faster by omitting melt()
 	o bugfix in rbind.fill/CombineRows
 	o bugfixes ClassPDEplotMaxLikeli and ClassPDEplot, documentaton now elaborates the difference clearly
 	o bugfixes in Classplot, especially for combinations of names and colors with SmallClassesOnTop, as well as PointBorderCol
-	o Multiplot now works also with plotly and automatically detects plotter (Native, ggplot2 or plotly)
-	o Added SpikeLineSize to MDplot() to make sparse PDE components spanning at most 0.1 percent of the displayed value axis better visible
+	o Multiplot now works also with plotly and automatically detects plotter (Native, ggplot2 or plotly).
+	  Added controls for shared axes, panel dimensions, and margins in Plotly
+	  layouts, including mixed ggplot/Plotly panels.
+	o Added SpikeLineSize to MDplot() to control visibility marks for numerical
+	  Dirac peaks spanning at most 0.1 percent of the displayed value axis.
+	  Constant inputs retain their exact support value without random jitter in
+	  the PDE statistic. Ordinary continuous-density violins receive no extra marks.
+	o Clarified the direction of MAplot differences: M = X - Y. Swapping the
+	  arguments changes the sign of differences, but not their means on the x-axis.
 	
 Version 1.4.1 (GitHub, 2026-06-30)
 	o Added xlab for MDplot

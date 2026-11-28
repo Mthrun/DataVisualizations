@@ -153,11 +153,16 @@ The function no longer uses the internal \pkg{choroplethr} interfaces.
 It repairs invalid planar geometry with \code{sf::st_make_valid} and gives a warning.
 It does not change global sf/s2 settings.
 
-The large German data files are separate files in the GitHub repository.
+The German postal-area polygons and income-tax example data are distributed
+as separate files in the GitHub repository.
 They are excluded from CRAN builds and other package builds.
-Download the files from \url{https://github.com/Mthrun/DataVisualizations/tree/master/data}.
-Load the files into a separate environment. Supply the objects to the function.
+Download the required files explicitly from
+\url{https://github.com/Mthrun/DataVisualizations/tree/master/data}.
+Load the files into a separate environment and supply the shape object through
+\code{PostalCodesShapes}. Supply the corresponding measurements or classes
+through \code{Counts} and their postal codes through \code{PostalCodes}.
 Installation from GitHub does not install these data files.
+Package installation and checks do not download these files.
 
 For the income-tax example, use \code{Categorical = TRUE} and named colors.
 The classes are 0 = not classified, 1 = low quota, and 2 = high quota.

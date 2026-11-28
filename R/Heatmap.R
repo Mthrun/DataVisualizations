@@ -10,6 +10,7 @@
   # Distanz               see DistanceMatrix(...,method):
   #
   # LowLim,HiLim  limits for the color axis as in PlotPixMatrix
+  # Clabel        Title of both axes; an empty string hides the titles.
   # author: MT 08/2016, edited 28.01.2018
   #2.Editor: MT 06/18
   #3.Editor: 07/2020 because of reviews in GMD journal
@@ -101,7 +102,7 @@
    }
    
    if (HiLim <= LowLim) {
-     warning("HiLim muss größer als LowLim sein; ",
+     warning("HiLim muss gr\u00f6\u00dfer als LowLim sein; ",
              "HiLim wird auf LowLim + 0.1 gesetzt.")
      HiLim = LowLim + 0.1
    }
@@ -138,6 +139,7 @@
    # Plot
    # ------------------------------------------------------------
    
+   AxisLabel = if (identical(Clabel, "")) NULL else Clabel
    plt = DataVisualizations::Pixelmatrix(
      DataDists,
      XNames = NULL,
@@ -146,7 +148,7 @@
      HiLim = HiLim,
      main = ""
    ) +
-     ggplot2::labs(x = NULL, y = NULL) +
+     ggplot2::labs(x = AxisLabel, y = AxisLabel) +
      ggplot2::theme(aspect.ratio = 1)
    
    if (length(Separators) > 0L) {

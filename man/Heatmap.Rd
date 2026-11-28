@@ -12,7 +12,7 @@ Here the dendrogram has to be shown separately and only the heatmap itself is di
 \usage{
 Heatmap(DataOrDistances,Cls,method='euclidean',
 
-LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No."  YAxis = c("auto", "none"),
+LowLim=0,HiLim,LineWidth=0.5,Clabel="Cluster No.", YAxis = c("auto", "none"),
                   PlotIt = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -35,7 +35,10 @@ if \code{DataOrDistances} is a [1:n,1:d] not symmetric numerical matrix, please
   \item{LowLim}{ Optional: limits for the color axis }
   \item{HiLim}{ Optional: limits for the color axis }
     \item{LineWidth}{Width of lines seperating the clusters in the heatmap}
-    \item{Clabel}{Default "\code{Cluster No.}", for large number of clusters abbrevations can be used like "\code{Cls No.}" or "\code{C}" in order to fit as the x and y axis labels}
+    \item{Clabel}{Title of both the x and y axes; default \code{"Cluster No."}.
+Set \code{Clabel = ""} to hide both axis titles. Abbreviations such as
+\code{"Cls No."} or \code{"C"} can be used to fit the available space.
+This argument does not change tick labels; \code{YAxis} controls the y-axis ticks.}
       \item{YAxis}{"auto": a few automatically selected numeric ticks on y axis, "none": no ticks
    }
          \item{PlotIt}{Boolean, FALSE disables showing the plot.
