@@ -28,6 +28,19 @@ MAplot=function(X,Y,islog=TRUE,LoA=FALSE,CI=FALSE,densityplot=FALSE,main,xlab,yl
 #   \item{ggplot}{see \code{ggplot2} output, if densityplot=TRUE, else NULL
 #   }
 # 
+# #DETAILS
+#   With islog=FALSE and densityplot=FALSE, the vertical difference is
+#   M=X-Y and the horizontal mean is A=0.5*(X+Y). Positive M means X>Y.
+#   Thus X=Reference, Y=Prediction gives Reference-Prediction; to show
+#   Prediction-Reference, pass X=Prediction, Y=Reference.
+#   Returned MA columns M_y and A_x follow this order. Statistics$Mean_value
+#   is mean(X-Y) when LoA or CI is requested. Swapping X and Y reverses
+#   M and its mean, leaves A and SD unchanged, and exchanges the negated
+#   lower and upper agreement limits.
+#   With islog=TRUE (default), SignedLog is applied separately to X and Y
+#   before taking the difference and mean in the same argument order.
+#   Custom axis labels do not change the calculation.
+# 
 # author: Michael Thrun
   if(missing(xlab)) xlabstr=deparse1(substitute(X))
   if(missing(ylab)) ylabstr=deparse1(substitute(Y))

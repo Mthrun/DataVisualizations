@@ -19,12 +19,11 @@ stat_pde_density <- function(mapping = NULL,
   # density estimators or a replacement of the violin by spikes.
   #
   # DECISION A: TICK ELIGIBILITY (compute_pdedensity)
-  # The plotting-only pde_tick_eligible flag is TRUE when !Flag.
-  # The pde_sparse flag is kept as grid metadata: TRUE when !Flag and either:
+  # The plotting-only pde_tick_eligible flag is TRUE only for a Dirac result.
+  # The pde_sparse flag is kept as grid metadata: TRUE when either:
   #   - dens$paretoRadius == 0, or
   #   - any consecutive kernel gap exceeds 4 * dens$paretoRadius.
-  # Flag is the existing single-unique-value workaround; it excludes that
-  # result from the additional ticks. 
+  # One unique value uses its exact Dirac position, without random jitter.
   #
   # DECISION B: DISPLAYED COMPONENT SIZE (GeomPDEviolin$draw_group)
   # The ordinary violin is returned without ticks if pde_tick_eligible is not TRUE,
@@ -99,27 +98,12 @@ compute_pdedensity <- function(x) {
     )
   }
   
-  ##MT: chatch error of one unique value
-  Flag <- FALSE
-  if (length(unique(x)) ==1) {
+  ##MT: catch the case of one unique value without moving the observation.
+  # The PDE now supplies a normalized Dirac representation for this case.
+  if (length(unique(x)) == 1)
     warning('stat_pde_density: Only one unique value in Data.')
-    if(unique(x)!=0)
-      x <- c(unique(x), head(x, 1) * runif(1, 0.999, 1.001))
-    else
-      x <- c(unique(x), head(x, 1) + runif(1, 0.999, 1.001))
-
-    Flag <- TRUE
-  }
-  
   dens <- ParetoDensityEstimation(Data = x,Compute = "Cpp_exp",Silent = TRUE)
-  
-  # Density cannot be estiamted, set density to value equal 1
-  if (Flag) {
-    # scatter kernels a little to visualize several features if given
-    dens$kernels <- dens$kernels * runif(length(dens$kernels), 0.998, 1.002)
-    x <- max(dens$kernels) - min(dens$kernels)
-    dens$paretoDensity[1:length(dens$paretoDensity)] <- 1 / x # integral over pdf should be 1
-  }
+
   data.frame(
     x = dens$kernels,
     density = dens$paretoDensity,
@@ -127,9 +111,9 @@ compute_pdedensity <- function(x) {
     count =   dens$paretoDensity * nx,
     # Grid-spacing metadata only; it does not determine tick eligibility.
     # GeomPDEviolin still checks each component's displayed size before drawing.
-    pde_sparse = !Flag && (isTRUE(dens$paretoRadius == 0) ||
-      isTRUE(any(diff(dens$kernels) > 4 * dens$paretoRadius))),
-    pde_tick_eligible = !Flag,
+    pde_sparse = isTRUE(dens$paretoRadius == 0) ||
+      isTRUE(any(diff(dens$kernels) > 4 * dens$paretoRadius)),
+    pde_tick_eligible = isTRUE(dens$paretoRadius == 0),
     n = nx
   )
   

@@ -9,12 +9,12 @@ ParetoDensityEstimation(
   MinAnzKernels = 100,
   PlotIt = FALSE,
   Compute = "Cpp",
-  Silent = FALSE,
+  Silent = FALSE
 )
 }
 \arguments{
   \item{Data}{
-    [1:n] numeric vector of data.. Matrices, arrays, data frames, and lists are
+    [1:n] numeric vector of data. Matrices and arrays are
     flattened before processing. Values that can be converted to numeric are
     converted, and non-finite observations are removed. At least one finite
     numeric observation must remain.
@@ -30,19 +30,19 @@ ParetoDensityEstimation(
   \item{kernels}{
     Optional [1:m] numeric vector of evaluation positions. \code{NULL},
     \code{numeric(0)}, or scalar zero requests an automatically generated
-    kernel grid. User-supplied kernels must contain finite real values and be
-    strictly increasing.
+    kernel grid. User-supplied kernels should contain finite real values. Density values are
+    interpolated to these positions in the supplied order.
   }
 
   \item{MinAnzKernels}{
     Optional, Minimum number of kernels used for an automatically generated grid.
-    Must be one finite non-negative real value. Zero restores the default of
-    \code{100}. Values are rounded upward, constrained to at least two, and
-    capped at \code{10000}.
+    Use one finite non-negative real value. Zero restores the default of
+    \code{100}. The internal grid may be refined to resolve the Pareto radius;
+    widely separated observations use a grid at the count changes.
   }
 
   \item{PlotIt}{
-    One non-missing logical value. If \code{TRUE}, a base R line plot of the
+    Logical value. If \code{TRUE}, a base R line plot of the
     returned density is produced. For publication-quality graphics, interfaces
     such as \code{\link{PDEplot}} or \code{\link{MDplot}} are generally more
     appropriate.
@@ -51,14 +51,15 @@ ParetoDensityEstimation(
   \item{Compute}{
     Character scalar selecting the interval-counting backend. Supported values
     are \code{"R"}, \code{"Cpp"}, and \code{"Cpp_exp"}, matched without
-    regard to case. This choice affects only interval counting, not radius
-    estimation, grid construction, boundary mirroring, interpolation, or
-    normalization.
+    regard to case. For estimated radii and at least 5000 observations,
+    \code{"R"} uses \code{ParetoRadius}, whereas the C++ backends use
+    \code{ParetoRadius_fast}. With a supplied radius, all backends use the
+    same grid, boundary mirroring, interpolation, and normalization.
   }
 
   \item{Silent}{
-    One non-missing logical value. If \code{TRUE}, warnings generated directly
-    by this function are suppressed. Errors are never suppressed.
+    Logical value. If \code{TRUE}, routine diagnostic messages and warnings
+    are suppressed. Numerical failures and errors are still reported.
   }
 
 }
@@ -67,8 +68,7 @@ A list with the following components:
 \describe{
   \item{\code{kernels}}{
     [1:m] Numeric vector of positions at which \code{paretoDensity} is returned.
-    In \code{"strict_2026"} mode with user-supplied kernels,
-    \code{min(Data)} and/or \code{max(Data)} may have been added.
+    With user-supplied kernels, their positions and order are preserved.
   }
   \item{\code{paretoDensity}}{
     [1:m] Numeric vector containing the trapezoidally normalized Pareto-density
@@ -83,7 +83,9 @@ A list with the following components:
      Minimal counting context for ParetoDensityEstimationFromFit(); NULL in the Dirac special case.
      It contains only Data, unnormalized paretoCounts, and countingKernels when the counting grid differs from the returned
      kernels. Quantities already returned above are not duplicated. Has the elements \code{Data},
-    \code{paretoCounts}, \code{countingKernels} and \code{interpolationUsed}
+    \code{paretoCounts}, \code{countingKernels} and \code{interpolationUsed}.
+    For full-support estimates without boundary reflection, it additionally
+    contains \code{boundaryReflection = FALSE}.
   }
   
 
@@ -94,7 +96,7 @@ A list with the following components:
 \description{
 This function estimates the Pareto Density for the distribution of one variable. 
 In the default setting the functions estimates internally the appropriate number and position of kernels to estimate the density properly. However, the user can set the \code{kernels} manually. 
-In this case density will only be estimated only around these values even if the internally estimated \code{paretoRadius} does not contain all datapoints between each kernel.
+In this case the internally estimated density is linearly interpolated to these positions; the requested grid does not change the Pareto radius or the internal counts.
 See example for details.
 }
 
@@ -106,27 +108,27 @@ If input argument \code{kernels} is set manually the output arguments \code{pare
 
 Typically it is not advisable to set \code{paretoRadius} manually. However in specific cases, the function \code{\link{ParetoRadius}} is used prior to calling this function. In such cases the input argument can use a priorly estimated \code{paretoRadius}.
 
-With user-supplied kernels and \code{EvaluationMode = "strict_2026"}, the
-counts are evaluated directly at those positions. Boundary positions are
-inserted only when the first or last Pareto interval would otherwise fail to
-cover the complete data range. Consequently, the returned kernels may differ
-from the supplied vector.
-
-With user-supplied kernels and
-\code{EvaluationMode = "compatible_2020"}, the density is first evaluated and
-normalized on the automatic internal grid and is then linearly interpolated to
+With user-supplied kernels, the density is first evaluated and normalized on
+the automatic internal grid and is then linearly interpolated to
 the requested kernels. Values outside the internal interpolation range are set
 to zero. The internal grid and density are returned separately.
 
 \strong{Special case: one or two distinct values}
 
-If \code{Data} contains only one or two distinct finite values, the function
+If \code{Data} contains only one or two distinct finite values and no positive
+\code{paretoRadius} is supplied, the function
 returns a normalized piecewise-linear numerical representation of the
 empirical Dirac measure or measures. Each support value is represented by a
-non-overlapping triangular impulse whose area equals its empirical relative
-frequency. The total trapezoidal area is one. In this case,
-\code{paretoRadius}, \code{kernels}, \code{MinAnzKernels}, \code{Compute}, and
-\code{EvaluationMode} are ignored, and the returned Pareto radius is zero.
+triangular impulse whose area equals its empirical relative frequency.
+The two impulses use the same nominal width, so their heights reflect the
+relative frequencies, up to numerical rounding. The total trapezoidal area is one. In this case,
+\code{kernels}, \code{MinAnzKernels}, and \code{Compute} are ignored, and the
+returned Pareto radius is zero. A supplied positive radius instead produces
+ordinary Pareto-window counts on their full support, without reflection.
+
+For reflected estimates, the internal integration grid includes both data
+extrema and is confined to their interval. This avoids losing probability
+mass between a boundary observation and the nearest grid midpoint.
 
 Warnings are issued, unless \code{Silent = TRUE}, when input is flattened,
 non-numeric input is converted, non-finite observations are removed, very few
@@ -175,8 +177,8 @@ plot(
   ylab = "PDE"
 )
 
-# One distinct value produces a numerical Dirac representation
-pde_dirac <- ParetoDensityEstimation(c(1,10),PlotIt = T)
+# Two distinct values produce numerical Dirac representations
+pde_dirac <- ParetoDensityEstimation(c(1,10),PlotIt = TRUE)
 }
 }
 \references{
@@ -185,7 +187,7 @@ Structure of Distributions: Leveraging Distributional Information for Robust
 and Plausible Naive Bayes. \emph{Machine Learning and Knowledge Extraction},
 8(1), 13. DOI: 10.3390/make8010013, 2026.
 
-[Thrun et al., 2026]  Thrun, M. C., Gehlert, T. and Ultsch, A.: Analyzing the Fine Structure
+[Thrun et al., 2020]  Thrun, M. C., Gehlert, T. and Ultsch, A.: Analyzing the Fine Structure
 of Distributions. \emph{PLoS ONE}, 15(10), e0238835,
 DOI: 10.1371/journal.pone.0238835,  2020.
 

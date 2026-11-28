@@ -49,6 +49,23 @@ for example, \code{ylim}, Please see either\code{ \link{Classplot}} in the mode 
 
 }
 \details{
+For \code{islog=FALSE} and \code{densityplot=FALSE}, the vertical coordinate is
+\eqn{M = X - Y} and the horizontal coordinate is \eqn{A = 0.5(X + Y)}.
+A positive difference means that \code{X} exceeds \code{Y}.
+Consequently, \code{MAplot(X=Reference, Y=Prediction, islog=FALSE)} displays
+reference minus prediction. To display prediction minus reference, pass
+\code{X=Prediction} and \code{Y=Reference}. Custom axis labels do not change
+this calculation.
+
+The returned columns \code{MA[, "M_y"]} and \code{MA[, "A_x"]} contain these
+differences and means. When \code{LoA=TRUE} or \code{CI=TRUE},
+\code{Statistics$Mean_value} uses the same difference direction. Swapping
+\code{X} and \code{Y} negates the differences and their mean, leaves the means
+on the horizontal axis and the standard deviation unchanged, and exchanges
+the negated lower and upper limits of agreement.
+With \code{islog=TRUE}, the default, \code{\link{SignedLog}} is applied to each
+input before calculating the difference and mean in the same argument order.
+
 Bland-Altman plot [Altman/Bland, 1983] for visual representation of genomic data or in order to decorrelate data.
 
 "The limits of agreement (LoA) are defined as the mean difference +- 1.96 SD of differences. If these limits do not exceed the maximum allowed difference between methods (the differences within mean +- 1.96 SD are not clinically important), the two methods are considered to be in agreement and may be used interchangeably." cited as in URL. Please note, that the underyling assumption is the normal distribution of the differences. Input argument \code{LoA=TRUE} shows the mean of the difference in blue and +- 1.96 SD in green. Input argument \code{CI=TRUE} shows the mean of the difference in blue and the confidence intervall as red dashed lines similar to the cited URL.

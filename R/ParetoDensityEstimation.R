@@ -58,10 +58,10 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     if (length(paretoRadius) == 0) {
       paretoRadius = NULL
     } else if (length(paretoRadius) != 1 || is.complex(paretoRadius)) {
-      stop("paretoRadius must be a single real number, NULL or NA.")
+      warning("paretoRadius must be a single real number, NULL or NA.")
     } else if (!is.na(paretoRadius) &&
                (!is.numeric(paretoRadius) || !is.finite(paretoRadius) || paretoRadius < 0)) {
-      stop("ParetoDensityEstimation: paretoRadius must be finite and positive.")
+      warning("ParetoDensityEstimation: paretoRadius must be finite and positive.")
     }
   }
   paretoRadiusGiven = !missing(paretoRadius) && !is.null(paretoRadius) &&
@@ -78,27 +78,17 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
       '1 or 2 unique values for density estimation. Normalized numerical Dirac representation(s) is(are) returned. Input of "kernels", "paretoRadius" and "MinAnzKernels" are ignored!'
     )
     
-    if (values[1] != 0)
-      kernels = seq(from = values[1] * 0.9,
-                    to = values[1] * 1.1,
-                    by = values[1] * 0.0001)
-    else
-      kernels = seq(from = values[1] - 0.1,
-                    to = values[1] + 0.1,
-                    by = 0.0001)
+    # Equal numerical widths make relative spike heights reflect the atom weights.
+    # For two atoms the resolution depends on their separation, not their origin.
+    diracStep = if (length(values) == 2) diff(sort(values)) * 0.0001 else
+      max(abs(values[1]), 1) * 0.0001
+    kernels = values[1] + (-1000:1000) * diracStep
     
     spikeIndex = which.min(abs(kernels - values[1]))
     kernels[spikeIndex] = values[1] # avoid losing the spike through rounding
     
     if (length(values) == 2) {
-      if (values[2] != 0)
-        kernels2 = seq(from = values[2] * 0.9,
-                       to = values[2] * 1.1,
-                       by = values[2] * 0.0001)
-      else
-        kernels2 = seq(from = values[2] - 0.1,
-                       to = values[2] + 0.1,
-                       by = 0.0001)
+      kernels2 = values[2] + (-1000:1000) * diracStep
       
       
       spikeIndex = which.min(abs(kernels2 - values[2]))
@@ -109,6 +99,9 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
     }
     kernels = sort(unique(kernels))
     spikeIndex = match(values, kernels)
+    if (any(!is.finite(kernels)) || anyNA(spikeIndex) ||
+        any(spikeIndex <= 1L | spikeIndex >= length(kernels)))
+      warning("ParetoDensityEstimation: numerical Dirac support cannot be represented at this data scale.")
     # Normalize each impulse on the final grid, including overlapping grids.
     # A unit-height spike has trapezoidal area (right - left) / 2.
     spikeArea = (kernels[spikeIndex + 1] - kernels[spikeIndex - 1]) / 2
@@ -199,7 +192,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
 
   if (!is.numeric(paretoRadius) || is.complex(paretoRadius) || length(paretoRadius) != 1 ||
       !is.finite(paretoRadius) || paretoRadius < 0)
-    stop("ParetoDensityEstimation: paretoRadius must be finite and positive.")
+    warning("ParetoDensityEstimation: paretoRadius must be finite and positive.")
   # An estimated zero radius is retried by the existing failsave below.
   minData = min(Data, na.rm = TRUE)
   maxData = max(Data, na.rm = TRUE)
@@ -233,7 +226,7 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
           warning("ParetoDensityEstimation: retrying the zero Pareto radius on the full data sample.")
         paretoRadius = ParetoRadius_fast(Data, maximumNrSamples = length(Data), failsave = TRUE)
         if (length(paretoRadius) != 1 || !is.finite(paretoRadius) || paretoRadius <= 0)
-          stop("ParetoDensityEstimation: a positive finite paretoRadius could not be determined.")
+          warning("ParetoDensityEstimation: a positive finite paretoRadius could not be determined.")
       }
       maximumUniformBins = max(1E4, nBins)
       # One/two-value and sub-kernel-width samples use the full Pareto windows,
@@ -285,11 +278,12 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   #bugfix: MT 2020
   #sicherstellen das alle daten auch in einer ParetoKugel enthalten sind
   #if(isFALSE(FLAG_kernels_manualSet)){
-    if((kernels_internal[1]-paretoRadius)>minData){
-      kernels_internal=c(minData,kernels_internal)
-    } 
-    if((tail(kernels_internal,1)+paretoRadius)<maxData){
-      kernels_internal=c(kernels_internal,maxData)
+    if (boundaryReflection) {
+      # Reflected density is normalized on the empirical data interval.
+      # Covering the extrema with a Pareto window does not include their mass
+      # in the integration grid. Keep both endpoints and no exterior midpoints.
+      kernels_internal = sort(unique(c(minData, maxData,
+        kernels_internal[kernels_internal > minData & kernels_internal < maxData])))
     }
   # }else{#design choice: user entscheidung geht vor
   #   if((kernels_internal[1]-paretoRadius)!=minData){#aber ueble warneldung vorgeben!
@@ -353,12 +347,10 @@ ParetoDensityEstimation = function(Data,paretoRadius,kernels=NULL,MinAnzKernels=
   #   }
   # }
  
-  if(requireNamespace('pracma',quietly = TRUE)){ #fuer trapz
-		area <- pracma::trapz(kernels_internal, paretoDensity)
-  }else{
-    area <- sum(diff(kernels_internal) *
-                (head(paretoDensity, -1) + tail(paretoDensity, -1)) / 2)
-  }
+  # Trapezoidal normalization using local differences avoids cancellation
+  # between large coordinate products for narrow, widely separated peaks.
+  area <- sum(diff(kernels_internal) *
+              (head(paretoDensity, -1) + tail(paretoDensity, -1)) / 2)
   #adhoc numerical calc (not preferable)
   #idx = 2:length(kernels_internal)
   #area <- (as.double((kernels_internal[idx] - kernels_internal[idx - 1]) %*% (paretoDensity[idx] + paretoDensity[idx - 1]))/2)

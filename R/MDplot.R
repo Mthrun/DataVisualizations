@@ -26,7 +26,7 @@ MDplot = function(Data, Names, Ordering='Default',Scaling="None",Fill='darkblue'
   # MDscaling             "area": equal area; "count": area prop to observations; "width" (default): equal max width.
   # LineColor             Color of outline around the mirrored densities (NA disables).
   # LineSize              Line width of the outline around the mirrored densities.
-  # SpikeLineSize         Minimum tick linewidth for visually compressed sparse PDE peaks.
+  # SpikeLineSize         Minimum tick linewidth for visually compressed numerical Dirac peaks.
   #                       Set to 0 to disable; ordinary violin outlines are unchanged.
   # QuantityThreshold     Minimal number of finite values required to estimate a density.
   # UniqueValuesThreshold Minimal number of unique values required to estimate a density
