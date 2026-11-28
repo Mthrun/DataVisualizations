@@ -6,7 +6,10 @@ CCDFplot=function(Feature,LogLogPlot=TRUE,PlotIt=TRUE,pch=0,xlab,ylab,main,...){
 # INPUT
 # Feature(1:n)              Vector of Feature to be plotted
 # or
-# Feature = [x,pdf(x)]         a probability density funciton pdf(x) is given 
+# Feature = [x,pdf(x)]         a probability density funciton pdf(x) is given
+#                           x and pdf are sorted together before cumulative
+#                           trapezoidal integration, with cdf(min(x)) = 0.
+#                           The supplied density is not renormalized.
 # Feature = [x,pdf(x),cdf(x)]  the cdf is given, pdf(x) is ignored
 #
 # OPTIONAL
@@ -44,12 +47,13 @@ if(is.matrix(Feature)|| is.data.frame(Feature)){
     f_ecd=ecdf(CCDFuniqX)
     CCDFuniqY = 1-f_ecd(CCDFuniqX)
   }else if(d==2){
-        CCDFuniqX = Feature[,1]
-        cdf = CCDFuniqX*0
-#         for(i in 2:length(cdf))
-#             cdf(i) = trapz(CCDFuniqX(1:i),Feature(1:i,2));
-
-        CCDFuniqY = 1-pracma::trapz(CCDFuniqX,Feature[,2])
+        indPDF = order(Feature[,1])
+        CCDFuniqX = Feature[indPDF,1]
+        PDF = Feature[indPDF,2]
+        cdf = numeric(n)
+        if(n > 1L)
+          cdf[-1L] = cumsum(diff(CCDFuniqX)*(PDF[-n]/2 + PDF[-1L]/2))
+        CCDFuniqY = 1-cdf
   }else if(d==3){
         CCDFuniqX = Feature[,1]
         CCDFuniqY = 1-Feature[,3]

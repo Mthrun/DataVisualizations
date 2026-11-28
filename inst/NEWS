@@ -1,4 +1,17 @@
+Version 1.5.1 (GitHub, 2026-11-28)
+	o Completed and exported DiagnosticAbility4Classifiers() for binary classifier
+	  comparisons. Fixed Plotly output, the ROC reference diagonal, and
+	  sensitivity/specificity axis labels; custom titles and axis labels are honored.
+	  Added explicit PositiveClass selection and consistent class alignment,
+	  including constant predictions. Undefined precision remains NA and the
+	  corresponding PRC points are omitted with a warning. The existing PRC axis
+	  order (precision on x, recall on y) and Plot/X/Y return structure are retained.
+	  Completed the help and examples, corrected the literature references
+
 Version 1.5.0 (CRAN, 2026-11-28)
+	o Fixed CCDFplot() for two-column PDF inputs: cumulative trapezoidal
+	  integration now returns one CCDF value per x coordinate instead of a single
+	  total integral. Coordinates and densities are sorted together before integration.
 	o ClassBarPlot() now preserves supplied instance names, uses the supplied
 	  deviations for error bars, and maps colors by class. Deviation, Names, and
 	  ClassColors are optional and default to NULL. The example supplies matching

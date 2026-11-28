@@ -1,7 +1,7 @@
 Package: DataVisualizations
 Type: Package
 Title: Visualizations of High-Dimensional Data
-Version: 1.5.0
+Version: 1.5.1
 Date: 2026-11-28
 Authors@R: c(person("Michael", "Thrun", email= "m.thrun@gmx.net",role=c("aut","cre","cph"), comment = c(ORCID = "0000-0001-9542-5543")),person("Felix", "Pape",role=c("aut","rev")),person("Onno", "Hansen-Goos",role=c("ctr","ctb")),person("Quirin", "Stier",role=c("ctb","rev"), comment = c(ORCID = "0000-0002-7896-4737")),person("Hamza", "Tayyab",role=c("ctr","ctb")),person("Luca", "Brinkmann",role=c("ctr","ctb")),person("Dirk", "Eddelbuettel",role=c("ctb")),person("Winston", "Chang",role=c("ctb")),person("Craig", "Varrichio",role=c("ctb")),person("Alfred", "Ultsch",role=c("dtc","ctb","ctr")))
 Maintainer: Michael Thrun <m.thrun@gmx.net>

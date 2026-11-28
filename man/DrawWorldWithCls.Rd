@@ -5,6 +5,11 @@
   This function plots a world map where the single countries get colored differently by using a classification
 }
 
+\usage{
+DrawWorldWithCls(CountryCode, Cls, JoinCode = "UN",
+                 Title = "Default Title",
+                 Colors = DataVisualizations::DefaultColorSequence)
+}
 \arguments{
   \item{CountryCode}{Vector of Countrys belonging to the Cls}
   \item{Cls}{Classes belonging to the Countries from CountryCode}
